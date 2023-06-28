@@ -1,7 +1,9 @@
+import { Title } from '@mantine/core';
+
 export default function ProfilePage() {
   return (
     <div>
-      <h1>Imagine an Admin Page Here</h1>
+      <Title>Imagine an Admin Page Here</Title>
     </div>
   );
 }
