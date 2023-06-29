@@ -1,4 +1,4 @@
-import Header from './components/Header';
+import UserInfo from './components/UserInfo';
 import ProfileNav from './components/Nav';
 
 type Params = { params: { slug: string } };
@@ -8,7 +8,7 @@ export default function Page({ params }: Params) {
   return (
     <div className='flex'>
       <ProfileNav username={username} />
-      <Header />
+      <UserInfo />
     </div>
   );
 }
