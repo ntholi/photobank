@@ -1,4 +1,3 @@
-import ProfilePicture from './ProfilePicture';
 import Image from 'next/image';
 
 export default function UserBio() {
