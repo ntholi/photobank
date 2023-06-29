@@ -23,7 +23,7 @@ export default function ProfileNav({ username }: Props) {
     { name: 'Settings', icon: <GoGear />, link: `#` },
   ];
   return (
-    <nav className='border-e h-screen w-1/4'>
+    <nav className='border-e border-zinc-300 h-screen w-1/4'>
       <div className='p-8'>
         <Image alt='logo' src='/images/logo.jpg' width={100} height={100} />
       </div>
