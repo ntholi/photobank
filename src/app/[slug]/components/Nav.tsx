@@ -18,7 +18,12 @@ type Props = {
 export default function ProfileNav({ username }: Props) {
   const navItems = [
     { name: 'Home', icon: <GoHome />, link: `/` },
-    { name: 'Profile', icon: <GoPerson />, link: `./${username}` },
+    {
+      name: 'Profile',
+      icon: <GoPerson />,
+      link: `./${username}`,
+      active: true,
+    },
     { name: 'Notifications', icon: <GoBell />, link: `#` },
     { name: 'Settings', icon: <GoGear />, link: `#` },
   ];
@@ -44,12 +49,12 @@ type NavItemProps = {
 };
 
 const NevItem = ({ name, icon, link, active }: NavItemProps) => {
-  const color = active ? 'text-black' : 'text-zinc-600';
+  const activeClass = active ? 'text-black' : 'text-zinc-600';
   return (
     <li key={name} className='group flex items-center p-2'>
       <Link
         href={`/dashboard/${link}`}
-        className={`p-2 w-full rounded-sm flex items-center ${color} border-s-2 border-transparent hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
+        className={`p-2 w-full rounded-sm flex items-center ${activeClass} border-s-2 border-transparent hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
       >
         <span className='mx-3 text-2xl'>{icon}</span>
         <span className='text-lg font-semibold'>{name}</span>
