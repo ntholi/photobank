@@ -1,6 +1,5 @@
 'use client';
 
-import { BaseProps } from '@/lib/BaseProps';
 import { Tab } from '@headlessui/react';
 import React from 'react';
 
