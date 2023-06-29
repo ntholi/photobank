@@ -1,15 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import {
-  GoBell,
-  GoBellFill,
-  GoGear,
-  GoHome,
-  GoHomeFill,
-  GoPerson,
-  GoPersonFill,
-} from 'react-icons/go';
+import { GoBell, GoGear, GoHome, GoPerson } from 'react-icons/go';
 
 type Props = {
   username: string;
