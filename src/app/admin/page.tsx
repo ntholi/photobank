@@ -1,7 +1,12 @@
 export default function ProfilePage() {
   return (
-    <div>
-      <h1>Imagine an Admin Page Here</h1>
-    </div>
+    <main className='flex h-screen justify-center items-center bg-gray-900'>
+      <div>
+        <h1 className='text-8xl text-gray-50 text-center'>PhotBank</h1>
+        <p className='text-xl text-gray-50 text-center mt-4 uppercase'>
+          Imagine a very nice admin page here
+        </p>
+      </div>
+    </main>
   );
 }
