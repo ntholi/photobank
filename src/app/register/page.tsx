@@ -1,12 +1,63 @@
+import { prisma } from '@/lib/db';
+import { redirect } from 'next/navigation';
+import Image from 'next/image';
+import bcrypt from 'bcrypt';
+
+async function registerAccount(data: FormData) {
+  'use server';
+  const names = data.get('names')?.valueOf() as string;
+  const email = data.get('email')?.valueOf() as string;
+  const password = data.get('password')?.valueOf() as string;
+
+  function toUsername(str: string) {
+    return str.replace(' ', '').toLowerCase();
+  }
+
+  if (!email || !password) {
+    throw new Error('Missing Fields');
+  }
+
+  let firstName = names;
+  let lastName = '';
+  if (names && names.split(' ').length >= 2) {
+    const namesArray = names.split(' ');
+    firstName = namesArray.slice(0, namesArray.length - 1).join(' ');
+    lastName = namesArray[namesArray.length - 1];
+  }
+
+  const exists = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+  });
+  if (!exists) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        username: toUsername(names),
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        hashedPassword: hashedPassword,
+      },
+    });
+
+    console.log('User', user);
+  }
+}
+
 export default function Register() {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
+          <Image
+            className="mx-auto w-auto"
+            height={40}
+            width={40}
+            src="/images/logo.jpg"
+            alt="Name of PhotoBank "
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Create Account
@@ -14,7 +65,7 @@ export default function Register() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form action={registerAccount} className="space-y-6" method="POST">
             <div>
               <label
                 htmlFor="names"
@@ -28,7 +79,6 @@ export default function Register() {
                   name="names"
                   type="text"
                   autoComplete="names"
-                  required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
