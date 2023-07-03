@@ -2,9 +2,11 @@
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 export default function LoginPage() {
   const [data, setData] = useState({ email: '', password: '' });
+  const { data: session } = useSession();
 
   async function handleLogin(e: any) {
     e.preventDefault();
