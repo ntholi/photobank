@@ -44,7 +44,12 @@ export const authOptions = {
                 if (!match) {
                     throw new Error('Incorrect password');
                 }
-                return user;
+                return {
+                    id: user.id,
+                    email: user.email,
+                    name: `${user.firstName} ${user.lastName}`,
+                    image: user.image,
+                };
             },
         }),
     ],
