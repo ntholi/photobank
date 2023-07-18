@@ -6,7 +6,7 @@ import { AiFillCaretDown } from 'react-icons/ai';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 
-async function Header() {
+function Header() {
   const { data: session } = useSession();
   const pathname = usePathname();
 
