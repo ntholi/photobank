@@ -2,9 +2,9 @@ import UserBio from './components/UserBio';
 import ProfileNav from './components/Nav';
 import ProfileBody from './components/ProfileBody';
 
-type Params = { params: { slug: string } };
+type Props = { params: { slug: string } };
 
-export default function Page({ params }: Params) {
+export default function Page({ params }: Props) {
   const username = params.slug;
   return (
     <main>
