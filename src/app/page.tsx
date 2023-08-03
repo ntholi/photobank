@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]/route';
+import { authOptions } from './api/auth/[...nextauth]/auth';
 
 async function fetchDatetime() {
   const res = await fetch('http://worldtimeapi.org/api/timezone/Africa/Maseru');
