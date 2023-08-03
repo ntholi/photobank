@@ -49,7 +49,7 @@ export const authOptions = {
                     email: user.email,
                     name: `${user.firstName} ${user.lastName}`,
                     image: user.image,
-                };
+                } as any;
             },
         }),
     ],
