@@ -1,19 +1,10 @@
-async function fetchDatetime() {
-  const res = await fetch('http://worldtimeapi.org/api/timezone/Africa/Maseru');
-  const data = await res.json();
-  return data;
-}
+// app/page.tsx
+import { Button } from '@nextui-org/button';
 
-export default async function Home() {
-  const time = await fetchDatetime();
+export default function Page() {
   return (
-    <main className="flex h-screen items-center justify-center bg-gray-900">
-      <div>
-        <h1 className="text-center text-8xl text-gray-50">PhotBank</h1>
-        <p className="mt-4 text-center text-xl uppercase text-gray-50">
-          the time is {time.datetime}
-        </p>
-      </div>
-    </main>
+    <div>
+      <Button color="primary">Button</Button>
+    </div>
   );
 }
