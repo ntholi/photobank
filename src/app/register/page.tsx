@@ -1,13 +1,38 @@
-import { prisma } from '@/lib/db';
-import { redirect } from 'next/navigation';
+'use client';
+
 import Image from 'next/image';
-import { registerAccount } from './actions';
 import { Link } from '@nextui-org/link';
 import NextLink from 'next/link';
 import { Button } from '@nextui-org/button';
 import { Input } from '@nextui-org/input';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import React from 'react';
+
+type InputType = {
+  names: string;
+  email: string;
+  password: string;
+};
 
 export default function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InputType>();
+  const [loading, setLoading] = React.useState(false);
+
+  const onSubmit: SubmitHandler<InputType> = async (data) => {
+    setLoading(true);
+    fetch('http://localhost:3000/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }).finally(() => setLoading(false));
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -25,25 +50,37 @@ export default function Register() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action={registerAccount} className="space-y-6" method="POST">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-6"
+            method="POST"
+          >
             <Input
               type="text"
               variant="bordered"
               label="Full Names"
-              name="names"
+              {...register('names', { required: true, minLength: 3 })}
             />
-            <Input type="email" variant="bordered" label="Email" name="email" />
+            <Input
+              type="email"
+              variant="bordered"
+              label="Email"
+              {...register('email', { required: true })}
+            />
             <Input
               type="password"
               variant="bordered"
+              required
               label="Password"
-              name="password"
+              {...register('password', { required: true, minLength: 6 })}
             />
 
             <div>
               <Button
                 color="primary"
                 variant="solid"
+                type="submit"
+                isLoading={loading}
                 className="flex w-full justify-center"
               >
                 Register
@@ -51,7 +88,10 @@ export default function Register() {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          <p
+            className="mt-10 text-center text-sm text-gray-500"
+            color="foreground"
+          >
             Already registered?{' '}
             <Link href="/login" size="sm" as={NextLink}>
               Login
