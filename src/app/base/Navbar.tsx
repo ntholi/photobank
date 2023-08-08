@@ -39,7 +39,7 @@ const siteConfig = {
 
 export default function Navbar() {
   return (
-    <NextUINavbar maxWidth="xl" position="sticky">
+    <NextUINavbar c>
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarMenuToggle className="sm:hidden" />
         <NavbarBrand as="li" className="gap-3 max-w-fit">
