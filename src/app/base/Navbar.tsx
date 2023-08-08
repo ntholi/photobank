@@ -8,10 +8,8 @@ import {
   NavbarItem,
   NavbarMenuItem,
 } from '@nextui-org/navbar';
-import { Button } from '@nextui-org/button';
 
 import { Link } from '@nextui-org/link';
-import { Input } from '@nextui-org/input';
 
 import { link as linkStyles } from '@nextui-org/theme';
 
@@ -29,75 +27,27 @@ const siteConfig = {
       href: '/',
     },
     {
-      label: 'Docs',
-      href: '/docs',
-    },
-    {
       label: 'Pricing',
       href: '/pricing',
-    },
-    {
-      label: 'Blog',
-      href: '/blog',
     },
     {
       label: 'About',
       href: '/about',
     },
   ],
-  navMenuItems: [
-    {
-      label: 'Profile',
-      href: '/profile',
-    },
-    {
-      label: 'Dashboard',
-      href: '/dashboard',
-    },
-    {
-      label: 'Projects',
-      href: '/projects',
-    },
-    {
-      label: 'Team',
-      href: '/team',
-    },
-    {
-      label: 'Calendar',
-      href: '/calendar',
-    },
-    {
-      label: 'Settings',
-      href: '/settings',
-    },
-    {
-      label: 'Help & Feedback',
-      href: '/help-feedback',
-    },
-    {
-      label: 'Logout',
-      href: '/logout',
-    },
-  ],
 };
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
-      <NavbarContent>
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-          className="sm:hidden"
-        />
-      </NavbarContent>
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+        <NavbarMenuToggle className="sm:hidden" />
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <Logo />
           </NextLink>
         </NavbarBrand>
-        <ul className="hidden lg:flex gap-4 justify-start ml-2">
+        <ul className="hidden sm:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
@@ -113,20 +63,19 @@ export default function Navbar() {
             </NavbarItem>
           ))}
         </ul>
+        <NavbarItem className="ml-auto">
+          <NextLink color="foreground" href={'/'}>
+            Sign In
+          </NextLink>
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarMenu>
         <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
+          {siteConfig.navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
-                color={
-                  index === 2
-                    ? 'primary'
-                    : index === siteConfig.navMenuItems.length - 1
-                    ? 'danger'
-                    : 'foreground'
-                }
+                color={index === 2 ? 'primary' : 'foreground'}
                 href="#"
                 size="lg"
               >
