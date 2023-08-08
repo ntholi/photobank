@@ -11,34 +11,11 @@ datasource db {
 }
 
 model User {
-  id             Int       @id @default(autoincrement())
-  username       String    @unique
-  firstName      String?
-  lastName       String?
-  email          String?   @unique
-  emailVerified  DateTime?
-  image          String?
-  hashedPassword String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-
-  accounts Account[]
-}
-
-model Account {
-  id                Int     @id @default(autoincrement())
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  User              User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int?
-
-  @@unique([provider, providerAccountId])
+  id        String   @id
+  firstName String?
+  lastName  String?
+  email     String?  @unique
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
