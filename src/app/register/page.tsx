@@ -1,7 +1,6 @@
 import { prisma } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
-import bcrypt from 'bcrypt';
 
 async function registerAccount(data: FormData) {
   'use server';
@@ -31,15 +30,13 @@ async function registerAccount(data: FormData) {
     },
   });
   if (!exists) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const user = await prisma.user.create({
       data: {
         username: toUsername(names),
         email: email,
         firstName: firstName,
         lastName: lastName,
-        hashedPassword: hashedPassword,
+        hashedPassword: 'hashedPassword',
       },
     });
 
