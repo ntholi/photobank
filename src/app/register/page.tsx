@@ -8,6 +8,8 @@ import { Input } from '@nextui-org/input';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import React from 'react';
 import axios from 'axios';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/config/firebase';
 
 type InputType = {
   names: string;
@@ -27,7 +29,9 @@ export default function Register() {
     setLoading(true);
     try {
       const response = await axios.post('/api/register', data);
-      console.log(response);
+      if (response.data.success) {
+        await signInWithEmailAndPassword(auth, data.email, data.password);
+      }
     } catch (error) {
       console.log(error);
     } finally {

@@ -16,7 +16,7 @@ import { link as linkStyles } from '@nextui-org/theme';
 import NextLink from 'next/link';
 import clsx from 'clsx';
 import Logo from './Logo';
-import React from 'react';
+import { useSession } from '@/lib/context/UserContext';
 
 const siteConfig = {
   name: 'Next.js + NextUI',
@@ -38,6 +38,10 @@ const siteConfig = {
 };
 
 export default function Navbar() {
+  const { user } = useSession();
+
+  console.log('Navbar.user -> ', user?.displayName);
+
   return (
     <NextUINavbar shouldHideOnScroll>
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">

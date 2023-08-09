@@ -9,10 +9,17 @@ export async function POST(request: Request) {
     if (!email || !password) {
         throw new Error('Missing Fields');
     }
-    const userId = await createFirebaseUser(names, email, password);
-    await saveUserToDatabase(userId, names, email);
+    try {
+        const userId = await createFirebaseUser(names, email, password);
+        await saveUserToDatabase(userId, names, email);
+    } catch (error: any) {
+        console.error(error);
+        if (error.errorInfo) {
+            throw new Error(error.errorInfo.message);
+        }
+    }
 
-    return NextResponse.json({});
+    return NextResponse.json({ success: true });
 }
 
 function saveUserToDatabase(uid: string, names: string, email: string) {

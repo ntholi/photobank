@@ -102,3 +102,5 @@ export default function LoginPage() {
     </>
   );
 }
+
+const login = async (email: string, password: string) => {};
