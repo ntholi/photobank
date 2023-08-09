@@ -23,13 +23,17 @@ export const ProfileBody = () => {
   ];
 
   return (
-    <div className="flex w-full flex-col">
-      <Tabs variant="underlined" items={tabs}>
+    <div className="flex w-full flex-col mt-10">
+      <Tabs
+        variant="underlined"
+        className="border-t-1 justify-center"
+        items={tabs}
+      >
         {(item) => (
           <Tab key={item.label} title={item.label}>
-            <Card>
-              <CardBody>{item.content}</CardBody>
-            </Card>
+            <div>
+              <p>{item.content}</p>
+            </div>
           </Tab>
         )}
       </Tabs>
