@@ -7,6 +7,7 @@ import { Button } from '@nextui-org/button';
 import { Input } from '@nextui-org/input';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import React from 'react';
+import axios from 'axios';
 
 type InputType = {
   names: string;
@@ -24,13 +25,14 @@ export default function Register() {
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
-    fetch('http://localhost:3000/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    }).finally(() => setLoading(false));
+    try {
+      const response = await axios.post('/api/register', data);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,10 +41,10 @@ export default function Register() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Image
             className="mx-auto w-auto"
-            height={40}
-            width={40}
+            height={80}
+            width={80}
             src="/images/logo.jpg"
-            alt="Name of PhotoBank "
+            alt="PhotoBank Logo"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Create Account
