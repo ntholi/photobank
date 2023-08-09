@@ -27,11 +27,11 @@ export default function ProfileNav() {
     },
   ];
   return (
-    <nav className="absolute bottom-0 sm:w-1/4 sm:static border-t border-t-red-500 sm:border-e sm:border-t-0 border-zinc-300 h-screen ">
-      <div className="p-8">
+    <nav className="fixed bottom-0 w-full sm:w-1/4 sm:h-screen sm:static border-t border-t-zinc-500 sm:border-e sm:border-t-0 border-zinc-300">
+      <div className="p-8 max-sm:hidden">
         <Image alt="logo" src="/images/logo.jpg" width={100} height={100} />
       </div>
-      <ul className="flex sm:block">
+      <ul className="flex justify-evenly sm:block">
         {navItems.map((item) => (
           <NevItem key={item.name} {...item} />
         ))}
