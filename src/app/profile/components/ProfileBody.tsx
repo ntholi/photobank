@@ -1,3 +1,4 @@
+'use client';
 import { Tab, Tabs } from '@nextui-org/tabs';
 import { Card, CardBody } from '@nextui-org/card';
 import React from 'react';
@@ -23,7 +24,7 @@ export const ProfileBody = () => {
 
   return (
     <div className="flex w-full flex-col">
-      <Tabs aria-label="Dynamic tabs" items={tabs}>
+      <Tabs variant="underlined" items={tabs}>
         {(item) => (
           <Tab key={item.label} title={item.label}>
             <Card>
