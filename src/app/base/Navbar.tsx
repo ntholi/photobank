@@ -38,7 +38,7 @@ export default function Navbar() {
   const { user } = useSession();
 
   return (
-    <NextUINavbar maxWidth="xl" shouldHideOnScroll>
+    <NextUINavbar maxWidth="xl" shouldHideOnScroll isBordered>
       <NavbarContent>
         <NavbarMenuToggle className="sm:hidden" />
         <NavbarBrand as="li" className="gap-3 max-w-fit">
@@ -65,11 +65,12 @@ export default function Navbar() {
         <NavbarItem className="ml-auto">
           {user ? (
             <NextLink color="foreground" href={`/u/${user.uid}`}>
-              {user.photoURL ? (
-                <Avatar src={user.photoURL} />
-              ) : (
-                <Avatar name={nameToInitials(user.displayName)} />
-              )}
+              <Avatar
+                isBordered
+                size="sm"
+                src={user.photoURL || undefined}
+                name={nameToInitials(user.displayName)}
+              />
             </NextLink>
           ) : (
             <NextLink color="foreground" href={'/register'}>

@@ -10,6 +10,7 @@ import React from 'react';
 import axios from 'axios';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/config/firebase';
+import { useRouter } from 'next/navigation';
 
 type InputType = {
   names: string;
@@ -24,13 +25,19 @@ export default function Register() {
     formState: { errors },
   } = useForm<InputType>();
   const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
     try {
       const response = await axios.post('/api/register', data);
       if (response.data.success) {
-        await signInWithEmailAndPassword(auth, data.email, data.password);
+        const { user } = await signInWithEmailAndPassword(
+          auth,
+          data.email,
+          data.password,
+        );
+        router.push(`/profile/${user.uid}`);
       }
     } catch (error) {
       console.log(error);
