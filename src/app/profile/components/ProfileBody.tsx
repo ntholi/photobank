@@ -1,4 +1,5 @@
-import { Card, CardBody, Tab, Tabs } from '@nextui-org/react';
+import { Tab, Tabs } from '@nextui-org/tabs';
+import { Card, CardBody } from '@nextui-org/card';
 import React from 'react';
 
 export const ProfileBody = () => {
