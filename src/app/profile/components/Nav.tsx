@@ -43,13 +43,13 @@ type NavItemProps = {
 const NevItem = ({ name, icon, link, active }: NavItemProps) => {
   const activeClass = active ? 'text-black' : 'text-zinc-600';
   return (
-    <li key={name} className="group flex items-center p-2">
+    <li key={name} className="group p-2">
       <Link
         href={link}
-        className={`p-2 w-full rounded-sm flex items-center ${activeClass} border-s-2 border-transparent hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
+        className={`p-2 w-full rounded-sm flex md:justify-start justify-center items-center ${activeClass} border-s-2 border-transparent hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
       >
         <span className="mx-3 text-2xl">{icon}</span>
-        <span className="text-lg font-semibold">{name}</span>
+        <span className="hidden md:inline text-lg font-semibold">{name}</span>
       </Link>
     </li>
   );
