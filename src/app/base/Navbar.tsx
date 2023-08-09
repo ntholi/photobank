@@ -17,6 +17,7 @@ import NextLink from 'next/link';
 import clsx from 'clsx';
 import Logo from './Logo';
 import { useSession } from '@/lib/context/UserContext';
+import { Avatar } from '@nextui-org/react';
 
 const navItems = [
   {
@@ -62,9 +63,19 @@ export default function Navbar() {
           ))}
         </ul>
         <NavbarItem className="ml-auto">
-          <NextLink color="foreground" href={'/register'}>
-            Sign In
-          </NextLink>
+          {user ? (
+            <NextLink color="foreground" href={`/u/${user.uid}`}>
+              {user.photoURL ? (
+                <Avatar src={user.photoURL} />
+              ) : (
+                <Avatar name={nameToInitials(user.displayName)} />
+              )}
+            </NextLink>
+          ) : (
+            <NextLink color="foreground" href={'/register'}>
+              Sign In
+            </NextLink>
+          )}
         </NavbarItem>
       </NavbarContent>
 
@@ -86,3 +97,9 @@ export default function Navbar() {
     </NextUINavbar>
   );
 }
+
+const nameToInitials = (name: string | null) => {
+  if (!name) return '?';
+  const initials = name.match(/\b\w/g) || [];
+  return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+};
