@@ -1,15 +1,29 @@
 import Image from 'next/image';
 
-export default function UserBio() {
+type Props = {
+  photoURL?: string;
+  displayName?: string;
+};
+
+export default function UserBio({ photoURL, displayName }: Props) {
   return (
-    <div className='flex flex-col w-2/4 mx-auto mt-14 border border-blue-300'>
+    <div className="flex mt-14">
       <Image
-        src='/images/profile.png'
+        src={photoURL || '/images/profile.png'}
         height={150}
         width={150}
-        className='rounded-full border border-zinc-400'
-        alt='Profile Picture'
+        className="rounded-full border border-zinc-400"
+        alt="Profile Picture"
       />
+      <div className="ml-20 mt-1">
+        <h1 className="text-4xl font-bold">{displayName}</h1>
+      </div>
     </div>
   );
 }
+
+export const nameToInitials = (name?: string | null) => {
+  if (!name) return '?';
+  const initials = name.match(/\b\w/g) || [];
+  return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+};

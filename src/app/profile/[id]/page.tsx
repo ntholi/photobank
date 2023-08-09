@@ -1,17 +1,23 @@
 import ProfileNav from '../components/Nav';
 import ProfileBody from '../components/ProfileBody';
 import UserBio from '../components/UserBio';
+import admin from '@/lib/config/firebase-admin';
 
-type Props = { params: { slug: string } };
+type Props = { params: { id: string } };
 
-export default function Page({ params }: Props) {
-  const username = params.slug;
+const getUser = async (id: string) => {
+  const user = await admin.auth().getUser(id);
+  return user;
+};
+
+export default async function Page({ params }: Props) {
+  const user = await getUser(params.id);
   return (
     <main>
       <div className="flex">
-        <ProfileNav username={username} />
+        <ProfileNav username={''} />
         <section className="w-screen px-16">
-          <UserBio />
+          <UserBio {...user} />
           <ProfileBody />
         </section>
       </div>

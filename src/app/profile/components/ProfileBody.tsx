@@ -1,11 +1,9 @@
-'use client';
-
 import React from 'react';
 
-export const ProfileBody: React.FC<BaseProps> = ({ className }) => {
+export const ProfileBody = () => {
   const items = ['Item 1', 'Item 2', 'Item 3'];
   return (
-    <div className={`${className}`}>
+    <div>
       <p>Tabs</p>
     </div>
   );
