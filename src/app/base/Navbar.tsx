@@ -18,33 +18,27 @@ import clsx from 'clsx';
 import Logo from './Logo';
 import { useSession } from '@/lib/context/UserContext';
 
-const siteConfig = {
-  name: 'Next.js + NextUI',
-  description: 'Make beautiful websites regardless of your design experience.',
-  navItems: [
-    {
-      label: 'Home',
-      href: '/',
-    },
-    {
-      label: 'Pricing',
-      href: '/pricing',
-    },
-    {
-      label: 'About',
-      href: '/about',
-    },
-  ],
-};
+const navItems = [
+  {
+    label: 'Home',
+    href: '/',
+  },
+  {
+    label: 'Pricing',
+    href: '/pricing',
+  },
+  {
+    label: 'About',
+    href: '/about',
+  },
+];
 
 export default function Navbar() {
   const { user } = useSession();
 
-  console.log('Navbar.user -> ', user?.displayName);
-
   return (
-    <NextUINavbar shouldHideOnScroll>
-      <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+    <NextUINavbar maxWidth="xl" shouldHideOnScroll>
+      <NavbarContent>
         <NavbarMenuToggle className="sm:hidden" />
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
@@ -52,7 +46,7 @@ export default function Navbar() {
           </NextLink>
         </NavbarBrand>
         <ul className="hidden sm:flex gap-4 justify-start ml-2">
-          {siteConfig.navItems.map((item) => (
+          {navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
                 className={clsx(
@@ -68,7 +62,7 @@ export default function Navbar() {
           ))}
         </ul>
         <NavbarItem className="ml-auto">
-          <NextLink color="foreground" href={'/'}>
+          <NextLink color="foreground" href={'/register'}>
             Sign In
           </NextLink>
         </NavbarItem>
@@ -76,7 +70,7 @@ export default function Navbar() {
 
       <NavbarMenu>
         <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navItems.map((item, index) => (
+          {navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
                 color={index === 2 ? 'primary' : 'foreground'}
