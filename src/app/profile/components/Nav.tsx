@@ -29,7 +29,7 @@ export default function ProfileNav() {
           icon={
             <Avatar
               isBordered
-              className="w-5 h-5"
+              className="w-5 h-5 ms-1 me-0.5"
               src={user?.photoURL || undefined}
             />
           }
