@@ -5,37 +5,36 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { GoBell, GoGear, GoHome, GoPerson } from 'react-icons/go';
-import { nameToInitials } from './UserBio';
 
 export default function ProfileNav() {
   const { user } = useSession();
 
   const navItems = [
-    { name: 'Home', icon: <GoHome />, link: `/` },
-    { name: 'Notifications', icon: <GoBell />, link: `#` },
-    { name: 'Settings', icon: <GoGear />, link: `#` },
+    { name: 'Home', link: `/`, icon: <GoHome /> },
+    { name: 'Notifications', link: `#`, icon: <GoBell /> },
+    { name: 'Settings', link: `#`, icon: <GoGear /> },
+    {
+      name: 'Profile',
+      link: `../profile/${user?.uid}`,
+      icon: (
+        <Avatar
+          isBordered
+          className="w-5 h-5 ms-1 me-0.5"
+          src={user?.photoURL || undefined}
+        />
+      ),
+      active: true,
+    },
   ];
   return (
-    <nav className="border-e border-zinc-300 h-screen w-1/4">
+    <nav className="absolute bottom-0 sm:w-1/4 sm:static border-t border-t-red-500 sm:border-e sm:border-t-0 border-zinc-300 h-screen ">
       <div className="p-8">
         <Image alt="logo" src="/images/logo.jpg" width={100} height={100} />
       </div>
-      <ul>
+      <ul className="flex sm:block">
         {navItems.map((item) => (
           <NevItem key={item.name} {...item} />
         ))}
-        <NevItem
-          name="Profile"
-          icon={
-            <Avatar
-              isBordered
-              className="w-5 h-5 ms-1 me-0.5"
-              src={user?.photoURL || undefined}
-            />
-          }
-          link={`../profile/${user?.uid}`}
-          active
-        />
       </ul>
     </nav>
   );

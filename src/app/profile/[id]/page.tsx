@@ -1,4 +1,4 @@
-import ProfileNav from '../components/Nav';
+import ProfileNav from '../components/ProfileNav';
 import ProfileBody from '../components/ProfileBody';
 import UserBio from '../components/UserBio';
 import admin from '@/lib/config/firebase-admin';
