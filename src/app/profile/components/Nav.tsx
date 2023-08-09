@@ -1,21 +1,17 @@
+'use client';
+import { useSession } from '@/lib/context/UserContext';
+import { Avatar } from '@nextui-org/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { GoBell, GoGear, GoHome, GoPerson } from 'react-icons/go';
+import { nameToInitials } from './UserBio';
 
-type Props = {
-  uid: string;
-};
+export default function ProfileNav() {
+  const { user } = useSession();
 
-export default function ProfileNav({ uid }: Props) {
   const navItems = [
     { name: 'Home', icon: <GoHome />, link: `/` },
-    {
-      name: 'Profile',
-      icon: <GoPerson />,
-      link: `../profile/${uid}`,
-      active: true,
-    },
     { name: 'Notifications', icon: <GoBell />, link: `#` },
     { name: 'Settings', icon: <GoGear />, link: `#` },
   ];
@@ -28,6 +24,18 @@ export default function ProfileNav({ uid }: Props) {
         {navItems.map((item) => (
           <NevItem key={item.name} {...item} />
         ))}
+        <NevItem
+          name="Profile"
+          icon={
+            <Avatar
+              isBordered
+              className="w-5 h-5"
+              src={user?.photoURL || undefined}
+            />
+          }
+          link={`../profile/${user?.uid}`}
+          active
+        />
       </ul>
     </nav>
   );
