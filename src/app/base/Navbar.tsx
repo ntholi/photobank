@@ -19,6 +19,7 @@ import Logo from './Logo';
 import { useSession } from '@/lib/context/UserContext';
 import { Avatar } from '@nextui-org/react';
 import { nameToInitials } from '../profile/components/UserBio';
+import { usePathname } from 'next/navigation';
 
 const navItems = [
   {
@@ -37,6 +38,9 @@ const navItems = [
 
 export default function Navbar() {
   const { user } = useSession();
+  const pathname = usePathname();
+
+  if (pathname.startsWith('/profile')) return null;
 
   return (
     <NextUINavbar maxWidth="xl" shouldHideOnScroll isBordered>
@@ -65,7 +69,7 @@ export default function Navbar() {
         </ul>
         <NavbarItem className="ml-auto">
           {user ? (
-            <NextLink color="foreground" href={`/u/${user.uid}`}>
+            <NextLink color="foreground" href={`/profile/${user.uid}`}>
               <Avatar
                 isBordered
                 size="sm"

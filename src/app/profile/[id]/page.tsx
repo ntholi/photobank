@@ -15,7 +15,7 @@ export default async function Page({ params }: Props) {
   return (
     <main>
       <div className="flex">
-        <ProfileNav username={''} />
+        <ProfileNav uid={user.uid} />
         <section className="w-screen px-16">
           <UserBio {...user} />
           <ProfileBody />
