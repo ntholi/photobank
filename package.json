@@ -27,6 +27,7 @@
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.13",
     "firebase": "^10.1.0",
+    "firebase-admin": "^11.10.1",
     "framer-motion": "^10.15.1",
     "next": "13.4.13",
     "postcss": "8.4.27",

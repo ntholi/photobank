@@ -1,9 +1,9 @@
-import { auth } from '@/lib/config/firebase';
+import admin from '@/lib/config/firebase-admin';
 import { prisma } from '@/lib/db';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
+    console.log(admin.auth);
     const body = await request.json();
     const { email, password, names } = body;
     if (!email || !password) {
@@ -32,15 +32,12 @@ async function createFirebaseUser(
     email: string,
     password: string,
 ) {
-    const { user } = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password,
-    );
-    await updateProfile(user, {
+    const user = await admin.auth().createUser({
+        email: email,
+        password: password,
         displayName: names,
     });
-    return user?.uid;
+    return user.uid;
 }
 
 function extractNames(names: string) {
