@@ -1,10 +1,36 @@
+import { Card, CardBody, Tab, Tabs } from '@nextui-org/react';
 import React from 'react';
 
 export const ProfileBody = () => {
-  const items = ['Item 1', 'Item 2', 'Item 3'];
+  let tabs = [
+    {
+      label: 'Uploads',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    },
+    {
+      label: 'Library',
+      content:
+        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+    },
+    {
+      label: 'Saved',
+      content:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    },
+  ];
+
   return (
-    <div>
-      <p>Tabs</p>
+    <div className="flex w-full flex-col">
+      <Tabs aria-label="Dynamic tabs" items={tabs}>
+        {(item) => (
+          <Tab key={item.label} title={item.label}>
+            <Card>
+              <CardBody>{item.content}</CardBody>
+            </Card>
+          </Tab>
+        )}
+      </Tabs>
     </div>
   );
 };

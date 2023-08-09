@@ -40,8 +40,6 @@ export default function Navbar() {
   const { user } = useSession();
   const pathname = usePathname();
 
-  if (pathname.startsWith('/profile')) return null;
-
   return (
     <NextUINavbar maxWidth="xl" shouldHideOnScroll isBordered>
       <NavbarContent>
