@@ -1,17 +1,18 @@
 import { auth } from '@/lib/config/firebase';
 import { prisma } from '@/lib/db';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
     const body = await request.json();
     const { email, password, names } = body;
-
     if (!email || !password) {
         throw new Error('Missing Fields');
     }
-
     const userId = await createFirebaseUser(names, email, password);
     await saveUserToDatabase(userId, names, email);
+
+    return NextResponse.json({});
 }
 
 function saveUserToDatabase(uid: string, names: string, email: string) {
