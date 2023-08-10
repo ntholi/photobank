@@ -25,7 +25,7 @@ type InputType = {
   password: string;
 };
 
-export default function Register() {
+export default function SignupPage() {
   const {
     register,
     handleSubmit,
@@ -38,7 +38,7 @@ export default function Register() {
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post('/api/register', data);
+      const response = await axios.post('/api/signup', data);
       if (response.data.success) {
         const { user } = await signInWithEmailAndPassword(
           auth,
@@ -81,7 +81,7 @@ export default function Register() {
             alt="PhotoBank Logo"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Create Account
+            Sign Up
           </h2>
         </div>
 

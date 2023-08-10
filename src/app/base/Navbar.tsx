@@ -80,7 +80,7 @@ export default function Navbar() {
               />
             </NextLink>
           ) : (
-            <NextLink color="foreground" href={'/register'}>
+            <NextLink color="foreground" href={'/signup'}>
               Sign In
             </NextLink>
           )}
