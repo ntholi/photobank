@@ -94,58 +94,59 @@ export default function Register() {
               </div>
             </>
           )}
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-6"
-            method="POST"
-          >
-            <Input
-              type="email"
-              variant="bordered"
-              label="Email"
-              isDisabled={step !== 0}
-              {...register('email', { required: true })}
-            />
-            {step !== 0 && (
-              <>
-                <Input
-                  type="text"
-                  variant="bordered"
-                  label="Full Names"
-                  {...register('names', { required: true, minLength: 3 })}
-                />
-                <Input
-                  type="password"
-                  variant="bordered"
-                  required
-                  label="Password"
-                  {...register('password', { required: true, minLength: 6 })}
-                />
-              </>
-            )}
-
-            <div>
-              {step === 0 ? (
-                <Button
-                  color="primary"
-                  variant="solid"
-                  onClick={() => setStep(1)}
-                  type="button"
-                  className="flex w-full p-6 justify-center rounded-md"
-                >
-                  Continue
-                </Button>
-              ) : (
-                <Button
-                  color="primary"
-                  variant="solid"
-                  type="submit"
-                  isLoading={loading}
-                  className="flex w-full justify-center"
-                >
-                  Register
-                </Button>
+          <form onSubmit={handleSubmit(onSubmit)} method="POST">
+            <h3 className="text-default-500 ps-1 mb-2 text-small">
+              Register with email and password
+            </h3>
+            <div className="space-y-6">
+              <Input
+                type="email"
+                variant="bordered"
+                label="Email"
+                isDisabled={step !== 0}
+                {...register('email', { required: true })}
+              />
+              {step !== 0 && (
+                <>
+                  <Input
+                    type="text"
+                    variant="bordered"
+                    label="Full Names"
+                    {...register('names', { required: true, minLength: 3 })}
+                  />
+                  <Input
+                    type="password"
+                    variant="bordered"
+                    required
+                    label="Password"
+                    {...register('password', { required: true, minLength: 6 })}
+                  />
+                </>
               )}
+
+              <div>
+                {step === 0 ? (
+                  <Button
+                    color="primary"
+                    variant="solid"
+                    onClick={() => setStep(1)}
+                    type="button"
+                    className="flex w-full p-6 justify-center rounded-md"
+                  >
+                    Continue
+                  </Button>
+                ) : (
+                  <Button
+                    color="primary"
+                    variant="solid"
+                    type="submit"
+                    isLoading={loading}
+                    className="flex w-full justify-center"
+                  >
+                    Register
+                  </Button>
+                )}
+              </div>
             </div>
           </form>
 
