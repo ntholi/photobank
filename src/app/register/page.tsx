@@ -8,8 +8,12 @@ import { Input } from '@nextui-org/input';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import React from 'react';
 import axios from 'axios';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/config/firebase';
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from 'firebase/auth';
+import { auth, googleProvider } from '@/lib/config/firebase';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
@@ -50,6 +54,21 @@ export default function Register() {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential?.accessToken;
+        const user = result.user;
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.customData.email;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+      });
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -72,6 +91,7 @@ export default function Register() {
               <div className="space-y-3">
                 <Button
                   variant="bordered"
+                  onClick={handleGoogleSignIn}
                   className="border-zinc-700 w-full p-6 flex justify-start border-1 rounded-sm"
                   startContent={<FcGoogle size="1.4rem" />}
                 >
