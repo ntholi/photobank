@@ -27,7 +27,7 @@ export default function ProfileNav() {
     },
   ];
   return (
-    <nav className="fixed bottom-0 w-full sm:w-1/4 sm:h-screen sm:static border-t border-t-zinc-500 sm:border-e sm:border-t-0 border-zinc-300">
+    <nav className="bg-background fixed bottom-0 w-full sm:w-1/4 sm:h-screen sm:static border-t border-t-zinc-100 sm:border-e sm:border-t-0 border-zinc-300">
       <div className="p-8 max-sm:hidden">
         <Image alt="logo" src="/images/logo.jpg" width={100} height={100} />
       </div>
