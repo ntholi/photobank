@@ -112,12 +112,12 @@ export default function SignupPage() {
                   OR
                 </span>
               </div>
+              <h3 className="text-default-500 ps-1 mb-2 text-small">
+                Email and password
+              </h3>
             </>
           )}
           <form onSubmit={handleSubmit(onSubmit)} method="POST">
-            <h3 className="text-default-500 ps-1 mb-2 text-small">
-              Email and password
-            </h3>
             <div className="space-y-6">
               <Input
                 type="email"
