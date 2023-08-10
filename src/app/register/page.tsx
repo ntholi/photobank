@@ -11,6 +11,9 @@ import axios from 'axios';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/config/firebase';
 import { useRouter } from 'next/navigation';
+import { FcGoogle } from 'react-icons/fc';
+import { FaFacebook } from 'react-icons/fa';
+import { Divider } from '@nextui-org/react';
 
 type InputType = {
   names: string;
@@ -25,6 +28,7 @@ export default function Register() {
     formState: { errors },
   } = useForm<InputType>();
   const [loading, setLoading] = React.useState(false);
+  const [step, setStep] = React.useState(0);
   const router = useRouter();
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {
@@ -63,41 +67,85 @@ export default function Register() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          {step === 0 && (
+            <>
+              <div className="space-y-3">
+                <Button
+                  variant="bordered"
+                  className="border-zinc-700 w-full p-6 flex justify-start border-1 rounded-sm"
+                  startContent={<FcGoogle size="1.4rem" />}
+                >
+                  Continue with Google
+                </Button>
+                <Button
+                  variant="bordered"
+                  className="border-zinc-700 w-full p-6 flex justify-start border-1 rounded-sm"
+                  startContent={<FaFacebook color="#1877F2" size="1.4rem" />}
+                >
+                  Continue with Facebook
+                </Button>
+              </div>
+
+              <div className="inline-flex items-center justify-center w-full">
+                <Divider className="h-px my-8 " />
+                <span className="absolute px-3 font-medium -translate-x-1/2 bg-white left-1/2 ">
+                  OR
+                </span>
+              </div>
+            </>
+          )}
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-6"
             method="POST"
           >
             <Input
-              type="text"
-              variant="bordered"
-              label="Full Names"
-              {...register('names', { required: true, minLength: 3 })}
-            />
-            <Input
               type="email"
               variant="bordered"
               label="Email"
+              isDisabled={step !== 0}
               {...register('email', { required: true })}
             />
-            <Input
-              type="password"
-              variant="bordered"
-              required
-              label="Password"
-              {...register('password', { required: true, minLength: 6 })}
-            />
+            {step !== 0 && (
+              <>
+                <Input
+                  type="text"
+                  variant="bordered"
+                  label="Full Names"
+                  {...register('names', { required: true, minLength: 3 })}
+                />
+                <Input
+                  type="password"
+                  variant="bordered"
+                  required
+                  label="Password"
+                  {...register('password', { required: true, minLength: 6 })}
+                />
+              </>
+            )}
 
             <div>
-              <Button
-                color="primary"
-                variant="solid"
-                type="submit"
-                isLoading={loading}
-                className="flex w-full justify-center"
-              >
-                Register
-              </Button>
+              {step === 0 ? (
+                <Button
+                  color="primary"
+                  variant="solid"
+                  onClick={() => setStep(1)}
+                  type="button"
+                  className="flex w-full p-6 justify-center rounded-md"
+                >
+                  Continue
+                </Button>
+              ) : (
+                <Button
+                  color="primary"
+                  variant="solid"
+                  type="submit"
+                  isLoading={loading}
+                  className="flex w-full justify-center"
+                >
+                  Register
+                </Button>
+              )}
             </div>
           </form>
 
