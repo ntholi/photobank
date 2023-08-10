@@ -4,7 +4,7 @@ import { Avatar } from '@nextui-org/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { GoBell, GoGear, GoHome, GoPerson } from 'react-icons/go';
+import { GoBell, GoGear, GoHome } from 'react-icons/go';
 
 export default function ProfileNav() {
   const { user } = useSession();
@@ -53,10 +53,11 @@ const NevItem = ({ name, icon, link, active }: NavItemProps) => {
     <li key={name} className="group p-2">
       <Link
         href={link}
-        className={`p-2 w-full rounded-sm flex md:justify-start justify-center items-center ${activeClass} border-s-2 border-transparent hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
+        className={`p-2 w-full relative rounded-sm flex md:justify-start justify-center items-center ${activeClass} border-s-2 border-transparent sm:hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
       >
         <span className="mx-3 text-2xl">{icon}</span>
         <span className="hidden md:inline text-lg font-semibold">{name}</span>
+        {/* <PiArrowRightBold className="absolute right-5 group-hover:inline group-hover:translate-x-3 transition-transform group-hover:text-zinc-500 text-zinc-200" /> */}
       </Link>
     </li>
   );
