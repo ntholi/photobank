@@ -13,6 +13,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from 'firebase/auth';
+import { FirebaseError } from '@firebase/util';
 import { auth, googleProvider } from '@/lib/config/firebase';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
@@ -55,18 +56,25 @@ export default function SignupPage() {
   };
 
   const handleGoogleSignIn = async () => {
-    signInWithPopup(auth, googleProvider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential?.accessToken;
-        const user = result.user;
-      })
-      .catch((error) => {
+    const result = await signInWithPopup(auth, googleProvider);
+    try {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential?.accessToken;
+      const user = result.user;
+      const response = await axios.post('/api/signin?provider=google', user);
+      router.push(`/profile/${user.uid}`);
+    } catch (error: any) {
+      console.error(error);
+      if (error instanceof FirebaseError) {
         const errorCode = error.code;
         const errorMessage = error.message;
-        const email = error.customData.email;
+        const email = error.customData?.email;
         const credential = GoogleAuthProvider.credentialFromError(error);
-      });
+        if (errorCode === 'auth/account-exists-with-different-credential') {
+          // Handle account linking here, if using.
+        }
+      }
+    }
   };
 
   return (

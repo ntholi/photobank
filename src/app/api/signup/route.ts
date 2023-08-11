@@ -1,17 +1,17 @@
 import admin from '@/lib/config/firebase-admin';
 import { prisma } from '@/lib/db';
+import { User } from 'firebase/auth';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
-    console.log(admin.auth);
     const body = await request.json();
     const { email, password, names } = body;
     if (!email || !password) {
         throw new Error('Missing Fields');
     }
     try {
-        const userId = await createFirebaseUser(names, email, password);
-        await saveUserToDatabase(userId, names, email);
+        const user = await createFirebaseUser(names, email, password);
+        await saveUserToDatabase(user);
     } catch (error: any) {
         console.error(error);
         if (error.errorInfo) {
@@ -22,12 +22,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true });
 }
 
-function saveUserToDatabase(uid: string, names: string, email: string) {
-    const { firstName, lastName } = extractNames(names);
-    return prisma.user.create({
+export async function saveUserToDatabase(user: User) {
+    const savedUser = await prisma.user.findUnique({
+        where: {
+            email: user.email || '',
+        },
+    });
+    if (savedUser) {
+        return savedUser;
+    }
+    const { firstName, lastName } = extractNames(user.displayName);
+    return await prisma.user.create({
         data: {
-            id: uid,
-            email: email,
+            id: user.uid,
+            email: user.email,
             firstName: firstName,
             lastName: lastName,
         },
@@ -44,10 +52,13 @@ async function createFirebaseUser(
         password: password,
         displayName: names,
     });
-    return user.uid;
+    return user;
 }
 
-function extractNames(names: string) {
+function extractNames(names?: string | null) {
+    if (!names) {
+        return { firstName: '', lastName: '' };
+    }
     let firstName = names;
     let lastName = '';
     if (names && names.split(' ').length >= 2) {
