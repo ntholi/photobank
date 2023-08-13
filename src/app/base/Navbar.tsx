@@ -8,6 +8,13 @@ import {
   NavbarItem,
   NavbarMenuItem,
 } from '@nextui-org/navbar';
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  DropdownSection,
+} from '@nextui-org/react';
 
 import { Link } from '@nextui-org/link';
 
@@ -20,6 +27,10 @@ import { useSession } from '@/lib/context/UserContext';
 import { Avatar } from '@nextui-org/react';
 import { nameToInitials } from '../profile/components/UserBio';
 import { usePathname } from 'next/navigation';
+import { BiLogOut, BiUser } from 'react-icons/bi';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/config/firebase';
 
 const navItems = [
   {
@@ -39,10 +50,16 @@ const navItems = [
 export default function Navbar() {
   const { user } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
 
   if (pathname.startsWith('/profile')) {
     return null;
   }
+
+  const handleSignOut = async () => {
+    signOut(auth);
+    router.push('/');
+  };
 
   return (
     <NextUINavbar maxWidth="xl" shouldHideOnScroll isBordered>
@@ -71,14 +88,38 @@ export default function Navbar() {
         </ul>
         <NavbarItem className="ml-auto">
           {user ? (
-            <NextLink color="foreground" href={`/profile/${user.uid}`}>
-              <Avatar
-                isBordered
-                size="sm"
-                src={user.photoURL || undefined}
-                name={nameToInitials(user.displayName)}
-              />
-            </NextLink>
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <Avatar
+                  isBordered
+                  size="sm"
+                  as="button"
+                  className="transition-transform"
+                  src={user.photoURL || undefined}
+                  name={nameToInitials(user.displayName)}
+                />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownSection title={user.displayName || ''} showDivider>
+                  <DropdownItem
+                    startContent={<BiUser />}
+                    onClick={() => router.push(`/profile/${user.uid}`)}
+                    key="profile"
+                  >
+                    View Profile
+                  </DropdownItem>
+                </DropdownSection>
+                <DropdownSection>
+                  <DropdownItem
+                    startContent={<BiLogOut />}
+                    onClick={handleSignOut}
+                    key="signOut"
+                  >
+                    Sign Out
+                  </DropdownItem>
+                </DropdownSection>
+              </DropdownMenu>
+            </Dropdown>
           ) : (
             <NextLink color="foreground" href={'/signup'}>
               Sign In
