@@ -1,13 +1,15 @@
 'use client';
 import { useSession } from '@/lib/context/UserContext';
-import { Avatar } from '@nextui-org/react';
+import { Avatar, Button, Divider } from '@nextui-org/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { GoBell, GoGear, GoHome } from 'react-icons/go';
+import { GoBell, GoGear, GoHome, GoUpload } from 'react-icons/go';
+import { useIsMobile } from '@/lib/hooks/useIsMobile';
 
 export default function ProfileNav() {
   const { user } = useSession();
+  const isMobile = useIsMobile();
 
   const navItems = [
     { name: 'Home', link: `/`, icon: <GoHome /> },
@@ -35,6 +37,19 @@ export default function ProfileNav() {
         {navItems.map((item) => (
           <NevItem key={item.name} {...item} />
         ))}
+        <div className="p-5 max-md:hidden">
+          <Divider />
+        </div>
+        <li className="p-2 md:ps-6 md:pe-10 max-md:text-center">
+          <Button
+            startContent={!isMobile && <GoUpload />}
+            variant="ghost"
+            isIconOnly={isMobile}
+            className="md:px-8 border-1.5 rounded-full md:rounded-md"
+          >
+            {isMobile ? <GoUpload /> : 'Upload'}
+          </Button>
+        </li>
       </ul>
     </nav>
   );
