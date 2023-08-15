@@ -13,14 +13,9 @@ const getUser = async (id: string) => {
 export default async function Page({ params }: Props) {
   const user = await getUser(params.id);
   return (
-    <main>
-      <div className="flex">
-        <ProfileNav />
-        <section className="w-screen px-16">
-          <UserBio {...user} />
-          <ProfileBody />
-        </section>
-      </div>
-    </main>
+    <section className="w-screen px-16">
+      <UserBio {...user} />
+      <ProfileBody />
+    </section>
   );
 }
