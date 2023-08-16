@@ -5,12 +5,12 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  useDisclosure,
 } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
-import { GoUpload } from 'react-icons/go';
 import { BiSolidCloudUpload } from 'react-icons/bi';
 import { useIsMobile } from '@/lib/hooks/useIsMobile';
+import { Image } from '@nextui-org/image';
+import { GrClose } from 'react-icons/gr';
 
 type Props = {
   isOpen: boolean;
@@ -18,10 +18,19 @@ type Props = {
 };
 export default function UploadModal({ isOpen, onOpenChange }: Props) {
   const fileRef = React.useRef<HTMLInputElement>(null);
+  const [file, setFile] = React.useState<File | null>(null);
   const isMobile = useIsMobile();
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFile(file);
+    }
+  };
+
   return (
     <Modal
-      size={isMobile ? 'full' : '2xl'}
+      size={isMobile ? 'full' : 'lg'}
       backdrop="blur"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
@@ -33,25 +42,63 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
               Upload Photo
             </ModalHeader>
             <ModalBody className={'md:px-10 md:py-5'}>
-              <input type="file" name="picture" ref={fileRef} hidden />
+              <input
+                type="file"
+                name="picture"
+                ref={fileRef}
+                onChange={handleFileChange}
+                hidden
+              />
               <div
                 className={
-                  'w-full h-72 border border-gray-300 rounded-xl flex flex-col justify-center items-center cursor-pointer'
+                  'h-72 border border-gray-300 rounded-xl overflow-clip'
                 }
-                onClick={() => fileRef.current?.click()}
               >
-                <BiSolidCloudUpload size="3rem" />
-                <p className="text-sm text-gray-500">
-                  Click here to upload an image
-                </p>
+                {file ? (
+                  <div className="relative">
+                    <Button
+                      className={
+                        'absolute top-1.5 right-1.5 z-50 bg-opacity-25 hover:bg-opacity-50 border-1 border-gray-400'
+                      }
+                      isIconOnly
+                      radius="full"
+                      aria-label="Like"
+                      onClick={() => setFile(null)}
+                    >
+                      <GrClose color="white" />
+                    </Button>
+                    <Image
+                      src={URL.createObjectURL(file)}
+                      alt="preview"
+                      className={'h-full w-full object-cover rounded-xl'}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className={
+                      'h-full flex flex-col justify-center items-center cursor-pointer'
+                    }
+                    onClick={() => fileRef.current?.click()}
+                  >
+                    <BiSolidCloudUpload size="3rem" />
+                    <p className="text-sm text-gray-500">
+                      Click here to upload an image
+                    </p>
+                  </div>
+                )}
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onClick={onClose}>
+              <Button
+                size="sm"
+                color="danger"
+                variant="light"
+                onClick={onClose}
+              >
                 Close
               </Button>
-              <Button color="primary" onPress={onClose}>
-                Action
+              <Button size={'sm'} color="primary" onPress={onClose}>
+                Next
               </Button>
             </ModalFooter>
           </>
