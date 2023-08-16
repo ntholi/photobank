@@ -12,15 +12,15 @@
   "dependencies": {
     "@nextui-org/button": "^2.0.11",
     "@nextui-org/card": "^2.0.11",
-    "@nextui-org/dropdown": "^2.0.12",
+    "@nextui-org/dropdown": "^2.0.13",
     "@nextui-org/image": "^2.0.11",
-    "@nextui-org/input": "^2.0.13",
+    "@nextui-org/input": "^2.0.14",
     "@nextui-org/link": "^2.0.11",
-    "@nextui-org/modal": "^2.0.12",
+    "@nextui-org/modal": "^2.0.13",
     "@nextui-org/navbar": "^2.0.11",
     "@nextui-org/progress": "^2.0.11",
     "@nextui-org/radio": "^2.0.12",
-    "@nextui-org/react": "^2.0.19",
+    "@nextui-org/react": "^2.0.22",
     "@nextui-org/skeleton": "^2.0.9",
     "@nextui-org/spinner": "^2.0.9",
     "@nextui-org/switch": "^2.0.11",
@@ -33,7 +33,7 @@
     "@types/react": "18.2.19",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
-    "aws-sdk": "^2.1436.0",
+    "aws-sdk": "^2.1437.0",
     "axios": "^1.4.0",
     "encoding": "^0.1.13",
     "eslint": "8.46.0",
@@ -51,7 +51,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
-    "prettier": "^3.0.1",
+    "prettier": "^3.0.2",
     "prettier-plugin-tailwindcss": "^0.4.1",
     "prisma": "^5.1.1"
   }
