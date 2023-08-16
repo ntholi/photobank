@@ -5,6 +5,7 @@ import { Button } from '@nextui-org/button';
 import { GoUpload } from 'react-icons/go';
 import { useDisclosure } from '@nextui-org/modal';
 import UploadModal from './components/UploadModal';
+import { useSession } from '@/lib/context/UserContext';
 
 export default function UploadPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

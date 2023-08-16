@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import {
   Modal,
@@ -11,20 +12,39 @@ import { BiSolidCloudUpload } from 'react-icons/bi';
 import { useIsMobile } from '@/lib/hooks/useIsMobile';
 import { Image } from '@nextui-org/image';
 import { GrClose } from 'react-icons/gr';
+import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import { useSession } from '@/lib/context/UserContext';
+import { v4 as uuidv4 } from 'uuid';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 };
 export default function UploadModal({ isOpen, onOpenChange }: Props) {
+  const { user } = useSession();
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [file, setFile] = React.useState<File | null>(null);
+  const [uploading, setUploading] = React.useState(false);
   const isMobile = useIsMobile();
+  const router = useRouter();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setFile(file);
+    }
+  };
+
+  const handleFileUpload = async () => {
+    if (user && file) {
+      setUploading(true);
+      const ext = file.name.split('.').pop();
+      const storage = getStorage();
+      const storageRef = ref(storage, `${user.uid}/${uuidv4()}.${ext}`);
+
+      await uploadBytes(storageRef, file);
+      setUploading(false);
     }
   };
 
@@ -98,8 +118,16 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
               >
                 Close
               </Button>
-              <Button size={'sm'} color="primary" onPress={onClose}>
-                Next
+              <Button
+                size={'sm'}
+                color="primary"
+                onPress={async () => {
+                  await handleFileUpload();
+                  onClose();
+                }}
+                isLoading={uploading}
+              >
+                Upload
               </Button>
             </ModalFooter>
           </>
