@@ -62,7 +62,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
                       }
                       isIconOnly
                       radius="full"
-                      aria-label="Like"
+                      aria-label="Remove"
                       onClick={() => setFile(null)}
                     >
                       <GrClose color="white" />
@@ -88,11 +88,12 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
                 )}
               </div>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter className="border-t border-gray-300 flex justify-between">
               <Button
                 size="sm"
+                className="border-1"
                 color="danger"
-                variant="light"
+                variant="bordered"
                 onClick={onClose}
               >
                 Close
