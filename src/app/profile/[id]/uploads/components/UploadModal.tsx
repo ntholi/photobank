@@ -110,7 +110,6 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
             </ModalBody>
             <ModalFooter className="border-t border-gray-300 flex justify-between">
               <Button
-                size="sm"
                 className="border-1"
                 color="danger"
                 variant="bordered"
@@ -119,7 +118,6 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
                 Close
               </Button>
               <Button
-                size={'sm'}
                 color="primary"
                 onPress={async () => {
                   await handleFileUpload();
