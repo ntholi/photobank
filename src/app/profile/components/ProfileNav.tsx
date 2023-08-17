@@ -6,6 +6,7 @@ import NextLink from 'next/link';
 import React from 'react';
 import { GoBell, GoGear, GoHome, GoUpload } from 'react-icons/go';
 import { useIsMobile } from '@/lib/hooks/useIsMobile';
+import Link from 'next/link';
 
 export default function ProfileNav() {
   const { user } = useSession();
@@ -30,9 +31,9 @@ export default function ProfileNav() {
   ];
   return (
     <nav className="bg-background fixed bottom-0 w-full sm:w-[20vw] sm:h-screen border-t border-t-zinc-100 sm:border-e sm:border-t-0 border-zinc-300">
-      <div className="p-8 max-sm:hidden">
+      <Link href={'/'} className="inline-block p-8 max-sm:hidden">
         <Image alt="logo" src="/images/logo.jpg" width={100} height={100} />
-      </div>
+      </Link>
       <ul className="flex justify-evenly sm:block">
         {navItems.map((item) => (
           <NevItem key={item.name} {...item} />
