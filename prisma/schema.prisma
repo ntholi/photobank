@@ -23,16 +23,23 @@ model User {
   @@map("users")
 }
 
+enum PhotoStatus {
+  pending
+  approved
+  rejected
+}
+
 model Photo {
-  id          Int   @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   name        String
+  status      PhotoStatus @default(pending)
   description String?
   location    String?
   url         String
-  user        User     @relation(fields: [userId], references: [id])
+  user        User        @relation(fields: [userId], references: [id])
   userId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   @@map("photos")
 }

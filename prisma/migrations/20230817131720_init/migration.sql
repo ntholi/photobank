@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "PhotoStatus" AS ENUM ('pending', 'approved', 'rejected');
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
@@ -15,6 +18,7 @@ CREATE TABLE "users" (
 CREATE TABLE "photos" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "status" "PhotoStatus" NOT NULL DEFAULT 'pending',
     "description" TEXT,
     "location" TEXT,
     "url" TEXT NOT NULL,
