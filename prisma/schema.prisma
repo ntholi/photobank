@@ -12,13 +12,13 @@ datasource db {
 
 model User {
   id        String   @id
-  firstName String?
-  lastName  String?
+  firstName String?  @map("first_name")
+  lastName  String?  @map("last_name")
   email     String?  @unique
   image     String?
   photos    Photo[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
 }
@@ -38,8 +38,8 @@ model Photo {
   url         String
   user        User        @relation(fields: [userId], references: [id])
   userId      String
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
 
   @@map("photos")
 }

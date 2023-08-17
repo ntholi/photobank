@@ -4,12 +4,12 @@ CREATE TYPE "PhotoStatus" AS ENUM ('pending', 'approved', 'rejected');
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
-    "firstName" TEXT,
-    "lastName" TEXT,
+    "first_name" TEXT,
+    "last_name" TEXT,
     "email" TEXT,
     "image" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -23,8 +23,8 @@ CREATE TABLE "photos" (
     "location" TEXT,
     "url" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "photos_pkey" PRIMARY KEY ("id")
 );
