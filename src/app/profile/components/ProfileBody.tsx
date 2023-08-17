@@ -1,6 +1,7 @@
 'use client';
 import { Tab, Tabs } from '@nextui-org/tabs';
-import { Image } from '@nextui-org/react';
+import { Image } from '@nextui-org/image';
+import { CircularProgress } from '@nextui-org/progress';
 import React from 'react';
 import { set } from 'react-hook-form';
 import axios from 'axios';
@@ -43,22 +44,30 @@ export const ProfileBody = () => {
       >
         {(item) => (
           <Tab key={item.title} title={item.title}>
-            <div className="">
-              {photos.length === 0 ? (
-                <p className="text-center text-gray-400 text-sm mt-20">Empty</p>
-              ) : (
-                <div className="md:grid grid-cols-3 gap-3">
-                  {photos.map((photo: Photo) => (
-                    <Image
-                      key={photo.id}
-                      className={'w-full h-full object-cover'}
-                      src={photo.url}
-                      alt={photo.name}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+            {loading ? (
+              <div className="sm:pt-24 flex justify-center">
+                <CircularProgress aria-label="Loading..." />
+              </div>
+            ) : (
+              <>
+                {photos.length === 0 ? (
+                  <p className="text-center text-gray-400 text-sm mt-20">
+                    Empty
+                  </p>
+                ) : (
+                  <div className="md:grid grid-cols-3 gap-3">
+                    {photos.map((photo: Photo) => (
+                      <Image
+                        key={photo.id}
+                        className={'w-full h-full object-cover'}
+                        src={photo.url}
+                        alt={photo.name}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
           </Tab>
         )}
       </Tabs>
