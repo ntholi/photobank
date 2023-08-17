@@ -1,3 +1,5 @@
+export const APP_NAME = 'PhotoBank';
+
 export const constants = {
     UPLOAD_FOLDER: 'uploads',
 };

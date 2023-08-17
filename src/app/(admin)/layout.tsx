@@ -2,13 +2,14 @@ import '../globals.css';
 import '@mantine/core/styles.css';
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core';
+import { APP_NAME } from '@/lib/constants';
 
 export const metadata = {
-  title: 'My Mantine app',
-  description: 'I have followed setup instructions carefully',
+  title: `${APP_NAME} Admin`,
+  description: `Admin Panel for ${APP_NAME}`,
 };
 
-export default function RootLayout({
+export default function MantineLayout({
   children,
 }: {
   children: React.ReactNode;
