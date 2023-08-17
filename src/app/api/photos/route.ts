@@ -6,8 +6,8 @@ export async function GET(request: Request) {
     const userId = searchParams.get('userId');
     const photoType = searchParams.get('type');
 
-    const photos = await prisma.photo.findMany();
-    return NextResponse.json(photos);
+    // const photos = await prisma.photo.findMany();
+    return NextResponse.json([]);
 }
 
 export async function POST(request: Request) {
