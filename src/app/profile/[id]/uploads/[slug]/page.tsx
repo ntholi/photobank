@@ -7,17 +7,17 @@ import PhotoUploadForm from '@/app/profile/[id]/uploads/[slug]/PhotoUploadForm';
 type Props = { params: { slug: string } };
 
 export default async function Page({ params }: Props) {
-  const src = await getDownloadURL(
+  const photoUrl = await getDownloadURL(
     ref(storage, `${constants.UPLOAD_FOLDER}/${params.slug}`),
   );
 
   return (
     <section className="w-screen px-16 pt-5 lg:grid grid-cols-5 space-y-5 gap-5">
       <div className={'col-span-2'}>
-        <Image src={src} alt={'Uploaded Image'} />
+        <Image src={photoUrl} alt={'Uploaded Image'} />
       </div>
       <div className={'rounded-xl col-span-3'}>
-        <PhotoUploadForm />
+        <PhotoUploadForm photoUrl={photoUrl} />
       </div>
     </section>
   );

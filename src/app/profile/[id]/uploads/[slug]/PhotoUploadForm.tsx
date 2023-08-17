@@ -9,9 +9,14 @@ type InputType = {
   name: string;
   description: string;
   location: string;
+  photoUrl: string;
 };
 
-export default function PhotoUploadForm() {
+type Props = {
+  photoUrl: string;
+};
+
+export default function PhotoUploadForm({ photoUrl }: Props) {
   const {
     register,
     handleSubmit,
@@ -22,7 +27,7 @@ export default function PhotoUploadForm() {
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
     try {
-      axios.post('/api/photo', data);
+      await axios.post('/api/photo', data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -34,6 +39,12 @@ export default function PhotoUploadForm() {
     <div>
       <form onSubmit={handleSubmit(onSubmit)} method="POST">
         <div className="space-y-6">
+          <input
+            type="text"
+            value={photoUrl}
+            hidden
+            {...register('photoUrl')}
+          />
           <Input
             label="Name"
             type="text"
