@@ -10,6 +10,13 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@mantine/core": "^7.0.0-beta.0",
+    "@mantine/dates": "^7.0.0-beta.0",
+    "@mantine/form": "^7.0.0-beta.0",
+    "@mantine/hooks": "7.0.0-beta.0",
+    "@mantine/modals": "^7.0.0-beta.0",
+    "@mantine/notifications": "^7.0.0-beta.0",
+    "@mantine/nprogress": "^7.0.0-beta.0",
     "@nextui-org/button": "^2.0.11",
     "@nextui-org/card": "^2.0.11",
     "@nextui-org/chip": "^2.0.11",
@@ -36,6 +43,7 @@
     "autoprefixer": "10.4.15",
     "aws-sdk": "^2.1438.0",
     "axios": "^1.4.0",
+    "dayjs": "^1.11.9",
     "encoding": "^0.1.13",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.16",
@@ -43,7 +51,6 @@
     "firebase-admin": "^11.10.1",
     "framer-motion": "^10.16.0",
     "next": "13.4.16",
-    "postcss": "8.4.28",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
@@ -54,6 +61,9 @@
   },
   "devDependencies": {
     "@types/uuid": "^9.0.2",
+    "postcss": "8.4.28",
+    "postcss-preset-mantine": "^1.7.0",
+    "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.0.2",
     "prettier-plugin-tailwindcss": "^0.5.3",
     "prisma": "^5.1.1"
