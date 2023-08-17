@@ -2,21 +2,22 @@
 import React from 'react';
 import {
   Modal,
-  ModalContent,
-  ModalHeader,
   ModalBody,
+  ModalContent,
   ModalFooter,
+  ModalHeader,
 } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
 import { BiSolidCloudUpload } from 'react-icons/bi';
 import { useIsMobile } from '@/lib/hooks/useIsMobile';
 import { Image } from '@nextui-org/image';
 import { GrClose } from 'react-icons/gr';
-import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import { ref, uploadBytes } from 'firebase/storage';
 import { useSession } from '@/lib/context/UserContext';
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from 'next/navigation';
 import { constants } from '@/lib/constants';
+import { storage } from '@/lib/config/firebase';
 
 type Props = {
   isOpen: boolean;
@@ -40,7 +41,6 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
   const handleFileUpload = async () => {
     if (user && file) {
       setUploading(true);
-      const storage = getStorage();
       const storageRef = ref(storage, `${constants.UPLOAD_FOLDER}/${uuidv4()}`);
 
       const results = await uploadBytes(storageRef, file);

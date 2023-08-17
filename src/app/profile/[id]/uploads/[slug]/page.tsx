@@ -1,7 +1,24 @@
-import admin from '@/lib/config/firebase-admin';
+import { Image } from '@nextui-org/image';
+import { getDownloadURL, ref } from 'firebase/storage';
+import { storage } from '@/lib/config/firebase';
+import { constants } from '@/lib/constants';
+import PhotoUploadForm from '@/app/profile/[id]/uploads/[slug]/PhotoUploadForm';
 
 type Props = { params: { slug: string } };
 
 export default async function Page({ params }: Props) {
-  return <section className="w-screen px-16">Hello {params.slug}</section>;
+  const src = await getDownloadURL(
+    ref(storage, `${constants.UPLOAD_FOLDER}/${params.slug}`),
+  );
+
+  return (
+    <section className="w-screen px-16 pt-5 lg:grid grid-cols-5 space-y-5 gap-5">
+      <div className={'col-span-2'}>
+        <Image src={src} alt={'Uploaded Image'} />
+      </div>
+      <div className={'rounded-xl col-span-3'}>
+        <PhotoUploadForm />
+      </div>
+    </section>
+  );
 }

@@ -5,7 +5,7 @@ import { Link } from '@nextui-org/link';
 import NextLink from 'next/link';
 import { Button } from '@nextui-org/button';
 import { Input } from '@nextui-org/input';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import React from 'react';
 import axios from 'axios';
 import {
