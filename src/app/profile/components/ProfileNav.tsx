@@ -17,7 +17,7 @@ export default function ProfileNav() {
     { name: 'Settings', link: `#`, icon: <GoGear /> },
     {
       name: 'Profile',
-      link: `../profile/${user?.uid}`,
+      link: `/profile/${user?.uid}`,
       icon: (
         <Avatar
           isBordered

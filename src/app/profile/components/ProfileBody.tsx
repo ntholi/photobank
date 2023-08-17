@@ -3,9 +3,7 @@ import { Tab, Tabs } from '@nextui-org/tabs';
 import { Image } from '@nextui-org/image';
 import { CircularProgress } from '@nextui-org/progress';
 import React from 'react';
-import { set } from 'react-hook-form';
 import axios from 'axios';
-import { Console } from 'console';
 
 interface Photo {
   id: string;
