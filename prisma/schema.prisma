@@ -15,7 +15,6 @@ model User {
   firstName String?  @map("first_name")
   lastName  String?  @map("last_name")
   email     String?  @unique
-  image     String?
   photos    Photo[]
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
