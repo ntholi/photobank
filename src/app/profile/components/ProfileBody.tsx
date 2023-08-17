@@ -6,6 +6,7 @@ import React from 'react';
 import axios from 'axios';
 import { Chip } from '@nextui-org/chip';
 import { MdOutlineNoPhotography } from 'react-icons/md';
+import NextImage from 'next/image';
 
 enum PhotoStatus {
   PENDING = 'pending',
@@ -59,7 +60,7 @@ export const ProfileBody = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="md:grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {photos.map((photo: Photo) => (
                       <div className="relative flex flex-1" key={photo.id}>
                         {photo.status !== 'approved' && (
@@ -74,6 +75,9 @@ export const ProfileBody = () => {
                           className={'w-full h-full object-cover'}
                           src={photo.url}
                           alt={photo.name}
+                          height={900}
+                          width={900}
+                          as={NextImage}
                         />
                       </div>
                     ))}
