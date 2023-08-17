@@ -11,9 +11,9 @@ const getUser = async (id: string) => {
 export default async function Page({ params }: Props) {
   const user = await getUser(params.id);
   return (
-    <section className="w-screen px-16">
+    <>
       <UserBio displayName={user.displayName} photoURL={user.photoURL} />
       <ProfileBody />
-    </section>
+    </>
   );
 }

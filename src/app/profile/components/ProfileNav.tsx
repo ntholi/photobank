@@ -29,7 +29,7 @@ export default function ProfileNav() {
     },
   ];
   return (
-    <nav className="bg-background fixed bottom-0 w-full sm:w-1/4 sm:h-screen sm:static border-t border-t-zinc-100 sm:border-e sm:border-t-0 border-zinc-300">
+    <nav className="bg-background fixed bottom-0 w-full sm:w-[20vw] sm:h-screen border-t border-t-zinc-100 sm:border-e sm:border-t-0 border-zinc-300">
       <div className="p-8 max-sm:hidden">
         <Image alt="logo" src="/images/logo.jpg" width={100} height={100} />
       </div>
@@ -70,11 +70,10 @@ const NevItem = ({ name, icon, link, active }: NavItemProps) => {
     <li key={name} className="group p-2">
       <NextLink
         href={link}
-        className={`p-2 w-full relative rounded-sm flex md:justify-start justify-center items-center ${activeClass} border-s-2 border-transparent sm:hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
+        className={`p-2 w-full relative rounded-sm flex lg:justify-start justify-center items-center ${activeClass} border-s-2 border-transparent sm:hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
       >
         <span className="mx-3 text-2xl">{icon}</span>
-        <span className="hidden md:inline text-lg font-semibold">{name}</span>
-        {/* <PiArrowRightBold className="absolute right-5 group-hover:inline group-hover:translate-x-3 transition-transform group-hover:text-zinc-500 text-zinc-200" /> */}
+        <span className="hidden lg:inline text-lg font-semibold">{name}</span>
       </NextLink>
     </li>
   );
