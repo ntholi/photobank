@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+    const photoType = searchParams.get('type');
+
+    const photos = await prisma.photo.findMany();
+    return NextResponse.json(photos);
+}
+
 export async function POST(request: Request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');

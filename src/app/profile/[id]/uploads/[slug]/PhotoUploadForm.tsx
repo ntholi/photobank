@@ -31,7 +31,7 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
     try {
-      await axios.post(`/api/photo?userId=${user?.uid}`, data);
+      await axios.post(`/api/photos?userId=${user?.uid}`, data);
       router.push(`/profile/${user?.uid}`);
     } catch (error) {
       console.log(error);
