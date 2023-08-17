@@ -183,7 +183,7 @@ export default function SignupPage() {
             color="foreground"
           >
             Already registered?{' '}
-            <Link href="/login" size="sm" as={NextLink}>
+            <Link href="/signin" size="sm" as={NextLink}>
               Login
             </Link>
           </p>
