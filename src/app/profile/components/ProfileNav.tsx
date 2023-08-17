@@ -30,7 +30,7 @@ export default function ProfileNav() {
     },
   ];
   return (
-    <nav className="bg-background fixed bottom-0 w-full sm:w-[20vw] sm:h-screen border-t border-t-zinc-100 sm:border-e sm:border-t-0 border-zinc-300">
+    <nav className="z-50 bg-background fixed bottom-0 w-full sm:w-[20vw] sm:h-screen border-t border-t-zinc-100 sm:border-e sm:border-t-0 border-zinc-300">
       <Link href={'/'} className="inline-block p-8 max-sm:hidden">
         <Image alt="logo" src="/images/logo.jpg" width={100} height={100} />
       </Link>
