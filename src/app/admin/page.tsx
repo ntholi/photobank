@@ -1,9 +1,9 @@
 export default function ProfilePage() {
   return (
-    <main className='flex h-screen justify-center items-center bg-gray-900'>
+    <main className="flex h-screen justify-center items-center ">
       <div>
-        <h1 className='text-8xl text-gray-50 text-center'>PhotBank</h1>
-        <p className='text-xl text-gray-50 text-center mt-4 uppercase'>
+        <h1 className="text-8xl text-center">PhotBank</h1>
+        <p className="text-xl text-center mt-4 uppercase">
           Imagine a very nice admin page here
         </p>
       </div>
