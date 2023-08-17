@@ -45,7 +45,7 @@ export default function ProfileNav() {
             startContent={!isMobile && <GoUpload />}
             variant="ghost"
             isIconOnly={isMobile}
-            href={`/profile/${user?.uid}/upload`}
+            href={`/profile/${user?.uid}/uploads/new`}
             as={NextLink}
             className="md:px-8 border-1.5 rounded-full md:rounded-md"
           >
