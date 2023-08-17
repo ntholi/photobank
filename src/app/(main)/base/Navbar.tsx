@@ -66,7 +66,10 @@ export default function Navbar() {
       <NavbarContent>
         <NavbarMenuToggle className="sm:hidden" />
         <NavbarBrand as="li" className="gap-3 max-w-fit">
-          <NextLink className="flex justify-start items-center gap-1" href="/">
+          <NextLink
+            className="hidden sm:flex justify-start items-center gap-1"
+            href="/"
+          >
             <Logo />
           </NextLink>
         </NavbarBrand>
