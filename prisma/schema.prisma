@@ -16,8 +16,23 @@ model User {
   lastName  String?
   email     String?  @unique
   image     String?
+  photos    Photo[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model Photo {
+  id          String   @id
+  name        String
+  description String?
+  location    String?
+  url         String
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("photos")
 }
