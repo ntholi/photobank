@@ -28,7 +28,6 @@ export const ProfileBody = () => {
     try {
       const res = await axios.get(`/api/photos?type=${key}`);
       setPhotos(res.data as Photo[]);
-      console.log(res.data);
     } finally {
       setLoading(false);
     }

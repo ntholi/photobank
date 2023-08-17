@@ -12,7 +12,11 @@ export default async function Page({ params }: Props) {
   const user = await getUser(params.id);
   return (
     <>
-      <UserBio displayName={user.displayName} photoURL={user.photoURL} />
+      <UserBio
+        userId={user.uid}
+        displayName={user.displayName}
+        photoURL={user.photoURL}
+      />
       <ProfileBody />
     </>
   );
