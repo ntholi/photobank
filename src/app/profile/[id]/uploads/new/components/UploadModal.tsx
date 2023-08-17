@@ -16,6 +16,7 @@ import { getStorage, ref, uploadBytes } from 'firebase/storage';
 import { useSession } from '@/lib/context/UserContext';
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from 'next/navigation';
+import { constants } from '@/lib/constants';
 
 type Props = {
   isOpen: boolean;
@@ -39,12 +40,12 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
   const handleFileUpload = async () => {
     if (user && file) {
       setUploading(true);
-      const ext = file.name.split('.').pop();
       const storage = getStorage();
-      const storageRef = ref(storage, `${user.uid}/${uuidv4()}.${ext}`);
+      const storageRef = ref(storage, `${constants.UPLOAD_FOLDER}/${uuidv4()}`);
 
-      await uploadBytes(storageRef, file);
+      const results = await uploadBytes(storageRef, file);
       setUploading(false);
+      return results.metadata.name;
     }
   };
 
@@ -120,12 +121,13 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
               <Button
                 color="primary"
                 onPress={async () => {
-                  await handleFileUpload();
+                  const fileName = await handleFileUpload();
                   onClose();
+                  router.push(`/profile/${user?.uid}/uploads/${fileName}`);
                 }}
                 isLoading={uploading}
               >
-                Upload
+                Next
               </Button>
             </ModalFooter>
           </>
