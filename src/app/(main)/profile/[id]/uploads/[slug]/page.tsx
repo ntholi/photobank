@@ -2,7 +2,7 @@ import { Image } from '@nextui-org/image';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '@/lib/config/firebase';
 import { constants } from '@/lib/constants';
-import PhotoUploadForm from '@/app/profile/[id]/uploads/[slug]/PhotoUploadForm';
+import PhotoUploadForm from './PhotoUploadForm';
 
 type Props = { params: { slug: string } };
 

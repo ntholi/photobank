@@ -4,7 +4,7 @@ import { Image } from '@nextui-org/image';
 import { Button } from '@nextui-org/button';
 import { GoUpload } from 'react-icons/go';
 import { useDisclosure } from '@nextui-org/modal';
-import UploadModal from '@/app/profile/[id]/uploads/new/components/UploadModal';
+import UploadModal from './components/UploadModal';
 
 export default function UploadPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -26,7 +26,12 @@ export default function UploadPage() {
           accepted, all photos are subject to review before they can be
           published on the photo bank
         </p>
-        <Button onPress={onOpen} startContent={<GoUpload />} className="">
+        <Button
+          onPress={onOpen}
+          startContent={<GoUpload />}
+          color="primary"
+          className="mt-5"
+        >
           Upload
         </Button>
       </section>
