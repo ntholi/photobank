@@ -2,10 +2,16 @@
 import { Badge, Table } from '@mantine/core';
 import { Photo, PhotoStatus } from '@prisma/client';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function PhotosTable({ photos }: { photos: Photo[] }) {
+  const router = useRouter();
   const rows = photos.map((it) => (
-    <Table.Tr key={it.name}>
+    <Table.Tr
+      className="cursor-pointer"
+      key={it.name}
+      onClick={() => router.push(`/admin/photos/${it.id}`)}
+    >
       <Table.Td>
         <Image
           src={it.url}
@@ -23,7 +29,7 @@ export default function PhotosTable({ photos }: { photos: Photo[] }) {
   ));
 
   return (
-    <Table striped withTableBorder>
+    <Table striped withTableBorder highlightOnHover>
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Photo</Table.Th>
