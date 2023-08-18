@@ -13,12 +13,12 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from 'firebase/auth';
-import { FirebaseError } from '@firebase/util';
 import { auth, googleProvider } from '@/lib/config/firebase';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import { Divider } from '@nextui-org/react';
+import { FirebaseError } from 'firebase/app';
 
 type InputType = {
   names: string;
