@@ -8,5 +8,5 @@ export const api = (path: string) => {
     if (process.env.NODE_ENV == 'development') {
         return `http://localhost:3000/api/${path}`;
     }
-    throw new Error('Did not set api url in production');
+    return `https://lesothophotobank.vercel.app/api/${path}`;
 };
