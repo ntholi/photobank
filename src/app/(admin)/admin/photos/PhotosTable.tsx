@@ -1,10 +1,20 @@
 'use client';
 import { Badge, Table } from '@mantine/core';
 import { Photo, PhotoStatus } from '@prisma/client';
+import Image from 'next/image';
 
 export default function PhotosTable({ photos }: { photos: Photo[] }) {
   const rows = photos.map((it) => (
     <Table.Tr key={it.name}>
+      <Table.Td>
+        <Image
+          src={it.url}
+          alt={it.name}
+          width={50}
+          height={50}
+          className="rounded object-cover"
+        />
+      </Table.Td>
       <Table.Td>{it.id}</Table.Td>
       <Table.Td>{it.name}</Table.Td>
       <Table.Td>{asBadge(it.status)}</Table.Td>
@@ -16,6 +26,7 @@ export default function PhotosTable({ photos }: { photos: Photo[] }) {
     <Table striped withTableBorder>
       <Table.Thead>
         <Table.Tr>
+          <Table.Th>Photo</Table.Th>
           <Table.Th>ID</Table.Th>
           <Table.Th>Name</Table.Th>
           <Table.Th>Status</Table.Th>
@@ -40,5 +51,5 @@ const asBadge = (status: PhotoStatus) => {
       color = 'red';
       break;
   }
-  return <Badge></Badge>;
+  return <Badge color={color}>{status}</Badge>;
 };
