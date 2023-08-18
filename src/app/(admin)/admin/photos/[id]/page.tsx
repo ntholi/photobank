@@ -6,6 +6,7 @@ import { Photo } from '@prisma/client';
 import { IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
+import { toDateTime } from '@/lib/utils';
 
 type Props = {
   params: {
@@ -29,10 +30,6 @@ async function fetchPhoto(id: string) {
 export default async function PhotoPage({ params }: Props) {
   const photo = await fetchPhoto(params.id);
 
-  console.log(photo);
-
-  // return <>Hello World</>;
-
   return (
     <div>
       <Paper withBorder p="lg">
@@ -54,12 +51,15 @@ export default async function PhotoPage({ params }: Props) {
       <Space h="md" />
       <Paper withBorder p="lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-          <Image src={photo.url} alt={photo.name} width={500} height={500} />
+          <Image src={photo.url} alt={photo.name} width={500} />
           <div className="space-y-3">
             <FieldDisplay label="ID" value={photo.id} />
             <FieldDisplay label="Name" value={photo.name} />
             <FieldDisplay label="Owner" value={photo.userId} />
-            {/* <FieldDisplay label="Created At" value={photo.createdAt} /> */}
+            <FieldDisplay
+              label="Created At"
+              value={toDateTime(photo.createdAt)}
+            />
           </div>
         </div>
       </Paper>
