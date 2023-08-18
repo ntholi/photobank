@@ -1,7 +1,17 @@
 'use client';
 import { useDisclosure } from '@mantine/hooks';
 import { AppShell, Burger, NavLink, useMantineTheme } from '@mantine/core';
-import { IconHome, IconHome2, IconPhoto, IconUser } from '@tabler/icons-react';
+import {
+  IconCash,
+  IconHome,
+  IconHome2,
+  IconMoneybag,
+  IconPhoto,
+  IconReportMoney,
+  IconUser,
+  IconUserDollar,
+  IconZoomMoney,
+} from '@tabler/icons-react';
 import Logo from '@/app/(main)/base/Logo';
 import NextLink from 'next/link';
 
@@ -31,7 +41,8 @@ export default function AdminLayout({ children }: Props) {
         <AppShell.Section grow>
           <Link label="Home" icon={<IconHome />} href="/" />
           <Link label="Photos" icon={<IconPhoto />} href="/admin/photos" />
-          <Link label="Users" icon={<IconUser />} href="/admin/users" />
+          <Link label="Payments" icon={<IconCash />} href="#" />
+          <Link label="Users" icon={<IconUser />} href="#" />
         </AppShell.Section>
         <AppShell.Section>Sign Out</AppShell.Section>
       </AppShell.Navbar>
