@@ -1,9 +1,10 @@
 'use client';
 import { toDateTime } from '@/lib/utils';
-import { Badge, Table } from '@mantine/core';
-import { Photo, PhotoStatus } from '@prisma/client';
+import { Table } from '@mantine/core';
+import { Photo } from '@prisma/client';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import PhotoStatusUpdate, { StatusDisplay } from './[id]/PhotoStatusUpdate';
 
 export default function PhotosTable({ photos }: { photos: Photo[] }) {
   const router = useRouter();
@@ -24,7 +25,9 @@ export default function PhotosTable({ photos }: { photos: Photo[] }) {
       </Table.Td>
       <Table.Td>{it.id}</Table.Td>
       <Table.Td>{it.name}</Table.Td>
-      <Table.Td>{asBadge(it.status)}</Table.Td>
+      <Table.Td>
+        <StatusDisplay status={it.status} />
+      </Table.Td>
       <Table.Td>{toDateTime(it.createdAt)}</Table.Td>
     </Table.Tr>
   ));
@@ -44,19 +47,3 @@ export default function PhotosTable({ photos }: { photos: Photo[] }) {
     </Table>
   );
 }
-
-const asBadge = (status: PhotoStatus) => {
-  let color: string;
-  switch (status) {
-    case 'pending':
-      color = 'orange';
-      break;
-    case 'approved':
-      color = 'green';
-      break;
-    case 'rejected':
-      color = 'red';
-      break;
-  }
-  return <Badge color={color}>{status}</Badge>;
-};

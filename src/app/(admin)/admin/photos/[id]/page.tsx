@@ -7,6 +7,8 @@ import { IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import { toDateTime } from '@/lib/utils';
+import FieldDisplay from '@/app/(admin)/base/FieldDisplay';
+import PhotoStatusUpdate from './PhotoStatusUpdate';
 
 type Props = {
   params: {
@@ -55,11 +57,17 @@ export default async function PhotoPage({ params }: Props) {
           <div className="space-y-3">
             <FieldDisplay label="ID" value={photo.id} />
             <FieldDisplay label="Name" value={photo.name} />
-            <FieldDisplay label="Owner" value={photo.userId} />
+            <FieldDisplay label="Owner">
+              <Link className="text-blue-600 hover:underline" href={`#`}>
+                {fullName(photo.user)}
+              </Link>
+            </FieldDisplay>
+            <FieldDisplay label="Location" value={photo.location} />
             <FieldDisplay
               label="Created At"
               value={toDateTime(photo.createdAt)}
             />
+            <PhotoStatusUpdate photo={photo} />
           </div>
         </div>
       </Paper>
@@ -67,17 +75,9 @@ export default async function PhotoPage({ params }: Props) {
   );
 }
 
-const FieldDisplay = ({
-  label,
-  value,
-  children,
-}: {
-  label: string;
-  value?: any;
-  children?: any;
-}) => (
-  <div className="">
-    <div className="text-gray-500 font-bold text-sm">{label}</div>
-    {value ? <div className="text-gray-900">{value}</div> : children}
-  </div>
-);
+const fullName = (user: {
+  firstName?: string | null;
+  lastName?: string | null;
+}) => {
+  return `${user.firstName} ${user.lastName}`.trim();
+};
