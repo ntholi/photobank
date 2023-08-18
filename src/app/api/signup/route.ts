@@ -22,7 +22,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true });
 }
 
-export async function saveUserToDatabase(user: User) {
+export async function saveUserToDatabase(user: {
+    uid: string;
+    email?: string | null;
+    displayName?: string | null;
+}) {
     const savedUser = await prisma.user.findUnique({
         where: {
             email: user.email || '',
