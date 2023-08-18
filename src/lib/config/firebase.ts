@@ -5,7 +5,7 @@ import {
     getAuth,
     GoogleAuthProvider,
 } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
+import { connectStorageEmulator, getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyCzEJxGVTeuvk_4Md6e37J5rwFajMXOz90',
@@ -25,7 +25,8 @@ export const storage = getStorage();
 
 // const analytics = getAnalytics(app);
 
-// if (true) {
-//     console.log('Connecting to the Firebase Emulators...');
-//     connectAuthEmulator(auth, 'http://127.0.0.1:9099');
-// }
+if (true) {
+    console.log('Connecting to the Firebase Emulators...');
+    connectAuthEmulator(auth, 'http://127.0.0.1:9099');
+    connectStorageEmulator(storage, '127.0.0.1', 9199);
+}
