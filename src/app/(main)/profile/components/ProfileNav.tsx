@@ -1,5 +1,5 @@
 'use client';
-import { useSession } from '@/lib/context/UserContext';
+
 import { Avatar, Button, Divider } from '@nextui-org/react';
 import Image from 'next/image';
 import NextLink from 'next/link';
@@ -7,10 +7,13 @@ import React from 'react';
 import { GoBell, GoGear, GoHome, GoUpload } from 'react-icons/go';
 import { useIsMobile } from '@/lib/hooks/useIsMobile';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 export default function ProfileNav() {
-  const { user } = useSession();
   const isMobile = useIsMobile();
+  const { data: session } = useSession();
+
+  const user = session?.user;
 
   const navItems = [
     { name: 'Home', link: `/`, icon: <GoHome /> },
@@ -18,12 +21,12 @@ export default function ProfileNav() {
     { name: 'Settings', link: `#`, icon: <GoGear /> },
     {
       name: 'Profile',
-      link: `/profile/${user?.uid}`,
+      link: `/profile/${user?.username}`,
       icon: (
         <Avatar
           isBordered
           className="w-5 h-5 ms-1 me-0.5"
-          src={user?.photoURL || undefined}
+          src={user?.image || undefined}
         />
       ),
       active: true,
@@ -46,7 +49,7 @@ export default function ProfileNav() {
             startContent={!isMobile && <GoUpload />}
             variant="ghost"
             isIconOnly={isMobile}
-            href={`/profile/${user?.uid}/uploads/new`}
+            href={`/profile/${user?.username}/uploads/new`}
             as={NextLink}
             className="md:px-8 border-1.5 rounded-full md:rounded-md"
           >

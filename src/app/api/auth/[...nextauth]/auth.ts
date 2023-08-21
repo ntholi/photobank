@@ -46,6 +46,7 @@ export const authOptions = {
                 }
                 return {
                     id: user.id,
+                    username: user.username,
                     email: user.email,
                     name: `${user.firstName} ${user.lastName}`,
                     image: user.image,
@@ -53,4 +54,23 @@ export const authOptions = {
             },
         }),
     ],
+    callbacks: {
+        async jwt({ token, account, profile, user }) {
+            if (user) {
+                token.id = user.id;
+                token.username = user.username;
+
+                console.log('jwt() -> token.username', token.username);
+            }
+            return token;
+        },
+        async session({ session, token, user }) {
+            session.user.id = token.id;
+            session.username = token.username;
+
+            console.log('session() -> token.username', token.username);
+
+            return session;
+        },
+    },
 } as AuthOptions;

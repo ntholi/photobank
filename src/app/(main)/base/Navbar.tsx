@@ -102,7 +102,7 @@ export default function Navbar() {
                 <DropdownSection title={user.name || ''} showDivider>
                   <DropdownItem
                     startContent={<BiUser />}
-                    onClick={() => router.push(`/profile/${user.email}`)}
+                    onClick={() => router.push(`/profile/${user.username}`)}
                     key="profile"
                   >
                     View Profile

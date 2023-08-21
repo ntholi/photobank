@@ -50,7 +50,6 @@ export default function LoginPage() {
             src="/images/logo.jpg"
             alt="PhotoBank Logo"
           />
-          Signed in as {session?.user?.email} <br />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign In
           </h2>
