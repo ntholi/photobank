@@ -23,7 +23,6 @@ import { link as linkStyles } from '@nextui-org/theme';
 import NextLink from 'next/link';
 import clsx from 'clsx';
 import Logo from './Logo';
-import { useSession } from '@/lib/context/UserContext';
 import { Avatar } from '@nextui-org/react';
 import { nameToInitials } from '../profile/components/UserBio';
 import { usePathname } from 'next/navigation';
@@ -31,6 +30,7 @@ import { BiLogOut, BiUser } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/config/firebase';
+import { useSession } from 'next-auth/react';
 
 const navItems = [
   {
@@ -48,7 +48,9 @@ const navItems = [
 ];
 
 export default function Navbar() {
-  const { user } = useSession();
+  const { data: session } = useSession();
+  const user = session?.user;
+
   const pathname = usePathname();
   const router = useRouter();
 
@@ -98,15 +100,15 @@ export default function Navbar() {
                   size="sm"
                   as="button"
                   className="transition-transform"
-                  src={user.photoURL || undefined}
-                  name={nameToInitials(user.displayName)}
+                  src={user.image || undefined}
+                  name={nameToInitials(user.name)}
                 />
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">
-                <DropdownSection title={user.displayName || ''} showDivider>
+                <DropdownSection title={user.name || ''} showDivider>
                   <DropdownItem
                     startContent={<BiUser />}
-                    onClick={() => router.push(`/profile/${user.uid}`)}
+                    onClick={() => router.push(`/profile/${user.email}`)}
                     key="profile"
                   >
                     View Profile

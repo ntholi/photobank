@@ -1,12 +1,11 @@
 'use client';
-
-import UserContextProvider from '@/lib/context/UserContext';
+import { SessionProvider } from 'next-auth/react';
 import { NextUIProvider } from '@nextui-org/react';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <NextUIProvider>
-      <UserContextProvider>{children}</UserContextProvider>
+      <SessionProvider>{children}</SessionProvider>
     </NextUIProvider>
   );
 }

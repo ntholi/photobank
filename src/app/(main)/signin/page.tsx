@@ -7,17 +7,8 @@ import { Button } from '@nextui-org/button';
 import { Input } from '@nextui-org/input';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import React, { useState } from 'react';
-import axios from 'axios';
-import {
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/config/firebase';
 import { useRouter } from 'next/navigation';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
-import { Divider } from '@nextui-org/react';
+import { signIn, useSession } from 'next-auth/react';
 
 type InputType = {
   names: string;
@@ -27,19 +18,20 @@ type InputType = {
 
 export default function LoginPage() {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<InputType>();
+  const { data: session } = useSession();
+  const { register, handleSubmit } = useForm<InputType>();
   const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState('');
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
     try {
-      const { email, password } = data;
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-      router.push(`/profile/${user.uid}`);
+      setError('');
+      const res = await signIn('credentials', { ...data, redirect: false });
+      if (res?.error) {
+        setError(res.error);
+      }
+      // router.push(`/profile/${user.uid}`);
     } catch (error) {
       console.log(error);
     } finally {
@@ -58,6 +50,7 @@ export default function LoginPage() {
             src="/images/logo.jpg"
             alt="PhotoBank Logo"
           />
+          Signed in as {session?.user?.email} <br />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign In
           </h2>
@@ -70,6 +63,7 @@ export default function LoginPage() {
                 type="email"
                 variant="bordered"
                 label="Email"
+                errorMessage={error}
                 {...register('email', { required: true })}
               />
               <Input
