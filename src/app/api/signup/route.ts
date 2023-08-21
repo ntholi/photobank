@@ -22,10 +22,11 @@ export async function POST(request: Request) {
             email: email,
         },
     });
+    let user = exists;
     if (!exists) {
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = await prisma.user.create({
+        user = await prisma.user.create({
             data: {
                 username: toUsername(names),
                 email: email,
@@ -34,11 +35,12 @@ export async function POST(request: Request) {
                 hashedPassword: hashedPassword,
             },
         });
-
-        console.log('User', user);
     }
 
-    return NextResponse.redirect('/');
+    return NextResponse.json({
+        ...user,
+        hashedPassword: undefined,
+    });
 }
 
 function toUsername(str: string) {

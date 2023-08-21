@@ -8,17 +8,10 @@ import { Input } from '@nextui-org/input';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import React from 'react';
 import axios from 'axios';
-import {
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/config/firebase';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import { Divider } from '@nextui-org/react';
-import { FirebaseError } from 'firebase/app';
 
 type InputType = {
   names: string;
@@ -26,12 +19,8 @@ type InputType = {
   password: string;
 };
 
-export default function SignupPage() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<InputType>();
+export default function SignUpPage() {
+  const { register, handleSubmit } = useForm<InputType>();
   const [loading, setLoading] = React.useState(false);
   const [step, setStep] = React.useState(0);
   const router = useRouter();
@@ -39,41 +28,15 @@ export default function SignupPage() {
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post('/api/signup', data);
-      if (response.data.success) {
-        const { user } = await signInWithEmailAndPassword(
-          auth,
-          data.email,
-          data.password,
-        );
-        router.push(`/profile/${user.uid}`);
+      const res = await axios.post('/api/signup', data);
+      console.log(res);
+      if (res.data.username) {
+        router.push(`/profile/${res.data.username}`);
       }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    const result = await signInWithPopup(auth, googleProvider);
-    try {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential?.accessToken;
-      const user = result.user;
-      const response = await axios.post('/api/signin?provider=google', user);
-      router.push(`/profile/${user.uid}`);
-    } catch (error: any) {
-      console.error(error);
-      if (error instanceof FirebaseError) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData?.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        if (errorCode === 'auth/account-exists-with-different-credential') {
-          // Handle account linking here, if using.
-        }
-      }
     }
   };
 
@@ -99,7 +62,6 @@ export default function SignupPage() {
               <div className="space-y-3">
                 <Button
                   variant="bordered"
-                  onClick={handleGoogleSignIn}
                   className="border-zinc-700 w-full p-6 flex justify-start border-1 rounded-sm"
                   startContent={<FcGoogle size="1.4rem" />}
                 >

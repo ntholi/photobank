@@ -1,10 +1,5 @@
 import { initializeApp } from 'firebase/app';
 // import { getAnalytics } from "firebase/analytics";
-import {
-    connectAuthEmulator,
-    getAuth,
-    GoogleAuthProvider,
-} from 'firebase/auth';
 import { connectStorageEmulator, getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
@@ -19,14 +14,14 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const googleProvider = new GoogleAuthProvider();
-export const auth = getAuth(app);
-export const storage = getStorage();
+// export const googleProvider = new GoogleAuthProvider();
+// export const auth = getAuth(app);
+export const storage = getStorage(app);
 
 // const analytics = getAnalytics(app);
 
 if (true) {
     console.log('Connecting to the Firebase Emulators...');
-    connectAuthEmulator(auth, 'http://127.0.0.1:9099');
+    // connectAuthEmulator(auth, 'http://127.0.0.1:9099');
     connectStorageEmulator(storage, '127.0.0.1', 9199);
 }

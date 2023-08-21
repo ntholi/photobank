@@ -28,9 +28,8 @@ import { nameToInitials } from '../profile/components/UserBio';
 import { usePathname } from 'next/navigation';
 import { BiLogOut, BiUser } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'firebase/auth';
-import { auth } from '@/lib/config/firebase';
 import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 const navItems = [
   {
@@ -57,11 +56,6 @@ export default function Navbar() {
   if (pathname.startsWith('/profile') || pathname.startsWith('/admin')) {
     return null;
   }
-
-  const handleSignOut = async () => {
-    signOut(auth);
-    router.push('/');
-  };
 
   return (
     <NextUINavbar maxWidth="xl" shouldHideOnScroll isBordered>
@@ -117,7 +111,7 @@ export default function Navbar() {
                 <DropdownSection>
                   <DropdownItem
                     startContent={<BiLogOut />}
-                    onClick={handleSignOut}
+                    onClick={() => signOut()}
                     key="signOut"
                   >
                     Sign Out
