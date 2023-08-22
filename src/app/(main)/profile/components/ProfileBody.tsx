@@ -7,12 +7,9 @@ import axios from 'axios';
 import { Chip } from '@nextui-org/chip';
 import { MdOutlineNoPhotography } from 'react-icons/md';
 import NextImage from 'next/image';
-
-enum PhotoStatus {
-  PENDING = 'pending',
-  APPROVED = 'approved',
-  REJECTED = 'rejected',
-}
+import { PhotoStatus } from '@prisma/client';
+import { PhotoType } from '@/lib/constants';
+import { useSession } from 'next-auth/react';
 
 interface Photo {
   id: string;
@@ -21,16 +18,27 @@ interface Photo {
   status: PhotoStatus;
 }
 
-export const ProfileBody = () => {
+type Props = {
+  userId: number;
+};
+
+export const ProfileBody = ({ userId }: Props) => {
   const [photos, setPhotos] = React.useState<Photo[]>([]);
   const [loading, setLoading] = React.useState(false);
-  let tabs = [{ title: 'Uploads' }, { title: 'Bought' }, { title: 'Saved' }];
+  let tabs = [
+    { title: PhotoType.UPLOADS },
+    { title: PhotoType.BOUGHT },
+    { title: PhotoType.SAVED },
+  ];
 
   async function handleTabChange(key: string | number) {
     setLoading(true);
     try {
-      const res = await axios.get(`/api/photos?type=${key}`);
-      setPhotos(res.data as Photo[]);
+      console.log('requesting user', userId);
+      const res = await axios.get(`/api/photos?type=${key}&userId=${userId}`);
+      if (res.data.photos) {
+        setPhotos(res.data.photos as Photo[]);
+      }
     } finally {
       setLoading(false);
     }
@@ -94,9 +102,9 @@ export const ProfileBody = () => {
 
 function getChipColor(status: PhotoStatus) {
   switch (status) {
-    case PhotoStatus.PENDING:
+    case PhotoStatus.pending:
       return 'warning';
-    case PhotoStatus.REJECTED:
+    case PhotoStatus.rejected:
       return 'danger';
     default:
       return 'success';

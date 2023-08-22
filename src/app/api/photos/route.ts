@@ -1,13 +1,34 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/auth';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { PhotoType } from '@/lib/constants';
 
-export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    const photoType = searchParams.get('type');
+export async function GET(req: NextApiRequest, res: NextApiResponse) {
+    const session = await getServerSession(authOptions);
+    const { searchParams } = new URL(req.url || '');
+    const photoType = searchParams.get('type') as PhotoType;
+    const requestedBy = Number(session?.user.id);
 
-    const photos = await prisma.photo.findMany();
-    return NextResponse.json(photos);
+    const user = await prisma.user.findUnique({
+        where: {
+            id: Number(searchParams.get('userId')),
+        },
+    });
+
+    if (!user) {
+        console.error('User not found');
+        return NextResponse.json({ error: 'User not found' });
+    }
+
+    if (photoType === PhotoType.UPLOADS) {
+        return NextResponse.json({
+            photos: await getUploads(user.id, requestedBy),
+        });
+    }
+
+    return NextResponse.json({ success: false });
 }
 
 export async function POST(request: Request) {
@@ -42,4 +63,14 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true });
+}
+async function getUploads(userId: number | undefined, requestedBy: number) {
+    const isOwner = userId === requestedBy;
+
+    return await prisma.photo.findMany({
+        where: {
+            userId: userId,
+            status: !isOwner ? 'approved' : undefined,
+        },
+    });
 }

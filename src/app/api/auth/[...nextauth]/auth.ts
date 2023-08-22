@@ -61,17 +61,12 @@ export const authOptions = {
                 if ('username' in user) {
                     token.username = user.username;
                 }
-
-                console.log('jwt() -> token.username', token.username);
             }
             return token;
         },
         async session({ session, token, user }) {
             session.user.id = token.id;
             session.user.username = token.username;
-
-            console.log('session() -> token.username', token.username);
-
             return session;
         },
     },

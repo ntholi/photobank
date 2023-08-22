@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db';
 import ProfileBody from '../components/ProfileBody';
 import UserBio from '../components/UserBio';
+import { notFound } from 'next/navigation';
 
 type Props = { params: { slug: string } };
 
@@ -14,6 +15,11 @@ const getUser = async (username: string) => {
 
 export default async function Page({ params }: Props) {
   const user = await getUser(params.slug);
+
+  if (!user) {
+    return notFound();
+  }
+
   return (
     <>
       <UserBio
@@ -21,7 +27,7 @@ export default async function Page({ params }: Props) {
         displayName={`${user?.firstName} ${user?.lastName}`}
         photoURL={user?.image || ''}
       />
-      <ProfileBody />
+      <ProfileBody userId={user.id} />
     </>
   );
 }
