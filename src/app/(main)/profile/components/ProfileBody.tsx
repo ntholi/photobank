@@ -8,7 +8,7 @@ import { Chip } from '@nextui-org/chip';
 import { MdOutlineNoPhotography } from 'react-icons/md';
 import NextImage from 'next/image';
 import { PhotoStatus } from '@prisma/client';
-import { PhotoType } from '@/lib/constants';
+import { GalleryType } from '@/lib/constants';
 
 interface Photo {
   id: string;
@@ -25,9 +25,9 @@ export const ProfileBody = ({ userId }: Props) => {
   const [photos, setPhotos] = React.useState<Photo[]>([]);
   const [loading, setLoading] = React.useState(false);
   let tabs = [
-    { title: PhotoType.UPLOADS },
-    { title: PhotoType.PURCHASED },
-    { title: PhotoType.SAVED },
+    { title: GalleryType.UPLOADS },
+    { title: GalleryType.PURCHASED },
+    { title: GalleryType.SAVED },
   ];
 
   async function handleTabChange(key: string | number) {

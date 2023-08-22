@@ -4,7 +4,7 @@ export const constants = {
     UPLOAD_FOLDER: 'uploads',
 };
 
-export enum PhotoType {
+export enum GalleryType {
     UPLOADS = 'Uploads',
     PURCHASED = 'Purchased',
     SAVED = 'Saved',

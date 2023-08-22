@@ -3,12 +3,12 @@ import { prisma } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PhotoType } from '@/lib/constants';
+import { GalleryType } from '@/lib/constants';
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession(authOptions);
     const { searchParams } = new URL(req.url || '');
-    const photoType = searchParams.get('type') as PhotoType;
+    const photoType = searchParams.get('type') as GalleryType;
     const requestedBy = Number(session?.user.id);
 
     const user = await prisma.user.findUnique({
@@ -21,15 +21,15 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
         return NextResponse.json({ error: 'User not found' });
     }
 
-    if (photoType === PhotoType.UPLOADS) {
+    if (photoType === GalleryType.UPLOADS) {
         return NextResponse.json({
             photos: await getUploads(user.id, requestedBy),
         });
-    } else if (photoType === PhotoType.PURCHASED) {
+    } else if (photoType === GalleryType.PURCHASED) {
         return NextResponse.json({
             photos: await getPurchased(user.id, requestedBy),
         });
-    } else if (photoType === PhotoType.SAVED) {
+    } else if (photoType === GalleryType.SAVED) {
         return NextResponse.json({
             photos: await getSaved(user.id, requestedBy),
         });
