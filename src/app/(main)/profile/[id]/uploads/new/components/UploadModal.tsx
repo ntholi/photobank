@@ -13,18 +13,18 @@ import { useIsMobile } from '@/lib/hooks/useIsMobile';
 import { Image } from '@nextui-org/image';
 import { GrClose } from 'react-icons/gr';
 import { ref, uploadBytes } from 'firebase/storage';
-import { useSession } from '@/lib/context/UserContext';
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from 'next/navigation';
 import { constants } from '@/lib/constants';
 import { storage } from '@/lib/config/firebase';
+import { useSession } from 'next-auth/react';
 
 type Props = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 };
 export default function UploadModal({ isOpen, onOpenChange }: Props) {
-  const { user } = useSession();
+  const { user } = useSession().data || {};
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [file, setFile] = React.useState<File | null>(null);
   const [uploading, setUploading] = React.useState(false);

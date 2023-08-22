@@ -4,8 +4,8 @@ import { Input, Textarea } from '@nextui-org/input';
 import React from 'react';
 import { Button } from '@nextui-org/button';
 import axios from 'axios';
-import { useSession } from '@/lib/context/UserContext';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 type InputType = {
   name: string;
@@ -25,14 +25,14 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
     formState: { errors },
   } = useForm<InputType>();
   const [loading, setLoading] = React.useState(false);
-  const { user } = useSession();
+  const { user } = useSession().data || {};
   const router = useRouter();
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
     try {
-      await axios.post(`/api/photos?userId=${user?.uid}`, data);
-      router.push(`/profile/${user?.uid}`);
+      await axios.post(`/api/photos?userId=${user?.id}`, data);
+      router.push(`/profile/${user?.username}`);
     } catch (error) {
       console.log(error);
     } finally {

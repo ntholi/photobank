@@ -58,7 +58,9 @@ export const authOptions = {
         async jwt({ token, account, profile, user }) {
             if (user) {
                 token.id = user.id;
-                token.username = user.username;
+                if ('username' in user) {
+                    token.username = user.username;
+                }
 
                 console.log('jwt() -> token.username', token.username);
             }
