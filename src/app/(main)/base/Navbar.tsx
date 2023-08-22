@@ -28,8 +28,7 @@ import { nameToInitials } from '../profile/components/UserBio';
 import { usePathname } from 'next/navigation';
 import { BiLogOut, BiUser } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 const navItems = [
   {
