@@ -4,7 +4,7 @@ import React from 'react';
 import PhotosTable from './PhotosTable';
 import { Photo } from '@prisma/client';
 import axios from 'axios';
-import { api } from '@/lib/constants';
+import api from '@/lib/config/api';
 
 const fetchPhotos = async () => {
   try {

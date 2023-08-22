@@ -1,4 +1,4 @@
-import { api } from '@/lib/constants';
+import api from '@/lib/config/api';
 import { Photo } from '@prisma/client';
 import Image from 'next/image';
 import React from 'react';
