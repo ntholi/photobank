@@ -17,21 +17,17 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
         },
     });
 
-    if (!user) {
-        return NextResponse.json({ error: 'User not found' });
-    }
-
-    if (photoType === GalleryType.UPLOADS) {
+    if (photoType === GalleryType.PURCHASED) {
         return NextResponse.json({
-            photos: await getUploads(user.id, requestedBy),
-        });
-    } else if (photoType === GalleryType.PURCHASED) {
-        return NextResponse.json({
-            photos: await getPurchased(user.id, requestedBy),
+            photos: await getPurchased(user?.id, requestedBy),
         });
     } else if (photoType === GalleryType.SAVED) {
         return NextResponse.json({
-            photos: await getSaved(user.id, requestedBy),
+            photos: await getSaved(user?.id, requestedBy),
+        });
+    } else {
+        return NextResponse.json({
+            photos: await getUploads(user?.id, requestedBy),
         });
     }
 }
@@ -79,7 +75,7 @@ async function getUploads(userId: number | undefined, requestedBy: number) {
         },
     });
 }
-async function getPurchased(userId: number, requestedBy: number) {
+async function getPurchased(userId: number | undefined, requestedBy: number) {
     const isOwner = userId === requestedBy;
     if (!isOwner) {
         return [];
@@ -96,7 +92,7 @@ async function getPurchased(userId: number, requestedBy: number) {
     return items.map((it) => it.photo);
 }
 
-async function getSaved(userId: number, requestedBy: number) {
+async function getSaved(userId: number | undefined, requestedBy: number) {
     const isOwner = userId === requestedBy;
     if (!isOwner) {
         return [];

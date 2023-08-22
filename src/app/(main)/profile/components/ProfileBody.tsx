@@ -33,7 +33,6 @@ export const ProfileBody = ({ userId }: Props) => {
   async function handleTabChange(key: string | number) {
     setLoading(true);
     try {
-      console.log('requesting user', userId);
       const res = await axios.get(`/api/photos?type=${key}&userId=${userId}`);
       if (res.data.photos) {
         setPhotos(res.data.photos as Photo[]);
