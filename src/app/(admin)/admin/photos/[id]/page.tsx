@@ -1,8 +1,5 @@
 import React from 'react';
 import { Paper, Space, Title, Button, Image } from '@mantine/core';
-import axios from 'axios';
-import { api } from '@/lib/constants';
-import { Photo } from '@prisma/client';
 import { IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
