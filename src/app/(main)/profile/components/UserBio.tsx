@@ -16,15 +16,17 @@ export default function UserBio({ photoURL, displayName, username }: Props) {
   return (
     <div className="flex mt-8">
       <Image
-        width={160}
-        height={160}
+        width={250}
+        height={250}
         referrerPolicy="no-referrer"
         src={largeSize(photoURL) || '/images/profile.png'}
-        className="rounded-full border border-zinc-400"
+        className="rounded-full border border-zinc-400 w-32 h-32 sm:w-40 sm:h-40"
         alt="Profile Picture"
       />
-      <div className="ml-5 sm:ml-16 mt-5">
-        <h1 className="sm:text-xl font-bold text-zinc-600">{displayName}</h1>
+      <div className="ml-5 sm:ml-16 mt-2 sm:mt-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-zinc-600">
+          {displayName}
+        </h1>
         {user?.username === username && (
           <Button size="sm" className="mt-3" radius="sm">
             Edit Profile
