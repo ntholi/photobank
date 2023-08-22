@@ -77,9 +77,11 @@ const NevItem = ({ name, icon, link, active }: NavItemProps) => {
     <li key={name} className="group p-2">
       <NextLink
         href={link}
-        className={`p-2 w-full relative rounded-sm flex lg:justify-start justify-center items-center ${activeClass} border-s-2 border-transparent sm:hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
+        className={`p-2 w-full relative rounded-sm flex lg:justify-start justify-center items-center ${activeClass} sm:hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
       >
-        <span className="mx-3 text-2xl">{icon}</span>
+        <span className="mx-3 text-2xl transition-transform duration-500 ease-in-out group-hover:scale-110 group-hover:font-bold">
+          {icon}
+        </span>
         <span className="hidden lg:inline text-lg font-semibold">{name}</span>
       </NextLink>
     </li>
