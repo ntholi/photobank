@@ -7,8 +7,13 @@ import axios from 'axios';
 import { api } from '@/lib/constants';
 
 const fetchPhotos = async () => {
-  const res = await axios.get(api('photos'));
-  return res.data as Photo[];
+  try {
+    const res = await axios.get(api('photos'));
+    if (res.data.length > 0) {
+      return res.data as Photo[];
+    }
+  } catch (error) {}
+  return [] as Photo[];
 };
 
 export default async function PhotosPage() {

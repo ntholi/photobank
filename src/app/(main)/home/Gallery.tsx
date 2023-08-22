@@ -4,8 +4,14 @@ import Image from 'next/image';
 import React from 'react';
 
 const getPhotos = async () => {
-  const photos = await fetch(api('photos'));
-  return (await photos.json()) as Photo[];
+  const response = await fetch(api('photos'), {
+    next: { revalidate: 60 * 60 * 24 },
+  });
+  if (response.ok) {
+    const photos: Photo[] = await response.json();
+    if (photos) return photos;
+  }
+  return [] as Photo[];
 };
 
 export default async function Gallery() {
