@@ -6,7 +6,8 @@ import { notFound } from 'next/navigation';
 type Props = { params: { slug: string } };
 
 const getUser = async (username: string) => {
-  return await prisma.user.findFirst({
+  if (!username) return null;
+  return await prisma.user.findUnique({
     where: {
       username: username,
     },

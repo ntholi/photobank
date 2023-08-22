@@ -23,6 +23,10 @@ export default function LoginPage() {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
 
+  if (session) {
+    router.push(`/profile/${session?.user?.username}`);
+  }
+
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
     try {
@@ -31,7 +35,6 @@ export default function LoginPage() {
       if (res?.error) {
         setError(res.error);
       }
-      router.push(`/profile/${session?.user?.username}`);
     } catch (error) {
       console.log(error);
     } finally {
