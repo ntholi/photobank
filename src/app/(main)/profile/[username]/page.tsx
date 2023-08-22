@@ -3,11 +3,10 @@ import ProfileBody from '../components/ProfileBody';
 import UserBio from '../components/UserBio';
 import { notFound } from 'next/navigation';
 
-type Props = { params: { slug: string } };
+type Props = { params: { username: string } };
 
 const getUser = async (username: string) => {
-  if (!username) return null;
-  return await prisma.user.findUnique({
+  return await prisma.user.findFirst({
     where: {
       username: username,
     },
@@ -15,7 +14,7 @@ const getUser = async (username: string) => {
 };
 
 export default async function Page({ params }: Props) {
-  const user = await getUser(params.slug);
+  const user = await getUser(params.username);
 
   if (!user) {
     return notFound();
