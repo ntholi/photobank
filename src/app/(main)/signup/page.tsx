@@ -29,9 +29,8 @@ export default function SignUpPage() {
     setLoading(true);
     try {
       const res = await axios.post('/api/signup', data);
-      console.log(res);
-      if (res.data.username) {
-        router.push(`/profile/${res.data.username}`);
+      if (res.data.user) {
+        router.push(`/profile/${res.data.user.username}`);
       }
     } catch (error) {
       console.log(error);

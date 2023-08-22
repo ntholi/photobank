@@ -37,10 +37,7 @@ export async function POST(request: Request) {
         });
     }
 
-    return NextResponse.json({
-        ...user,
-        hashedPassword: undefined,
-    });
+    return NextResponse.json({ user: { ...user, hashedPassword: undefined } });
 }
 
 function toUsername(str: string) {

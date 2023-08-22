@@ -31,7 +31,7 @@ export default function LoginPage() {
       if (res?.error) {
         setError(res.error);
       }
-      // router.push(`/profile/${user.uid}`);
+      router.push(`/profile/${session?.user?.username}`);
     } catch (error) {
       console.log(error);
     } finally {
