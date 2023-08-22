@@ -18,7 +18,6 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!user) {
-        console.error('User not found');
         return NextResponse.json({ error: 'User not found' });
     }
 
@@ -27,6 +26,13 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
             photos: await getUploads(user.id, requestedBy),
         });
     } else if (photoType === PhotoType.PURCHASED) {
+        return NextResponse.json({
+            photos: await getPurchased(user.id, requestedBy),
+        });
+    } else if (photoType === PhotoType.SAVED) {
+        return NextResponse.json({
+            photos: await getSaved(user.id, requestedBy),
+        });
     }
 }
 
@@ -72,4 +78,37 @@ async function getUploads(userId: number | undefined, requestedBy: number) {
             status: !isOwner ? 'approved' : undefined,
         },
     });
+}
+async function getPurchased(userId: number, requestedBy: number) {
+    const isOwner = userId === requestedBy;
+    if (!isOwner) {
+        return [];
+    }
+    const items = await prisma.purchasedPhotos.findMany({
+        where: {
+            id: requestedBy,
+        },
+        include: {
+            photo: true,
+        },
+    });
+
+    return items.map((it) => it.photo);
+}
+
+async function getSaved(userId: number, requestedBy: number) {
+    const isOwner = userId === requestedBy;
+    if (!isOwner) {
+        return [];
+    }
+    const items = await prisma.savedPhotos.findMany({
+        where: {
+            id: requestedBy,
+        },
+        include: {
+            photo: true,
+        },
+    });
+
+    return items.map((it) => it.photo);
 }
