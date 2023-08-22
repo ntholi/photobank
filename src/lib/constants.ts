@@ -6,6 +6,6 @@ export const constants = {
 
 export enum PhotoType {
     UPLOADS = 'Uploads',
-    BOUGHT = 'Bought',
+    PURCHASED = 'Purchased',
     SAVED = 'Saved',
 }

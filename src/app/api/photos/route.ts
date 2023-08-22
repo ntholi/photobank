@@ -26,7 +26,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
         return NextResponse.json({
             photos: await getUploads(user.id, requestedBy),
         });
-    } else if (photoType === PhotoType.BOUGHT) {
+    } else if (photoType === PhotoType.PURCHASED) {
     }
 }
 

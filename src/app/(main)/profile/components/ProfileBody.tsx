@@ -9,7 +9,6 @@ import { MdOutlineNoPhotography } from 'react-icons/md';
 import NextImage from 'next/image';
 import { PhotoStatus } from '@prisma/client';
 import { PhotoType } from '@/lib/constants';
-import { useSession } from 'next-auth/react';
 
 interface Photo {
   id: string;
@@ -27,7 +26,7 @@ export const ProfileBody = ({ userId }: Props) => {
   const [loading, setLoading] = React.useState(false);
   let tabs = [
     { title: PhotoType.UPLOADS },
-    { title: PhotoType.BOUGHT },
+    { title: PhotoType.PURCHASED },
     { title: PhotoType.SAVED },
   ];
 
