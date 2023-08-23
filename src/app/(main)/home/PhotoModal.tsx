@@ -2,15 +2,13 @@
 import React from 'react';
 import { Modal, ModalBody, ModalContent } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
-import useIsMobile from '@/lib/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Photo, User } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { TiLocation } from 'react-icons/ti';
-import { GoBookmark, GoDownload } from 'react-icons/go';
-import { FaBookmark, FaCartArrowDown, FaDownload } from 'react-icons/fa';
+import { FaBookmark, FaCartArrowDown } from 'react-icons/fa';
 import axios from 'axios';
 import api from '@/lib/config/api';
 
@@ -25,7 +23,16 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
   const [purchasing, setPurchasing] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
 
-  const handlePurchase = async () => {};
+  const handlePurchase = async () => {
+    if (user) {
+      setPurchasing(true);
+      axios.post(api(`/photos/${photo.id}/purchase`)).finally(() => {
+        setPurchasing(false);
+      });
+    } else {
+      router.push('/signin');
+    }
+  };
 
   const handleSave = async () => {
     if (user) {
@@ -85,9 +92,11 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                     <div className="flex items-center justify-between p-3 py-5 border-t border-gray-200">
                       <Button
                         startContent={<FaCartArrowDown />}
+                        onClick={handlePurchase}
+                        isLoading={purchasing}
                         color="primary"
                       >
-                        Download
+                        Buy Photo
                       </Button>
                       <Button
                         isIconOnly
