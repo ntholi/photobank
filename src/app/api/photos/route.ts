@@ -9,7 +9,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession(authOptions);
     const { searchParams } = new URL(req.url || '');
     const photoType = searchParams.get('type') as GalleryType;
-    const requestedBy = Number(session?.user.id);
+    const requestedBy = Number(session?.user?.id);
 
     const user = await prisma.user.findUnique({
         where: {
