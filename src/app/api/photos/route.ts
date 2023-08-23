@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GalleryType } from '@/lib/constants';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession(authOptions);
@@ -74,7 +74,7 @@ async function publicPhotos() {
 async function getUploads(owner: User | null, sessionUser: SessionUser) {
     const photos = await prisma.photo.findMany({
         where: {
-            userId: Number(sessionUser?.id),
+            userId: Number(owner?.id),
             status: !isOwner(owner, sessionUser) ? 'approved' : undefined,
         },
     });
@@ -87,7 +87,7 @@ async function getPurchased(owner: User | null, sessionUser: SessionUser) {
     }
     const items = await prisma.purchasedPhotos.findMany({
         where: {
-            id: Number(sessionUser?.id),
+            id: Number(owner?.id),
         },
         include: {
             photo: true,
@@ -103,7 +103,7 @@ async function getSaved(owner: User | null, sessionUser: SessionUser) {
     }
     const items = await prisma.savedPhotos.findMany({
         where: {
-            id: Number(sessionUser?.id),
+            id: Number(owner?.id),
         },
         include: {
             photo: true,
@@ -115,8 +115,10 @@ async function getSaved(owner: User | null, sessionUser: SessionUser) {
 
 const isOwner = (user: User | null, sessionUser: SessionUser) => {
     const requestedBy = Number(sessionUser?.id);
-    console.log('sessionUser?.role', sessionUser?.role);
-    if (sessionUser?.role === 'admin' || sessionUser?.role === 'moderator') {
+    if (
+        sessionUser?.role === Role.admin ||
+        sessionUser?.role === Role.moderator
+    ) {
         return true;
     }
     return user?.id === requestedBy;

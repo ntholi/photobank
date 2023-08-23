@@ -50,6 +50,7 @@ export const authOptions = {
                     email: user.email,
                     name: `${user.firstName} ${user.lastName}`,
                     image: user.image,
+                    role: user.role,
                 } as any;
             },
         }),
@@ -58,12 +59,8 @@ export const authOptions = {
         async jwt({ token, account, profile, user }) {
             if (user) {
                 token.id = user.id;
-                if ('username' in user) {
-                    token.username = user.username;
-                }
-                if ('isAdmin' in user) {
-                    token.isAdmin = user.isAdmin;
-                }
+                token.username = user.username;
+                token.role = user.role;
             }
             return token;
         },
