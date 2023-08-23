@@ -8,9 +8,9 @@ import api from '@/lib/config/api';
 
 const fetchPhotos = async () => {
   try {
-    const res = await axios.get(api('photos'));
-    if (res.data.length > 0) {
-      return res.data as Photo[];
+    const res = await axios.get(api('photos?fromAdmin=true')); //TODO: 'admin=true' SHOULD BE REMOVED
+    if (res.data.photos.length > 0) {
+      return res.data.photos as Photo[];
     }
   } catch (error) {}
   return [] as Photo[];

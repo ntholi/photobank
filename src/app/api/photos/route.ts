@@ -10,6 +10,11 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession(authOptions);
     const { searchParams } = new URL(req.url || '');
     const photoType = searchParams.get('type') as GalleryType;
+    const fromAdmin = searchParams.get('fromAdmin') === 'true'; //TODO: THIS IS A TERRIBLE WAY TO DO THIS
+    if (fromAdmin) {
+        const photos = await prisma.photo.findMany({});
+        return NextResponse.json({ photos });
+    }
 
     const owner = await prisma.user.findUnique({
         where: {

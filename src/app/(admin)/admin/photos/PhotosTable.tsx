@@ -11,16 +11,16 @@ export default function PhotosTable({ photos }: { photos: Photo[] }) {
   const rows = photos.map((it) => (
     <Table.Tr
       className="cursor-pointer"
-      key={it.name}
+      key={it.id}
       onClick={() => router.push(`/admin/photos/${it.id}`)}
     >
       <Table.Td>
         <Image
           src={it.url}
           alt={it.name}
-          width={50}
-          height={50}
-          className="rounded object-cover"
+          width={100}
+          height={100}
+          className="w-11 h-11 rounded object-cover"
         />
       </Table.Td>
       <Table.Td>{it.id}</Table.Td>
@@ -28,7 +28,7 @@ export default function PhotosTable({ photos }: { photos: Photo[] }) {
       <Table.Td>
         <StatusDisplay status={it.status} />
       </Table.Td>
-      <Table.Td>{toDateTime(it.createdAt)}</Table.Td>
+      <Table.Td>{it.createdAt && it.createdAt.toLocaleString()}</Table.Td>
     </Table.Tr>
   ));
 
