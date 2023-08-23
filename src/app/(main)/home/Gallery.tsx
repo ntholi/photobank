@@ -10,7 +10,6 @@ const getPhotos = async () => {
   });
   if (response.ok) {
     const res = await response.json();
-    console.log(res);
     if (res.photos) {
       return res.photos as Photo[];
     }
