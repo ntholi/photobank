@@ -6,7 +6,7 @@ import NextLink from 'next/link';
 import { Button } from '@nextui-org/button';
 import { Input } from '@nextui-org/input';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 
@@ -95,7 +95,7 @@ export default function LoginPage() {
             color="foreground"
           >
             {"Don't have an account? "}
-            <Link href="/singup" size="sm" as={NextLink}>
+            <Link href="/signup" size="sm" as={NextLink}>
               Sing Up
             </Link>
           </p>

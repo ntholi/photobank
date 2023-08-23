@@ -149,7 +149,7 @@ export default function SignUpPage() {
           >
             Already registered?{' '}
             <Link href="/signin" size="sm" as={NextLink}>
-              Login
+              Sign In
             </Link>
           </p>
         </div>

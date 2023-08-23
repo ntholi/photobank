@@ -4,9 +4,16 @@ import { Avatar, Button, Divider } from '@nextui-org/react';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import React from 'react';
-import { GoBell, GoGear, GoHome, GoUpload } from 'react-icons/go';
+import {
+  GoBell,
+  GoGear,
+  GoHome,
+  GoSignIn,
+  GoSignOut,
+  GoUpload,
+} from 'react-icons/go';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import useIsMobile from '@/lib/hooks/useIsMobile';
 
 export default function ProfileNav() {
@@ -16,7 +23,6 @@ export default function ProfileNav() {
   const user = session?.user;
 
   const navItems = [
-    { name: 'Home', link: `/`, icon: <GoHome /> },
     { name: 'Notifications', link: `#`, icon: <GoBell /> },
     { name: 'Settings', link: `#`, icon: <GoGear /> },
     {
@@ -38,24 +44,53 @@ export default function ProfileNav() {
         <Image alt="logo" src="/images/logo.jpg" width={100} height={100} />
       </Link>
       <ul className="flex justify-evenly sm:block">
-        {navItems.map((item) => (
-          <NevItem key={item.name} {...item} />
-        ))}
-        <div className="p-5 max-md:hidden">
-          <Divider />
-        </div>
-        <li className="p-2 md:ps-6 md:pe-10 max-md:text-center">
-          <Button
-            startContent={!isMobile && <GoUpload />}
-            variant="ghost"
-            isIconOnly={isMobile}
-            href={`/${user?.username}/uploads/new`}
-            as={NextLink}
-            className="md:px-8 border-1.5 rounded-full md:rounded-md"
-          >
-            {isMobile ? <GoUpload /> : 'Upload'}
-          </Button>
-        </li>
+        <NevItem name="Home" link="/" icon={<GoHome />} />
+        {!session?.user ? (
+          <li className="p-2 md:ps-6 md:pe-10 max-md:text-center">
+            <Button
+              variant="ghost"
+              href={`/signup`}
+              as={NextLink}
+              className="md:px-8 border-1.5 rounded-full md:rounded-md"
+            >
+              <GoSignIn /> Sign In
+            </Button>
+          </li>
+        ) : (
+          <>
+            {navItems.map((item) => (
+              <NevItem key={item.name} {...item} />
+            ))}
+
+            <div className="p-5 max-md:hidden">
+              <Divider />
+            </div>
+            <li className="p-2 md:ps-6 md:pe-10 max-md:text-center">
+              <Button
+                startContent={!isMobile && <GoUpload />}
+                variant="ghost"
+                isIconOnly={isMobile}
+                href={`/${user?.username}/uploads/new`}
+                as={NextLink}
+                className="md:px-8 border-1.5 rounded-full md:rounded-md"
+              >
+                {isMobile ? <GoUpload /> : 'Upload'}
+              </Button>
+            </li>
+
+            <li className="p-2 max-sm:hidden absolute bottom-2">
+              <button
+                onClick={() => signOut()}
+                className={`p-2 w-full flex items-center justify-center md:justify-start text-gray-600 hover:text-black`}
+              >
+                <span className="mx-3">
+                  <GoSignOut />
+                </span>
+                <span className="hidden lg:inline font-semibold">Sign Out</span>
+              </button>
+            </li>
+          </>
+        )}
       </ul>
     </nav>
   );
