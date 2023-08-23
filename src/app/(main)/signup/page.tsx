@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import { Divider } from '@nextui-org/react';
+import { signIn, useSession } from 'next-auth/react';
 
 type InputType = {
   names: string;
@@ -21,17 +22,20 @@ type InputType = {
 
 export default function SignUpPage() {
   const { register, handleSubmit } = useForm<InputType>();
+  const { data: session } = useSession();
   const [loading, setLoading] = React.useState(false);
   const [step, setStep] = React.useState(0);
   const router = useRouter();
+
+  if (session) {
+    router.push(`/${session?.user?.username}`);
+  }
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
     try {
       const res = await axios.post('/api/signup', data);
-      if (res.data.user) {
-        router.push(`/${res.data.user.username}`);
-      }
+      await signIn('credentials', { ...data, redirect: false });
     } catch (error) {
       console.log(error);
     } finally {
