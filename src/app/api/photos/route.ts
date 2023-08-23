@@ -4,31 +4,27 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GalleryType } from '@/lib/constants';
+import { User } from '@prisma/client';
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession(authOptions);
     const { searchParams } = new URL(req.url || '');
     const photoType = searchParams.get('type') as GalleryType;
-    const requestedBy = Number(session?.user?.id);
 
-    const user = await prisma.user.findUnique({
+    const owner = await prisma.user.findUnique({
         where: {
             id: Number(searchParams.get('userId')),
         },
     });
 
-    if (photoType === GalleryType.PURCHASED) {
-        return NextResponse.json({
-            photos: await getPurchased(user?.id, requestedBy),
-        });
+    if (!photoType && !owner) {
+        return await publicPhotos();
+    } else if (photoType === GalleryType.PURCHASED) {
+        return await getPurchased(owner, session?.user);
     } else if (photoType === GalleryType.SAVED) {
-        return NextResponse.json({
-            photos: await getSaved(user?.id, requestedBy),
-        });
+        return await getSaved(owner, session?.user);
     } else {
-        return NextResponse.json({
-            photos: await getUploads(user?.id, requestedBy),
-        });
+        return await getUploads(owner, session?.user);
     }
 }
 
@@ -65,46 +61,63 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
 }
-async function getUploads(userId: number | undefined, requestedBy: number) {
-    const isOwner = userId === requestedBy;
 
-    return await prisma.photo.findMany({
+async function publicPhotos() {
+    const photos = await prisma.photo.findMany({
         where: {
-            userId: userId,
-            status: !isOwner ? 'approved' : undefined,
+            status: 'approved',
         },
     });
+    return NextResponse.json({ photos });
 }
-async function getPurchased(userId: number | undefined, requestedBy: number) {
-    const isOwner = userId === requestedBy;
-    if (!isOwner) {
+
+async function getUploads(owner: User | null, sessionUser: SessionUser) {
+    const photos = await prisma.photo.findMany({
+        where: {
+            userId: Number(sessionUser?.id),
+            status: !isOwner(owner, sessionUser) ? 'approved' : undefined,
+        },
+    });
+    return NextResponse.json({ photos });
+}
+
+async function getPurchased(owner: User | null, sessionUser: SessionUser) {
+    if (!isOwner(owner, sessionUser)) {
         return [];
     }
     const items = await prisma.purchasedPhotos.findMany({
         where: {
-            id: requestedBy,
+            id: Number(sessionUser?.id),
         },
         include: {
             photo: true,
         },
     });
-
-    return items.map((it) => it.photo);
+    const photos = items.map((it) => it.photo);
+    return NextResponse.json({ photos });
 }
 
-async function getSaved(userId: number | undefined, requestedBy: number) {
-    const isOwner = userId === requestedBy;
-    if (!isOwner) {
+async function getSaved(owner: User | null, sessionUser: SessionUser) {
+    if (!(owner?.id === Number(sessionUser?.id))) {
         return [];
     }
     const items = await prisma.savedPhotos.findMany({
         where: {
-            id: requestedBy,
+            id: Number(sessionUser?.id),
         },
         include: {
             photo: true,
         },
     });
-
-    return items.map((it) => it.photo);
+    const photos = items.map((it) => it.photo);
+    return NextResponse.json({ photos });
 }
+
+const isOwner = (user: User | null, sessionUser: SessionUser) => {
+    const requestedBy = Number(sessionUser?.id);
+    console.log('sessionUser?.role', sessionUser?.role);
+    if (sessionUser?.role === 'admin' || sessionUser?.role === 'moderator') {
+        return true;
+    }
+    return user?.id === requestedBy;
+};
