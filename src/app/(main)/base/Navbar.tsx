@@ -30,6 +30,7 @@ import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { nameToInitials } from '../[username]/UserBio';
 import commonUrlPatterns from '@/app/api/signup/commonUrlPatterns';
+import React, { useEffect } from 'react';
 
 const navItems = [
   {
@@ -54,17 +55,40 @@ const isAppPath = (pathname: string) => {
 
 export default function Navbar() {
   const { data: session } = useSession();
+  const [homeStyle, setHomeStyle] = React.useState('');
   const user = session?.user;
 
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    const checkIfHome = () => {
+      if (window.scrollY < 100 && pathname === '/') {
+        setHomeStyle('absolute text-white bg-black/30');
+      } else {
+        setHomeStyle('');
+      }
+    };
+    checkIfHome();
+    const handleScroll = () => {
+      checkIfHome();
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [pathname]);
 
   if (!isAppPath(pathname)) {
     return null;
   }
 
   return (
-    <NextUINavbar maxWidth="xl" shouldHideOnScroll isBordered>
+    <NextUINavbar
+      maxWidth="xl"
+      shouldHideOnScroll
+      isBordered
+      className={homeStyle}
+    >
       <NavbarContent>
         <NavbarMenuToggle className="sm:hidden" />
         <NavbarBrand as="li" className="gap-3 max-w-fit">
@@ -79,10 +103,10 @@ export default function Navbar() {
           {navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
-                className={clsx(
-                  linkStyles({ color: 'foreground' }),
-                  'data-[active=true]:text-primary data-[active=true]:font-medium',
-                )}
+                // className={clsx(
+                //   linkStyles({ color: 'foreground' }),
+                //   'data-[active=true]:text-primary data-[active=true]:font-medium',
+                // )}
                 color="foreground"
                 href={item.href}
               >

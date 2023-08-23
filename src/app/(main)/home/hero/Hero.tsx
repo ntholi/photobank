@@ -1,7 +1,6 @@
 import { CurrentSlideData, Data } from '@/lib/types';
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
-import Header from './Header';
 import SlideInfo from './SlideInfo';
 import Slides from './Slides';
 import Controls from './Controls';
@@ -31,7 +30,6 @@ export default function Home({ sliderData }: { sliderData: Data[] }) {
           currentSlideData={currentSlideData}
         />
         <div className="  absolute z-20  h-full w-full">
-          <Header />
           <div className=" flex h-full w-full grid-cols-10 flex-col md:grid">
             <div className=" col-span-4 mb-3 flex h-full flex-1 flex-col justify-end px-5 md:mb-0 md:justify-center md:px-10">
               <SlideInfo
