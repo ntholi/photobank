@@ -25,6 +25,8 @@ model User {
   photos          Photo[]
   purchasedPhotos PurchasedPhotos[]
   savedPhotos     SavedPhotos[]
+
+  @@map("users")
 }
 
 enum PhotoStatus {
