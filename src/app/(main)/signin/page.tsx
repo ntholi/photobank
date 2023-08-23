@@ -5,9 +5,9 @@ import { Link } from '@nextui-org/link';
 import NextLink from 'next/link';
 import { Button } from '@nextui-org/button';
 import { Input } from '@nextui-org/input';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import React from 'react';
-import { useRouter } from 'next/navigation';
+import { SubmitHandler, set, useForm } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 
 type InputType = {
@@ -19,13 +19,22 @@ type InputType = {
 export default function LoginPage() {
   const router = useRouter();
   const { data: session } = useSession();
-  const { register, handleSubmit } = useForm<InputType>();
+  const { register, handleSubmit, setValue, setFocus } = useForm<InputType>();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
+  const searchParams = useSearchParams();
+  const email = searchParams.get('email');
 
   if (session) {
     router.push(`/${session?.user?.username}`);
   }
+
+  useEffect(() => {
+    if (email) {
+      setValue('email', email);
+      setFocus('password');
+    }
+  }, [email, setValue, setFocus]);
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
@@ -104,5 +113,3 @@ export default function LoginPage() {
     </>
   );
 }
-
-const login = async (email: string, password: string) => {};

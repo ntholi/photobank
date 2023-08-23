@@ -13,6 +13,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import { Divider } from '@nextui-org/react';
 import { signIn, useSession } from 'next-auth/react';
+import router from 'next/navigation';
 
 type InputType = {
   names: string;
@@ -21,7 +22,7 @@ type InputType = {
 };
 
 export default function SignUpPage() {
-  const { register, handleSubmit } = useForm<InputType>();
+  const { register, handleSubmit, getValues } = useForm<InputType>();
   const { data: session } = useSession();
   const [loading, setLoading] = React.useState(false);
   const [step, setStep] = React.useState(0);
@@ -34,13 +35,29 @@ export default function SignUpPage() {
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
     try {
-      const res = await axios.post('/api/signup', data);
+      await axios.post('/api/signup', data);
       await signIn('credentials', { ...data, redirect: false });
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleContinue = async () => {
+    setLoading(true);
+    const email = getValues('email');
+    if (!email) return;
+
+    try {
+      const res = await axios.get(`/api/users/exists?email=${email}`);
+      if (res.data.exists) {
+        router.push(`/signin?email=${email}`);
+      }
+    } finally {
+      setLoading(false);
+    }
+    setStep(1);
   };
 
   return (
@@ -122,7 +139,7 @@ export default function SignUpPage() {
                   <Button
                     color="primary"
                     variant="solid"
-                    onClick={() => setStep(1)}
+                    onClick={handleContinue}
                     type="button"
                     className="flex w-full p-6 justify-center rounded-md"
                   >
