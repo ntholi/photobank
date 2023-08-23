@@ -72,6 +72,9 @@ async function publicPhotos() {
         where: {
             status: 'approved',
         },
+        include: {
+            user: true,
+        },
     });
     return NextResponse.json({ photos });
 }
