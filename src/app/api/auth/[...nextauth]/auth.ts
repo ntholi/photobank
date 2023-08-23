@@ -61,12 +61,18 @@ export const authOptions = {
                 if ('username' in user) {
                     token.username = user.username;
                 }
+                if ('isAdmin' in user) {
+                    token.isAdmin = user.isAdmin;
+                }
             }
             return token;
         },
         async session({ session, token, user }) {
-            session.user.id = token.id;
-            session.user.username = token.username;
+            if (session.user) {
+                session.user.id = token.id;
+                session.user.username = token.username;
+                session.user.role = token.role;
+            }
             return session;
         },
     },

@@ -1,9 +1,5 @@
 import { DefaultSession, DefaultUser } from 'next-auth';
-
-export enum Role {
-    user = 'user',
-    admin = 'admin',
-}
+import { Role } from '@prisma/client';
 
 interface IUser extends DefaultUser {
     role?: Role;
