@@ -24,7 +24,7 @@ export default function LoginPage() {
   const [error, setError] = React.useState('');
 
   if (session) {
-    router.push(`/profile/${session?.user?.username}`);
+    router.push(`/${session?.user?.username}`);
   }
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {

@@ -30,7 +30,7 @@ export default function SignUpPage() {
     try {
       const res = await axios.post('/api/signup', data);
       if (res.data.user) {
-        router.push(`/profile/${res.data.user.username}`);
+        router.push(`/${res.data.user.username}`);
       }
     } catch (error) {
       console.log(error);
