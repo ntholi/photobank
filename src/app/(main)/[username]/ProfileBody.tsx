@@ -78,7 +78,7 @@ export const ProfileBody = ({ userId }: Props) => {
                           </Chip>
                         )}
                         <Image
-                          className={'w-full h-full object-cover'}
+                          className={'min-w-full h-60 sm:h-72 object-cover'}
                           src={photo.url}
                           alt={photo.name}
                           height={900}
