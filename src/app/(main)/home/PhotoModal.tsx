@@ -9,7 +9,10 @@ import { Photo, User } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { TiLocation } from 'react-icons/ti';
-import { GoDownload } from 'react-icons/go';
+import { GoBookmark, GoDownload } from 'react-icons/go';
+import { FaBookmark, FaCartArrowDown, FaDownload } from 'react-icons/fa';
+import axios from 'axios';
+import api from '@/lib/config/api';
 
 type Props = {
   isOpen: boolean;
@@ -19,8 +22,21 @@ type Props = {
 export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
   const { user } = useSession().data || {};
   const router = useRouter();
+  const [purchasing, setPurchasing] = React.useState(false);
+  const [saving, setSaving] = React.useState(false);
 
   const handlePurchase = async () => {};
+
+  const handleSave = async () => {
+    if (user) {
+      setSaving(true);
+      axios.post(api(`/photos/${photo.id}/save`)).finally(() => {
+        setSaving(false);
+      });
+    } else {
+      router.push('/signin');
+    }
+  };
 
   return (
     <Modal
@@ -66,13 +82,21 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                     </p>
                   </div>
                   <footer>
-                    <div className="flex items-center justify-between p-3 border-t border-gray-200">
+                    <div className="flex items-center justify-between p-3 py-5 border-t border-gray-200">
                       <Button
-                        startContent={<GoDownload />}
+                        startContent={<FaCartArrowDown />}
                         color="primary"
-                        variant="bordered"
                       >
                         Download
+                      </Button>
+                      <Button
+                        isIconOnly
+                        color="danger"
+                        aria-label="Bookmark"
+                        onClick={handleSave}
+                        isLoading={saving}
+                      >
+                        <FaBookmark />
                       </Button>
                     </div>
                   </footer>
