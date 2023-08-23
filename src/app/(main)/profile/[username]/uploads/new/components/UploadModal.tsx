@@ -9,7 +9,7 @@ import {
 } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
 import { BiSolidCloudUpload } from 'react-icons/bi';
-import { useIsMobile } from '@/lib/hooks/useIsMobile';
+import useIsMobile from '@/lib/hooks/useIsMobile';
 import { Image } from '@nextui-org/image';
 import { GrClose } from 'react-icons/gr';
 import { ref, uploadBytes } from 'firebase/storage';

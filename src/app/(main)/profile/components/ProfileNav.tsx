@@ -7,14 +7,11 @@ import React from 'react';
 import { GoBell, GoGear, GoHome, GoUpload } from 'react-icons/go';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import useIsMobile from '@/lib/hooks/useIsMobile';
 
 export default function ProfileNav() {
-  const [isMobile, setIsMobile] = React.useState(false);
+  const isMobile = useIsMobile();
   const { data: session } = useSession();
-
-  React.useEffect(() => {
-    setIsMobile(window.matchMedia('(max-width: 768px)').matches);
-  }, []);
 
   const user = session?.user;
 
