@@ -1,4 +1,4 @@
-import ProfileNav from './components/ProfileNav';
+import ProfileNav from './ProfileNav';
 
 export default async function ProfileLayout({ children }: { children: any }) {
   return (

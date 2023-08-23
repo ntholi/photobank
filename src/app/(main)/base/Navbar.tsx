@@ -24,11 +24,12 @@ import NextLink from 'next/link';
 import clsx from 'clsx';
 import Logo from './Logo';
 import { Avatar } from '@nextui-org/react';
-import { nameToInitials } from '../profile/components/UserBio';
 import { usePathname } from 'next/navigation';
 import { BiLogOut, BiUser } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
+import { nameToInitials } from '../[username]/UserBio';
+import commonUrlPatterns from '@/app/api/signup/commonUrlPatterns';
 
 const navItems = [
   {
@@ -45,6 +46,12 @@ const navItems = [
   },
 ];
 
+const isAppPath = (pathname: string) => {
+  return (
+    pathname === '/' || commonUrlPatterns.includes(pathname.replace('/', ''))
+  );
+};
+
 export default function Navbar() {
   const { data: session } = useSession();
   const user = session?.user;
@@ -52,7 +59,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
 
-  if (pathname.startsWith('/profile') || pathname.startsWith('/admin')) {
+  if (!isAppPath(pathname)) {
     return null;
   }
 
@@ -101,7 +108,7 @@ export default function Navbar() {
                 <DropdownSection title={user.name || ''} showDivider>
                   <DropdownItem
                     startContent={<BiUser />}
-                    onClick={() => router.push(`/profile/${user.username}`)}
+                    onClick={() => router.push(`/${user.username}`)}
                     key="profile"
                   >
                     View Profile

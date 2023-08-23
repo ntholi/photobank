@@ -21,7 +21,7 @@ export default function ProfileNav() {
     { name: 'Settings', link: `#`, icon: <GoGear /> },
     {
       name: 'Profile',
-      link: `/profile/${user?.username}`,
+      link: `/${user?.username}`,
       icon: (
         <Avatar
           isBordered
@@ -49,7 +49,7 @@ export default function ProfileNav() {
             startContent={!isMobile && <GoUpload />}
             variant="ghost"
             isIconOnly={isMobile}
-            href={`/profile/${user?.username}/uploads/new`}
+            href={`/${user?.username}/uploads/new`}
             as={NextLink}
             className="md:px-8 border-1.5 rounded-full md:rounded-md"
           >
