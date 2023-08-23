@@ -1,5 +1,3 @@
-'use client';
-import { Button } from '@nextui-org/button';
 import Gallery from './home/Gallery';
 import Hero from './home/hero/Hero';
 import api from '@/lib/config/api';

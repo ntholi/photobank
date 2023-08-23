@@ -1,3 +1,4 @@
+'use client';
 import { CurrentSlideData, Data } from '@/lib/types';
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
