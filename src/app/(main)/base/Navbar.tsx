@@ -38,12 +38,12 @@ const navItems = [
     href: '/',
   },
   {
-    label: 'Pricing',
-    href: '/pricing',
+    label: 'Browse',
+    href: '/#gallery',
   },
   {
     label: 'About',
-    href: '/about',
+    href: '#',
   },
 ];
 
@@ -82,6 +82,11 @@ export default function Navbar() {
     return null;
   }
 
+  const scrollToGallery = () => {
+    const gallerySection = document.getElementById('gallery');
+    gallerySection?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <NextUINavbar
       maxWidth="xl"
@@ -100,20 +105,24 @@ export default function Navbar() {
           </NextLink>
         </NavbarBrand>
         <ul className="hidden sm:flex gap-4 justify-start ml-2">
-          {navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                // className={clsx(
-                //   linkStyles({ color: 'foreground' }),
-                //   'data-[active=true]:text-primary data-[active=true]:font-medium',
-                // )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
+          {navItems.map((item) => {
+            if (item.label == 'Browse') {
+              return (
+                <NavbarItem key={item.href}>
+                  <button color="foreground" onClick={scrollToGallery}>
+                    {item.label}
+                  </button>
+                </NavbarItem>
+              );
+            }
+            return (
+              <NavbarItem key={item.href}>
+                <NextLink color="foreground" href={item.href}>
+                  {item.label}
+                </NextLink>
+              </NavbarItem>
+            );
+          })}
         </ul>
         <NavbarItem className="ml-auto">
           {user ? (

@@ -20,7 +20,7 @@ const getPhotos = async () => {
 };
 
 export default async function Page() {
-  const photos = await getPhotos();
+  const photos = (await getPhotos()).slice(0, 7); //Only take seven photos
   const sliderData = photos.map((it) => ({
     img: it.url,
     title: it.name,
@@ -31,10 +31,12 @@ export default async function Page() {
   return (
     <>
       <Hero sliderData={sliderData} />
-      <div className="px-4">
-        <Divider className="my-10" />
-      </div>
-      <Gallery />
+      <section id="gallery">
+        <div className="px-4">
+          <Divider className="my-10" />
+        </div>
+        <Gallery />
+      </section>
     </>
   );
 }
