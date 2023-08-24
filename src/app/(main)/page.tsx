@@ -3,6 +3,7 @@ import api from '@/lib/config/api';
 import { Photo } from '@prisma/client';
 import GallerySection from './home/GallerySection';
 import Image from 'next/image';
+import Footer from './home/Footer';
 
 const getPhotos = async () => {
   const res = await fetch(api('/photos'), {
@@ -42,6 +43,7 @@ export default async function Page() {
           </p>
         </section>
       )}
+      <Footer className="mt-10" />
     </>
   );
 }
