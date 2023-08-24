@@ -7,6 +7,7 @@ import { Divider } from '@nextui-org/divider';
 import { Input } from '@nextui-org/input';
 
 export default function GallerySection() {
+  const [searchKey, setSearchKey] = React.useState(''); // [1
   return (
     <section id="gallery" className="pt-10">
       <div className="px-4">
@@ -34,9 +35,10 @@ export default function GallerySection() {
               variant="bordered"
               placeholder="Search Photos"
               className="max-w-lg mx-auto"
+              onChange={(e) => setSearchKey(e.target.value)}
             />
             <div className="mt-10">
-              <Gallery />
+              <Gallery searchKey={searchKey} />
             </div>
           </div>
         </Tab>

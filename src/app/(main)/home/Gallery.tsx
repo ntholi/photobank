@@ -9,18 +9,24 @@ import StackGrid from 'react-stack-grid';
 import PhotoModal from './PhotoModal';
 import { useDisclosure } from '@nextui-org/modal';
 import { PhotoWithUser } from '@/lib/types';
+import { type } from 'os';
 
-export default function Gallery() {
+type Props = {
+  searchKey: string;
+};
+
+export default function Gallery({ searchKey }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [photos, setPhotos] = React.useState<PhotoWithUser[]>([]);
   const [selectedPhoto, setSelectedPhoto] =
     React.useState<PhotoWithUser | null>(null);
 
   React.useEffect(() => {
-    axios.get(api('/photos')).then((res) => {
+    axios.get(api(`/photos/search?searchKey=${searchKey}`)).then((res) => {
+      console.log(res.data.photos);
       setPhotos(res.data.photos);
     });
-  }, []);
+  }, [searchKey]);
 
   return (
     <>
@@ -37,7 +43,7 @@ export default function Gallery() {
           event.preventDefault();
         }}
       >
-        <StackGrid columnWidth={470} monitorImagesLoaded={true}>
+        <StackGrid columnWidth={380} monitorImagesLoaded={true}>
           {photos.map((it) => (
             <Image
               key={it.id}

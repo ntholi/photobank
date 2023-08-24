@@ -5,6 +5,7 @@ import { authOptions } from '../auth/[...nextauth]/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GalleryType } from '@/lib/constants';
 import { Role, User } from '@prisma/client';
+import { SessionUser } from '@/lib/types';
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession(authOptions);
