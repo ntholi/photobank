@@ -63,7 +63,7 @@ function Controls({
       <SliderButton handleClick={handleNext}>
         <IoIosArrowForward className=" text-xl" />
       </SliderButton>
-      <Progress curIndex={currentSlideData.index} length={sliderData.length} />
+      {/* <Progress curIndex={currentSlideData.index} length={sliderData.length} /> */}
     </div>
   );
 }

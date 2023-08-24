@@ -8,8 +8,7 @@ import axios from 'axios';
 import StackGrid from 'react-stack-grid';
 import PhotoModal from './PhotoModal';
 import { useDisclosure } from '@nextui-org/modal';
-
-type PhotoWithUser = Photo & { user: User };
+import { PhotoWithUser } from '@/lib/types';
 
 export default function Gallery() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
