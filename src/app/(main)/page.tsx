@@ -1,8 +1,8 @@
-import Gallery from './home/Gallery';
 import Hero from './home/hero/Hero';
 import api from '@/lib/config/api';
 import { Photo } from '@prisma/client';
 import GallerySection from './home/GallerySection';
+import Image from 'next/image';
 
 const getPhotos = async () => {
   const res = await fetch(api('/photos'), {
@@ -30,8 +30,18 @@ export default async function Page() {
 
   return (
     <>
-      <Hero sliderData={sliderData} />
-      <GallerySection />
+      {sliderData && sliderData.length > 0 ? (
+        <>
+          <Hero sliderData={sliderData} />
+          <GallerySection />
+        </>
+      ) : (
+        <section className="h-screen flex justify-center items-center">
+          <p className="text-gray-400 py-10 px-10 border border-gray-200">
+            PhotoBank Empty
+          </p>
+        </section>
+      )}
     </>
   );
 }
