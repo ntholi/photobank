@@ -17,11 +17,17 @@ function SlideInfo({ transitionData, currentSlideData }: Props) {
 
   return (
     <>
-      {/* <PhotoModal
+      <PhotoModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        photo={selectedPhoto}
-      /> */}
+        photo={{
+          id: 1,
+          name: currentSlideData.data.title,
+          description: currentSlideData.data.description,
+          url: currentSlideData.data.img,
+          location: currentSlideData.data.location,
+        }}
+      />
       <motion.span layout className=" mb-2 h-1 w-5 rounded-full bg-white" />
       <OtherInfo
         data={transitionData ? transitionData : currentSlideData.data}
@@ -30,8 +36,7 @@ function SlideInfo({ transitionData, currentSlideData }: Props) {
         <Button
           color="default"
           onClick={() => {
-            // setSelectedPhoto(currentSlideData);
-            // onOpen();
+            onOpen();
           }}
         >
           View Photo

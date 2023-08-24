@@ -69,15 +69,18 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                   <div className="p-3">
                     <h1 className="text-xl text-gray-700 mb-0">{photo.name}</h1>
                     <div className="flex items-center justify-between space-x-6">
-                      <p className="text-sm">
-                        By{' '}
-                        <Link
-                          href={`/${photo.user.username}`}
-                          className="text-gray-400 hover:text-black"
-                        >
-                          @{photo.user.username}
-                        </Link>
-                      </p>
+                      {photo.user && (
+                        <p className="text-sm">
+                          By{' '}
+                          <Link
+                            href={`/${photo.user.username}`}
+                            className="text-gray-400 hover:text-black"
+                          >
+                            @{photo.user.username}
+                          </Link>
+                        </p>
+                      )}
+
                       <p className="flex items-center space-x-1 text-gray-500">
                         <TiLocation className="text-sm" />{' '}
                         <span>{photo.location}</span>
