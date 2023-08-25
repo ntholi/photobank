@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PhotoWithUser } from '@/lib/types';
+import MotionImage from './MotionImage';
 
 type Props = {
   data: PhotoWithUser;
@@ -26,7 +27,9 @@ function SliderCard({ data }: Props) {
         stiffness: 100,
       }}
     >
-      <motion.img
+      <MotionImage
+        height={600}
+        width={300}
         layoutId={data.url}
         alt="Transition Image"
         src={data.url}

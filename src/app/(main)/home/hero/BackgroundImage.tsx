@@ -29,7 +29,7 @@ function BackgroundImage({ transitionData, currentSlideData }: Props) {
       <MotionImage
         alt="Current Image"
         height={600}
-        width={300}
+        width={600}
         key={currentSlideData.data.url + 'transition'}
         src={currentSlideData.data.url}
         className=" absolute left-0 top-0 h-full w-full object-cover brightness-50"
