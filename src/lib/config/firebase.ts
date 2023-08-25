@@ -3,13 +3,12 @@ import { initializeApp } from 'firebase/app';
 import { connectStorageEmulator, getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyD6B4RErZ1B66Ff5Iz4uZakdXft1KfERzQ',
-    authDomain: 'nationalphotobank.firebaseapp.com',
-    projectId: 'nationalphotobank',
-    storageBucket: 'nationalphotobank.appspot.com',
-    messagingSenderId: '820366036958',
-    appId: '1:820366036958:web:f00ee1876e29ba1aed974f',
-    measurementId: 'G-0B5DBK34MF',
+    apiKey: 'AIzaSyDqaCfK9YAr0WfybINmviY0Vx-hULoLUxk',
+    authDomain: 'photobanktests.firebaseapp.com',
+    projectId: 'photobanktests',
+    storageBucket: 'photobanktests.appspot.com',
+    messagingSenderId: '581279966610',
+    appId: '1:581279966610:web:2b0d8452cc77bb637c4d4b',
 };
 
 // Initialize Firebase
