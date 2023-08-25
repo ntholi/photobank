@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { getApp, getApps, initializeApp } from 'firebase/app';
 // import { getAnalytics } from "firebase/analytics";
 import { connectStorageEmulator, getStorage } from 'firebase/storage';
 
@@ -12,7 +12,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
 // export const googleProvider = new GoogleAuthProvider();
 // export const auth = getAuth(app);
 export const storage = getStorage(app);
