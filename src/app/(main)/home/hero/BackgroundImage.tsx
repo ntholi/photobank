@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CurrentSlideData, Data } from '@/lib/types';
+import { CurrentSlideData, PhotoWithUser } from '@/lib/types';
 import MotionImage from './MotionImage';
 
 type Props = {
-  transitionData: Data;
+  transitionData: PhotoWithUser;
   currentSlideData: CurrentSlideData;
 };
 
@@ -15,23 +15,23 @@ function BackgroundImage({ transitionData, currentSlideData }: Props) {
         <MotionImage
           fill
           sizes="100vw"
-          key={transitionData.img}
-          layoutId={transitionData.img}
+          key={transitionData.url}
+          layoutId={transitionData.url}
           alt="Transition Image"
           transition={{
             opacity: { ease: 'linear' },
             layout: { duration: 0.6 },
           }}
           className=" absolute left-0 top-0 z-10 h-full w-full object-cover brightness-50"
-          src={transitionData.img}
+          src={transitionData.url}
         />
       )}
       <MotionImage
         alt="Current Image"
         height={600}
         width={300}
-        key={currentSlideData.data.img + 'transition'}
-        src={currentSlideData.data.img}
+        key={currentSlideData.data.url + 'transition'}
+        src={currentSlideData.data.url}
         className=" absolute left-0 top-0 h-full w-full object-cover brightness-50"
       />
     </>

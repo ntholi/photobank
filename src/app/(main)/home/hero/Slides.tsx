@@ -1,16 +1,16 @@
 import React from 'react';
 import SliderCard from './SliderCard';
-import { Data } from '@/lib/types';
+import { PhotoWithUser } from '@/lib/types';
 
 type Props = {
-  data: Data[];
+  data: PhotoWithUser[];
 };
 
 function Slides({ data }: Props) {
   return (
     <div className=" flex w-full gap-6">
       {data.map((data) => {
-        return <SliderCard key={data.img} data={data} />;
+        return <SliderCard key={data.url} data={data} />;
       })}
     </div>
   );

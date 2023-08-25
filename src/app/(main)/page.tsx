@@ -4,6 +4,7 @@ import { Photo } from '@prisma/client';
 import GallerySection from './home/GallerySection';
 import Image from 'next/image';
 import Footer from './home/Footer';
+import { PhotoWithUser } from '@/lib/types';
 
 const getPhotos = async () => {
   const res = await fetch(api('/photos'), {
@@ -14,26 +15,20 @@ const getPhotos = async () => {
 
   const data = await res.json();
   if (data.photos.length > 0) {
-    return data.photos as Photo[];
+    return data.photos as PhotoWithUser[];
   }
 
-  return [] as Photo[];
+  return [] as PhotoWithUser[];
 };
 
 export default async function Page() {
   const photos = (await getPhotos()).slice(0, 7); //Only take seven photos
-  const sliderData = photos.map((it) => ({
-    img: it.url,
-    title: it.name,
-    description: it.description || '',
-    location: it.location || '',
-  }));
 
   return (
     <>
-      {sliderData && sliderData.length > 0 ? (
+      {photos && photos.length > 0 ? (
         <>
-          <Hero sliderData={sliderData} />
+          <Hero sliderData={photos} />
           <GallerySection />
         </>
       ) : (

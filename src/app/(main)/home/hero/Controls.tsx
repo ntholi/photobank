@@ -1,19 +1,19 @@
 import React from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import Progress from './Progress';
-import { CurrentSlideData, Data } from '@/lib/types';
+import { CurrentSlideData, PhotoWithUser } from '@/lib/types';
 
 type Props = {
   currentSlideData: CurrentSlideData;
-  sliderData: Data[];
-  data: Data[];
-  transitionData: Data;
-  handleData: React.Dispatch<React.SetStateAction<Data[]>>;
-  handleTransitionData: React.Dispatch<React.SetStateAction<Data>>;
+  sliderData: PhotoWithUser[];
+  data: PhotoWithUser[];
+  transitionData: PhotoWithUser;
+  handleData: React.Dispatch<React.SetStateAction<PhotoWithUser[]>>;
+  handleTransitionData: React.Dispatch<React.SetStateAction<PhotoWithUser>>;
   handleCurrentSlideData: React.Dispatch<
     React.SetStateAction<CurrentSlideData>
   >;
-  initData: Data;
+  initData: PhotoWithUser;
 };
 
 function Controls({
@@ -34,7 +34,7 @@ function Controls({
     handleCurrentSlideData({
       data: transitionData ? transitionData : sliderData[0],
       index: sliderData.findIndex(
-        (ele) => ele.img === data[data.length - 1].img,
+        (ele) => ele.url === data[data.length - 1].url,
       ),
     });
     handleTransitionData(data[data.length - 1]);
@@ -44,7 +44,7 @@ function Controls({
     handleData((prev) => prev.slice(1));
     handleCurrentSlideData({
       data: transitionData ? transitionData : initData,
-      index: sliderData.findIndex((ele) => ele.img === data[0].img),
+      index: sliderData.findIndex((ele) => ele.url === data[0].url),
     });
     handleTransitionData(data[0]);
     setTimeout(() => {

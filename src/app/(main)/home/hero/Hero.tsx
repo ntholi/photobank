@@ -1,5 +1,5 @@
 'use client';
-import { CurrentSlideData, Data } from '@/lib/types';
+import { CurrentSlideData, PhotoWithUser } from '@/lib/types';
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
 import SlideInfo from './SlideInfo';
@@ -7,11 +7,11 @@ import Slides from './Slides';
 import Controls from './Controls';
 import BackgroundImage from './BackgroundImage';
 
-export default function Home({ sliderData }: { sliderData: Data[] }) {
+export default function Home({ sliderData }: { sliderData: PhotoWithUser[] }) {
   const initData = sliderData[0];
 
-  const [data, setData] = React.useState<Data[]>(sliderData.slice(1));
-  const [transitionData, setTransitionData] = React.useState<Data>(
+  const [data, setData] = React.useState<PhotoWithUser[]>(sliderData.slice(1));
+  const [transitionData, setTransitionData] = React.useState<PhotoWithUser>(
     sliderData[0],
   );
   const [currentSlideData, setCurrentSlideData] =
