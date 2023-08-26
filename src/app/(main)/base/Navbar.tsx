@@ -29,7 +29,7 @@ import { BiLogOut, BiUser } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { nameToInitials } from '../[username]/UserBio';
-import commonUrlPatterns from '@/app/api/signup/commonUrlPatterns';
+import commonUrlPatterns from '@/app/api/users/commonUrlPatterns';
 import React, { useEffect } from 'react';
 
 const navItems = [

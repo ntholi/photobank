@@ -2,18 +2,13 @@ import { prisma } from '@/lib/db';
 import { AuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import bcrypt from 'bcrypt';
-import { FirestoreAdapter } from '@auth/firebase-adapter';
-import { cert } from 'firebase-admin/app';
-import admin from '@/lib/config/firebase-admin';
 import { auth } from '@/lib/config/firebase';
 import {
     GoogleAuthProvider,
-    getIdTokenResult,
     signInWithCredential,
     signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { destructureNames } from '../../signup/route';
+import { saveUserToDB } from '../../users/userService';
 
 export const authOptions = {
     secret: process.env.SECRET,
@@ -73,17 +68,25 @@ export const authOptions = {
                     const credential = GoogleAuthProvider.credential(
                         account.id_token,
                     );
-                    signInWithCredential(auth, credential).catch((error) => {
-                        // Handle Errors here.
+
+                    try {
+                        const userCredential = await signInWithCredential(
+                            auth,
+                            credential,
+                        );
+                        await saveUserToDB(userCredential.user);
+                    } catch (error: any) {
+                        console.log(error);
                         const errorCode = error.code;
                         const errorMessage = error.message;
                         // The email of the user's account used.
+
                         const email = error.email;
                         // The credential that was used.
                         const credential =
                             GoogleAuthProvider.credentialFromError(error);
                         // ...
-                    });
+                    }
                 }
                 return true;
             } else {
