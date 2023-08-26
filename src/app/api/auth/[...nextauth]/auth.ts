@@ -20,61 +20,27 @@ export const authOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID || '',
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-
-            async profile(profile: any, tokens: any): Promise<User> {
-                console.log({ profile });
-                const user = await prisma.user.findUnique({
-                    where: {
-                        email: profile.email,
-                    },
-                });
-                if (!user) {
-                    throw new Error('No user found');
-                }
-                return {
-                    id: user.id,
-                    name: `${user.firstName} ${user.lastName}`,
-                    email: user.email,
-                    image: user.image,
-                    username: user?.username || '',
-                    role: user.role,
-                };
-            },
         }),
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                email: {
-                    label: 'Email',
-                    type: 'text',
-                    placeholder: 'Email',
-                },
+                email: { label: 'Email', type: 'text' },
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials, req) {
                 if (!credentials?.email || !credentials.password) {
                     throw new Error('Enter email and password');
                 }
-                const userCredentials = await signInWithEmailAndPassword(
+                const { user } = await signInWithEmailAndPassword(
                     auth,
                     credentials.email,
                     credentials.password,
                 );
-                const user = await prisma.user.findUnique({
-                    where: {
-                        id: userCredentials.user.uid,
-                    },
-                });
-                if (!user) {
-                    throw new Error('No user found');
-                }
                 return {
-                    id: user.id,
-                    username: user.username,
+                    id: user.uid,
                     email: user.email,
-                    name: `${user.firstName} ${user.lastName}`,
-                    image: user.image,
-                    role: user.role,
+                    name: user.displayName,
+                    image: user.photoURL,
                 } as any;
             },
         }),
@@ -87,16 +53,11 @@ export const authOptions = {
                     const credential = GoogleAuthProvider.credential(
                         account.id_token,
                     );
-
-                    try {
-                        const userCredential = await signInWithCredential(
-                            auth,
-                            credential,
-                        );
-                        await saveUserToDB(userCredential.user);
-                    } catch (error: any) {
-                        console.log(error);
-                    }
+                    const userCredential = await signInWithCredential(
+                        auth,
+                        credential,
+                    );
+                    await saveUserToDB(userCredential.user);
                 }
                 return true;
             } else {
@@ -106,9 +67,21 @@ export const authOptions = {
 
         async jwt({ token, account, profile, user }) {
             if (user) {
+                const dbUser = await prisma.user.findUnique({
+                    where: {
+                        //TODO: THIS WILL NOT WORK FOR FACEBOOK PROVIDER BECAUSE EMAIL ADDRESSES ARE OPTIONAL,
+                        //TODO: AND I CANNOT USE user.id, BECAUSE THAT VALUE HOLDS A PROVIDER SPECIFIC ID NOT THE FIREBASE UID
+                        email: user.email as string,
+                    },
+                });
+                if (!dbUser) {
+                    throw new Error(`User ${user.id} not found in database`);
+                }
                 token.id = user.id;
-                token.username = user.username;
-                token.role = user.role;
+                token.username = dbUser.username;
+                token.name = `${dbUser.firstName} ${dbUser.lastName}`;
+                token.email = dbUser.email;
+                token.role = dbUser.role;
             }
             return token;
         },

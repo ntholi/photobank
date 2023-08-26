@@ -16,6 +16,7 @@ export const saveUserToDB = async (firebaseUser: FirebaseUser | UserRecord) => {
             email: firebaseUser.email,
             firstName: firstName,
             lastName: lastName,
+            image: firebaseUser.photoURL,
         },
     });
 };
