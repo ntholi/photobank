@@ -19,7 +19,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 
     const owner = await prisma.user.findUnique({
         where: {
-            id: Number(searchParams.get('userId')),
+            id: searchParams.get('userId') || '',
         },
     });
 
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     const userId = searchParams.get('userId');
     const user = await prisma.user.findUnique({
         where: {
-            id: Number(userId),
+            id: userId || '',
         },
     });
     if (!user) {
@@ -83,7 +83,7 @@ async function publicPhotos() {
 async function getUploads(owner: User | null, sessionUser: SessionUser) {
     const photos = await prisma.photo.findMany({
         where: {
-            userId: Number(owner?.id),
+            userId: owner?.id,
             status: !isOwner(owner, sessionUser) ? 'approved' : undefined,
         },
     });
@@ -107,7 +107,7 @@ async function getPurchased(owner: User | null, sessionUser: SessionUser) {
 }
 
 async function getSaved(owner: User | null, sessionUser: SessionUser) {
-    if (!(owner?.id === Number(sessionUser?.id))) {
+    if (!(owner?.id === sessionUser?.id)) {
         return [];
     }
     const items = await prisma.savedPhotos.findMany({
@@ -123,7 +123,7 @@ async function getSaved(owner: User | null, sessionUser: SessionUser) {
 }
 
 const isOwner = (user: User | null, sessionUser: SessionUser) => {
-    const requestedBy = Number(sessionUser?.id);
+    const requestedBy = sessionUser?.id;
     if (
         sessionUser?.role === Role.admin ||
         sessionUser?.role === Role.moderator

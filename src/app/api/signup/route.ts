@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db';
 import bcrypt from 'bcrypt';
 import { NextResponse } from 'next/server';
 import commonUrlPatterns from './commonUrlPatterns';
+import admin from '@/lib/config/firebase-admin';
 
 export async function POST(request: Request) {
     const { email, password, names } = await request.json();
@@ -10,13 +11,7 @@ export async function POST(request: Request) {
         throw new Error('Missing Fields');
     }
 
-    let firstName = names;
-    let lastName = '';
-    if (names && names.split(' ').length >= 2) {
-        const namesArray = names.split(' ');
-        firstName = namesArray.slice(0, namesArray.length - 1).join(' ');
-        lastName = namesArray[namesArray.length - 1];
-    }
+    const { firstName, lastName } = destructureNames(names);
 
     const exists = await prisma.user.findUnique({
         where: {
@@ -25,15 +20,19 @@ export async function POST(request: Request) {
     });
     let user = exists;
     if (!exists) {
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const { uid } = await admin.auth().createUser({
+            email: email,
+            password: password,
+            displayName: `names`,
+        });
 
         user = await prisma.user.create({
             data: {
+                id: uid,
                 username: await generateUsername(firstName, lastName),
                 email: email,
                 firstName: firstName,
                 lastName: lastName,
-                hashedPassword: hashedPassword,
             },
         });
     }
@@ -50,7 +49,6 @@ async function generateUsername(firstName: string, lastName: string) {
     });
 
     let counter = 2;
-
     while (userWithSameUsername) {
         username = `${firstName.toLowerCase()}${lastName.toLowerCase()}`;
 
@@ -62,7 +60,6 @@ async function generateUsername(firstName: string, lastName: string) {
                 username: username,
             },
         });
-
         counter++;
     }
 
@@ -71,4 +68,15 @@ async function generateUsername(firstName: string, lastName: string) {
     }
 
     return username;
+}
+
+function destructureNames(names: string) {
+    let firstName = names;
+    let lastName = '';
+    if (names && names.split(' ').length >= 2) {
+        const namesArray = names.split(' ');
+        firstName = namesArray.slice(0, namesArray.length - 1).join(' ');
+        lastName = namesArray[namesArray.length - 1];
+    }
+    return { firstName, lastName };
 }

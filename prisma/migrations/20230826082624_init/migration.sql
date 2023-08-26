@@ -6,7 +6,7 @@ CREATE TYPE "PhotoStatus" AS ENUM ('pending', 'approved', 'rejected');
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "first_name" TEXT,
     "last_name" TEXT,
@@ -29,7 +29,7 @@ CREATE TABLE "photos" (
     "description" TEXT,
     "location" TEXT,
     "url" TEXT NOT NULL,
-    "user_id" INTEGER NOT NULL,
+    "user_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -40,7 +40,7 @@ CREATE TABLE "photos" (
 CREATE TABLE "purchased_photos" (
     "id" SERIAL NOT NULL,
     "photo_id" INTEGER NOT NULL,
-    "user_id" INTEGER NOT NULL,
+    "user_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -51,7 +51,7 @@ CREATE TABLE "purchased_photos" (
 CREATE TABLE "saved_photos" (
     "id" SERIAL NOT NULL,
     "photo_id" INTEGER NOT NULL,
-    "user_id" INTEGER NOT NULL,
+    "user_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 

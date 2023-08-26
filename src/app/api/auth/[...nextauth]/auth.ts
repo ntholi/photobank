@@ -5,22 +5,16 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
 import { FirestoreAdapter } from '@auth/firebase-adapter';
 import { cert } from 'firebase-admin/app';
+import admin from '@/lib/config/firebase-admin';
+import { auth } from '@/lib/config/firebase';
+import { getIdTokenResult, signInWithEmailAndPassword } from 'firebase/auth';
 
 export const authOptions = {
-    // adapter: FirestoreAdapter({
-    //     credential: cert({
-    //         projectId: process.env.FIREBASE_PROJECT_ID,
-    //         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    //         privateKey: process.env.FIREBASE_PRIVATE_KEY
-    //             ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
-    //             : undefined,
-    //     }),
-    // }),
     secret: process.env.SECRET,
     session: {
         strategy: 'jwt',
     },
-    debug: process.env.NODE_ENV === 'development',
+    // debug: process.env.NODE_ENV === 'development',
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID || '',
@@ -40,19 +34,20 @@ export const authOptions = {
                 if (!credentials?.email || !credentials.password) {
                     throw new Error('Enter email and password');
                 }
+                const userCredentials = await signInWithEmailAndPassword(
+                    auth,
+                    credentials.email,
+                    credentials.password,
+                );
                 const user = await prisma.user.findUnique({
-                    where: { email: credentials.email },
+                    where: {
+                        id: userCredentials.user.uid,
+                    },
                 });
                 if (!user) {
                     throw new Error('No user found');
                 }
-                const match = bcrypt.compareSync(
-                    credentials.password,
-                    user.hashedPassword || '',
-                );
-                if (!match) {
-                    throw new Error('Incorrect password');
-                }
+
                 return {
                     id: user.id,
                     username: user.username,
@@ -64,22 +59,22 @@ export const authOptions = {
             },
         }),
     ],
-    // callbacks: {
-    //     async jwt({ token, account, profile, user }) {
-    //         if (user) {
-    //             token.id = user.id;
-    //             token.username = user.username;
-    //             token.role = user.role;
-    //         }
-    //         return token;
-    //     },
-    //     async session({ session, token, user }) {
-    //         if (session.user) {
-    //             session.user.id = token.id;
-    //             session.user.username = token.username;
-    //             session.user.role = token.role;
-    //         }
-    //         return session;
-    //     },
-    // },
+    callbacks: {
+        async jwt({ token, account, profile, user }) {
+            if (user) {
+                token.id = user.id;
+                token.username = user.username;
+                token.role = user.role;
+            }
+            return token;
+        },
+        async session({ session, token, user }) {
+            if (session.user) {
+                session.user.id = token.id;
+                session.user.username = token.username;
+                session.user.role = token.role;
+            }
+            return session;
+        },
+    },
 } as AuthOptions;
