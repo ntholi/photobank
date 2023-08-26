@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/db';
-import { AuthOptions } from 'next-auth';
+import { AuthOptions, User } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { auth } from '@/lib/config/firebase';
@@ -20,6 +20,26 @@ export const authOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID || '',
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+
+            async profile(profile: any, tokens: any): Promise<User> {
+                console.log({ profile });
+                const user = await prisma.user.findUnique({
+                    where: {
+                        email: profile.email,
+                    },
+                });
+                if (!user) {
+                    throw new Error('No user found');
+                }
+                return {
+                    id: user.id,
+                    name: `${user.firstName} ${user.lastName}`,
+                    email: user.email,
+                    image: user.image,
+                    username: user?.username || '',
+                    role: user.role,
+                };
+            },
         }),
         CredentialsProvider({
             name: 'Credentials',
@@ -48,7 +68,6 @@ export const authOptions = {
                 if (!user) {
                     throw new Error('No user found');
                 }
-
                 return {
                     id: user.id,
                     username: user.username,
@@ -77,23 +96,11 @@ export const authOptions = {
                         await saveUserToDB(userCredential.user);
                     } catch (error: any) {
                         console.log(error);
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        // The email of the user's account used.
-
-                        const email = error.email;
-                        // The credential that was used.
-                        const credential =
-                            GoogleAuthProvider.credentialFromError(error);
-                        // ...
                     }
                 }
                 return true;
             } else {
-                // Return false to display a default error message
                 return false;
-                // Or you can return a URL to redirect to:
-                // return '/unauthorized'
             }
         },
 
@@ -115,23 +122,3 @@ export const authOptions = {
         },
     },
 } as AuthOptions;
-
-async function createUserFromProvider(
-    user: import('next-auth').User | import('next-auth/adapters').AdapterUser,
-) {
-    if (user.email) {
-        const dbUser = await prisma.user.findUnique({
-            where: {
-                email: user.email,
-            },
-        });
-        // if (!dbUser) {
-        //     const {} = destructureNames(user.name);
-        //     await prisma.user.create({
-        //         data: {
-        //             email: user.email,
-        //         },
-        //     });
-        // }
-    }
-}

@@ -5,8 +5,12 @@ import { UserRecord } from 'firebase-admin/lib/auth/user-record';
 
 export const saveUserToDB = async (firebaseUser: FirebaseUser | UserRecord) => {
     const { firstName, lastName } = destructureNames(firebaseUser.displayName);
-    return await prisma.user.create({
-        data: {
+    return await prisma.user.upsert({
+        where: {
+            id: firebaseUser.uid,
+        },
+        update: {},
+        create: {
             id: firebaseUser.uid,
             username: await generateUsername(firstName, lastName),
             email: firebaseUser.email,
