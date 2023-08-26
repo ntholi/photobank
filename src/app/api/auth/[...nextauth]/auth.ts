@@ -7,7 +7,13 @@ import { FirestoreAdapter } from '@auth/firebase-adapter';
 import { cert } from 'firebase-admin/app';
 import admin from '@/lib/config/firebase-admin';
 import { auth } from '@/lib/config/firebase';
-import { getIdTokenResult, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+    GoogleAuthProvider,
+    getIdTokenResult,
+    signInWithCredential,
+    signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { destructureNames } from '../../signup/route';
 
 export const authOptions = {
     secret: process.env.SECRET,
@@ -60,6 +66,34 @@ export const authOptions = {
         }),
     ],
     callbacks: {
+        async signIn({ user, account, profile, email, credentials }) {
+            const isAllowedToSignIn = true;
+            if (isAllowedToSignIn) {
+                if (account?.provider === 'google') {
+                    const credential = GoogleAuthProvider.credential(
+                        account.id_token,
+                    );
+                    signInWithCredential(auth, credential).catch((error) => {
+                        // Handle Errors here.
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        // The email of the user's account used.
+                        const email = error.email;
+                        // The credential that was used.
+                        const credential =
+                            GoogleAuthProvider.credentialFromError(error);
+                        // ...
+                    });
+                }
+                return true;
+            } else {
+                // Return false to display a default error message
+                return false;
+                // Or you can return a URL to redirect to:
+                // return '/unauthorized'
+            }
+        },
+
         async jwt({ token, account, profile, user }) {
             if (user) {
                 token.id = user.id;
@@ -78,3 +112,23 @@ export const authOptions = {
         },
     },
 } as AuthOptions;
+
+async function createUserFromProvider(
+    user: import('next-auth').User | import('next-auth/adapters').AdapterUser,
+) {
+    if (user.email) {
+        const dbUser = await prisma.user.findUnique({
+            where: {
+                email: user.email,
+            },
+        });
+        // if (!dbUser) {
+        //     const {} = destructureNames(user.name);
+        //     await prisma.user.create({
+        //         data: {
+        //             email: user.email,
+        //         },
+        //     });
+        // }
+    }
+}

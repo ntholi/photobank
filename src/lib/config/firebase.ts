@@ -1,7 +1,7 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
 // import { getAnalytics } from "firebase/analytics";
 import { connectStorageEmulator, getStorage } from 'firebase/storage';
-import { getAuth } from 'firebase/auth';
+import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDqaCfK9YAr0WfybINmviY0Vx-hULoLUxk',
@@ -15,7 +15,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-// export const googleProvider = new GoogleAuthProvider();
+export const googleProvider = new GoogleAuthProvider();
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 

@@ -70,7 +70,9 @@ async function generateUsername(firstName: string, lastName: string) {
     return username;
 }
 
-function destructureNames(names: string) {
+export function destructureNames(names?: string | null) {
+    if (!names) return { firstName: '', lastName: '' };
+
     let firstName = names;
     let lastName = '';
     if (names && names.split(' ').length >= 2) {
