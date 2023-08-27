@@ -1,15 +1,16 @@
 'use client';
 import { Button } from '@nextui-org/button';
 import { Image } from '@nextui-org/image';
+import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
 
 type Props = {
-  photoURL?: string;
-  displayName?: string;
-  username: string;
+  image?: string | null;
+  name?: string | null;
+  id: string;
 };
 
-export default function UserBio({ photoURL, displayName, username }: Props) {
+export default function UserBio({ image, name, id }: Props) {
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -19,15 +20,13 @@ export default function UserBio({ photoURL, displayName, username }: Props) {
         width={250}
         height={250}
         referrerPolicy="no-referrer"
-        src={largeSize(photoURL) || '/images/profile.png'}
+        src={largeSize(image) || '/images/profile.png'}
         className="rounded-full border border-zinc-400 w-32 h-32 sm:w-40 sm:h-40"
         alt="Profile Picture"
       />
       <div className="ml-5 sm:ml-16 mt-2 sm:mt-3">
-        <h1 className="text-xl sm:text-2xl font-bold text-zinc-600">
-          {displayName}
-        </h1>
-        {user?.username === username && (
+        <h1 className="text-xl sm:text-2xl font-bold text-zinc-600">{name}</h1>
+        {user?.id === id && (
           <Button size="sm" className="mt-3" radius="sm">
             Edit Profile
           </Button>

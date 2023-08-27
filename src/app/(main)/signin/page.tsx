@@ -26,7 +26,7 @@ export default function LoginPage() {
   const email = searchParams.get('email');
 
   if (session) {
-    router.push(`/${session?.user?.username}`);
+    router.push(`/profile/${session?.user?.id}`);
   }
 
   useEffect(() => {

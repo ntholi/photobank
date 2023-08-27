@@ -28,9 +28,9 @@ import { usePathname } from 'next/navigation';
 import { BiLogOut, BiUser } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
-import { nameToInitials } from '../[username]/UserBio';
 import commonUrlPatterns from '@/app/api/users/commonUrlPatterns';
 import React, { useEffect } from 'react';
+import { nameToInitials } from '../profile/[id]/UserBio';
 
 const navItems = [
   {
@@ -141,7 +141,7 @@ export default function Navbar() {
                 <DropdownSection title={user.name || ''} showDivider>
                   <DropdownItem
                     startContent={<BiUser />}
-                    onClick={() => router.push(`/${user.username}`)}
+                    onClick={() => router.push(`/profile/${user.id}`)}
                     key="profile"
                   >
                     View Profile

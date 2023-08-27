@@ -4,7 +4,6 @@ import { Role } from '@prisma/client';
 interface IUser extends DefaultUser {
     role?: Role;
     id: string;
-    username: string;
 }
 
 declare module 'next-auth' {

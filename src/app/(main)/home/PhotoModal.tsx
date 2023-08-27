@@ -73,10 +73,10 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                         <p className="text-sm">
                           By{' '}
                           <Link
-                            href={`/${photo.user.username}`}
+                            href={`/${photo.user.id}`}
                             className="text-gray-400 hover:text-black"
                           >
-                            @{photo.user.username}
+                            {user?.name}
                           </Link>
                         </p>
                       )}

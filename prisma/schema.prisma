@@ -22,15 +22,7 @@ enum Role {
 }
 
 model User {
-  id        String   @id
-  username  String   @unique
-  firstName String?  @map("first_name")
-  lastName  String?  @map("last_name")
-  email     String?  @unique
-  image     String?
-  role      Role     @default(user)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id String @id
 
   photos          Photo[]
   purchasedPhotos PurchasedPhotos[]

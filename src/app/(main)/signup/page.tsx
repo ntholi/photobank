@@ -29,7 +29,7 @@ export default function SignUpPage() {
   const router = useRouter();
 
   if (session) {
-    router.push(`/${session?.user?.username}`);
+    router.push(`/profile/${session?.user?.id}`);
   }
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {

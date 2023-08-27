@@ -18,7 +18,7 @@ interface Photo {
 }
 
 type Props = {
-  userId: number;
+  userId: string;
 };
 
 export const ProfileBody = ({ userId }: Props) => {

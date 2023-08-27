@@ -9,14 +9,14 @@ import {
     signInWithCredential,
     signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { saveUserToDB } from '../../users/userService';
+import admin from '@/lib/config/firebase-admin';
 
 export const authOptions = {
     secret: process.env.SECRET,
     session: {
         strategy: 'jwt',
     },
-    debug: process.env.NODE_ENV === 'development',
+    // debug: process.env.NODE_ENV === 'development',
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID || '',
@@ -63,7 +63,11 @@ export const authOptions = {
                         auth,
                         credential,
                     );
-                    await saveUserToDB(userCredential.user);
+                    await prisma.user.create({
+                        data: {
+                            id: userCredential.user.uid,
+                        },
+                    });
                 }
                 return true;
             } else {
@@ -72,29 +76,24 @@ export const authOptions = {
         },
 
         async jwt({ token, account, profile, user }) {
+            console.log({ token, account, profile, user });
             if (user) {
-                const dbUser = await prisma.user.findUnique({
-                    where: {
-                        //TODO: THIS WILL NOT WORK FOR FACEBOOK PROVIDER BECAUSE EMAIL ADDRESSES ARE OPTIONAL,
-                        //TODO: AND I CANNOT USE user.id, BECAUSE THAT VALUE HOLDS A PROVIDER SPECIFIC ID NOT THE FIREBASE UID
-                        email: user.email as string,
-                    },
-                });
-                if (!dbUser) {
-                    throw new Error(`User ${user.id} not found in database`);
+                if (account?.provider === 'google') {
+                    token.id = user.id;
+                    const { uid } = await admin
+                        .app()
+                        .auth()
+                        .getUserByProviderUid('google.com', user.id);
+                    token.id = uid;
                 }
-                token.id = user.id;
-                token.username = dbUser.username;
-                token.name = `${dbUser.firstName} ${dbUser.lastName}`;
-                token.email = dbUser.email;
-                token.role = dbUser.role;
+
+                token.role = 'admin';
             }
             return token;
         },
         async session({ session, token, user }) {
             if (session.user) {
                 session.user.id = token.id;
-                session.user.username = token.username;
                 session.user.role = token.role;
             }
             return session;

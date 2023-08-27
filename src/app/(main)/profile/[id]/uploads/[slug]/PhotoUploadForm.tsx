@@ -32,7 +32,7 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
     setLoading(true);
     try {
       await axios.post(`/api/photos?userId=${user?.id}`, data);
-      router.push(`/${user?.username}`);
+      router.push(`/${user?.id}`);
     } catch (error) {
       console.log(error);
     } finally {
