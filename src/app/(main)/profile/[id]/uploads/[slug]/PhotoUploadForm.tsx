@@ -8,7 +8,6 @@ import { useSession } from 'next-auth/react';
 import PlaceInput from './PlaceInput';
 import { useState } from 'react';
 import { Location } from '@/lib/types';
-import { Photo } from '@prisma/client';
 
 type InputType = {
   name: string;
@@ -22,11 +21,7 @@ type Props = {
 };
 
 export default function PhotoUploadForm({ photoUrl }: Props) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<InputType>();
+  const { register, handleSubmit } = useForm<InputType>();
   const [loading, setLoading] = useState(false);
   const { user } = useSession().data || {};
   const router = useRouter();
@@ -44,7 +39,7 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
         };
       }
       await axios.post(`/api/photos?userId=${user?.id}`, data);
-      router.push(`/${user?.id}`);
+      router.push(`/profile/${user?.id}`);
     } catch (error) {
       console.log(error);
     } finally {
