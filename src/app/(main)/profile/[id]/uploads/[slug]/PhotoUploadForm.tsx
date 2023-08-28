@@ -1,11 +1,13 @@
 'use client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Input, Textarea } from '@nextui-org/input';
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button } from '@nextui-org/button';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
+import PlaceInput from './PlaceInput';
 
 type InputType = {
   name: string;
@@ -56,12 +58,7 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
             variant="bordered"
             {...register('name', { required: true })}
           />
-          <Input
-            label="Location"
-            type="text"
-            variant="bordered"
-            {...register('location', { required: true })}
-          />
+          <PlaceInput />
           <Textarea
             label="Description"
             labelPlacement="outside"

@@ -123,7 +123,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
                 onPress={async () => {
                   const fileName = await handleFileUpload();
                   onClose();
-                  router.push(`/${user?.id}/uploads/${fileName}`);
+                  router.push(`/profile/${user?.id}/uploads/${fileName}`);
                 }}
                 isLoading={uploading}
               >
