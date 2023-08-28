@@ -20,6 +20,9 @@ export async function POST(request: Request) {
                 id: user.uid,
             },
         });
+        await admin.app().auth().setCustomUserClaims(user.uid, {
+            role: 'user',
+        });
         return NextResponse.json({ user });
     } catch (error) {
         return NextResponse.json({ error });

@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/db';
-import { AuthOptions, User } from 'next-auth';
+import { Account, AuthOptions, User } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import FacebookProvider from 'next-auth/providers/facebook';
@@ -76,18 +76,10 @@ export const authOptions = {
         },
 
         async jwt({ token, account, profile, user }) {
-            console.log({ token, account, profile, user });
-            if (user) {
-                if (account?.provider === 'google') {
-                    token.id = user.id;
-                    const { uid } = await admin
-                        .app()
-                        .auth()
-                        .getUserByProviderUid('google.com', user.id);
-                    token.id = uid;
-                }
-
-                token.role = 'admin';
+            if (user && account) {
+                const firebaseUser = await getFirebaseUser(user, account);
+                token.role = firebaseUser.customClaims?.role;
+                token.id = firebaseUser.uid;
             }
             return token;
         },
@@ -100,3 +92,16 @@ export const authOptions = {
         },
     },
 } as AuthOptions;
+
+async function getFirebaseUser(user: User, account: Account | null) {
+    if (account?.provider === 'google') {
+        return await admin
+            .app()
+            .auth()
+            .getUserByProviderUid('google.com', account.providerAccountId);
+    }
+    return await admin
+        .app()
+        .auth()
+        .getUserByEmail(user.email || '');
+}
