@@ -7,3 +7,9 @@ export type CurrentSlideData = {
     data: PhotoWithUser;
     index: number;
 };
+
+export type Location = {
+    name: string;
+    lat: number;
+    lng: number;
+};

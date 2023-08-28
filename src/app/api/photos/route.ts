@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GalleryType } from '@/lib/constants';
-import { Role, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { SessionUser } from '@/lib/types';
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
@@ -51,10 +51,24 @@ export async function POST(request: Request) {
         throw new Error('Missing Fields');
     }
 
+    const dbLocation = await prisma.location.upsert({
+        where: {
+            name: location.name,
+        },
+        update: {},
+        create: {
+            name: location.name,
+            lat: location.lat,
+            lng: location.lng,
+        },
+    });
+
     await prisma.photo.create({
         data: {
             name: name,
-            location: location,
+            location: {
+                connect: dbLocation,
+            },
             description: description,
             url: photoUrl,
             user: {
@@ -124,11 +138,11 @@ async function getSaved(owner: User | null, sessionUser: SessionUser) {
 
 const isOwner = (user: User | null, sessionUser: SessionUser) => {
     const requestedBy = sessionUser?.id;
-    if (
-        sessionUser?.role === Role.admin ||
-        sessionUser?.role === Role.moderator
-    ) {
-        return true;
-    }
+    // if (
+    //     sessionUser?.role === Role.admin ||
+    //     sessionUser?.role === Role.moderator
+    // ) {
+    //     return true;
+    // }
     return user?.id === requestedBy;
 };

@@ -1,13 +1,14 @@
 'use client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Input, Textarea } from '@nextui-org/input';
-import React, { useRef } from 'react';
 import { Button } from '@nextui-org/button';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api';
 import PlaceInput from './PlaceInput';
+import { useState } from 'react';
+import { Location } from '@/lib/types';
+import { Photo } from '@prisma/client';
 
 type InputType = {
   name: string;
@@ -26,13 +27,22 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
     handleSubmit,
     formState: { errors },
   } = useForm<InputType>();
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   const { user } = useSession().data || {};
   const router = useRouter();
+  const [location, setLocation] = useState<Location | null>(null);
 
-  const onSubmit: SubmitHandler<InputType> = async (data) => {
+  const onSubmit: SubmitHandler<InputType> = async (data: any) => {
+    console.log({ data });
     setLoading(true);
     try {
+      if (location) {
+        data.location = {
+          name: location.name,
+          lat: location.lat,
+          lng: location.lng,
+        };
+      }
       await axios.post(`/api/photos?userId=${user?.id}`, data);
       router.push(`/${user?.id}`);
     } catch (error) {
@@ -58,7 +68,7 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
             variant="bordered"
             {...register('name', { required: true })}
           />
-          <PlaceInput />
+          <PlaceInput setLocation={setLocation} />
           <Textarea
             label="Description"
             labelPlacement="outside"

@@ -42,16 +42,27 @@ model Photo {
   name            String
   status          PhotoStatus       @default(pending)
   description     String?
-  location        String?
   url             String
   user            User              @relation(fields: [userId], references: [id])
   userId          String            @map("user_id")
+  location        Location?         @relation(fields: [locationId], references: [id])
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
   purchasedPhotos PurchasedPhotos[]
   savedPhotos     SavedPhotos[]
+  locationId      Int?
 
   @@map("photos")
+}
+
+model Location {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  lat    Float
+  lng    Float
+  photos Photo[]
+
+  @@map("locations")
 }
 
 model PurchasedPhotos {
