@@ -9,7 +9,7 @@ import {
     signInWithCredential,
     signInWithEmailAndPassword,
 } from 'firebase/auth';
-import admin from '@/lib/config/firebase-admin';
+import { adminAuth } from '@/lib/config/firebase-admin';
 
 export const authOptions = {
     secret: process.env.SECRET,
@@ -95,13 +95,10 @@ export const authOptions = {
 
 async function getFirebaseUser(user: User, account: Account | null) {
     if (account?.provider === 'google') {
-        return await admin
-            .app()
-            .auth()
-            .getUserByProviderUid('google.com', account.providerAccountId);
+        return await adminAuth.getUserByProviderUid(
+            'google.com',
+            account.providerAccountId,
+        );
     }
-    return await admin
-        .app()
-        .auth()
-        .getUserByEmail(user.email || '');
+    return await adminAuth.getUserByEmail(user.email || '');
 }

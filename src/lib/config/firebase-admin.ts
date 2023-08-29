@@ -1,19 +1,29 @@
-import admin from 'firebase-admin';
-import { getApps } from 'firebase-admin/app';
+import {
+    cert,
+    getApp,
+    getApps,
+    initializeApp,
+    ServiceAccount,
+} from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
 
-var serviceAccount = require('../../../serviceAccountKey.json');
+const credentials: ServiceAccount = {
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY
+        ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+        : undefined,
+};
 
-try {
-    if (getApps().length <= 0) {
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
+function createFirebaseAdminApp() {
+    if (getApps().length === 0) {
+        return initializeApp({
+            credential: cert(credentials),
         });
-        console.log('Firebase admin initialized');
-    }
-} catch (error: any) {
-    if (!/already exists/u.test(error.message)) {
-        console.error('Firebase admin initialization error', error.stack);
+    } else {
+        return getApp();
     }
 }
 
-export default admin;
+const app = createFirebaseAdminApp();
+export const adminAuth = getAuth(app);

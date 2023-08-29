@@ -1,13 +1,13 @@
 import ProfileBody from './ProfileBody';
 import UserBio from './UserBio';
 import { notFound } from 'next/navigation';
-import admin from '@/lib/config/firebase-admin';
 import { User } from 'next-auth';
+import { adminAuth } from '@/lib/config/firebase-admin';
 
 type Props = { params: { id: string } };
 
 const getUser = async (id: string): Promise<User> => {
-  const user = await admin.app().auth().getUser(id);
+  const user = await adminAuth.getUser(id);
   return {
     id: user.uid,
     name: user.displayName,
