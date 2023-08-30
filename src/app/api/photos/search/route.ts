@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { GalleryType } from '@/lib/constants';
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: Request, res: Response) {
     const { searchParams } = new URL(req.url || '');
 
     console.log('searchParams', searchParams);

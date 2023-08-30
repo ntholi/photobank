@@ -4,7 +4,6 @@ import { Modal, ModalBody, ModalContent } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Photo, User } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { TiLocation } from 'react-icons/ti';
@@ -12,12 +11,12 @@ import { FaBookmark, FaCartArrowDown } from 'react-icons/fa';
 import axios from 'axios';
 import api from '@/lib/config/api';
 import { profilePath } from '@/lib/constants';
-import { Location } from '@prisma/client';
+import { PhotoWithUser } from '@/lib/types';
 
 type Props = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  photo: Photo & { user: User } & { location: Location };
+  photo: PhotoWithUser;
 };
 export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
   const { user } = useSession().data || {};

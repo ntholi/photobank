@@ -25,7 +25,7 @@ export async function POST(request: Request, { params }: Props) {
             },
             user: {
                 connect: {
-                    id: Number(session?.user?.id),
+                    id: session?.user?.id,
                 },
             },
         },

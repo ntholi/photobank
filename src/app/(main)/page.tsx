@@ -1,21 +1,23 @@
 import Hero from './home/hero/Hero';
 import api from '@/lib/config/api';
-import { Photo } from '@prisma/client';
 import GallerySection from './home/GallerySection';
-import Image from 'next/image';
 import Footer from './home/Footer';
 import { PhotoWithUser } from '@/lib/types';
 
 const getPhotos = async () => {
-  const res = await fetch(api('/photos'), {
-    next: {
-      revalidate: 0,
-    },
-  });
+  try {
+    const res = await fetch(api('/photos'), {
+      next: {
+        revalidate: 0,
+      },
+    });
 
-  const data = await res.json();
-  if (data.photos.length > 0) {
-    return data.photos as PhotoWithUser[];
+    const data = await res.json();
+    if (data.photos.length > 0) {
+      return data.photos as PhotoWithUser[];
+    }
+  } catch (e) {
+    console.log(e);
   }
 
   return [] as PhotoWithUser[];

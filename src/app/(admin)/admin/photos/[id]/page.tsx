@@ -18,6 +18,7 @@ async function fetchPhoto(id: string) {
     where: { id: Number(id) },
     include: {
       user: true,
+      location: true,
     },
   });
   if (!photo) {
@@ -56,10 +57,10 @@ export default async function PhotoPage({ params }: Props) {
             <FieldDisplay label="Name" value={photo.name} />
             <FieldDisplay label="Owner">
               <Link className="text-blue-600 hover:underline" href={`#`}>
-                {fullName(photo.user)}
+                {/* {fullName(photo.user)} */} [GET USER FROM FIREBASE]
               </Link>
             </FieldDisplay>
-            <FieldDisplay label="Location" value={photo.location} />
+            <FieldDisplay label="Location" value={photo?.location?.name} />
             <FieldDisplay
               label="Created At"
               value={toDateTime(photo.createdAt)}

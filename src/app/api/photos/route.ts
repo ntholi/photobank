@@ -2,12 +2,11 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/auth';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { GalleryType } from '@/lib/constants';
 import { User } from '@prisma/client';
 import { SessionUser } from '@/lib/types';
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: Request, res: Response) {
     const session = await getServerSession(authOptions);
     const { searchParams } = new URL(req.url || '');
     const photoType = searchParams.get('type') as GalleryType;
@@ -27,11 +26,15 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
         return await publicPhotos();
     } else if (photoType === GalleryType.PURCHASED) {
         return await getPurchased(owner, session?.user);
-    } else if (photoType === GalleryType.SAVED) {
-        return await getSaved(owner, session?.user);
-    } else {
-        return await getUploads(owner, session?.user);
     }
+
+    // else if (photoType === GalleryType.SAVED) {
+    //     return await getSaved(owner, session?.user);
+    // }
+
+    return NextResponse.json({
+        photos: {},
+    });
 }
 
 export async function POST(request: Request) {
