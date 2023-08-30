@@ -11,11 +11,13 @@ import { TiLocation } from 'react-icons/ti';
 import { FaBookmark, FaCartArrowDown } from 'react-icons/fa';
 import axios from 'axios';
 import api from '@/lib/config/api';
+import { profilePath } from '@/lib/constants';
+import { Location } from '@prisma/client';
 
 type Props = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  photo: Photo & { user: User };
+  photo: Photo & { user: User } & { location: Location };
 };
 export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
   const { user } = useSession().data || {};
@@ -73,7 +75,7 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                         <p className="text-sm">
                           By{' '}
                           <Link
-                            href={`/${photo.user.id}`}
+                            href={profilePath(photo.user)}
                             className="text-gray-400 hover:text-black"
                           >
                             {user?.name}
@@ -83,7 +85,7 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
 
                       <p className="flex items-center space-x-1 text-gray-500">
                         <TiLocation className="text-sm" />{' '}
-                        <span>{photo.location}</span>
+                        <span>{photo.location.name}</span>
                       </p>
                     </div>
 

@@ -1,3 +1,5 @@
+import { User } from 'next-auth';
+
 export const APP_NAME = 'PhotoBank';
 
 export const constants = {
@@ -9,3 +11,10 @@ export enum GalleryType {
     PURCHASED = 'Purchased',
     SAVED = 'Saved',
 }
+
+export const profilePath = (user?: User | null) => {
+    if (user) {
+        return `/profile/${user.id}`;
+    }
+    return '#';
+};

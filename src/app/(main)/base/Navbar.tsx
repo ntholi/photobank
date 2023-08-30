@@ -18,10 +18,7 @@ import {
 
 import { Link } from '@nextui-org/link';
 
-import { link as linkStyles } from '@nextui-org/theme';
-
 import NextLink from 'next/link';
-import clsx from 'clsx';
 import Logo from './Logo';
 import { Avatar } from '@nextui-org/react';
 import { usePathname } from 'next/navigation';
@@ -31,6 +28,7 @@ import { signOut, useSession } from 'next-auth/react';
 import commonUrlPatterns from '@/app/api/users/commonUrlPatterns';
 import React, { useEffect } from 'react';
 import { nameToInitials } from '../profile/[id]/UserBio';
+import { profilePath } from '@/lib/constants';
 
 const navItems = [
   {
@@ -141,7 +139,7 @@ export default function Navbar() {
                 <DropdownSection title={user.name || ''} showDivider>
                   <DropdownItem
                     startContent={<BiUser />}
-                    onClick={() => router.push(`/profile/${user.id}`)}
+                    onClick={() => router.push(profilePath(user))}
                     key="profile"
                   >
                     View Profile
