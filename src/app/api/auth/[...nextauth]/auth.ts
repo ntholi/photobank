@@ -63,8 +63,12 @@ export const authOptions = {
                         auth,
                         credential,
                     );
-                    await prisma.user.create({
-                        data: {
+                    await prisma.user.upsert({
+                        create: {
+                            id: userCredential.user.uid,
+                        },
+                        update: {},
+                        where: {
                             id: userCredential.user.uid,
                         },
                     });
