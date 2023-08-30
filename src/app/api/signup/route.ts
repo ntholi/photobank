@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import admin from '@/lib/config/firebase-admin';
 import { prisma } from '@/lib/db';
+import { adminAuth } from '@/lib/config/firebase-admin';
 
 export async function POST(request: Request) {
     const { email, password, names } = await request.json();
@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     }
 
     try {
-        const user = await admin.app().auth().createUser({
+        const user = await adminAuth.createUser({
             email,
             password,
             displayName: names,
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
                 id: user.uid,
             },
         });
-        await admin.app().auth().setCustomUserClaims(user.uid, {
+        await adminAuth.setCustomUserClaims(user.uid, {
             role: 'user',
         });
         return NextResponse.json({ user });

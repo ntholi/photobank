@@ -1,4 +1,4 @@
-import admin from '@/lib/config/firebase-admin';
+import { adminAuth } from '@/lib/config/firebase-admin';
 import { NextApiRequest } from 'next';
 import { NextResponse } from 'next/server';
 
@@ -8,7 +8,7 @@ export async function GET(req: NextApiRequest) {
 
     let user = null;
     try {
-        user = await admin.app().auth().getUserByEmail(email);
+        user = await adminAuth.getUserByEmail(email);
     } catch (e) {
         console.log(e);
     }
