@@ -120,6 +120,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
               </Button>
               <Button
                 color="primary"
+                isDisabled={!file}
                 onPress={async () => {
                   const fileName = await handleFileUpload();
                   onClose();

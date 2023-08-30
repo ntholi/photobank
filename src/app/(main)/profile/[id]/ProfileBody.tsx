@@ -34,7 +34,7 @@ export const ProfileBody = ({ userId }: Props) => {
     setLoading(true);
     try {
       const res = await axios.get(`/api/photos?type=${key}&userId=${userId}`);
-      if (res.data.photos) {
+      if (res.data.photos.length > 0) {
         setPhotos(res.data.photos as Photo[]);
       }
     } finally {
