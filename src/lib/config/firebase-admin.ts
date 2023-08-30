@@ -1,11 +1,6 @@
-import {
-    cert,
-    getApp,
-    getApps,
-    initializeApp,
-    ServiceAccount,
-} from 'firebase-admin/app';
+import { cert, getApp, getApps, ServiceAccount } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
+import admin from 'firebase-admin';
 
 const credentials: ServiceAccount = {
     projectId: process.env.FIREBASE_PROJECT_ID,
@@ -17,7 +12,7 @@ const credentials: ServiceAccount = {
 
 function createFirebaseAdminApp() {
     if (getApps().length === 0) {
-        return initializeApp({
+        return admin.initializeApp({
             credential: cert(credentials),
         });
     } else {

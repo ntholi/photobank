@@ -6,13 +6,13 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'firebasestorage.googleapis.com',
         port: '',
-        pathname: '/v0/b/nationalphotobank.appspot.com/**',
+        pathname: '/v0/b/photobanktests.appspot.com/**',
       },
       {
         protocol: 'http',
         hostname: '127.0.0.1',
         port: '9199',
-        pathname: '/v0/b/nationalphotobank.appspot.com/**',
+        pathname: '/v0/b/photobanktests.appspot.com/**',
       },
       {
         protocol: 'https',
