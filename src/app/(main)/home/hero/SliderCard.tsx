@@ -45,7 +45,7 @@ function SliderCard({ data }: Props) {
             layoutId={data.url + 'data.location'}
             className="text-xs text-[#D5D5D6]"
           >
-            {data.location.name}
+            {data?.location?.name}
           </motion.p>
           <motion.h1
             layoutId={data.url + 'data.name'}

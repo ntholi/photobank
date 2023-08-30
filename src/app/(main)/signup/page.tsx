@@ -84,6 +84,7 @@ export default function SignUpPage() {
                   variant="bordered"
                   className="border-zinc-700 w-full p-6 flex justify-start border-1 rounded-sm"
                   startContent={<FcGoogle size="1.4rem" />}
+                  onClick={() => signIn('google')}
                 >
                   Continue with Google
                 </Button>
