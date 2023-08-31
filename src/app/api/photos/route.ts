@@ -26,12 +26,18 @@ export async function POST(request: Request) {
         },
     });
     if (!user) {
-        throw new Error(`User with id ${userId} not found`);
+        return NextResponse.json(
+            { error: `User with id ${userId} not found` },
+            { status: 404 },
+        );
     }
 
     const { name, description, location, photoUrl } = await request.json();
     if (!photoUrl || !name) {
-        throw new Error('Missing Fields');
+        return NextResponse.json(
+            { error: 'Missing required fields' },
+            { status: 400 },
+        );
     }
 
     const dbLocation = await prisma.location.upsert({

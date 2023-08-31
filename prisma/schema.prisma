@@ -22,11 +22,20 @@ enum Role {
 }
 
 model User {
-  id String @id
+  id        String  @id
+  username  String  @unique
+  firstName String? @map("first_name")
+  lastName  String? @map("last_name")
+  email     String?
+  image     String?
+  role      Role    @default(user)
 
   photos          Photo[]
   purchasedPhotos PurchasedPhotos[]
   savedPhotos     SavedPhotos[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
 }

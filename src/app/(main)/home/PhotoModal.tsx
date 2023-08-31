@@ -77,14 +77,14 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                             href={profilePath(photo.user)}
                             className="text-gray-400 hover:text-black"
                           >
-                            {user?.name}
+                            {photo.user?.name}
                           </Link>
                         </p>
                       )}
 
                       <p className="flex items-center space-x-1 text-gray-500">
                         <TiLocation className="text-sm" />{' '}
-                        <span>{photo.location.name}</span>
+                        <span>{photo.location?.name}</span>
                       </p>
                     </div>
 
