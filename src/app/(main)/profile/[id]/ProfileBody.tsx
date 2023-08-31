@@ -32,12 +32,11 @@ export const ProfileBody = ({ userId }: Props) => {
 
   async function handleTabChange(key: string | number) {
     setLoading(true);
+    setPhotos([]);
     try {
       const res = await axios.get(`/api/photos/${key}?userId=${userId}`);
       if (res.data.photos.length > 0) {
         setPhotos(res.data.photos as Photo[]);
-      } else {
-        setPhotos([]);
       }
     } finally {
       setLoading(false);
