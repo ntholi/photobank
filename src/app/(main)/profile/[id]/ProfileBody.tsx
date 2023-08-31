@@ -36,6 +36,8 @@ export const ProfileBody = ({ userId }: Props) => {
       const res = await axios.get(`/api/photos/${key}?userId=${userId}`);
       if (res.data.photos.length > 0) {
         setPhotos(res.data.photos as Photo[]);
+      } else {
+        setPhotos([]);
       }
     } finally {
       setLoading(false);
@@ -51,7 +53,7 @@ export const ProfileBody = ({ userId }: Props) => {
         onSelectionChange={handleTabChange}
       >
         {(item) => (
-          <Tab key={item.title} title={item.title}>
+          <Tab key={item.title} title={item.title} className="capitalize">
             {loading ? (
               <div className="sm:pt-24 flex justify-center">
                 <CircularProgress aria-label="Loading..." />
