@@ -33,7 +33,7 @@ export const ProfileBody = ({ userId }: Props) => {
   async function handleTabChange(key: string | number) {
     setLoading(true);
     try {
-      const res = await axios.get(`/api/photos?type=${key}&userId=${userId}`);
+      const res = await axios.get(`/api/photos/${key}?userId=${userId}`);
       if (res.data.photos.length > 0) {
         setPhotos(res.data.photos as Photo[]);
       }
@@ -66,7 +66,7 @@ export const ProfileBody = ({ userId }: Props) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                     {photos.map((photo: Photo) => (
                       <div className="relative flex flex-1" key={photo.id}>
                         {photo.status !== 'approved' && (

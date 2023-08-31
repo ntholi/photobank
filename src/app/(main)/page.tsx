@@ -6,7 +6,7 @@ import { PhotoWithUser } from '@/lib/types';
 
 const getPhotos = async () => {
   try {
-    const res = await fetch(api('/photos'), {
+    const res = await fetch(api('/photos/public'), {
       next: {
         revalidate: 0,
       },

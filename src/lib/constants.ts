@@ -7,9 +7,9 @@ export const constants = {
 };
 
 export enum GalleryType {
-    UPLOADS = 'Uploads',
-    PURCHASED = 'Purchased',
-    SAVED = 'Saved',
+    UPLOADS = 'uploads',
+    PURCHASED = 'purchased',
+    SAVED = 'saved',
 }
 
 export const profilePath = (user?: User | null) => {
