@@ -15,7 +15,7 @@ import { GrClose } from 'react-icons/gr';
 import { ref, uploadBytes } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from 'next/navigation';
-import { constants } from '@/lib/constants';
+import { constants, profilePath } from '@/lib/constants';
 import { storage } from '@/lib/config/firebase';
 import { useSession } from 'next-auth/react';
 
@@ -124,7 +124,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
                 onPress={async () => {
                   const fileName = await handleFileUpload();
                   onClose();
-                  router.push(`/profile/${user?.id}/uploads/${fileName}`);
+                  router.push(`${profilePath(user)}/uploads/${fileName}`);
                 }}
                 isLoading={uploading}
               >

@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import PlaceInput from './PlaceInput';
 import { useState } from 'react';
 import { Location } from '@/lib/types';
+import { profilePath } from '@/lib/constants';
 
 type InputType = {
   name: string;
@@ -39,7 +40,7 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
         };
       }
       await axios.post(`/api/photos?userId=${user?.id}`, data);
-      router.push(`/profile/${user?.id}`);
+      router.push(profilePath(user));
     } catch (error) {
       console.log(error);
     } finally {

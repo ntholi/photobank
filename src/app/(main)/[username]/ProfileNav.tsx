@@ -15,6 +15,8 @@ import {
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import useIsMobile from '@/lib/hooks/useIsMobile';
+import { profileEnd } from 'console';
+import { profilePath } from '@/lib/constants';
 
 export default function ProfileNav() {
   const isMobile = useIsMobile();
@@ -27,7 +29,7 @@ export default function ProfileNav() {
     { name: 'Settings', link: `#`, icon: <GoGear /> },
     {
       name: 'Profile',
-      link: `/profile/${user?.id}`,
+      link: profilePath(user),
       icon: (
         <Avatar
           isBordered
@@ -70,7 +72,7 @@ export default function ProfileNav() {
                 startContent={!isMobile && <GoUpload />}
                 variant="ghost"
                 isIconOnly={isMobile}
-                href={`/profile/${user?.id}/uploads/new`}
+                href={`${profilePath(user)}/uploads/new`}
                 as={NextLink}
                 className="md:px-8 border-1.5 rounded-full md:rounded-md"
               >

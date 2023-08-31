@@ -14,6 +14,7 @@ import { FaFacebook } from 'react-icons/fa';
 import { Divider } from '@nextui-org/react';
 import { signIn, useSession } from 'next-auth/react';
 import router from 'next/navigation';
+import { profilePath } from '@/lib/constants';
 
 type InputType = {
   names: string;
@@ -29,7 +30,7 @@ export default function SignUpPage() {
   const router = useRouter();
 
   if (session) {
-    router.push(`/profile/${session?.user?.id}`);
+    router.push(profilePath(session.user));
   }
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {

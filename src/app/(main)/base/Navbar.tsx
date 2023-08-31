@@ -27,8 +27,8 @@ import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import commonUrlPatterns from '@/app/api/users/commonUrlPatterns';
 import React, { useEffect } from 'react';
-import { nameToInitials } from '../profile/[id]/UserBio';
 import { profilePath } from '@/lib/constants';
+import { nameToInitials } from '../[username]/UserBio';
 
 const navItems = [
   {

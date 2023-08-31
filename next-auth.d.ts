@@ -3,6 +3,7 @@ import { Role } from '@prisma/client';
 
 interface IUser extends DefaultUser {
     role?: Role;
+    username: string;
     id: string;
 }
 

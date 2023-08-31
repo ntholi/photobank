@@ -10,6 +10,7 @@ import {
     signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { adminAuth } from '@/lib/config/firebase-admin';
+import { saveUserToDB } from '../../users/userService';
 
 export const authOptions = {
     secret: process.env.SECRET,
@@ -37,16 +38,24 @@ export const authOptions = {
                 if (!credentials?.email || !credentials.password) {
                     throw new Error('Enter email and password');
                 }
-                const { user } = await signInWithEmailAndPassword(
+                const {
+                    user: { uid },
+                } = await signInWithEmailAndPassword(
                     auth,
                     credentials.email,
                     credentials.password,
                 );
+                const user = await prisma.user.findUnique({
+                    where: { id: uid },
+                });
+                if (!user) {
+                    throw new Error('User not found');
+                }
                 return {
-                    id: user.uid,
-                    email: user.email,
-                    name: user.displayName,
-                    image: user.photoURL,
+                    id: user.id,
+                    username: user.username,
+                    name: `${user.firstName} ${user.lastName}`,
+                    image: user.image,
                 } as any;
             },
         }),
@@ -63,15 +72,7 @@ export const authOptions = {
                         auth,
                         credential,
                     );
-                    await prisma.user.upsert({
-                        create: {
-                            id: userCredential.user.uid,
-                        },
-                        update: {},
-                        where: {
-                            id: userCredential.user.uid,
-                        },
-                    });
+                    saveUserToDB(userCredential.user);
                 }
                 return true;
             } else {
@@ -81,9 +82,15 @@ export const authOptions = {
 
         async jwt({ token, account, profile, user }) {
             if (user && account) {
-                const firebaseUser = await getFirebaseUser(user, account);
-                token.role = firebaseUser.customClaims?.role;
-                token.id = firebaseUser.uid;
+                const uid = await getFirebaseUserId(user, account);
+                const dbUser = await prisma.user.findUnique({
+                    where: { id: uid },
+                });
+                if (dbUser) {
+                    token.id = dbUser.id;
+                    token.role = dbUser.role;
+                    token.username = dbUser.username;
+                }
             }
             return token;
         },
@@ -91,18 +98,21 @@ export const authOptions = {
             if (session.user) {
                 session.user.id = token.id;
                 session.user.role = token.role;
+                session.user.username = token.username;
             }
             return session;
         },
     },
 } as AuthOptions;
 
-async function getFirebaseUser(user: User, account: Account | null) {
+async function getFirebaseUserId(user: User, account: Account | null) {
+    let firebaseUser;
     if (account?.provider === 'google') {
-        return await adminAuth.getUserByProviderUid(
+        firebaseUser = await adminAuth.getUserByProviderUid(
             'google.com',
             account.providerAccountId,
         );
     }
-    return await adminAuth.getUserByEmail(user.email || '');
+    firebaseUser = await adminAuth.getUserByEmail(user.email || '');
+    return firebaseUser.uid;
 }

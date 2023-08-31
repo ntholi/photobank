@@ -9,6 +9,8 @@ import { SubmitHandler, set, useForm } from 'react-hook-form';
 import React, { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
+import { profile } from 'console';
+import { profilePath } from '@/lib/constants';
 
 type InputType = {
   names: string;
@@ -26,7 +28,7 @@ export default function LoginPage() {
   const email = searchParams.get('email');
 
   if (session) {
-    router.push(`/profile/${session?.user?.id}`);
+    router.push(profilePath(session.user));
   }
 
   useEffect(() => {

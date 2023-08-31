@@ -14,7 +14,7 @@ export enum GalleryType {
 
 export const profilePath = (user?: User | null) => {
     if (user) {
-        return `/profile/${user.id}`;
+        return `/${user.username}`;
     }
     return '#';
 };
