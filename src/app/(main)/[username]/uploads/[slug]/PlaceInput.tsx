@@ -39,7 +39,13 @@ export default function PlaceInput({ setLocation }: Props) {
         onPlacesChanged={handlePlaceChanged}
         bounds={bounds}
       >
-        <Input label="Location" type="text" variant="bordered" placeholder="" />
+        <Input
+          label="Location"
+          type="text"
+          variant="bordered"
+          placeholder=""
+          description="Where the photo was taken"
+        />
       </StandaloneSearchBox>
     </LoadScript>
   );

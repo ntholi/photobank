@@ -12,11 +12,11 @@ export default async function Page({ params }: Props) {
   );
 
   return (
-    <section className="px-16 pt-5 lg:grid grid-cols-5 space-y-5 gap-5">
-      <div className={'col-span-2'}>
-        <Image src={photoUrl} alt={'Uploaded Image'} />
+    <section className="px-16 pt-5 lg:grid grid-cols-11 space-y-5 gap-5">
+      <div className={'col-span-5'}>
+        <Image src={photoUrl} alt={'Uploaded Image'} shadow="sm" />
       </div>
-      <div className={'rounded-xl col-span-3'}>
+      <div className={'rounded-xl col-span-6'}>
         <PhotoUploadForm photoUrl={photoUrl} />
       </div>
     </section>

@@ -47,21 +47,50 @@ enum PhotoStatus {
 }
 
 model Photo {
-  id              Int               @id @default(autoincrement())
-  name            String
-  status          PhotoStatus       @default(pending)
-  description     String?
-  url             String
-  user            User              @relation(fields: [userId], references: [id])
-  userId          String            @map("user_id")
-  location        Location?         @relation(fields: [locationId], references: [id])
-  createdAt       DateTime          @default(now()) @map("created_at")
-  updatedAt       DateTime          @updatedAt @map("updated_at")
+  id          Int         @id @default(autoincrement())
+  name        String
+  status      PhotoStatus @default(pending)
+  description String?
+  url         String
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String      @map("user_id")
+  location    Location?   @relation(fields: [locationId], references: [id])
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  tags            Tag[]
   purchasedPhotos PurchasedPhotos[]
   savedPhotos     SavedPhotos[]
   locationId      Int?
+  PhotoTag        PhotoTag[]
 
   @@map("photos")
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  photos   Photo[]
+  photoId  Int?
+  PhotoTag PhotoTag[]
+
+  @@map("tags")
+}
+
+model PhotoTag {
+  photoId Int @map("photo_id")
+  tagId   Int @map("tag_id")
+
+  photo     Photo    @relation(fields: [photoId], references: [id])
+  tag       Tag      @relation(fields: [tagId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@id([photoId, tagId])
+  @@map("photo_tags")
 }
 
 model Location {

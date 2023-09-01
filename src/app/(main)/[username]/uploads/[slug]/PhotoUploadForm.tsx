@@ -9,6 +9,7 @@ import PlaceInput from './PlaceInput';
 import { useState } from 'react';
 import { Location } from '@/lib/types';
 import { profilePath } from '@/lib/constants';
+import TagInput from './TagInput';
 
 type InputType = {
   name: string;
@@ -27,9 +28,9 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
   const { user } = useSession().data || {};
   const router = useRouter();
   const [location, setLocation] = useState<Location | null>(null);
+  const [tags, setTags] = useState<string[]>([]);
 
   const onSubmit: SubmitHandler<InputType> = async (data: any) => {
-    console.log({ data });
     setLoading(true);
     try {
       if (location) {
@@ -38,8 +39,9 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
           lat: location.lat,
           lng: location.lng,
         };
+        data.tags = tags;
       }
-      await axios.post(`/api/photos?userId=${user?.id}`, data);
+      await axios.post('/api/photos', data);
       router.push(profilePath(user));
     } catch (error) {
       console.log(error);
@@ -65,6 +67,7 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
             {...register('name', { required: true })}
           />
           <PlaceInput setLocation={setLocation} />
+          <TagInput tags={tags} setTags={setTags} />
           <Textarea
             label="Description"
             labelPlacement="outside"
@@ -72,7 +75,12 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
             placeholder="Describe your photo (one sentance story about your photo)"
             {...register('description')}
           />
-          <Button type="submit" isLoading={loading} className="w-full">
+          <Button
+            color="primary"
+            type="submit"
+            isLoading={loading}
+            className="w-full"
+          >
             Save
           </Button>
         </div>

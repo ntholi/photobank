@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/auth';
+import { PhotoData, savePhoto } from './photoService';
 
 export async function GET(req: Request) {
     const session = await getServerSession(authOptions);
@@ -18,55 +19,34 @@ export async function GET(req: Request) {
 }
 
 export async function POST(request: Request) {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    const user = await prisma.user.findUnique({
-        where: {
-            id: userId || '',
-        },
-    });
-    if (!user) {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
         return NextResponse.json(
-            { error: `User with id ${userId} not found` },
-            { status: 404 },
+            { error: 'You must be logged in to save a photo' },
+            { status: 401 },
         );
     }
 
-    const { name, description, location, photoUrl } = await request.json();
-    if (!photoUrl || !name) {
+    const photo = (await request.json()) as PhotoData;
+
+    console.log({ photo });
+
+    if (!photo.photoUrl || !photo.name) {
         return NextResponse.json(
             { error: 'Missing required fields' },
             { status: 400 },
         );
     }
-
-    const dbLocation = await prisma.location.upsert({
-        where: {
-            name: location.name,
-        },
-        update: {},
-        create: {
-            name: location.name,
-            lat: location.lat,
-            lng: location.lng,
-        },
-    });
-
-    await prisma.photo.create({
-        data: {
-            name: name,
-            location: {
-                connect: dbLocation,
-            },
-            description: description,
-            url: photoUrl,
-            user: {
-                connect: {
-                    id: user.id,
-                },
-            },
-        },
-    });
+    try {
+        await savePhoto(photo, session?.user?.id);
+    } catch (e) {
+        console.error(e);
+        return NextResponse.json(
+            { error: 'Failed to save photo' },
+            { status: 500 },
+        );
+    }
 
     return NextResponse.json({ success: true });
 }
