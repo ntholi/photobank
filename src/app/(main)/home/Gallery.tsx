@@ -1,6 +1,6 @@
 'use client';
 import api from '@/lib/config/api';
-import { Photo, User } from '@prisma/client';
+import { Photo, Tag, User } from '@prisma/client';
 import NextImage from 'next/image';
 import { Image } from '@nextui-org/image';
 import React from 'react';
@@ -9,24 +9,24 @@ import StackGrid from 'react-stack-grid';
 import PhotoModal from './PhotoModal';
 import { useDisclosure } from '@nextui-org/modal';
 import { PhotoWithUser } from '@/lib/types';
-import { type } from 'os';
 
 type Props = {
   searchKey: string;
+  tag: Tag | null;
 };
 
-export default function Gallery({ searchKey }: Props) {
+export default function Gallery({ searchKey, tag }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [photos, setPhotos] = React.useState<PhotoWithUser[]>([]);
   const [selectedPhoto, setSelectedPhoto] =
     React.useState<PhotoWithUser | null>(null);
 
   React.useEffect(() => {
-    axios.get(api(`/photos/search?searchKey=${searchKey}`)).then((res) => {
+    axios.post(`/api/photos/search?searchKey=${searchKey}`, tag).then((res) => {
       console.log(res.data.photos);
       setPhotos(res.data.photos);
     });
-  }, [searchKey]);
+  }, [searchKey, tag]);
 
   return (
     <>

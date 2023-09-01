@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/db';
-import { Filter } from '@/lib/types';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request, res: Response) {
@@ -14,7 +13,7 @@ export async function GET(req: Request, res: Response) {
         filters: [
             {
                 name: 'All',
-                type: 'tag',
+                type: 'all',
             },
             ...filters,
         ],

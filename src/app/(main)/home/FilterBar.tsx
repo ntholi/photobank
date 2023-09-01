@@ -1,11 +1,14 @@
-import { Filter } from '@/lib/types';
 import React from 'react';
-import { Chip } from '@nextui-org/chip';
 import axios from 'axios';
 import { Button } from '@nextui-org/button';
+import { Tag } from '@prisma/client';
 
-export default function FilterBar() {
-  const [items, setItems] = React.useState<Filter[]>([]);
+type Props = {
+  setTag: React.Dispatch<React.SetStateAction<Tag | null>>;
+};
+
+export default function FilterBar({ setTag }: Props) {
+  const [items, setItems] = React.useState<Tag[]>([]);
 
   React.useEffect(() => {
     axios.get('/api/filters').then((res) => {
@@ -18,10 +21,10 @@ export default function FilterBar() {
     <nav className="flex mt-2 gap-x-2">
       {items.map((item) => (
         <Button
-          key={`${item.name}+${item.type}`}
+          key={`${item.name}+${item.id}`}
           color="default"
           size="md"
-          onClick={() => console.log('clicked')}
+          onClick={() => setTag(item)}
         >
           {item.name}
         </Button>
