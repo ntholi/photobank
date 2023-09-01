@@ -38,22 +38,22 @@ export const authOptions = {
                 if (!credentials?.email || !credentials.password) {
                     throw new Error('Enter email and password');
                 }
-                const {
-                    user: { uid },
-                } = await signInWithEmailAndPassword(
+                const firebaseCredentials = await signInWithEmailAndPassword(
                     auth,
                     credentials.email,
                     credentials.password,
                 );
                 const user = await prisma.user.findUnique({
-                    where: { id: uid },
+                    where: { id: firebaseCredentials.user.uid },
                 });
+
                 if (!user) {
                     throw new Error('User not found');
                 }
                 return {
                     id: user.id,
                     username: user.username,
+                    email: user.email,
                     name: `${user.firstName} ${user.lastName}`,
                     image: user.image,
                 } as any;
