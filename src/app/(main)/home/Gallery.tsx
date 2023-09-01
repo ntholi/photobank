@@ -23,7 +23,6 @@ export default function Gallery({ searchKey, tag }: Props) {
 
   React.useEffect(() => {
     axios.post(`/api/photos/search?searchKey=${searchKey}`, tag).then((res) => {
-      console.log(res.data.photos);
       setPhotos(res.data.photos);
     });
   }, [searchKey, tag]);
