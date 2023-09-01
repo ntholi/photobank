@@ -13,3 +13,8 @@ export type Location = {
     lat: number;
     lng: number;
 };
+
+export type Filter = {
+    name: string;
+    type: 'tag' | 'location';
+};

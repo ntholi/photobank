@@ -2,10 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { GalleryType } from '@/lib/constants';
 
-export async function GET(req: Request, res: Response) {
+export async function GET(req: Request) {
     const { searchParams } = new URL(req.url || '');
-
-    console.log('searchParams', searchParams);
 
     const searchKey = searchParams.get('searchKey') as GalleryType;
     console.log('searchKey', searchKey);

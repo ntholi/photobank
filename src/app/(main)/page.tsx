@@ -28,11 +28,11 @@ export default async function Page() {
 
   return (
     <>
-      {photos && photos.length > 0 ? (
+      {/* {photos && photos.length > 0 ? (
         <>
-          <Hero sliderData={photos} />
-          <GallerySection />
-        </>
+          <Hero sliderData={photos} /> */}
+      <GallerySection />
+      {/* </>
       ) : (
         <section className="h-screen flex justify-center items-center">
           <p className="text-gray-400 py-10 px-10 border border-gray-200">
@@ -40,7 +40,7 @@ export default async function Page() {
           </p>
         </section>
       )}
-      <Footer className="mt-10" />
+      <Footer className="mt-10" /> */}
     </>
   );
 }

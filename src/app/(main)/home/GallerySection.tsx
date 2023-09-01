@@ -5,9 +5,10 @@ import Gallery from './Gallery';
 import { FaImages, FaMap, FaPhotoVideo, FaSearch } from 'react-icons/fa';
 import { Divider } from '@nextui-org/divider';
 import { Input } from '@nextui-org/input';
+import FilterBar from './FilterBar';
 
 export default function GallerySection() {
-  const [searchKey, setSearchKey] = React.useState(''); // [1
+  const [searchKey, setSearchKey] = React.useState('');
   return (
     <section id="gallery" className="pt-10">
       <div className="px-4">
@@ -28,15 +29,18 @@ export default function GallerySection() {
           }
         >
           <div className="min-h-screen mt-5">
-            <Input
-              type="text"
-              size="lg"
-              endContent={<FaSearch color="gray" />}
-              variant="bordered"
-              placeholder="Search Photos"
-              className="max-w-lg mx-auto"
-              onChange={(e) => setSearchKey(e.target.value)}
-            />
+            <div className="max-w-3xl mx-auto">
+              <Input
+                type="text"
+                size="lg"
+                endContent={<FaSearch color="gray" />}
+                variant="bordered"
+                placeholder="Search Photos"
+                onChange={(e) => setSearchKey(e.target.value)}
+              />
+              <FilterBar />
+            </div>
+
             <div className="mt-10">
               <Gallery searchKey={searchKey} />
             </div>
