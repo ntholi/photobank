@@ -25,32 +25,27 @@ export const savePhoto = async (photo: PhotoData, userId: string) => {
             },
             description: photo.description,
             url: photo.photoUrl,
-            tags: {
-                connect: await getOrSaveTags(photo.tags),
-            },
             user: {
                 connect: {
                     id: userId,
                 },
             },
+            tags: {
+                create: photo.tags.map((tag) => ({
+                    tag: {
+                        connectOrCreate: {
+                            where: {
+                                name: tag,
+                            },
+                            create: {
+                                name: tag,
+                            },
+                        },
+                    },
+                })),
+            },
         },
     });
-};
-
-const getOrSaveTags = async (tags: string[]) => {
-    return await Promise.all(
-        tags.map(async (tag) => {
-            return await prisma.tag.upsert({
-                where: {
-                    name: tag,
-                },
-                update: {},
-                create: {
-                    name: tag,
-                },
-            });
-        }),
-    );
 };
 
 const saveLocation = async (location: LocationData) => {

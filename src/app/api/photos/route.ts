@@ -30,8 +30,6 @@ export async function POST(request: Request) {
 
     const photo = (await request.json()) as PhotoData;
 
-    console.log({ photo });
-
     if (!photo.photoUrl || !photo.name) {
         return NextResponse.json(
             { error: 'Missing required fields' },
