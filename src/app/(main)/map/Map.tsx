@@ -1,23 +1,19 @@
 'use client';
 import React, { useEffect } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { CircleMarker, MapContainer, Popup, TileLayer } from 'react-leaflet';
 import { Location } from '@prisma/client';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
-import { Icon } from 'leaflet';
+
+type LocationWithCount = Location & { photoCount: number };
 
 export default function Map() {
-  const [locations, setLocations] = React.useState<Location[]>([]);
+  const [locations, setLocations] = React.useState<LocationWithCount[]>([]);
   useEffect(() => {
     axios.get('/api/photos/locations').then((res) => {
       setLocations(res.data.locations);
     });
   }, []);
-
-  const icon = new Icon({
-    iconUrl: '/images/location.png',
-    iconSize: [25, 25],
-  });
 
   return (
     <div>
@@ -27,13 +23,15 @@ export default function Map() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {locations.map((location) => (
-          <Marker
+          <CircleMarker
             key={location.id}
-            position={[location.lat, location.lng]}
-            icon={icon}
+            center={[location.lat, location.lng]}
+            fillOpacity={0.5}
+            stroke={false}
+            radius={10 * location.photoCount}
           >
-            <Popup>{location.name}</Popup>
-          </Marker>
+            <Popup>{location.photoCount}</Popup>
+          </CircleMarker>
         ))}
       </MapContainer>
     </div>
