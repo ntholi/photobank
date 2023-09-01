@@ -5,7 +5,12 @@ export async function POST(req: Request) {
     const { searchParams } = new URL(req.url || '');
     const searchKey = searchParams.get('searchKey');
 
-    const tag = (await req.json()) as { id: number };
+    let tagId = undefined;
+    try {
+        tagId = (await req.json()).id;
+    } catch (err) {
+        console.error('Error parsing request body');
+    }
 
     const photos = await prisma.photo.findMany({
         where: {
@@ -16,7 +21,7 @@ export async function POST(req: Request) {
             },
             tags: {
                 some: {
-                    tagId: tag.id,
+                    tagId: tagId,
                 },
             },
         },
