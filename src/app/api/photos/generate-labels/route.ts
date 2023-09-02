@@ -10,11 +10,12 @@ export async function GET(req: Request) {
     };
 
     const client = new vision.ImageAnnotatorClient(options);
-    const labels = await client.labelDetection(photoUrl);
+    const detections = await client.labelDetection(photoUrl);
 
-    labels.forEach((it) => {
-        console.log('->', it);
-    });
+    const labels = detections.pop()?.labelAnnotations?.map((it) => ({
+        name: it.description,
+        score: it.score,
+    }));
 
-    return NextResponse.json({ message: 'Hello, World!' });
+    return NextResponse.json({ labels });
 }
