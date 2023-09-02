@@ -17,7 +17,7 @@ export type PhotoData = {
 export const savePhoto = async (photo: PhotoData, userId: string) => {
     const location = await saveLocation(photo.location);
 
-    await prisma.photo.create({
+    return await prisma.photo.create({
         data: {
             name: photo.name,
             location: {

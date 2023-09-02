@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/auth';
 import { PhotoData, savePhoto } from './photoService';
+import { getLabels } from './generate-labels/labelService';
 
 export async function GET(req: Request) {
     const session = await getServerSession(authOptions);
@@ -27,7 +28,6 @@ export async function POST(request: Request) {
             { status: 401 },
         );
     }
-
     const photo = (await request.json()) as PhotoData;
 
     if (!photo.photoUrl || !photo.name) {
@@ -37,7 +37,11 @@ export async function POST(request: Request) {
         );
     }
     try {
-        await savePhoto(photo, session?.user?.id);
+        const savedPhoto = await savePhoto(photo, session?.user?.id);
+        const labels = await getLabels(savedPhoto);
+        await prisma.label.createMany({
+            data: labels,
+        });
     } catch (e) {
         console.error(e);
         return NextResponse.json(

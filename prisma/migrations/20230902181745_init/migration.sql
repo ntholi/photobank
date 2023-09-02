@@ -35,6 +35,16 @@ CREATE TABLE "photos" (
 );
 
 -- CreateTable
+CREATE TABLE "Label" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "score" DOUBLE PRECISION NOT NULL,
+    "photoId" INTEGER,
+
+    CONSTRAINT "Label_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "tags" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
@@ -100,6 +110,9 @@ ALTER TABLE "photos" ADD CONSTRAINT "photos_user_id_fkey" FOREIGN KEY ("user_id"
 
 -- AddForeignKey
 ALTER TABLE "photos" ADD CONSTRAINT "photos_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "locations"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Label" ADD CONSTRAINT "Label_photoId_fkey" FOREIGN KEY ("photoId") REFERENCES "photos"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "photo_tags" ADD CONSTRAINT "photo_tags_photo_id_fkey" FOREIGN KEY ("photo_id") REFERENCES "photos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
