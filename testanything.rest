@@ -1,1 +1,1 @@
-GET http://localhost:3000/api/photos
+GET http://localhost:3000/api/photos/generate-labels?photoUrl=https://cdn.britannica.com/39/189239-050-A323CE65/huts-roofs-Lesotho-door-frames.jpg
