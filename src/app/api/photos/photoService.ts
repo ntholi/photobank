@@ -11,7 +11,10 @@ export type PhotoData = {
     description: string;
     location: LocationData;
     photoUrl: string;
-    tags: string[];
+    labels: {
+        name: string;
+        score: number;
+    }[];
 };
 
 export const savePhoto = async (photo: PhotoData, userId: string) => {
@@ -30,15 +33,16 @@ export const savePhoto = async (photo: PhotoData, userId: string) => {
                     id: userId,
                 },
             },
-            tags: {
-                create: photo.tags.map((tag) => ({
-                    tag: {
+            labels: {
+                create: photo.labels.map((it) => ({
+                    score: it.score,
+                    label: {
                         connectOrCreate: {
                             where: {
-                                name: tag,
+                                name: it.name,
                             },
                             create: {
-                                name: tag,
+                                name: it.name,
                             },
                         },
                     },

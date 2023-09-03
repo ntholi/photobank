@@ -3,7 +3,6 @@ import { prisma } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/auth';
 import { PhotoData, savePhoto } from './photoService';
-import { getLabels } from './generate-labels/labelService';
 
 export async function GET(req: Request) {
     const session = await getServerSession(authOptions);
@@ -30,18 +29,14 @@ export async function POST(request: Request) {
     }
     const photo = (await request.json()) as PhotoData;
 
-    if (!photo.photoUrl || !photo.name) {
+    if (!photo.photoUrl) {
         return NextResponse.json(
-            { error: 'Missing required fields' },
+            { error: 'photoUrl missing' },
             { status: 400 },
         );
     }
     try {
-        const savedPhoto = await savePhoto(photo, session?.user?.id);
-        const labels = await getLabels(savedPhoto);
-        await prisma.label.createMany({
-            data: labels,
-        });
+        await savePhoto(photo, session?.user?.id);
     } catch (e) {
         console.error(e);
         return NextResponse.json(

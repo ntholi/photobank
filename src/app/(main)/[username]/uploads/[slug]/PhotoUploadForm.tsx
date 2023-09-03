@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import PlaceInput from './PlaceInput';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Location } from '@/lib/types';
 import { profilePath } from '@/lib/constants';
 import TagInput from './TagInput';
@@ -20,15 +20,15 @@ type InputType = {
 
 type Props = {
   photoUrl: string;
+  photoLabels: any[];
 };
 
-export default function PhotoUploadForm({ photoUrl }: Props) {
+export default function PhotoUploadForm({ photoUrl, photoLabels }: Props) {
   const { register, handleSubmit } = useForm<InputType>();
   const [loading, setLoading] = useState(false);
   const { user } = useSession().data || {};
   const router = useRouter();
   const [location, setLocation] = useState<Location | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
 
   const onSubmit: SubmitHandler<InputType> = async (data: any) => {
     setLoading(true);
@@ -39,7 +39,7 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
           lat: location.lat,
           lng: location.lng,
         };
-        data.tags = tags;
+        data.labels = photoLabels;
       }
       await axios.post('/api/photos', data);
       router.push(profilePath(user));
@@ -67,7 +67,6 @@ export default function PhotoUploadForm({ photoUrl }: Props) {
             {...register('name', { required: true })}
           />
           <PlaceInput setLocation={setLocation} />
-          <TagInput tags={tags} setTags={setTags} />
           <Textarea
             label="Description"
             labelPlacement="outside"

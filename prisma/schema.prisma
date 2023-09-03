@@ -22,20 +22,18 @@ enum Role {
 }
 
 model User {
-  id        String  @id
-  username  String  @unique
-  firstName String? @map("first_name")
-  lastName  String? @map("last_name")
-  email     String?
-  image     String?
-  role      Role    @default(user)
-
+  id              String            @id
+  username        String            @unique
+  firstName       String?           @map("first_name")
+  lastName        String?           @map("last_name")
+  email           String?
+  image           String?
+  role            Role              @default(user)
   photos          Photo[]
   purchasedPhotos PurchasedPhotos[]
   savedPhotos     SavedPhotos[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
 
   @@map("users")
 }
@@ -47,55 +45,52 @@ enum PhotoStatus {
 }
 
 model Photo {
-  id          Int         @id @default(autoincrement())
-  name        String
-  status      PhotoStatus @default(pending)
-  description String?
-  url         String
-  user        User        @relation(fields: [userId], references: [id])
-  userId      String      @map("user_id")
-  location    Location?   @relation(fields: [locationId], references: [id])
-  locationId  Int?
-  labels      Label[]
-
+  id              Int               @id @default(autoincrement())
+  name            String
+  status          PhotoStatus       @default(pending)
+  description     String?
+  url             String
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String            @map("user_id")
+  location        Location?         @relation(fields: [locationId], references: [id])
+  locationId      Int?
   purchasedPhotos PurchasedPhotos[]
   savedPhotos     SavedPhotos[]
-  tags            PhotoTag[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  labels          PhotoLabel[]
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
 
   @@map("photos")
 }
 
-model Label {
-  id      Int    @id @default(autoincrement())
-  name    String
-  score   Float
-  photo   Photo? @relation(fields: [photoId], references: [id])
-  photoId Int?
-}
-
-model Tag {
-  id        Int        @id @default(autoincrement())
-  name      String     @unique
-  photos    PhotoTag[]
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
-
-  @@map("tags")
-}
-
-model PhotoTag {
-  photoId   Int      @map("photo_id")
+model PhotoLabel {
+  id        Int      @id @default(autoincrement())
   photo     Photo    @relation(fields: [photoId], references: [id])
-  tagId     Int      @map("tag_id")
-  tag       Tag      @relation(fields: [tagId], references: [id])
+  score     Float
+  photoId   Int      @map("photo_id")
+  label     Label    @relation(fields: [labelId], references: [id])
+  labelId   Int      @map("label_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@id([photoId, tagId])
-  @@map("photo_tags")
+  @@map("photo_labels")
+}
+
+model Label {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  tags        Tag[]
+  photoLabels PhotoLabel[]
+
+  @@map("labels")
+}
+
+model Tag {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  labels Label[]
+
+  @@map("tags")
 }
 
 model Location {
