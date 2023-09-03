@@ -1,13 +1,29 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image } from '@nextui-org/image';
 import { Button } from '@nextui-org/button';
 import { GoUpload } from 'react-icons/go';
 import { useDisclosure } from '@nextui-org/modal';
 import UploadModal from './UploadModal';
+import axios from 'axios';
+
+type UploadURL = {
+  uploadURL: string;
+  id: string;
+};
 
 export default function UploadPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [uploadUrl, setUploadUrl] = React.useState<UploadURL | null>();
+
+  useEffect(() => {
+    axios.get('/api/cloudflare/upload-url').then((res) => {
+      if (res.data.uploadURL) {
+        setUploadUrl(res.data.uploadURL as UploadURL);
+        console.log(res.data.uploadURL);
+      }
+    });
+  }, []);
 
   return (
     <>

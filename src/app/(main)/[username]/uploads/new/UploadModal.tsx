@@ -39,7 +39,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
   };
 
   const handleFileUpload = async () => {
-    if (user && file) {
+    if (file) {
       setUploading(true);
       const storageRef = ref(storage, `${constants.UPLOAD_FOLDER}/${uuidv4()}`);
 
