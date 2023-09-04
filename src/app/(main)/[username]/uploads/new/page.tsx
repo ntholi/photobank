@@ -1,33 +1,40 @@
-'use client';
-import React, { useEffect } from 'react';
 import { Image } from '@nextui-org/image';
-import { Button } from '@nextui-org/button';
-import { GoUpload } from 'react-icons/go';
-import { useDisclosure } from '@nextui-org/modal';
-import UploadModal from './UploadModal';
-import axios from 'axios';
+import ModalButton from './ModalButton';
 
 type UploadURL = {
   uploadURL: string;
   id: string;
 };
 
-export default function UploadPage() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [uploadUrl, setUploadUrl] = React.useState<UploadURL | null>();
+const getUploadUrl = async () => {
+  const token = process.env.CLOUDFLARE_TOKEN;
+  const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
 
-  useEffect(() => {
-    axios.get('/api/cloudflare/upload-url').then((res) => {
-      if (res.data.uploadURL) {
-        setUploadUrl(res.data.uploadURL as UploadURL);
-        console.log(res.data.uploadURL);
-      }
-    });
-  }, []);
+  const results = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${accountId}/images/v2/direct_upload`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  const data = await results.json();
+
+  if (!data.success) {
+    //TODO: handle this error properly
+    throw new Error(data.errors[0].message);
+  }
+  return data.result as UploadURL;
+};
+
+export default async function UploadPage() {
+  const uploadUrl = await getUploadUrl();
+
+  console.log('uploadUrl', uploadUrl);
 
   return (
     <>
-      <UploadModal isOpen={isOpen} onOpenChange={onOpenChange} />
       <section className="flex flex-col justify-center items-center w-full h-screen">
         <Image
           src="/images/photo_session.svg"
@@ -42,14 +49,7 @@ export default function UploadPage() {
           accepted, all photos are subject to review before they can be
           published on the photo bank
         </p>
-        <Button
-          onPress={onOpen}
-          startContent={<GoUpload />}
-          color="primary"
-          className="mt-5"
-        >
-          Upload
-        </Button>
+        <ModalButton uploadUrl={uploadUrl} />
       </section>
     </>
   );

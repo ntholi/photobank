@@ -12,18 +12,23 @@ import { BiSolidCloudUpload } from 'react-icons/bi';
 import useIsMobile from '@/lib/hooks/useIsMobile';
 import { Image } from '@nextui-org/image';
 import { GrClose } from 'react-icons/gr';
-import { ref, uploadBytes } from 'firebase/storage';
-import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from 'next/navigation';
-import { constants, profilePath } from '@/lib/constants';
-import { storage } from '@/lib/config/firebase';
+import { profilePath } from '@/lib/constants';
 import { useSession } from 'next-auth/react';
 
 type Props = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  uploadUrl?: null | {
+    uploadURL: string;
+    id: string;
+  };
 };
-export default function UploadModal({ isOpen, onOpenChange }: Props) {
+export default function UploadModal({
+  isOpen,
+  onOpenChange,
+  uploadUrl,
+}: Props) {
   const { user } = useSession().data || {};
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [file, setFile] = React.useState<File | null>(null);
@@ -39,13 +44,17 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
   };
 
   const handleFileUpload = async () => {
-    if (file) {
+    if (file && uploadUrl) {
       setUploading(true);
-      const storageRef = ref(storage, `${constants.UPLOAD_FOLDER}/${uuidv4()}`);
+      const formData = new FormData();
+      formData.append('file', file);
 
-      const results = await uploadBytes(storageRef, file);
+      const response = await fetch(uploadUrl.uploadURL, {
+        method: 'POST',
+        body: formData,
+      });
+
       setUploading(false);
-      return results.metadata.name;
     }
   };
 
@@ -122,9 +131,9 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
                 color="primary"
                 isDisabled={!file}
                 onPress={async () => {
-                  const fileName = await handleFileUpload();
+                  await handleFileUpload();
                   onClose();
-                  router.push(`${profilePath(user)}/uploads/${fileName}`);
+                  router.push(`${profilePath(user)}/uploads/${uploadUrl?.id}`);
                 }}
                 isLoading={uploading}
               >
