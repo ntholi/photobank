@@ -54,6 +54,8 @@ export default function UploadModal({
         body: formData,
       });
 
+      console.log('response', response);
+
       setUploading(false);
     }
   };
@@ -133,7 +135,7 @@ export default function UploadModal({
                 onPress={async () => {
                   await handleFileUpload();
                   onClose();
-                  router.push(`${profilePath(user)}/uploads/${uploadUrl?.id}`);
+                  // router.push(`${profilePath(user)}/uploads/${uploadUrl?.id}`);
                 }}
                 isLoading={uploading}
               >
