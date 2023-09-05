@@ -2,7 +2,7 @@
 CREATE TYPE "Role" AS ENUM ('user', 'moderator', 'admin');
 
 -- CreateEnum
-CREATE TYPE "PhotoStatus" AS ENUM ('pending', 'approved', 'rejected');
+CREATE TYPE "PhotoStatus" AS ENUM ('draft', 'published', 'rejected');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -21,11 +21,10 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "photos" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "status" "PhotoStatus" NOT NULL DEFAULT 'pending',
-    "description" TEXT,
-    "url" TEXT NOT NULL,
+    "id" TEXT NOT NULL,
+    "fileName" TEXT NOT NULL,
+    "status" "PhotoStatus" NOT NULL DEFAULT 'draft',
+    "caption" TEXT,
     "user_id" TEXT NOT NULL,
     "locationId" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -37,8 +36,8 @@ CREATE TABLE "photos" (
 -- CreateTable
 CREATE TABLE "photo_labels" (
     "id" SERIAL NOT NULL,
+    "photo_id" TEXT NOT NULL,
     "score" DOUBLE PRECISION NOT NULL,
-    "photo_id" INTEGER NOT NULL,
     "label_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -75,7 +74,7 @@ CREATE TABLE "locations" (
 -- CreateTable
 CREATE TABLE "purchased_photos" (
     "id" SERIAL NOT NULL,
-    "photo_id" INTEGER NOT NULL,
+    "photo_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -86,7 +85,7 @@ CREATE TABLE "purchased_photos" (
 -- CreateTable
 CREATE TABLE "saved_photos" (
     "id" SERIAL NOT NULL,
-    "photo_id" INTEGER NOT NULL,
+    "photo_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -102,6 +101,9 @@ CREATE TABLE "_LabelToTag" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "labels_name_key" ON "labels"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tags_name_key" ON "tags"("name");

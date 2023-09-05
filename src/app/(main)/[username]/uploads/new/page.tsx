@@ -1,14 +1,7 @@
 import { Image } from '@nextui-org/image';
 import ModalButton from './ModalButton';
 
-type UploadURL = {
-  uploadURL: string;
-  id: string;
-};
-
 export default async function UploadPage() {
-  // const uploadUrl = await getUploadUrl();
-
   return (
     <>
       <section className="flex flex-col justify-center items-center w-full h-screen">
@@ -25,7 +18,7 @@ export default async function UploadPage() {
           accepted, all photos are subject to review before they can be
           published on the photo bank
         </p>
-        <ModalButton uploadUrl={{ id: '', uploadURL: '' }} />
+        <ModalButton />
       </section>
     </>
   );

@@ -15,22 +15,13 @@ import { GrClose } from 'react-icons/gr';
 import { useRouter } from 'next/navigation';
 import { profilePath } from '@/lib/constants';
 import { useSession } from 'next-auth/react';
-import api from '@/lib/config/api';
 import axios from 'axios';
 
 type Props = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  uploadUrl?: null | {
-    uploadURL: string;
-    id: string;
-  };
 };
-export default function UploadModal({
-  isOpen,
-  onOpenChange,
-  uploadUrl,
-}: Props) {
+export default function UploadModal({ isOpen, onOpenChange }: Props) {
   const { user } = useSession().data || {};
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [file, setFile] = React.useState<File | null>(null);
@@ -46,16 +37,17 @@ export default function UploadModal({
   };
 
   const handleFileUpload = async () => {
-    if (file && uploadUrl) {
+    if (file) {
       setUploading(true);
       const formData = new FormData();
       formData.append('file', file);
-
       const response = await axios.post('/api/photos/uploads', formData);
-
-      console.log('response', response.data);
-
       setUploading(false);
+
+      const { url, photo } = response.data;
+      if (url && photo) {
+        router.push(`${profilePath(user)}/uploads/${photo.id}`);
+      }
     }
   };
 
@@ -134,7 +126,6 @@ export default function UploadModal({
                 onPress={async () => {
                   await handleFileUpload();
                   onClose();
-                  // router.push(`${profilePath(user)}/uploads/${uploadUrl?.id}`);
                 }}
                 isLoading={uploading}
               >

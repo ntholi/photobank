@@ -4,22 +4,11 @@ import { GoUpload } from 'react-icons/go';
 import { useDisclosure } from '@nextui-org/modal';
 import UploadModal from './UploadModal';
 
-type Props = {
-  uploadUrl: {
-    uploadURL: string;
-    id: string;
-  };
-};
-
-export default function ModalButton({ uploadUrl }: Props) {
+export default function ModalButton() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      <UploadModal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        uploadUrl={uploadUrl}
-      />
+      <UploadModal isOpen={isOpen} onOpenChange={onOpenChange} />
       <Button
         onPress={onOpen}
         startContent={<GoUpload />}
