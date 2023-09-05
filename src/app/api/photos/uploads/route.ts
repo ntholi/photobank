@@ -2,7 +2,13 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/auth';
 import { prisma } from '@/lib/db';
 import { NextResponse } from 'next/server';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import {
+    S3Client,
+    PutObjectCommand,
+    GetObjectCommand,
+} from '@aws-sdk/client-s3';
+import { v4 as uuid } from 'uuid';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const bucketName = process.env.AWS_BUCKET_NAME || '';
 const bucketRegion = process.env.AWS_BUCKET_REGION || '';
@@ -34,6 +40,18 @@ export async function POST(request: Request) {
         );
     }
 
+    const { fileName, url } = await uploadImage(data);
+    const photo = await prisma.photo.create({
+        data: {
+            userId: session.user.id,
+            fileName: fileName,
+        },
+    });
+
+    return NextResponse.json({ photo, url });
+}
+
+async function uploadImage(data: FormData) {
     const s3 = new S3Client({
         region: bucketRegion,
         credentials: {
@@ -43,23 +61,20 @@ export async function POST(request: Request) {
     });
 
     const file = data.get('file') as File;
-    const fileFileBuffer = (await file.arrayBuffer()) as any;
-
-    const res = await s3.send(
-        new PutObjectCommand({
-            Bucket: bucketName,
-            Key: createFileName(file, session.user.id),
-            Body: fileFileBuffer,
-            ContentType: file.type,
-        }),
-    );
-
-    console.log('res', res);
-
-    return NextResponse.json({ success: true });
-}
-
-function createFileName(file: File, userId: string) {
     const ext = file.name.split('.').pop();
-    return `${userId}-${Date.now()}.${ext}`;
+    const fileName = `${uuid()}.${ext}`;
+    const buffer = (await file.arrayBuffer()) as any;
+
+    const params = {
+        Bucket: bucketName,
+        Key: fileName,
+        Body: buffer,
+        ContentType: file.type,
+    };
+    await s3.send(new PutObjectCommand(params));
+
+    const command = new GetObjectCommand(params);
+    const url = await getSignedUrl(s3, command, { expiresIn: 60 * 60 });
+
+    return { fileName, url };
 }

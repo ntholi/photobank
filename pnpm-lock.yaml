@@ -14,6 +14,9 @@ dependencies:
   '@aws-sdk/client-s3':
     specifier: ^3.405.0
     version: 3.405.0
+  '@aws-sdk/s3-request-presigner':
+    specifier: ^3.405.0
+    version: 3.405.0
   '@google-cloud/vision':
     specifier: ^4.0.1
     version: 4.0.1(encoding@0.1.13)
@@ -710,6 +713,22 @@ packages:
       tslib: 2.6.2
     dev: false
 
+  /@aws-sdk/s3-request-presigner@3.405.0:
+    resolution: {integrity: sha512-UxOw4TMgS5TONm4VmZnWXSv4RUPKNv9Rtvy1S0dYl8WZSqrihN3KPY3bHP/H/A7fWTyjSWnKqK9YtPsrSMfULQ==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@aws-sdk/signature-v4-multi-region': 3.398.0
+      '@aws-sdk/types': 3.398.0
+      '@aws-sdk/util-format-url': 3.398.0
+      '@smithy/middleware-endpoint': 2.0.5
+      '@smithy/protocol-http': 2.0.5
+      '@smithy/smithy-client': 2.0.5
+      '@smithy/types': 2.2.2
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - '@aws-sdk/signature-v4-crt'
+    dev: false
+
   /@aws-sdk/signature-v4-multi-region@3.398.0:
     resolution: {integrity: sha512-8fTqTxRDWE03T7ClaWlCfbwuSae//01XMNVy2a9g5QgaelQh7ZZyU3ZIJiV8gIj8v6ZM0NGn9Bz1liI/vmNmcw==}
     engines: {node: '>=14.0.0'}
@@ -789,6 +808,16 @@ packages:
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-sdk/types': 3.398.0
+      tslib: 2.6.2
+    dev: false
+
+  /@aws-sdk/util-format-url@3.398.0:
+    resolution: {integrity: sha512-Q3kchZZ9+VkR6mORK04wpQXL9LHi88EIPZNfpWSuqV/g1gR+rxcNc3mNe0KjnQ0//IQmcWworfGigHRhDQSsKg==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@aws-sdk/types': 3.398.0
+      '@smithy/querystring-builder': 2.0.5
+      '@smithy/types': 2.2.2
       tslib: 2.6.2
     dev: false
 

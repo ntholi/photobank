@@ -6,33 +6,6 @@ type UploadURL = {
   id: string;
 };
 
-const getUploadUrl = async () => {
-  const token = process.env.CLOUDFLARE_TOKEN;
-  const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
-
-  const formData = new FormData();
-  formData.append('requireSignedURLs', 'true');
-  const results = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${accountId}/images/v2/direct_upload`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    },
-  );
-  const data = await results.json();
-
-  console.log('data', data);
-
-  if (!data.success) {
-    //TODO: handle this error properly
-    throw new Error(data.errors[0].message);
-  }
-  return data.result as UploadURL;
-};
-
 export default async function UploadPage() {
   // const uploadUrl = await getUploadUrl();
 

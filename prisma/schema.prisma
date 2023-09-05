@@ -39,17 +39,16 @@ model User {
 }
 
 enum PhotoStatus {
-  pending
-  approved
+  draft
+  published
   rejected
 }
 
 model Photo {
-  id              Int               @id @default(autoincrement())
-  name            String
-  status          PhotoStatus       @default(pending)
-  description     String?
-  url             String
+  id              String            @id @default(cuid())
+  fileName        String
+  status          PhotoStatus       @default(draft)
+  caption         String?
   user            User              @relation(fields: [userId], references: [id])
   userId          String            @map("user_id")
   location        Location?         @relation(fields: [locationId], references: [id])
@@ -66,8 +65,8 @@ model Photo {
 model PhotoLabel {
   id        Int      @id @default(autoincrement())
   photo     Photo    @relation(fields: [photoId], references: [id])
+  photoId   String   @map("photo_id")
   score     Float
-  photoId   Int      @map("photo_id")
   label     Label    @relation(fields: [labelId], references: [id])
   labelId   Int      @map("label_id")
   createdAt DateTime @default(now()) @map("created_at")
@@ -106,7 +105,7 @@ model Location {
 model PurchasedPhotos {
   id        Int      @id @default(autoincrement())
   photo     Photo    @relation(fields: [photoId], references: [id])
-  photoId   Int      @map("photo_id")
+  photoId   String   @map("photo_id")
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
@@ -118,7 +117,7 @@ model PurchasedPhotos {
 model SavedPhotos {
   id        Int      @id @default(autoincrement())
   photo     Photo    @relation(fields: [photoId], references: [id])
-  photoId   Int      @map("photo_id")
+  photoId   String   @map("photo_id")
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
