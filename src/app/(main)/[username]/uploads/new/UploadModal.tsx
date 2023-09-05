@@ -15,6 +15,7 @@ import { GrClose } from 'react-icons/gr';
 import { useRouter } from 'next/navigation';
 import { profilePath } from '@/lib/constants';
 import { useSession } from 'next-auth/react';
+import api from '@/lib/config/api';
 
 type Props = {
   isOpen: boolean;
@@ -49,7 +50,7 @@ export default function UploadModal({
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch(uploadUrl.uploadURL, {
+      const response = await fetch('/api/photos/uploads', {
         method: 'POST',
         body: formData,
       });

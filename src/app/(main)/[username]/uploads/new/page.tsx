@@ -34,7 +34,7 @@ const getUploadUrl = async () => {
 };
 
 export default async function UploadPage() {
-  const uploadUrl = await getUploadUrl();
+  // const uploadUrl = await getUploadUrl();
 
   return (
     <>
@@ -52,7 +52,7 @@ export default async function UploadPage() {
           accepted, all photos are subject to review before they can be
           published on the photo bank
         </p>
-        <ModalButton uploadUrl={uploadUrl} />
+        <ModalButton uploadUrl={{ id: '', uploadURL: '' }} />
       </section>
     </>
   );
