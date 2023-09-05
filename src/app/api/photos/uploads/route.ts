@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     const res = await s3.send(
         new PutObjectCommand({
             Bucket: bucketName,
-            Key: createFileName(file.name),
+            Key: createFileName(file, session.user.id),
             Body: fileFileBuffer,
             ContentType: file.type,
         }),
@@ -59,8 +59,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true });
 }
 
-function createFileName(name: string) {
-    const ext = name.split('.').pop();
-    const fileName = name.replace(`.${ext}`, '');
-    return `${fileName}-${Date.now()}.${ext}`;
+function createFileName(file: File, userId: string) {
+    const ext = file.name.split('.').pop();
+    return `${userId}-${Date.now()}.${ext}`;
 }
