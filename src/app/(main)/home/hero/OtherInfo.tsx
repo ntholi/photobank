@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PhotoWithUser } from '@/lib/types';
+import { PhotoWithData } from '@/lib/types';
 
 type Props = {
-  data: PhotoWithUser;
+  data: PhotoWithData;
 };
 const item = {
   hidden: {

@@ -1,19 +1,19 @@
 import React from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import Progress from './Progress';
-import { CurrentSlideData, PhotoWithUser } from '@/lib/types';
+import { CurrentSlideData, PhotoWithData } from '@/lib/types';
 
 type Props = {
   currentSlideData: CurrentSlideData;
-  sliderData: PhotoWithUser[];
-  data: PhotoWithUser[];
-  transitionData: PhotoWithUser;
-  handleData: React.Dispatch<React.SetStateAction<PhotoWithUser[]>>;
-  handleTransitionData: React.Dispatch<React.SetStateAction<PhotoWithUser>>;
+  sliderData: PhotoWithData[];
+  data: PhotoWithData[];
+  transitionData: PhotoWithData;
+  handleData: React.Dispatch<React.SetStateAction<PhotoWithData[]>>;
+  handleTransitionData: React.Dispatch<React.SetStateAction<PhotoWithData>>;
   handleCurrentSlideData: React.Dispatch<
     React.SetStateAction<CurrentSlideData>
   >;
-  initData: PhotoWithUser;
+  initData: PhotoWithData;
 };
 
 function Controls({

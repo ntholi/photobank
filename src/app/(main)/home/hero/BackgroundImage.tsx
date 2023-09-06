@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CurrentSlideData, PhotoWithUser } from '@/lib/types';
+import { CurrentSlideData, PhotoWithData } from '@/lib/types';
 import MotionImage from './MotionImage';
 
 type Props = {
-  transitionData: PhotoWithUser;
+  transitionData: PhotoWithData;
   currentSlideData: CurrentSlideData;
 };
 

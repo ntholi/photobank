@@ -2,7 +2,7 @@ import Hero from './home/hero/Hero';
 import api from '@/lib/config/api';
 import GallerySection from './home/GallerySection';
 import Footer from './home/Footer';
-import { PhotoWithUser } from '@/lib/types';
+import { PhotoWithData } from '@/lib/types';
 
 const getPhotos = async () => {
   try {
@@ -14,13 +14,13 @@ const getPhotos = async () => {
 
     const data = await res.json();
     if (data.photos.length > 0) {
-      return data.photos as PhotoWithUser[];
+      return data.photos as PhotoWithData[];
     }
   } catch (e) {
     console.log(e);
   }
 
-  return [] as PhotoWithUser[];
+  return [] as PhotoWithData[];
 };
 
 export default async function Page() {

@@ -1,8 +1,5 @@
 'use client';
 import { Image } from '@nextui-org/image';
-import { getDownloadURL, ref } from 'firebase/storage';
-import { storage } from '@/lib/config/firebase';
-import { constants } from '@/lib/constants';
 import PhotoUploadForm from './PhotoUploadForm';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -44,7 +41,7 @@ export default function Page({ params: { photoId } }: Props) {
         />
       </div>
       <div className={'rounded-xl col-span-6'}>
-        <PhotoUploadForm photoUrl={photoUrl} photoLabels={labels} />
+        <PhotoUploadForm photoId={photoId} photoLabels={labels} />
       </div>
     </section>
   );

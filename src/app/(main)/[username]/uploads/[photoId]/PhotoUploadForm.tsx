@@ -13,15 +13,14 @@ import { profilePath } from '@/lib/constants';
 type InputType = {
   caption: string;
   location: string;
-  photoUrl: string;
 };
 
 type Props = {
-  photoUrl: string;
+  photoId: string;
   photoLabels: any[];
 };
 
-export default function PhotoUploadForm({ photoUrl, photoLabels }: Props) {
+export default function PhotoUploadForm({ photoId, photoLabels }: Props) {
   const { register, handleSubmit } = useForm<InputType>();
   const [loading, setLoading] = useState(false);
   const { user } = useSession().data || {};
@@ -39,7 +38,7 @@ export default function PhotoUploadForm({ photoUrl, photoLabels }: Props) {
         };
         data.labels = photoLabels;
       }
-      await axios.post('/api/photos', data);
+      await axios.put(`/api/photos/${photoId}`, data);
       router.push(profilePath(user));
     } catch (error) {
       console.log(error);
@@ -52,12 +51,6 @@ export default function PhotoUploadForm({ photoUrl, photoLabels }: Props) {
     <div>
       <form onSubmit={handleSubmit(onSubmit)} method="POST">
         <div className="space-y-6 -mt-6">
-          <input
-            type="text"
-            value={photoUrl}
-            hidden
-            {...register('photoUrl')}
-          />
           <LocationInput setLocation={setLocation} />
           <Textarea
             label="Caption"

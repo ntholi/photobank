@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PhotoWithUser } from '@/lib/types';
+import { PhotoWithData } from '@/lib/types';
 import MotionImage from './MotionImage';
 
 type Props = {
-  data: PhotoWithUser;
+  data: PhotoWithData;
 };
 
 function SliderCard({ data }: Props) {

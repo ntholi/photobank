@@ -1,9 +1,9 @@
 import React from 'react';
 import SliderCard from './SliderCard';
-import { PhotoWithUser } from '@/lib/types';
+import { PhotoWithData } from '@/lib/types';
 
 type Props = {
-  data: PhotoWithUser[];
+  data: PhotoWithData[];
 };
 
 function Slides({ data }: Props) {

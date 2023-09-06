@@ -11,12 +11,12 @@ import { FaBookmark, FaCartArrowDown } from 'react-icons/fa';
 import axios from 'axios';
 import api from '@/lib/config/api';
 import { profilePath } from '@/lib/constants';
-import { PhotoWithUser } from '@/lib/types';
+import { PhotoWithData } from '@/lib/types';
 
 type Props = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  photo: PhotoWithUser;
+  photo: PhotoWithData;
 };
 export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
   const { user } = useSession().data || {};

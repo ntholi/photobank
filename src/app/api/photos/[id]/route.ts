@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { Photo } from '@prisma/client';
+import { PhotoWithData } from '@/lib/types';
 
 type Props = {
     params: {
@@ -9,36 +10,69 @@ type Props = {
 };
 
 export async function GET(request: Request, { params }: Props) {
-    const id = Number(params.id || -1);
-
     const photo = await prisma.photo.findUnique({
         where: {
-            id: id,
+            id: params.id,
         },
     });
     if (!photo) {
-        throw new Error(`Photo with id ${id} not found`);
+        throw new Error(`Photo with id ${params.id} not found`);
     }
     return NextResponse.json(photo);
 }
 
-export async function PUT(request: Request, { params }: Props) {
-    const id = Number(params.id || -1);
+export type PhotoData = {
+    caption: string;
+    description: string;
+    location: {
+        name: string;
+        lat: number;
+        lng: number;
+    };
+    photoUrl: string;
+    labels: {
+        name: string;
+        score: number;
+    }[];
+};
 
-    if (id < 0) {
-        throw new Error(`Invalid id ${id}`);
-    }
-    const data = (await request.json()) as Photo;
+export async function PUT(request: Request, { params }: Props) {
+    const data = (await request.json()) as PhotoData;
     const photo = await prisma.photo.update({
         where: {
-            id: id,
+            id: params.id,
         },
         data: {
-            ...data,
+            caption: data.caption,
+            status: 'published',
+            location: {
+                connectOrCreate: {
+                    where: {
+                        name: data.location.name,
+                    },
+                    create: {
+                        name: data.location.name,
+                        lat: data.location.lat,
+                        lng: data.location.lng,
+                    },
+                },
+            },
+            labels: {
+                create: data.labels.map((it) => ({
+                    score: it.score,
+                    label: {
+                        connectOrCreate: {
+                            where: {
+                                name: it.name,
+                            },
+                            create: {
+                                name: it.name,
+                            },
+                        },
+                    },
+                })),
+            },
         },
     });
-    if (!photo) {
-        throw new Error(`Photo with id ${id} not found`);
-    }
     return NextResponse.json(photo);
 }

@@ -8,7 +8,7 @@ import axios from 'axios';
 import StackGrid from 'react-stack-grid';
 import PhotoModal from './PhotoModal';
 import { useDisclosure } from '@nextui-org/modal';
-import { PhotoWithUser } from '@/lib/types';
+import { PhotoWithData } from '@/lib/types';
 
 type Props = {
   searchKey: string;
@@ -17,9 +17,9 @@ type Props = {
 
 export default function Gallery({ searchKey, tag }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [photos, setPhotos] = React.useState<PhotoWithUser[]>([]);
+  const [photos, setPhotos] = React.useState<PhotoWithData[]>([]);
   const [selectedPhoto, setSelectedPhoto] =
-    React.useState<PhotoWithUser | null>(null);
+    React.useState<PhotoWithData | null>(null);
 
   React.useEffect(() => {
     axios.post(`/api/photos/search?searchKey=${searchKey}`, tag).then((res) => {
