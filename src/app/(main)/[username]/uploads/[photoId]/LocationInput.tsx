@@ -14,7 +14,7 @@ const bounds = {
   west: 27.011223,
 };
 
-export default function PlaceInput({ setLocation }: Props) {
+export default function LocationInput({ setLocation }: Props) {
   const inputRef = useRef<any>();
 
   const handlePlaceChanged = () => {
@@ -44,7 +44,7 @@ export default function PlaceInput({ setLocation }: Props) {
           type="text"
           variant="bordered"
           placeholder=""
-          description="Where the photo was taken"
+          description="Where was the photo taken?"
         />
       </StandaloneSearchBox>
     </LoadScript>

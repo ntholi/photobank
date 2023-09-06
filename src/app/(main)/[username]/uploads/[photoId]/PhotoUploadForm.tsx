@@ -5,7 +5,7 @@ import { Button } from '@nextui-org/button';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import PlaceInput from './PlaceInput';
+import LocationInput from './LocationInput';
 import { useState } from 'react';
 import { Location } from '@/lib/types';
 import { profilePath } from '@/lib/constants';
@@ -58,7 +58,7 @@ export default function PhotoUploadForm({ photoUrl, photoLabels }: Props) {
             hidden
             {...register('photoUrl')}
           />
-          <PlaceInput setLocation={setLocation} />
+          <LocationInput setLocation={setLocation} />
           <Textarea
             label="Caption"
             variant="bordered"
