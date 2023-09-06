@@ -13,16 +13,13 @@ export default function Page({ params: { photoId } }: Props) {
   const [loadingLabels, setLoadingLabels] = useState(false);
   const photoUrl = searchParams.get('photoUrl') || '';
 
-  console.log('photoId', photoId);
-  console.log('photoUrl', photoUrl);
-
   useEffect(() => {
     setLoadingLabels(true);
     axios
-      .get(`/api/photos/generate-labels?photoUrl=${photoUrl}`)
+      .get(
+        `/api/photos/generate-labels?photoUrl=${encodeURIComponent(photoUrl)}`,
+      )
       .then((res) => {
-        console.log(res.data);
-        console.log(photoUrl);
         setLabels(res.data.labels);
       })
       .finally(() => {

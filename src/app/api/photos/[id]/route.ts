@@ -30,7 +30,7 @@ export type PhotoData = {
         lng: number;
     };
     photoUrl: string;
-    labels: {
+    labels?: {
         name: string;
         score: number;
     }[];
@@ -58,7 +58,7 @@ export async function PUT(request: Request, { params }: Props) {
                 },
             },
             labels: {
-                create: data.labels.map((it) => ({
+                create: data.labels?.map((it) => ({
                     score: it.score,
                     label: {
                         connectOrCreate: {
