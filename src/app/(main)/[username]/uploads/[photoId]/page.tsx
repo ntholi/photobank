@@ -6,20 +6,18 @@ import { constants } from '@/lib/constants';
 import PhotoUploadForm from './PhotoUploadForm';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation';
 
-type Props = { params: { slug: string } };
+type Props = { params: { photoId: string } };
 
-export default function Page({ params }: Props) {
-  const [photoUrl, setPhotoUrl] = useState('');
+export default function Page({ params: { photoId } }: Props) {
+  const searchParams = useSearchParams();
   const [labels, setLabels] = useState<string[]>([]);
   const [loadingLabels, setLoadingLabels] = useState(false);
+  const photoUrl = searchParams.get('photoUrl') || '';
 
-  useEffect(() => {
-    const sRef = ref(storage, `${constants.UPLOAD_FOLDER}/${params.slug}`);
-    getDownloadURL(sRef).then((url) => {
-      setPhotoUrl(url);
-    });
-  }, [params]);
+  console.log('photoId', photoId);
+  console.log('photoUrl', photoUrl);
 
   useEffect(() => {
     setLoadingLabels(true);

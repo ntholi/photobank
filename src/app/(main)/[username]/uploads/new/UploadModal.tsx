@@ -44,9 +44,12 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
       const response = await axios.post('/api/photos/uploads', formData);
       setUploading(false);
 
-      const { url, photo } = response.data;
-      if (url && photo) {
-        router.push(`${profilePath(user)}/uploads/${photo.id}`);
+      const { photo, url } = response.data;
+      if (photo && url) {
+        const encodedUrl = encodeURIComponent(url);
+        router.push(
+          `${profilePath(user)}/uploads/${photo.id}?photoUrl=${encodedUrl}`,
+        );
       }
     }
   };
