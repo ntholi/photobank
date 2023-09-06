@@ -6,14 +6,12 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import PlaceInput from './PlaceInput';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Location } from '@/lib/types';
 import { profilePath } from '@/lib/constants';
-import TagInput from './TagInput';
 
 type InputType = {
-  name: string;
-  description: string;
+  caption: string;
   location: string;
   photoUrl: string;
 };
@@ -53,26 +51,19 @@ export default function PhotoUploadForm({ photoUrl, photoLabels }: Props) {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} method="POST">
-        <div className="space-y-6">
+        <div className="space-y-6 -mt-6">
           <input
             type="text"
             value={photoUrl}
             hidden
             {...register('photoUrl')}
           />
-          <Input
-            label="Name"
-            type="text"
-            variant="bordered"
-            {...register('name', { required: true })}
-          />
           <PlaceInput setLocation={setLocation} />
           <Textarea
-            label="Description"
-            labelPlacement="outside"
+            label="Caption"
             variant="bordered"
-            placeholder="Describe your photo (one sentance story about your photo)"
-            {...register('description')}
+            placeholder="(Optional)"
+            {...register('caption')}
           />
           <Button
             color="primary"
