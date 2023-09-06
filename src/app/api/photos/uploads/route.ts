@@ -24,6 +24,7 @@ export async function GET(req: Request) {
     const photos = await prisma.photo.findMany({
         where: {
             userId: userId,
+            status: userId !== session?.user?.id ? 'published' : undefined,
         },
     });
     return NextResponse.json({ photos });

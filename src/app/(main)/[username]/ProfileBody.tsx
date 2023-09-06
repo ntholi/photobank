@@ -70,7 +70,7 @@ export const ProfileBody = ({ userId }: Props) => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                     {photos.map((photo: Photo) => (
                       <div className="relative flex flex-1" key={photo.id}>
-                        {photo.status !== 'approved' && (
+                        {photo.status !== 'published' && (
                           <Chip
                             className="absolute top-2 right-2 z-20 text-xs bg-opacity-80"
                             color={getChipColor(photo.status)}
