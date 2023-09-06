@@ -15,18 +15,40 @@ const bucketRegion = process.env.AWS_BUCKET_REGION || '';
 const bucketAccessKey = process.env.AWS_BUCKET_ACCESS_KEY || '';
 const bucketSecretKey = process.env.AWS_BUCKET_SECRET_KEY || '';
 
+export const s3Client = new S3Client({
+    region: bucketRegion,
+    credentials: {
+        accessKeyId: bucketAccessKey,
+        secretAccessKey: bucketSecretKey,
+    },
+});
+
 export async function GET(req: Request) {
     const session = await getServerSession(authOptions);
     const { searchParams } = new URL(req.url || '');
 
     const userId = searchParams.get('userId') || '';
 
-    const photos = await prisma.photo.findMany({
+    const data = await prisma.photo.findMany({
         where: {
             userId: userId,
             status: userId !== session?.user?.id ? 'published' : undefined,
         },
     });
+
+    const photoPromises = data.map(async (it) => {
+        const params = {
+            Bucket: bucketName,
+            Key: it.fileName,
+        };
+        const url = await getSignedUrl(s3Client, new GetObjectCommand(params), {
+            expiresIn: 60,
+        });
+        return { ...it, url };
+    });
+
+    const photos = await Promise.all(photoPromises);
+
     return NextResponse.json({ photos });
 }
 
@@ -52,14 +74,6 @@ export async function POST(request: Request) {
 }
 
 async function uploadImage(data: FormData) {
-    const s3 = new S3Client({
-        region: bucketRegion,
-        credentials: {
-            accessKeyId: bucketAccessKey,
-            secretAccessKey: bucketSecretKey,
-        },
-    });
-
     const file = data.get('file') as File;
     const ext = file.name.split('.').pop();
     const fileName = `${uuid()}.${ext}`;
@@ -71,10 +85,10 @@ async function uploadImage(data: FormData) {
         Body: buffer,
         ContentType: file.type,
     };
-    await s3.send(new PutObjectCommand(params));
+    await s3Client.send(new PutObjectCommand(params));
 
     const command = new GetObjectCommand(params);
-    const url = await getSignedUrl(s3, command, { expiresIn: 60 * 60 });
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
 
     return { fileName, url };
 }

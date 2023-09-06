@@ -4,19 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com',
-        port: '',
-        pathname: '/v0/b/photobanktests.appspot.com/**',
-      },
-      {
-        protocol: 'http',
-        hostname: '127.0.0.1',
-        port: '9199',
-        pathname: '/v0/b/photobanktests.appspot.com/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
+        hostname: 'photobank-test-2.s3.eu-north-1.amazonaws.com',
         port: '',
         pathname: '/**',
       },

@@ -1,7 +1,9 @@
 import { Label, Photo, User } from '@prisma/client';
 
 export type SessionUser = import('next-auth').User | undefined;
-export type PhotoWithData = Photo & { user: User } & { location: Location } & {
+export type PhotoWithData = Photo & { url: string } & { user: User } & {
+    location: Location;
+} & {
     labels: Label[];
 };
 
