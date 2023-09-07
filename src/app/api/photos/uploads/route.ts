@@ -8,12 +8,15 @@ import {
     GetObjectCommand,
 } from '@aws-sdk/client-s3';
 import { v4 as uuid } from 'uuid';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
 
 const bucketName = process.env.AWS_BUCKET_NAME || '';
 const bucketRegion = process.env.AWS_BUCKET_REGION || '';
 const bucketAccessKey = process.env.AWS_BUCKET_ACCESS_KEY || '';
 const bucketSecretKey = process.env.AWS_BUCKET_SECRET_KEY || '';
+const cloudfrontPrivateKey = process.env.AWS_CLOUDFRONT_PRIVATE_KEY
+    ? process.env.AWS_CLOUDFRONT_PRIVATE_KEY.replace(/\\n/g, '\n')
+    : '';
 
 export const s3Client = new S3Client({
     region: bucketRegion,
@@ -45,7 +48,13 @@ export async function GET(req: Request) {
         //     expiresIn: 60,
         // });
         const url = process.env.AWS_CLOUDFRONT_URL + '/' + it.fileName;
-        return { ...it, url };
+        const signedUrl = getSignedUrl({
+            url,
+            privateKey: cloudfrontPrivateKey,
+            keyPairId: process.env.AWS_CLOUDFRONT_KEY_PAIR_ID || '',
+            dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24).toString(),
+        });
+        return { ...it, url: signedUrl };
     });
 
     const photos = await Promise.all(photoPromises);
@@ -89,7 +98,7 @@ async function uploadImage(data: FormData) {
     await s3Client.send(new PutObjectCommand(params));
 
     const command = new GetObjectCommand(params);
-    const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
+    const url = ''; //await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
 
     return { fileName, url };
 }
