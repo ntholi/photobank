@@ -41,9 +41,10 @@ export async function GET(req: Request) {
             Bucket: bucketName,
             Key: it.fileName,
         };
-        const url = await getSignedUrl(s3Client, new GetObjectCommand(params), {
-            expiresIn: 60,
-        });
+        // const url = await getSignedUrl(s3Client, new GetObjectCommand(params), {
+        //     expiresIn: 60,
+        // });
+        const url = process.env.AWS_CLOUDFRONT_URL + '/' + it.fileName;
         return { ...it, url };
     });
 

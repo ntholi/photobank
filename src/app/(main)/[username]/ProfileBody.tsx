@@ -6,7 +6,6 @@ import React from 'react';
 import axios from 'axios';
 import { Chip } from '@nextui-org/chip';
 import { MdOutlineNoPhotography } from 'react-icons/md';
-import NextImage from 'next/image';
 import { PhotoStatus } from '@prisma/client';
 import { GalleryType } from '@/lib/constants';
 
@@ -84,7 +83,6 @@ export const ProfileBody = ({ userId }: Props) => {
                           alt={photo.name}
                           height={900}
                           width={900}
-                          as={NextImage}
                         />
                       </div>
                     ))}
