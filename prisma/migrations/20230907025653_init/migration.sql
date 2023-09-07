@@ -2,7 +2,7 @@
 CREATE TYPE "Role" AS ENUM ('user', 'moderator', 'admin');
 
 -- CreateEnum
-CREATE TYPE "PhotoStatus" AS ENUM ('draft', 'published', 'rejected');
+CREATE TYPE "PhotoStatus" AS ENUM ('draft', 'published', 'pending', 'rejected');
 
 -- CreateTable
 CREATE TABLE "users" (
