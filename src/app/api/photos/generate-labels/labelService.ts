@@ -20,5 +20,7 @@ export const getLabels = async (photoUrl: string): Promise<LabelData[]> => {
         } as LabelData;
     });
 
+    console.log({labels})
+
     return labels || [];
 };

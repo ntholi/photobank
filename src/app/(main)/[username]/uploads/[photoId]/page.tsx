@@ -38,7 +38,11 @@ export default function Page({ params: { photoId } }: Props) {
         />
       </div>
       <div className={'rounded-xl col-span-6'}>
-        <PhotoUploadForm photoId={photoId} photoLabels={labels} />
+        <PhotoUploadForm
+          photoId={photoId}
+          photoLabels={labels}
+          disabled={loadingLabels}
+        />
       </div>
     </section>
   );
