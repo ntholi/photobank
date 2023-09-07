@@ -1,6 +1,6 @@
 'use client';
 import { Image } from '@nextui-org/image';
-import PhotoUploadForm from './PhotoUploadForm';
+import PhotoUploadForm from './Form';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSearchParams } from 'next/navigation';
