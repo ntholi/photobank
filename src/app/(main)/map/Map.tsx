@@ -5,11 +5,14 @@ import { Location } from '@prisma/client';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
 import { Card } from '@nextui-org/card';
+import { useRouter } from 'next/navigation';
 
 type LocationWithCount = Location & { photoCount: number };
 
 export default function Map() {
   const [locations, setLocations] = React.useState<LocationWithCount[]>([]);
+  const router = useRouter();
+
   useEffect(() => {
     axios.get('/api/photos/locations').then((res) => {
       setLocations(res.data.locations);
@@ -17,7 +20,7 @@ export default function Map() {
   }, []);
 
   const calculateRadius = (location: LocationWithCount) => {
-    const scalingFactor = 0.35;
+    const scalingFactor = 20; // 0.35;
     return Math.min(location.photoCount * scalingFactor, 30);
   };
 
@@ -38,6 +41,7 @@ export default function Map() {
             eventHandlers={{
               mouseover: (event) => event.target.openPopup(),
               mouseout: (event) => event.target.closePopup(),
+              click: (event) => router.push(`/locations/${location.id}`),
             }}
           >
             <Popup>

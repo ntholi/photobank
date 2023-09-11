@@ -7,7 +7,6 @@ import { Divider } from '@nextui-org/divider';
 import { Input } from '@nextui-org/input';
 import FilterBar from './FilterBar';
 import { Tag } from '@prisma/client';
-import Map from '../map/Map';
 import MapWrapper from '../map/MapWrapper';
 
 export default function GallerySection() {

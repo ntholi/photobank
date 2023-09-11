@@ -50,5 +50,13 @@ const commonUrlPatterns = [
     'content',
     'video',
     'videos',
+    'location',
+    'locations',
+    'user',
+    'users',
+    'web',
+    'website',
+    'place',
+    'places',
 ];
 export default commonUrlPatterns;
