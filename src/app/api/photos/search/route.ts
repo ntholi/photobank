@@ -33,7 +33,6 @@ export async function POST(req: Request) {
         const fileName = it.fileName.split('.')[0];
         return {
             ...it,
-            id: 'hello Word',
             url: `https://djvt9h5y4w4rn.cloudfront.net/${fileName}-thumb.jpg`,
         };
     });

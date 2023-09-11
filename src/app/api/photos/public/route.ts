@@ -21,7 +21,5 @@ export async function GET(req: Request) {
         };
     });
 
-    console.log({ photos });
-
     return NextResponse.json({ photos });
 }
