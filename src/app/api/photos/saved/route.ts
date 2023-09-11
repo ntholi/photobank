@@ -13,9 +13,23 @@ export async function GET(req: Request) {
             userId: userId,
         },
         include: {
-            photo: true,
+            photo: {
+                include: {
+                    user: true,
+                    location: true,
+                },
+            },
         },
     });
-    const photos = items.map((it) => it.photo);
+    const data = items.map((it) => it.photo);
+    const photos = data.map((photo) => {
+        const fileName = photo.fileName.split('.')[0];
+
+        return {
+            ...photo,
+            url: `https://djvt9h5y4w4rn.cloudfront.net/${fileName}-thumb.jpg`,
+        };
+    });
+
     return NextResponse.json({ photos });
 }
