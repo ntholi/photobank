@@ -17,6 +17,9 @@ dependencies:
   '@aws-sdk/cloudfront-signer':
     specifier: ^3.398.0
     version: 3.398.0
+  '@aws-sdk/s3-request-presigner':
+    specifier: ^3.409.0
+    version: 3.409.0
   '@google-cloud/vision':
     specifier: ^4.0.2
     version: 4.0.2(encoding@0.1.13)
@@ -721,6 +724,22 @@ packages:
       tslib: 2.6.2
     dev: false
 
+  /@aws-sdk/s3-request-presigner@3.409.0:
+    resolution: {integrity: sha512-DEensiYt0unx4NrAOJcRkvpJuHSEDQo2TYpKqQW0D67TEarCzK4fTugJT+ciUhromxJfApwBdwIy1fH3OcY73w==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@aws-sdk/signature-v4-multi-region': 3.408.0
+      '@aws-sdk/types': 3.408.0
+      '@aws-sdk/util-format-url': 3.408.0
+      '@smithy/middleware-endpoint': 2.0.6
+      '@smithy/protocol-http': 2.0.5
+      '@smithy/smithy-client': 2.1.3
+      '@smithy/types': 2.3.0
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - '@aws-sdk/signature-v4-crt'
+    dev: false
+
   /@aws-sdk/signature-v4-multi-region@3.408.0:
     resolution: {integrity: sha512-lFfQAG4ZO8Q7tYFDt9x7Hs1v45DjGTcXC/9c8g3Y6FS6WM/OScYtPXP0WDqQQt4BToHiDzcSxx4Ezxqvt3vJEA==}
     engines: {node: '>=14.0.0'}
@@ -800,6 +819,16 @@ packages:
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-sdk/types': 3.408.0
+      tslib: 2.6.2
+    dev: false
+
+  /@aws-sdk/util-format-url@3.408.0:
+    resolution: {integrity: sha512-kk4xkTrVH2+/dGCKsbTPtAsza11dLM9qFM4PNhUWPvBfBvpON54RY7WOOxmEpmEQId1pPhns3wYUucmFUaPSSw==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@aws-sdk/types': 3.408.0
+      '@smithy/querystring-builder': 2.0.6
+      '@smithy/types': 2.3.0
       tslib: 2.6.2
     dev: false
 

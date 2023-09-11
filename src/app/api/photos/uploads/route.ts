@@ -8,7 +8,7 @@ import {
     GetObjectCommand,
 } from '@aws-sdk/client-s3';
 import { v4 as uuid } from 'uuid';
-import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const bucketName = process.env.AWS_BUCKET_NAME || '';
 const bucketRegion = process.env.AWS_BUCKET_REGION || '';
@@ -44,17 +44,10 @@ export async function GET(req: Request) {
             Bucket: bucketName,
             Key: it.fileName,
         };
-        // const url = await getSignedUrl(s3Client, new GetObjectCommand(params), {
-        //     expiresIn: 60,
-        // });
-        const url = process.env.AWS_CLOUDFRONT_URL + '/' + it.fileName;
-        const signedUrl = getSignedUrl({
-            url,
-            privateKey: cloudfrontPrivateKey,
-            keyPairId: process.env.AWS_CLOUDFRONT_KEY_PAIR_ID || '',
-            dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24).toString(),
+        const url = await getSignedUrl(s3Client, new GetObjectCommand(params), {
+            expiresIn: 60,
         });
-        return { ...it, url: signedUrl };
+        return { ...it, url };
     });
 
     const photos = await Promise.all(photoPromises);
