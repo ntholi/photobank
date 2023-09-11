@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('user', 'moderator', 'admin');
+CREATE TYPE "Role" AS ENUM ('user', 'contributor', 'moderator', 'admin');
 
 -- CreateEnum
 CREATE TYPE "PhotoStatus" AS ENUM ('draft', 'published', 'pending', 'rejected');

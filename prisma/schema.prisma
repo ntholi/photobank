@@ -17,6 +17,7 @@ datasource db {
 
 enum Role {
   user
+  contributor
   moderator
   admin
 }
