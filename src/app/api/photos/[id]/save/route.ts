@@ -12,7 +12,7 @@ type Props = {
 export async function POST(request: Request, { params }: Props) {
     const session = await getServerSession(authOptions);
 
-    const res = await prisma.purchasedPhotos.create({
+    const res = await prisma.savedPhotos.create({
         data: {
             photo: {
                 connect: {
