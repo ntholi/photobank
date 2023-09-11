@@ -4,6 +4,7 @@ import { CircleMarker, MapContainer, Popup, TileLayer } from 'react-leaflet';
 import { Location } from '@prisma/client';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
+import { Card } from '@nextui-org/card';
 
 type LocationWithCount = Location & { photoCount: number };
 
@@ -15,8 +16,13 @@ export default function Map() {
     });
   }, []);
 
+  const calculateRadius = (location: LocationWithCount) => {
+    const scalingFactor = 0.35;
+    return Math.min(location.photoCount * scalingFactor, 30);
+  };
+
   return (
-    <div>
+    <Card>
       <MapContainer center={[-29.652, 28.57]} zoom={8} scrollWheelZoom={false}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -28,12 +34,21 @@ export default function Map() {
             center={[location.lat, location.lng]}
             fillOpacity={0.5}
             stroke={false}
-            radius={10 * location.photoCount}
+            radius={calculateRadius(location)}
+            eventHandlers={{
+              mouseover: (event) => event.target.openPopup(),
+              mouseout: (event) => event.target.closePopup(),
+            }}
           >
-            <Popup>{location.photoCount}</Popup>
+            <Popup>
+              <h3 className="mb-0">{location.name}</h3>
+              <p className="-mt-2 text-xs text-gray-600">
+                {location.photoCount} Photos
+              </p>
+            </Popup>
           </CircleMarker>
         ))}
       </MapContainer>
-    </div>
+    </Card>
   );
 }
