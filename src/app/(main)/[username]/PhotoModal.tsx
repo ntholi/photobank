@@ -2,16 +2,12 @@
 import React from 'react';
 import { Modal, ModalBody, ModalContent } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { TiLocation } from 'react-icons/ti';
-import { FaBookmark, FaCartArrowDown } from 'react-icons/fa';
-import axios from 'axios';
-import api from '@/lib/config/api';
+import { FaCartArrowDown } from 'react-icons/fa';
 import { profilePath } from '@/lib/constants';
 import { PhotoWithData } from '@/lib/types';
-import Image from 'next/image';
+import { Image } from '@nextui-org/image';
 
 type Props = {
   isOpen: boolean;
@@ -19,33 +15,6 @@ type Props = {
   photo: PhotoWithData;
 };
 export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
-  const { user } = useSession().data || {};
-  const router = useRouter();
-  const [purchasing, setPurchasing] = React.useState(false);
-  const [saving, setSaving] = React.useState(false);
-
-  const handlePurchase = async () => {
-    if (user) {
-      setPurchasing(true);
-      axios.post(api(`/photos/${photo.id}/purchase`)).finally(() => {
-        setPurchasing(false);
-      });
-    } else {
-      router.push('/signin');
-    }
-  };
-
-  const handleSave = async () => {
-    if (user) {
-      setSaving(true);
-      axios.post(api(`/photos/${photo.id}/save`)).finally(() => {
-        setSaving(false);
-      });
-    } else {
-      router.push('/signin');
-    }
-  };
-
   return (
     <Modal
       size={'5xl'}
@@ -59,13 +28,14 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
           <>
             <ModalBody className="p-0 md:pe-3">
               <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-                <Image
-                  src={photo.url}
-                  width={1200}
-                  height={1200}
-                  className="w-full h-[85vh] object-cover md:col-span-3"
-                  alt={photo.caption || ''}
-                />
+                <div className="md:col-span-3">
+                  <Image
+                    src={photo.url}
+                    className="w-full h-[85vh] object-cover"
+                    alt={photo.caption || ''}
+                    radius="none"
+                  />
+                </div>
                 <section className="md:col-span-2 h-full flex flex-col justify-between">
                   <div className="p-3">
                     <h1 className="text-xl text-gray-700 mb-0">
@@ -101,20 +71,11 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                     <div className="flex items-center justify-between p-3 py-5 border-t border-gray-200">
                       <Button
                         startContent={<FaCartArrowDown />}
-                        onClick={handlePurchase}
-                        isLoading={purchasing}
                         color="primary"
+                        as={Link}
+                        href={'/photos/' + photo.id}
                       >
                         Buy Photo
-                      </Button>
-                      <Button
-                        isIconOnly
-                        color="danger"
-                        aria-label="Bookmark"
-                        onClick={handleSave}
-                        isLoading={saving}
-                      >
-                        <FaBookmark />
                       </Button>
                     </div>
                   </footer>
