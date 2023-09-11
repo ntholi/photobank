@@ -1,12 +1,8 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import { Image } from '@nextui-org/image';
-import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/card';
-import { Divider } from '@nextui-org/divider';
-import Link from 'next/link';
-import { profilePath } from '@/lib/constants';
-import { Avatar } from '@nextui-org/avatar';
-import PricingPlans from './PricingPlans';
+import DetailsCard from './DetailsCard';
+import { PhotoWithData } from '@/lib/types';
 
 type Props = { params: { id: string } };
 
@@ -29,7 +25,7 @@ const getPhoto = async (id: string) => {
 };
 
 export default async function Page({ params }: Props) {
-  const photo = await getPhoto(params.id);
+  const photo = (await getPhoto(params.id)) as PhotoWithData;
 
   if (!photo) {
     return notFound();
@@ -42,28 +38,9 @@ export default async function Page({ params }: Props) {
           <div className="md:col-span-3">
             <Image src={photo.url} alt={photo.caption || 'Lesotho'} />
           </div>
-
-          <Card className="md:col-span-2">
-            <CardHeader className="flex gap-3">
-              <Avatar src={photo.user.image || ''} />
-              <div className="flex flex-col">
-                <p className="text-md">
-                  {photo.caption || <span>No Caption</span>}
-                </p>
-                <Link
-                  href={profilePath(photo.user)}
-                  target="_blank"
-                  className="text-small text-default-500"
-                >
-                  @{photo.user?.username || ''}
-                </Link>
-              </div>
-            </CardHeader>
-            <Divider />
-            <CardBody>
-              <PricingPlans />
-            </CardBody>
-          </Card>
+          <div className="md:col-span-2">
+            <DetailsCard photo={photo} />
+          </div>
         </div>
       </section>
     </div>
