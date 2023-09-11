@@ -15,7 +15,7 @@ type Props = {
 
 async function fetchPhoto(id: string) {
   const photo = await prisma.photo.findUnique({
-    where: { id: Number(id) },
+    where: { id: id },
     include: {
       user: true,
       location: true,
@@ -30,47 +30,48 @@ async function fetchPhoto(id: string) {
 export default async function PhotoPage({ params }: Props) {
   const photo = await fetchPhoto(params.id);
 
-  return (
-    <div>
-      <Paper withBorder p="lg">
-        <header className="flex items-center justify-between">
-          <Title order={1} size={'h5'}>
-            {photo.name}
-          </Title>
+  return <></>;
+  // return (
+  //   <div>
+  //     <Paper withBorder p="lg">
+  //       <header className="flex items-center justify-between">
+  //         <Title order={1} size={'h5'}>
+  //           {photo.caption || 'No Caption'}
+  //         </Title>
 
-          <Button
-            color="dark"
-            leftSection={<IconArrowLeft size="1rem" />}
-            component={Link}
-            href={'./'}
-          >
-            Back
-          </Button>
-        </header>
-      </Paper>
-      <Space h="md" />
-      <Paper withBorder p="lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-          <Image src={photo.url} alt={photo.name} width={500} />
-          <div className="space-y-3">
-            <FieldDisplay label="ID" value={photo.id} />
-            <FieldDisplay label="Name" value={photo.name} />
-            <FieldDisplay label="Owner">
-              <Link className="text-blue-600 hover:underline" href={`#`}>
-                {/* {fullName(photo.user)} */} [GET USER FROM FIREBASE]
-              </Link>
-            </FieldDisplay>
-            <FieldDisplay label="Location" value={photo?.location?.name} />
-            <FieldDisplay
-              label="Created At"
-              value={toDateTime(photo.createdAt)}
-            />
-            <PhotoStatusUpdate photo={photo} />
-          </div>
-        </div>
-      </Paper>
-    </div>
-  );
+  //         <Button
+  //           color="dark"
+  //           leftSection={<IconArrowLeft size="1rem" />}
+  //           component={Link}
+  //           href={'./'}
+  //         >
+  //           Back
+  //         </Button>
+  //       </header>
+  //     </Paper>
+  //     <Space h="md" />
+  //     <Paper withBorder p="lg">
+  //       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+  //         <Image src={photo.url} alt={photo.name} width={500} />
+  //         <div className="space-y-3">
+  //           <FieldDisplay label="ID" value={photo.id} />
+  //           <FieldDisplay label="Name" value={photo.name} />
+  //           <FieldDisplay label="Owner">
+  //             <Link className="text-blue-600 hover:underline" href={`#`}>
+  //               {/* {fullName(photo.user)} */} [GET USER FROM FIREBASE]
+  //             </Link>
+  //           </FieldDisplay>
+  //           <FieldDisplay label="Location" value={photo?.location?.name} />
+  //           <FieldDisplay
+  //             label="Created At"
+  //             value={toDateTime(photo.createdAt)}
+  //           />
+  //           <PhotoStatusUpdate photo={photo} />
+  //         </div>
+  //       </div>
+  //     </Paper>
+  //   </div>
+  // );
 }
 
 const fullName = (user: {

@@ -51,7 +51,7 @@ function SliderCard({ data }: Props) {
             layoutId={data.url + 'data.name'}
             className="text-xl leading-6 text-white"
           >
-            {data.name}
+            {data.caption}
           </motion.h1>
         </motion.div>
       </motion.div>

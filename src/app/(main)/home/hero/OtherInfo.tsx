@@ -25,12 +25,9 @@ function OtherInfo({ data }: Props) {
       />
       <AnimatedText
         className=" my-1 text-4xl font-semibold md:my-3 md:text-8xl md:leading-[100px]"
-        data={data?.name}
+        data={'Lehakoe'}
       />
-      <AnimatedText
-        className=" text-xs text-[#D5D5D6]"
-        data={data?.description}
-      />
+      <AnimatedText className=" text-xs text-[#D5D5D6]" data={data?.caption} />
     </motion.div>
   );
 }

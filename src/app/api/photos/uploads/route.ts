@@ -3,9 +3,9 @@ import { authOptions } from '../../auth/[...nextauth]/auth';
 import { prisma } from '@/lib/db';
 import { NextResponse } from 'next/server';
 import {
-    S3Client,
-    PutObjectCommand,
     GetObjectCommand,
+    PutObjectCommand,
+    S3Client,
 } from '@aws-sdk/client-s3';
 import { v4 as uuid } from 'uuid';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -18,7 +18,7 @@ const cloudfrontPrivateKey = process.env.AWS_CLOUDFRONT_PRIVATE_KEY
     ? process.env.AWS_CLOUDFRONT_PRIVATE_KEY.replace(/\\n/g, '\n')
     : '';
 
-export const s3Client = new S3Client({
+const s3Client = new S3Client({
     region: bucketRegion,
     credentials: {
         accessKeyId: bucketAccessKey,

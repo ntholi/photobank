@@ -15,16 +15,16 @@ export default function PhotosTable({ photos }: { photos: Photo[] }) {
       onClick={() => router.push(`/admin/photos/${it.id}`)}
     >
       <Table.Td>
-        <Image
+        {/* <Image
           src={it.url}
           alt={it.name}
           width={100}
           height={100}
           className="w-11 h-11 rounded object-cover"
-        />
+        /> */}
       </Table.Td>
       <Table.Td>{it.id}</Table.Td>
-      <Table.Td>{it.name}</Table.Td>
+      <Table.Td>{it.caption}</Table.Td>
       <Table.Td>
         <StatusDisplay status={it.status} />
       </Table.Td>
