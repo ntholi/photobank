@@ -71,7 +71,7 @@ export default function Footer({ className }: { className?: string }) {
                     href="#"
                     className="text-gray-700 transition hover:opacity-75"
                   >
-                    Directory
+                    Photos
                   </Link>
                 </li>
 
@@ -80,7 +80,7 @@ export default function Footer({ className }: { className?: string }) {
                     href="#"
                     className="text-gray-700 transition hover:opacity-75"
                   >
-                    Advertising Opportunities
+                    Events
                   </Link>
                 </li>
 
@@ -89,7 +89,7 @@ export default function Footer({ className }: { className?: string }) {
                     href="#"
                     className="text-gray-700 transition hover:opacity-75"
                   >
-                    Article Publications
+                    Prices
                   </Link>
                 </li>
 
@@ -105,7 +105,7 @@ export default function Footer({ className }: { className?: string }) {
             </div>
 
             <div>
-              <p className="font-medium text-gray-900">Company</p>
+              <p className="font-medium text-gray-900">Organization</p>
 
               <ul className="mt-6 space-y-4 text-sm">
                 <li>

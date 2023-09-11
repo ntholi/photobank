@@ -46,9 +46,8 @@ const navItems = [
 ];
 
 const isAppPath = (pathname: string) => {
-  return (
-    pathname === '/' || commonUrlPatterns.includes(pathname.replace('/', ''))
-  );
+  const name = pathname.split('/')[1];
+  return pathname === '/' || commonUrlPatterns.includes(name.replace('/', ''));
 };
 
 export default function Navbar() {

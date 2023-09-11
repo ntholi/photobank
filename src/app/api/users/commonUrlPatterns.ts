@@ -45,5 +45,10 @@ const commonUrlPatterns = [
     'sitemap.xml',
     'support',
     'terms-of-service',
+    'photo',
+    'photos',
+    'content',
+    'video',
+    'videos',
 ];
 export default commonUrlPatterns;
