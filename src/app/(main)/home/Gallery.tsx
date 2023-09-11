@@ -23,6 +23,7 @@ export default function Gallery({ searchKey, tag }: Props) {
 
   React.useEffect(() => {
     axios.post(`/api/photos/search?searchKey=${searchKey}`, tag).then((res) => {
+      console.log(res.data.photos);
       setPhotos(res.data.photos);
     });
   }, [searchKey, tag]);
@@ -47,7 +48,7 @@ export default function Gallery({ searchKey, tag }: Props) {
             <Image
               key={it.id}
               src={it.url}
-              alt={it.caption || 'Lesotho'}
+              alt={it.caption || it.url}
               width={600}
               height={600}
               className="cursor-pointer"
