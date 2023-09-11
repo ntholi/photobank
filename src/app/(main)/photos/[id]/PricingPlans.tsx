@@ -2,31 +2,35 @@
 import React from 'react';
 import { RadioGroup, Radio, cn } from '@nextui-org/react';
 
-const CustomRadio = (props: any) => {
-  const { children, ...otherProps } = props;
-
-  return (
-    <Radio
-      {...otherProps}
-      classNames={{
-        base: cn(
-          'inline-flex m-0 bg-content1 hover:bg-content2 items-center justify-between',
-          'flex-row-reverse max-w-[300p] cursor-pointer rounded-lg gap-4 p-4 border-2 border-transparent',
-          'data-[selected=true]:border-primary',
-        ),
-      }}
-    >
-      {children}
-    </Radio>
-  );
+type Props = {
+  setPrice: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export default function PricingPlans() {
+export default function PricingPlans({ setPrice }: Props) {
+  const CustomRadio = (props: any) => {
+    const { children, ...otherProps } = props;
+
+    return (
+      <Radio
+        {...otherProps}
+        classNames={{
+          base: cn(
+            'inline-flex m-0 bg-content1 hover:bg-content2 items-center justify-between',
+            'flex-row-reverse max-w-[300p] cursor-pointer rounded-lg gap-4 p-4 border-2 border-transparent',
+            'data-[selected=true]:border-primary',
+          ),
+        }}
+      >
+        {children}
+      </Radio>
+    );
+  };
+
   return (
     <RadioGroup
       label="Pricing Plans"
       description="Selected plan can be changed at any time."
-      onValueChange={(value) => console.log(value)}
+      onValueChange={setPrice}
     >
       <CustomRadio description="With Watermark (WebP)" value="free">
         Free

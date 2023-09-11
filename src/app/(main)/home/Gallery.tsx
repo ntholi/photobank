@@ -1,11 +1,9 @@
 'use client';
-import { Photo, Tag, User } from '@prisma/client';
+import { Tag } from '@prisma/client';
 import { Image } from '@nextui-org/image';
 import React from 'react';
 import axios from 'axios';
 import StackGrid from 'react-stack-grid';
-import PhotoModal from '../[username]/PhotoModal';
-import { useDisclosure } from '@nextui-org/modal';
 import { PhotoWithData } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 

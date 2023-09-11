@@ -19,6 +19,7 @@ type Props = {
 };
 
 export default function DetailsCard({ photo }: Props) {
+  const [price, setPrice] = React.useState('');
   const [purchasing, setPurchasing] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
   const { user } = useSession().data || {};
@@ -31,7 +32,7 @@ export default function DetailsCard({ photo }: Props) {
         setPurchasing(false);
       });
     } else {
-      router.push('/signin');
+      router.push('/signup');
     }
   };
 
@@ -42,7 +43,7 @@ export default function DetailsCard({ photo }: Props) {
         setSaving(false);
       });
     } else {
-      router.push('/signin');
+      router.push('/signup');
     }
   };
 
@@ -63,15 +64,17 @@ export default function DetailsCard({ photo }: Props) {
       </CardHeader>
       <Divider />
       <CardBody>
-        <PricingPlans />
+        <PricingPlans setPrice={setPrice} />
       </CardBody>
       <Divider />
       <CardFooter className="justify-between">
         <Button
           startContent={<FaCartArrowDown />}
-          onClick={handlePurchase}
           isLoading={purchasing}
+          isDisabled={price !== 'free'}
           color="primary"
+          as={Link}
+          href={photo.url}
         >
           Download
         </Button>
