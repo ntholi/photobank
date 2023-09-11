@@ -22,19 +22,6 @@ export default function GallerySection() {
         className="pb-3 pt-10 px-14 border-b w-full"
       >
         <Tab
-          key="map"
-          title={
-            <div className="flex items-center space-x-2 text-medium">
-              <FaMap className="text-xl" />
-              <span>Map</span>
-            </div>
-          }
-        >
-          <div className="">
-            <p>Map will be here</p>
-          </div>
-        </Tab>
-        <Tab
           key="photos"
           title={
             <div className="flex items-center space-x-2 text-medium">
@@ -59,6 +46,19 @@ export default function GallerySection() {
             <div className="mt-10">
               <Gallery searchKey={searchKey} tag={tag} />
             </div>
+          </div>
+        </Tab>
+        <Tab
+          key="map"
+          title={
+            <div className="flex items-center space-x-2 text-medium">
+              <FaMap className="text-xl" />
+              <span>Map</span>
+            </div>
+          }
+        >
+          <div className="">
+            <p>Map will be here</p>
           </div>
         </Tab>
       </Tabs>

@@ -47,7 +47,7 @@ export default function Gallery({ searchKey, tag }: Props) {
             <Image
               key={it.id}
               src={it.url}
-              alt={it.name}
+              alt={it.caption || 'Lesotho'}
               width={600}
               height={600}
               className="cursor-pointer"
