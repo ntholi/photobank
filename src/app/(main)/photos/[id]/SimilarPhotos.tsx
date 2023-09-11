@@ -31,6 +31,7 @@ const getSimilarPhotos = async (photoId: string) => {
         not: photoId,
       },
     },
+    take: 20,
   });
 
   const photos = data.map((it) => {
@@ -48,7 +49,7 @@ export default async function SimilarPhotos({ photo }: Props) {
   const photos = await getSimilarPhotos(photo.id);
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
         {photos.map((photo: PhotoWithData) => (
           <Link
             className="relative flex flex-1"
