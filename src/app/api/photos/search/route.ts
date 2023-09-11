@@ -29,7 +29,7 @@ export async function POST(req: Request) {
                 contains: searchKey ? searchKey : '',
                 mode: 'insensitive',
             },
-            labels: {
+            labels: tagId && {
                 some: {
                     labelId: {
                         in: labels.map((it) => it.id),
