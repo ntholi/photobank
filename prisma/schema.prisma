@@ -30,7 +30,7 @@ model User {
   email           String?
   image           String?
   bio             String?
-  role            Role              @default(user)
+  role            Role              @default(contributor)
   photos          Photo[]
   purchasedPhotos PurchasedPhotos[]
   savedPhotos     SavedPhotos[]

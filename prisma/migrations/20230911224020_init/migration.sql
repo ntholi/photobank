@@ -12,7 +12,8 @@ CREATE TABLE "users" (
     "last_name" TEXT,
     "email" TEXT,
     "image" TEXT,
-    "role" "Role" NOT NULL DEFAULT 'user',
+    "bio" TEXT,
+    "role" "Role" NOT NULL DEFAULT 'contributor',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
