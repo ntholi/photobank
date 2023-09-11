@@ -91,7 +91,11 @@ async function uploadImage(data: FormData) {
     await s3Client.send(new PutObjectCommand(params));
 
     const command = new GetObjectCommand(params);
-    const url = ''; //await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
+
+    // call lambda via http request
+    const lambdaUrl = `https://ydhxmfgb3m.execute-api.eu-central-1.amazonaws.com/Prod/hello?filename=${fileName}`;
+    await fetch(lambdaUrl);
 
     return { fileName, url };
 }
