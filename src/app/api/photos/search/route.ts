@@ -14,16 +14,16 @@ export async function POST(req: Request) {
 
     const photos = await prisma.photo.findMany({
         where: {
-            status: 'approved',
-            name: {
+            status: 'published',
+            caption: {
                 contains: searchKey ? searchKey : '',
                 mode: 'insensitive',
             },
-            tags: {
-                some: {
-                    tagId: tagId,
-                },
-            },
+            // tags: {
+            //     some: {
+            //         tagId: tagId,
+            //     },
+            // },
         },
         include: {
             user: true,

@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export async function GET(req: Request) {
     const photos = await prisma.photo.findMany({
         where: {
-            status: 'approved',
+            status: 'published',
         },
         include: {
             user: true,

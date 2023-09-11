@@ -8,8 +8,8 @@ import axios from 'axios';
 
 const items = [
   {
-    label: 'Approve',
-    value: 'approved',
+    label: 'Publish',
+    value: 'published',
   },
   {
     label: 'Reject',
@@ -59,7 +59,7 @@ export const StatusDisplay = ({ status }: { status: PhotoStatus }) => {
     case 'pending':
       color = 'orange';
       break;
-    case 'approved':
+    case 'published':
       color = 'green';
       break;
     case 'rejected':
