@@ -1,8 +1,10 @@
 'use client';
+import { profilePath } from '@/lib/constants';
 import { Button } from '@nextui-org/button';
 import { Image } from '@nextui-org/image';
 import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 type Props = {
   image?: string | null;
@@ -27,7 +29,13 @@ export default function UserBio({ image, name, id }: Props) {
       <div className="ml-5 sm:ml-16 mt-2 sm:mt-3">
         <h1 className="text-xl sm:text-2xl font-bold text-zinc-600">{name}</h1>
         {user?.id === id && (
-          <Button size="sm" className="mt-3" radius="sm">
+          <Button
+            size="sm"
+            className="mt-3"
+            radius="sm"
+            as={Link}
+            href={`${profilePath(user)}/edit`}
+          >
             Edit Profile
           </Button>
         )}

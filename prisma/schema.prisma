@@ -29,6 +29,7 @@ model User {
   lastName        String?           @map("last_name")
   email           String?
   image           String?
+  bio             String?
   role            Role              @default(user)
   photos          Photo[]
   purchasedPhotos PurchasedPhotos[]
