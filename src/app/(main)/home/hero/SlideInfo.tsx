@@ -4,7 +4,7 @@ import OtherInfo from './OtherInfo';
 import { CurrentSlideData, PhotoWithData } from '@/lib/types';
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
-import PhotoModal from '../PhotoModal';
+import PhotoModal from '../../[username]/PhotoModal';
 
 type Props = {
   transitionData: PhotoWithData;

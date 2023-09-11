@@ -37,6 +37,10 @@ export async function GET(req: Request) {
             userId: userId,
             status: userId !== session?.user?.id ? 'published' : undefined,
         },
+        include: {
+            user: true,
+            location: true,
+        },
     });
 
     const photoPromises = data.map(async (it) => {

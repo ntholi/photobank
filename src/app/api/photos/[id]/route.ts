@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { Photo } from '@prisma/client';
-import { PhotoWithData } from '@/lib/types';
 
 type Props = {
     params: {
@@ -18,7 +16,15 @@ export async function GET(request: Request, { params }: Props) {
     if (!photo) {
         throw new Error(`Photo with id ${params.id} not found`);
     }
-    return NextResponse.json(photo);
+
+    const fileName = photo.fileName.split('.')[0];
+
+    return NextResponse.json({
+        photo: {
+            ...photo,
+            url: `https://djvt9h5y4w4rn.cloudfront.net/${fileName}-thumb.jpg`,
+        },
+    });
 }
 
 export type PhotoData = {

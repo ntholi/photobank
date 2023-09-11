@@ -4,7 +4,6 @@ import { Modal, ModalBody, ModalContent } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { TiLocation } from 'react-icons/ti';
 import { FaBookmark, FaCartArrowDown } from 'react-icons/fa';
@@ -12,6 +11,7 @@ import axios from 'axios';
 import api from '@/lib/config/api';
 import { profilePath } from '@/lib/constants';
 import { PhotoWithData } from '@/lib/types';
+import Image from 'next/image';
 
 type Props = {
   isOpen: boolean;
@@ -64,11 +64,13 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                   width={1200}
                   height={1200}
                   className="w-full h-[85vh] object-cover md:col-span-3"
-                  alt={photo.name}
+                  alt={photo.caption || ''}
                 />
                 <section className="md:col-span-2 h-full flex flex-col justify-between">
                   <div className="p-3">
-                    <h1 className="text-xl text-gray-700 mb-0">{photo.name}</h1>
+                    <h1 className="text-xl text-gray-700 mb-0">
+                      {photo.caption} {/* TODO: This should be a photo tag */}
+                    </h1>
                     <div className="flex items-center justify-between space-x-6">
                       {photo.user && (
                         <p className="text-sm">
@@ -77,19 +79,22 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                             href={profilePath(photo.user)}
                             className="text-gray-400 hover:text-black"
                           >
-                            {photo.user?.name}
+                            @{photo.user?.username || ''}
                           </Link>
                         </p>
                       )}
 
-                      <p className="flex items-center space-x-1 text-gray-500">
-                        <TiLocation className="text-sm" />{' '}
-                        <span>{photo.location?.name}</span>
+                      <p className="flex items-center space-x-1 text-gray-500 text-sm pe-3">
+                        <TiLocation /> <span>{photo.location?.name}</span>
                       </p>
                     </div>
 
                     <p className="mt-6 text-sm text-gray-700 border bg-gray-50 p-2">
-                      {photo.description}
+                      {photo.caption ? (
+                        photo.caption
+                      ) : (
+                        <span className="italic">(No Caption)</span>
+                      )}
                     </p>
                   </div>
                   <footer>

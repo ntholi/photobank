@@ -6,7 +6,7 @@ import { Image } from '@nextui-org/image';
 import React from 'react';
 import axios from 'axios';
 import StackGrid from 'react-stack-grid';
-import PhotoModal from './PhotoModal';
+import PhotoModal from '../[username]/PhotoModal';
 import { useDisclosure } from '@nextui-org/modal';
 import { PhotoWithData } from '@/lib/types';
 
@@ -48,7 +48,7 @@ export default function Gallery({ searchKey, tag }: Props) {
             <Image
               key={it.id}
               src={it.url}
-              alt={it.caption || it.url}
+              alt={it.caption || 'Lesotho'}
               width={600}
               height={600}
               className="cursor-pointer"
