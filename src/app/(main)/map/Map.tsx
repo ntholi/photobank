@@ -20,7 +20,7 @@ export default function Map() {
   }, []);
 
   const calculateRadius = (location: LocationWithCount) => {
-    const scalingFactor = 20; // 0.35;
+    const scalingFactor = 5; // 0.35;
     return Math.min(location.photoCount * scalingFactor, 30);
   };
 
