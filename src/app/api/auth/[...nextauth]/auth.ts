@@ -112,7 +112,8 @@ async function getFirebaseUserId(user: User, account: Account | null) {
             'google.com',
             account.providerAccountId,
         );
+    } else {
+        firebaseUser = await adminAuth.getUserByEmail(user.email || '');
     }
-    firebaseUser = await adminAuth.getUserByEmail(user.email || '');
     return firebaseUser.uid;
 }
