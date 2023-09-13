@@ -72,7 +72,7 @@ export const authOptions = {
                         auth,
                         credential,
                     );
-                    saveUserToDB(userCredential.user);
+                    await saveUserToDB(userCredential.user);
                 }
                 return true;
             } else {
