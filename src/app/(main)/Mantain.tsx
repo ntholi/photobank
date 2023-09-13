@@ -1,11 +1,12 @@
 import React from 'react';
+import { Image } from '@nextui-org/image';
 
 export default function Maintain() {
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="flex flex-col items-center justify-center max-w-lg">
         <div className="mb-4 flex flex-col justify-center items-center">
-          <img src="/images/logo.jpg" alt="Logo" className="my-4 w-36" />
+          <Image src="/images/logo.jpg" alt="Logo" className="my-4 w-36" />
           <h1 className="text-5xl font-extrabold text-blue-600">503</h1>
         </div>
         <h3 className="mb-3 text-2xl font-bold text-center text-gray-700">
