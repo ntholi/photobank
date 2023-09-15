@@ -25,14 +25,14 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
   const { user } = useSession().data || {};
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number>();
-  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
   const isMobile = useIsMobile();
   const router = useRouter();
 
   const handleFileUpload = async () => {
     if (file) {
       setProgress(0);
-      setLoading(true);
+      setMessage('Uploading');
       const ext = file.name.split('.').pop();
       try {
         const { url, fileName } = (
@@ -47,6 +47,8 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
           },
         });
         if (fileName) {
+          setMessage('Processing Image');
+          setProgress(0);
           const { data } = await axios.post('/api/photos', {
             fileName,
           });
@@ -54,8 +56,8 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
           // router.push(`${profilePath(user)}/uploads/${data.photo.id}`);
         }
       } finally {
-        setLoading(false);
         setFile(null);
+        setMessage(null);
         setProgress(undefined);
       }
     }
@@ -81,6 +83,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
               {progress != undefined && (
                 <Progress
                   size="sm"
+                  label={message}
                   isIndeterminate={progress === 0}
                   value={progress}
                 />
@@ -98,7 +101,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
               <Button
                 color="primary"
                 isDisabled={!file}
-                isLoading={loading}
+                isLoading={progress != undefined}
                 onPress={async () => {
                   await handleFileUpload();
                   onClose();
