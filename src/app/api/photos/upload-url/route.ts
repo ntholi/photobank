@@ -15,14 +15,14 @@ export async function GET(req: Request) {
         );
     }
     const { searchParams } = new URL(req.url);
-    const fileType = searchParams.get('fileType') || '';
-    const ext = fileType.split('/')[1];
+    const ext = searchParams.get('ext') || '';
 
+    const fileName = `${nanoid()}.${ext}`;
     const command = new PutObjectCommand({
         Bucket: bucketName,
-        Key: `${nanoid()}.jpg`,
+        Key: fileName,
     });
     const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
 
-    return NextResponse.json({ url });
+    return NextResponse.json({ url, fileName });
 }
