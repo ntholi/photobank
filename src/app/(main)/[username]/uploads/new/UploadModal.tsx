@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Modal,
   ModalBody,
@@ -63,6 +63,11 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
     }
   };
 
+  const imageInput = useMemo(
+    () => <ImageInput file={file} setFile={setFile} />,
+    [file],
+  );
+
   return (
     <Modal
       size={isMobile ? 'full' : 'lg'}
@@ -78,7 +83,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
             </ModalHeader>
             <ModalBody className={'md:px-10 md:py-5'}>
               <div className="h-72 border border-gray-300 rounded-xl overflow-clip">
-                <ImageInput file={file} setFile={setFile} />
+                {imageInput}
               </div>
               {progress != undefined && (
                 <Progress

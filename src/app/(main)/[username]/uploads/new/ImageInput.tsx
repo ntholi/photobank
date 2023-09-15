@@ -3,7 +3,6 @@ import React from 'react';
 import { Button } from '@nextui-org/button';
 import { BiSolidCloudUpload } from 'react-icons/bi';
 import { Image } from '@nextui-org/image';
-import { GrClose } from 'react-icons/gr';
 import { IconX } from '@tabler/icons-react';
 
 type Props = {
@@ -19,6 +18,8 @@ export default function ImageInput({ file, setFile, isLoading }: Props) {
     if (file) setFile(file);
     else setFile(null);
   };
+
+  console.log('file', file);
 
   return (
     <>
