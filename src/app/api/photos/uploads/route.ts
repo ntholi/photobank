@@ -7,24 +7,9 @@ import {
     PutObjectCommand,
     S3Client,
 } from '@aws-sdk/client-s3';
-import { v4 as uuid } from 'uuid';
+import { nanoid } from 'nanoid';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-
-const bucketName = process.env.AWS_BUCKET_NAME || '';
-const bucketRegion = process.env.AWS_BUCKET_REGION || '';
-const bucketAccessKey = process.env.AWS_BUCKET_ACCESS_KEY || '';
-const bucketSecretKey = process.env.AWS_BUCKET_SECRET_KEY || '';
-const cloudfrontPrivateKey = process.env.AWS_CLOUDFRONT_PRIVATE_KEY
-    ? process.env.AWS_CLOUDFRONT_PRIVATE_KEY.replace(/\\n/g, '\n')
-    : '';
-
-const s3Client = new S3Client({
-    region: bucketRegion,
-    credentials: {
-        accessKeyId: bucketAccessKey,
-        secretAccessKey: bucketSecretKey,
-    },
-});
+import { bucketName, s3Client } from '@/lib/config/aws';
 
 export async function GET(req: Request) {
     const session = await getServerSession(authOptions);
@@ -83,7 +68,7 @@ export async function POST(request: Request) {
 async function uploadImage(data: FormData) {
     const file = data.get('file') as File;
     const ext = file.name.split('.').pop();
-    const fileName = `${uuid()}.${ext}`;
+    const fileName = `${nanoid()}.${ext}`;
     const buffer = (await file.arrayBuffer()) as any;
 
     const params = {
