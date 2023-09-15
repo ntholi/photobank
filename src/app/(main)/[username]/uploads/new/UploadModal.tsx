@@ -10,11 +10,11 @@ import {
 import { Button } from '@nextui-org/button';
 import useIsMobile from '@/lib/hooks/useIsMobile';
 import { useRouter } from 'next/navigation';
-import { profilePath } from '@/lib/constants';
 import { useSession } from 'next-auth/react';
 import axios, { AxiosProgressEvent } from 'axios';
 import ImageInput from './ImageInput';
 import { Progress } from '@nextui-org/progress';
+import { profilePath } from '@/lib/constants';
 
 type Props = {
   isOpen: boolean;
@@ -24,13 +24,15 @@ type Props = {
 export default function UploadModal({ isOpen, onOpenChange }: Props) {
   const { user } = useSession().data || {};
   const [file, setFile] = useState<File | null>(null);
-  const [progress, setProgress] = useState<undefined | number>();
+  const [progress, setProgress] = useState<number>();
+  const [loading, setLoading] = useState(false);
   const isMobile = useIsMobile();
   const router = useRouter();
 
   const handleFileUpload = async () => {
     if (file) {
       setProgress(0);
+      setLoading(true);
       const ext = file.name.split('.').pop();
       try {
         const { url, fileName } = (
@@ -45,12 +47,14 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
           },
         });
         if (fileName) {
-          // const encodedUrl = encodeURIComponent(url);
-          // router.push(
-          //   `${profilePath(user)}/uploads/${photo.id}?photoUrl=${encodedUrl}`,
-          // );
+          const { data } = await axios.post('/api/photos', {
+            fileName,
+          });
+
+          // router.push(`${profilePath(user)}/uploads/${data.photo.id}`);
         }
       } finally {
+        setLoading(false);
         setFile(null);
         setProgress(undefined);
       }
@@ -94,7 +98,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
               <Button
                 color="primary"
                 isDisabled={!file}
-                isLoading={progress != undefined && progress < 100}
+                isLoading={loading}
                 onPress={async () => {
                   await handleFileUpload();
                   onClose();
