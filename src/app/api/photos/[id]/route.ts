@@ -29,54 +29,33 @@ export async function GET(request: Request, { params }: Props) {
 
 export type PhotoData = {
     caption: string;
-    description: string;
     location: {
         name: string;
         lat: number;
         lng: number;
     };
-    photoUrl: string;
-    labels?: {
-        name: string;
-        score: number;
-    }[];
 };
 
 export async function PUT(request: Request, { params }: Props) {
-    const data = (await request.json()) as PhotoData;
+    const { location, caption } = (await request.json()) as PhotoData;
     const photo = await prisma.photo.update({
         where: {
             id: params.id,
         },
         data: {
-            caption: data.caption,
+            caption: caption,
             status: 'published',
             location: {
                 connectOrCreate: {
                     where: {
-                        name: data.location.name,
+                        name: location.name,
                     },
                     create: {
-                        name: data.location.name,
-                        lat: data.location.lat,
-                        lng: data.location.lng,
+                        name: location.name,
+                        lat: location.lat,
+                        lng: location.lng,
                     },
                 },
-            },
-            labels: {
-                create: data.labels?.map((it) => ({
-                    score: it.score,
-                    label: {
-                        connectOrCreate: {
-                            where: {
-                                name: it.name,
-                            },
-                            create: {
-                                name: it.name,
-                            },
-                        },
-                    },
-                })),
             },
         },
     });

@@ -2,10 +2,14 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/auth';
-import { nanoid } from 'nanoid';
-import { bucketName, s3Client } from '@/lib/config/aws';
 import axios from 'axios';
 import { imageProcessor } from '@/lib/config/urls';
+
+type Label = {
+    Name: string;
+    Confidence: number;
+    Categories: string[];
+};
 
 export async function GET(req: Request) {
     const session = await getServerSession(authOptions);
@@ -32,14 +36,35 @@ export async function POST(request: Request) {
     }
 
     const res = await axios.get(imageProcessor(fileName));
-
-    console.log('AWS Lambda Results:');
-    console.log(res.data);
+    const { labels: awsLabels } = res.data as { labels: Label[] };
+    const labels: { name: string; confidence: number }[] = [];
+    awsLabels.forEach((label) => {
+        label.Categories.forEach((category) => {
+            if (!labels.find((it) => it.name === category)) {
+                labels.push({ name: category, confidence: label.Confidence });
+            }
+        });
+    });
 
     const photo = await prisma.photo.create({
         data: {
             userId: session.user.id,
             fileName: fileName,
+            labels: {
+                create: labels.map((it) => ({
+                    confidence: it.confidence,
+                    label: {
+                        connectOrCreate: {
+                            where: {
+                                name: it.name,
+                            },
+                            create: {
+                                name: it.name,
+                            },
+                        },
+                    },
+                })),
+            },
         },
     });
 
