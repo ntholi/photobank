@@ -19,8 +19,6 @@ export default function ImageInput({ file, setFile, isLoading }: Props) {
     else setFile(null);
   };
 
-  console.log('file', file);
-
   return (
     <>
       <input
@@ -41,7 +39,7 @@ export default function ImageInput({ file, setFile, isLoading }: Props) {
             aria-label="Remove"
             onClick={() => setFile(null)}
           >
-            <IconX size="1rem" className="border-zinc-500" />
+            <IconX size="1rem" />
           </Button>
           <Image
             src={URL.createObjectURL(file)}

@@ -74,6 +74,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
       backdrop="blur"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
+      closeButton={<></>}
     >
       <ModalContent>
         {(onClose) => (
