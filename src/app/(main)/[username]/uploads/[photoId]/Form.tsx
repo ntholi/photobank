@@ -17,15 +17,10 @@ type InputType = {
 
 type Props = {
   photoId: string;
-  photoLabels: any[];
   disabled?: boolean;
 };
 
-export default function PhotoUploadForm({
-  photoId,
-  photoLabels,
-  disabled,
-}: Props) {
+export default function PhotoUploadForm({ photoId, disabled }: Props) {
   const { register, handleSubmit } = useForm<InputType>();
   const [loading, setLoading] = useState(false);
   const { user } = useSession().data || {};
@@ -42,7 +37,6 @@ export default function PhotoUploadForm({
           lng: location.lng,
         };
       }
-      data.labels = photoLabels;
       await axios.put(`/api/photos/${photoId}`, data);
       router.push(profilePath(user));
     } catch (error) {

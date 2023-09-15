@@ -53,7 +53,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
             fileName,
           });
 
-          // router.push(`${profilePath(user)}/uploads/${data.photo.id}`);
+          router.push(`${profilePath(user)}/uploads/${data.photo.id}`);
         }
       } finally {
         setFile(null);
