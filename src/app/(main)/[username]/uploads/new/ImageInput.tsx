@@ -4,12 +4,14 @@ import { Button } from '@nextui-org/button';
 import { BiSolidCloudUpload } from 'react-icons/bi';
 import { Image } from '@nextui-org/image';
 import { GrClose } from 'react-icons/gr';
+import { IconX } from '@tabler/icons-react';
 
 type Props = {
   file: File | null;
   setFile: React.Dispatch<React.SetStateAction<File | null>>;
+  isLoading?: boolean;
 };
-export default function ImageInput({ file, setFile }: Props) {
+export default function ImageInput({ file, setFile, isLoading }: Props) {
   const fileRef = React.useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,14 +33,14 @@ export default function ImageInput({ file, setFile }: Props) {
         <div className="relative">
           <Button
             className={
-              'absolute top-1.5 right-1.5 z-50 bg-opacity-25 hover:bg-opacity-50 border-1 border-gray-400'
+              'absolute top-1.5 right-1.5 z-50 border-zinc-500 bg-white bg-opacity-25 hover:bg-opacity-50 border-1'
             }
             isIconOnly
             radius="full"
             aria-label="Remove"
             onClick={() => setFile(null)}
           >
-            <GrClose color="white" />
+            <IconX size="1rem" className="border-zinc-500" />
           </Button>
           <Image
             src={URL.createObjectURL(file)}
