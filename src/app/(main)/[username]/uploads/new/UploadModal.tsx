@@ -15,7 +15,7 @@ import { GrClose } from 'react-icons/gr';
 import { useRouter } from 'next/navigation';
 import { profilePath } from '@/lib/constants';
 import { useSession } from 'next-auth/react';
-import axios from 'axios';
+import axios, { AxiosProgressEvent } from 'axios';
 
 type Props = {
   uploadUrl: string;
@@ -32,6 +32,7 @@ export default function UploadModal({
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [file, setFile] = React.useState<File | null>(null);
   const [uploading, setUploading] = React.useState(false);
+  const [uploadProgress, setUploadProgress] = React.useState(0);
   const isMobile = useIsMobile();
   const router = useRouter();
 
@@ -45,9 +46,13 @@ export default function UploadModal({
   const handleFileUpload = async () => {
     if (file) {
       setUploading(true);
-      const formData = new FormData();
-      formData.append('file', file);
-      const response = await axios.put(uploadUrl, file);
+      const response = await axios.put(uploadUrl, file, {
+        onUploadProgress: (e: AxiosProgressEvent) => {
+          if (e.total) {
+            setUploadProgress((e.loaded / e.total) * 100);
+          }
+        },
+      });
       setUploading(false);
 
       const { photo, url } = response.data;
@@ -127,7 +132,7 @@ export default function UploadModal({
                 variant="bordered"
                 onClick={onClose}
               >
-                Close
+                Close {uploadProgress}
               </Button>
               <Button
                 color="primary"

@@ -20,7 +20,7 @@ export async function GET(req: Request) {
 
     const command = new PutObjectCommand({
         Bucket: bucketName,
-        Key: 'name.jpg',
+        Key: `${nanoid()}.jpg`,
     });
     const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
 
