@@ -2,11 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/auth';
 import { prisma } from '@/lib/db';
 import { NextResponse } from 'next/server';
-import {
-    GetObjectCommand,
-    PutObjectCommand,
-    S3Client,
-} from '@aws-sdk/client-s3';
+import { GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { nanoid } from 'nanoid';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { bucketName, s3Client } from '@/lib/config/aws';

@@ -14,8 +14,14 @@ export async function GET(req: Request) {
             { status: 401 },
         );
     }
+    const { searchParams } = new URL(req.url);
+    const fileType = searchParams.get('fileType') || '';
+    const ext = fileType.split('/')[1];
 
-    const command = new PutObjectCommand({ Bucket: bucketName, Key: nanoid() });
+    const command = new PutObjectCommand({
+        Bucket: bucketName,
+        Key: 'name.jpg',
+    });
     const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
 
     return NextResponse.json({ url });

@@ -24,7 +24,14 @@ export default function ModalButton() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      <UploadModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      {uploadUrl && (
+        <UploadModal
+          uploadUrl={uploadUrl}
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+        />
+      )}
+
       <Button
         onPress={onOpen}
         startContent={<GoUpload />}

@@ -18,10 +18,16 @@ import { useSession } from 'next-auth/react';
 import axios from 'axios';
 
 type Props = {
+  uploadUrl: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 };
-export default function UploadModal({ isOpen, onOpenChange }: Props) {
+
+export default function UploadModal({
+  uploadUrl,
+  isOpen,
+  onOpenChange,
+}: Props) {
   const { user } = useSession().data || {};
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [file, setFile] = React.useState<File | null>(null);
@@ -41,7 +47,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
       setUploading(true);
       const formData = new FormData();
       formData.append('file', file);
-      const response = await axios.post('/api/photos/uploads', formData);
+      const response = await axios.put(uploadUrl, file);
       setUploading(false);
 
       const { photo, url } = response.data;
