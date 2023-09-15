@@ -1,6 +1,6 @@
 'use client';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Input, Textarea } from '@nextui-org/input';
+import { Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
