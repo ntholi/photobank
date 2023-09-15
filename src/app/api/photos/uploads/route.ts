@@ -98,7 +98,7 @@ async function uploadImage(data: FormData) {
     const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
 
     // call lambda via http request
-    const lambdaUrl = `https://ydhxmfgb3m.execute-api.eu-central-1.amazonaws.com/Prod/hello?filename=${fileName}`;
+    const lambdaUrl = `https://ydhxmfgb3m.execute-api.eu-central-1.amazonaws.com/Prod/process-image?filename=${fileName}`;
     await fetch(lambdaUrl);
 
     return { fileName, url };
