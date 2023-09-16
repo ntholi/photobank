@@ -23,7 +23,7 @@ export default async function Page({ params: { photoId } }: Props) {
   const photoUrl = thumbnail(photo.fileName);
 
   return (
-    <section className="px-16 pt-5 lg:grid grid-cols-11 space-y-5 gap-5">
+    <section className="md:px-16 pt-5 lg:grid grid-cols-11 space-y-5 gap-5">
       <div className={'col-span-5'}>
         <Image src={photoUrl} alt={'Uploaded Image'} shadow="sm" />
       </div>
