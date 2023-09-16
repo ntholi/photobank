@@ -2,7 +2,6 @@ import ProfileBody from './ProfileBody';
 import UserBio from './UserBio';
 import { notFound } from 'next/navigation';
 import { User } from 'next-auth';
-import { adminAuth } from '@/lib/config/firebase-admin';
 import { prisma } from '@/lib/db';
 
 type Props = { params: { username: string } };
