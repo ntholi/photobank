@@ -12,6 +12,7 @@ CREATE TABLE "users" (
     "last_name" TEXT,
     "email" TEXT,
     "image" TEXT,
+    "website" TEXT,
     "bio" TEXT,
     "role" "Role" NOT NULL DEFAULT 'contributor',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -38,7 +39,7 @@ CREATE TABLE "photos" (
 CREATE TABLE "photo_labels" (
     "id" SERIAL NOT NULL,
     "photo_id" TEXT NOT NULL,
-    "score" DOUBLE PRECISION NOT NULL,
+    "confidence" DOUBLE PRECISION NOT NULL,
     "label_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,

@@ -29,6 +29,7 @@ model User {
   lastName        String?           @map("last_name")
   email           String?
   image           String?
+  website         String?
   bio             String?
   role            Role              @default(contributor)
   photos          Photo[]
