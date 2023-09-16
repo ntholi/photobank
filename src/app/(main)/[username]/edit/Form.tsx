@@ -24,16 +24,15 @@ export default function Form({ user }: Props) {
     register,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm<InputType>();
   const [loading, setLoading] = useState(false);
 
-  const onSubmit: SubmitHandler<InputType> = async (data) => {
+  const onSubmit: SubmitHandler<InputType> = async (formData) => {
     try {
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      await axios.put(`/api/users/${user.id}`, data);
+      const { data } = await axios.put(`/api/users/${user.id}`, formData);
+      console.log({ data });
     } finally {
       setLoading(false);
     }
@@ -103,7 +102,12 @@ export default function Form({ user }: Props) {
           },
         })}
       />
-      <Button className="w-full md:w-60" color="primary" isLoading={loading}>
+      <Button
+        type="submit"
+        className="w-full md:w-60"
+        color="primary"
+        isLoading={loading}
+      >
         Save
       </Button>
     </form>
