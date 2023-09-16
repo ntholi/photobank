@@ -25,7 +25,9 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
   const { user } = useSession().data || {};
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number>();
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<'' | 'Uploading' | 'Processing Image'>(
+    '',
+  );
   const isMobile = useIsMobile();
   const router = useRouter();
 
@@ -57,7 +59,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
         }
       } finally {
         setFile(null);
-        setMessage(null);
+        setMessage('');
         setProgress(undefined);
       }
     }
@@ -90,6 +92,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
                 <Progress
                   size="sm"
                   label={message}
+                  color={message === 'Processing Image' ? 'success' : 'primary'}
                   isIndeterminate={progress === 0}
                   value={progress}
                 />
