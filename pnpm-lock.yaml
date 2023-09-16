@@ -53,6 +53,9 @@ dependencies:
   '@nextui-org/card':
     specifier: ^2.0.20
     version: 2.0.20(framer-motion@10.16.4)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.3.3)
+  '@nextui-org/checkbox':
+    specifier: ^2.0.21
+    version: 2.0.21(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.3.3)
   '@nextui-org/chip':
     specifier: ^2.0.20
     version: 2.0.20(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.3.3)
@@ -101,6 +104,9 @@ dependencies:
   '@nextui-org/tabs':
     specifier: ^2.0.20
     version: 2.0.20(framer-motion@10.16.4)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.3.3)
+  '@nextui-org/tooltip':
+    specifier: ^2.0.23
+    version: 2.0.23(framer-motion@10.16.4)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.3.3)
   '@nextui-org/user':
     specifier: ^2.0.21
     version: 2.0.21(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.3.3)
