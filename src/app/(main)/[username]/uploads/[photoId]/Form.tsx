@@ -16,6 +16,7 @@ import { IconInfoCircle } from '@tabler/icons-react';
 type InputType = {
   caption: string;
   location: string;
+  allowHomepageDisplay: boolean;
 };
 
 type Props = {
@@ -62,7 +63,11 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
             {...register('caption')}
           />
           <div className="flex gap-2 items-center">
-            <Checkbox className="mt-1" size="sm">
+            <Checkbox
+              className="mt-1"
+              size="sm"
+              {...register('allowHomepageDisplay')}
+            >
               Allow for homepage display
             </Checkbox>
             <Tooltip

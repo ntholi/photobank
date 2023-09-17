@@ -4,6 +4,7 @@ import { Image } from '@nextui-org/image';
 import DetailsCard from './DetailsCard';
 import { PhotoWithData } from '@/lib/types';
 import SimilarPhotos from './SimilarPhotos';
+import { watermarked } from '@/lib/config/urls';
 
 type Props = { params: { id: string } };
 
@@ -17,7 +18,7 @@ const getPhoto = async (id: string) => {
   });
   if (photo) {
     const fileName = photo.fileName.split('.')[0];
-    const url = `https://djvt9h5y4w4rn.cloudfront.net/${fileName}.webp`;
+    const url = watermarked(fileName);
     return {
       ...photo,
       url: url,
