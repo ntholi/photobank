@@ -16,7 +16,7 @@ export async function POST(request: Request) {
             password,
             displayName: names,
         });
-        saveUserToDB(user);
+        await saveUserToDB(user);
         return NextResponse.json({ user });
     } catch (error: FirebaseError | any) {
         console.log(error);
