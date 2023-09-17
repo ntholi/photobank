@@ -3,6 +3,7 @@ import { PhotoWithData } from '@/lib/types';
 import React from 'react';
 import { Image } from '@nextui-org/image';
 import Link from 'next/link';
+import { thumbnail } from '@/lib/config/urls';
 
 type Props = {
   photo: PhotoWithData;
@@ -38,7 +39,7 @@ const getSimilarPhotos = async (photoId: string) => {
     const fileName = it.fileName.split('.')[0];
     return {
       ...it,
-      url: `https://djvt9h5y4w4rn.cloudfront.net/${fileName}-thumb.jpg`,
+      url: thumbnail(fileName),
     };
   });
 

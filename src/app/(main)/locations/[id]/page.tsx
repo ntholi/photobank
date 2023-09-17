@@ -5,6 +5,7 @@ import { GoLocation } from 'react-icons/go';
 import { MdLocationCity, MdLocationPin } from 'react-icons/md';
 import Gallery from './Gallary';
 import { PhotoWithData } from '@/lib/types';
+import { thumbnail } from '@/lib/config/urls';
 
 type Props = { params: { id: string } };
 
@@ -20,7 +21,7 @@ const getLocation = async (id: number) => {
     const fileName = it.fileName.split('.')[0];
     return {
       ...it,
-      url: `https://djvt9h5y4w4rn.cloudfront.net/${fileName}-thumb.jpg`,
+      url: thumbnail(fileName),
     };
   });
 

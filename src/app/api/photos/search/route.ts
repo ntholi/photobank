@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { thumbnail } from '@/lib/config/urls';
 
 export async function POST(req: Request) {
     const { searchParams } = new URL(req.url || '');
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
         const fileName = it.fileName.split('.')[0];
         return {
             ...it,
-            url: `https://djvt9h5y4w4rn.cloudfront.net/${fileName}-thumb.jpg`,
+            url: thumbnail(fileName),
         };
     });
 

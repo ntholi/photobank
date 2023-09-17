@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { thumbnail } from '@/lib/config/urls';
 
 type Props = {
     params: {
@@ -22,7 +23,7 @@ export async function GET(request: Request, { params }: Props) {
     return NextResponse.json({
         photo: {
             ...photo,
-            url: `https://djvt9h5y4w4rn.cloudfront.net/${fileName}-thumb.jpg`,
+            url: thumbnail(fileName),
         },
     });
 }

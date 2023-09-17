@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/auth';
 import { prisma } from '@/lib/db';
 import { NextResponse } from 'next/server';
+import { thumbnail } from '@/lib/config/urls';
 
 export async function GET(req: Request) {
     const session = await getServerSession(authOptions);
@@ -27,7 +28,7 @@ export async function GET(req: Request) {
 
         return {
             ...photo,
-            url: `https://djvt9h5y4w4rn.cloudfront.net/${fileName}-thumb.jpg`,
+            url: thumbnail(fileName),
         };
     });
 
