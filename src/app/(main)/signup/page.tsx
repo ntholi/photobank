@@ -91,6 +91,7 @@ export default function SignUpPage() {
                 </Button>
                 <Button
                   variant="bordered"
+                  isDisabled={true}
                   className="border-zinc-700 w-full p-6 flex justify-start border-1 rounded-sm"
                   startContent={<FaFacebook color="#1877F2" size="1.4rem" />}
                 >
