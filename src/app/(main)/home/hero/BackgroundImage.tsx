@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { CurrentSlideData, PhotoWithData } from '@/lib/types';
 import MotionImage from './MotionImage';
 
