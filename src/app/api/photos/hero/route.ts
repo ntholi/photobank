@@ -5,22 +5,27 @@ export async function GET(req: Request) {
     const photos = [
         {
             id: 1,
-            url: `https://djvt9h5y4w4rn.cloudfront.net/one.JPG`,
+            url: `https://d3tw6tl1trq98w.cloudfront.net/01.jpg`,
             title: 'One',
         },
         {
             id: 2,
-            url: `https://djvt9h5y4w4rn.cloudfront.net/two.JPG`,
+            url: `https://d3tw6tl1trq98w.cloudfront.net/02.jpg`,
             title: 'One',
         },
         {
             id: 3,
-            url: `https://djvt9h5y4w4rn.cloudfront.net/three.JPG`,
+            url: `https://d3tw6tl1trq98w.cloudfront.net/03.jpg`,
             title: 'One',
         },
         {
             id: 4,
-            url: `https://djvt9h5y4w4rn.cloudfront.net/four.JPG`,
+            url: `https://d3tw6tl1trq98w.cloudfront.net/04.jpg`,
+            title: 'One',
+        },
+        {
+            id: 6,
+            url: `https://d3tw6tl1trq98w.cloudfront.net/06.jpg`,
             title: 'One',
         },
     ];
