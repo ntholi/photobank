@@ -3,7 +3,7 @@ import { Tag } from '@prisma/client';
 import { Image } from '@nextui-org/image';
 import React from 'react';
 import axios from 'axios';
-import StackGrid from 'react-stack-grid';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { PhotoWithData } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 
@@ -24,24 +24,28 @@ export default function Gallery({ searchKey, tag }: Props) {
 
   return (
     <section
-      className="px-2"
+      className="container mx-auto px-4"
       onContextMenu={(event) => {
         event.preventDefault();
       }}
     >
-      <StackGrid columnWidth={380} monitorImagesLoaded={true}>
-        {photos.map((it) => (
-          <Image
-            key={it.id}
-            src={it.url}
-            alt={it.caption || 'Lesotho'}
-            width={600}
-            height={600}
-            className="cursor-pointer"
-            onClick={() => router.push(`/photos/${it.id}`)}
-          />
-        ))}
-      </StackGrid>
+      <ResponsiveMasonry
+        columnsCountBreakPoints={{ 350: 1, 750: 2, 1100: 3, 1700: 4 }}
+      >
+        <Masonry gutter={'1rem'}>
+          {photos.map((it) => (
+            <Image
+              key={it.id}
+              src={it.url}
+              alt={it.caption || 'Lesotho'}
+              width={600}
+              height={600}
+              className="cursor-pointer"
+              onClick={() => router.push(`/photos/${it.id}`)}
+            />
+          ))}
+        </Masonry>
+      </ResponsiveMasonry>
     </section>
   );
 }
