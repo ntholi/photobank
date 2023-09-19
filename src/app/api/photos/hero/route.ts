@@ -4,13 +4,13 @@ import { NextResponse } from 'next/server';
 export async function GET(req: Request) {
     const photos = [
         {
-            id: 1,
-            url: `https://d3tw6tl1trq98w.cloudfront.net/01.jpg`,
+            id: 2,
+            url: `https://d3tw6tl1trq98w.cloudfront.net/02.jpg`,
             title: 'One',
         },
         {
-            id: 2,
-            url: `https://d3tw6tl1trq98w.cloudfront.net/02.jpg`,
+            id: 1,
+            url: `https://d3tw6tl1trq98w.cloudfront.net/01.jpg`,
             title: 'One',
         },
         {
@@ -25,7 +25,7 @@ export async function GET(req: Request) {
         },
         {
             id: 6,
-            url: `https://d3tw6tl1trq98w.cloudfront.net/06.jpg`,
+            url: `https://d3tw6tl1trq98w.cloudfront.net/05.jpg`,
             title: 'One',
         },
     ];
