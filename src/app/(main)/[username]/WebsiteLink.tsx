@@ -20,19 +20,23 @@ export default function WebsiteLink({ user }: Props) {
   return (
     <div className="flex mt-1.5 gap-2 items-center text-sm">
       {icon}
-      <Link target="_blank" href={user.website || ''}>
-        {displayWebsiteAs(user.website || '')}
+      <Link target="_blank" href={validateUrl(user.website)}>
+        {displayWebsiteAs(user.website)}
       </Link>
     </div>
   );
 }
 
-/**
- * if a website is a social profile like twitter.com/username, it should return username other wise it should return the website
- * @param website
- * @returns
- */
-function displayWebsiteAs(website: string) {
+function validateUrl(website: string | null) {
+  if (!website) return '';
+  if (website.includes('https://') || website.includes('http://')) {
+    return website;
+  }
+  return `https://${website}`;
+}
+
+function displayWebsiteAs(website: string | null) {
+  if (!website) return '';
   return website
     .replace('https://', '')
     .replace('http://', '')
