@@ -7,6 +7,7 @@ import { User } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { BiSolidBadgeCheck } from 'react-icons/bi';
+import WebsiteLink from './WebsiteLink';
 
 type Props = {
   user: User;
@@ -54,14 +55,16 @@ export default function UserBio({ user }: Props) {
               {user?.role}
             </Chip>
           )}
-          <p className="hidden md:block w-48 md:w-96 text-sm mt-3 text-foreground-500">
-            {user.bio}
-          </p>
+          <div className="hidden md:block w-48 md:w-96 text-sm mt-3 text-foreground-500">
+            <p>{user.bio}</p>
+            <WebsiteLink user={user} />
+          </div>
         </div>
       </div>
-      <p className="block md:hidden text-sm mt-3 text-foreground-500">
-        {user.bio}
-      </p>
+      <div className="block md:hidden text-sm mt-3 text-foreground-500">
+        <p>{user.bio}</p>
+        <WebsiteLink user={user} />
+      </div>
     </>
   );
 }
