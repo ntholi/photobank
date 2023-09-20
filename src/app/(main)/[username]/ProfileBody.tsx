@@ -2,7 +2,7 @@
 import { Tab, Tabs } from '@nextui-org/tabs';
 import { Image } from '@nextui-org/image';
 import { CircularProgress } from '@nextui-org/progress';
-import React from 'react';
+import React, { Key } from 'react';
 import axios from 'axios';
 import { Chip } from '@nextui-org/chip';
 import { MdOutlineNoPhotography } from 'react-icons/md';
@@ -36,7 +36,7 @@ export const ProfileBody = ({ userId }: Props) => {
     { title: GalleryType.SAVED },
   ];
 
-  async function handleTabChange(key: string | number) {
+  async function handleTabChange(key: Key) {
     setLoading(true);
     setPhotos([]);
     try {

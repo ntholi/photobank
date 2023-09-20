@@ -17,6 +17,7 @@ const fetchPhotos = async () => {
 };
 
 export default async function PhotosPage() {
+  return null;
   const photos = await fetchPhotos();
   return (
     <div>

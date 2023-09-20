@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import PhotoStatusUpdate, { StatusDisplay } from './[id]/PhotoStatusUpdate';
 
 export default function PhotosTable({ photos }: { photos: Photo[] }) {
+  return null;
   const router = useRouter();
   const rows = photos.map((it) => (
     <Table.Tr

@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { Button, Title } from '@mantine/core';
+import { Title } from '@mantine/core';
 
 export default function AdminPage() {
   return (
