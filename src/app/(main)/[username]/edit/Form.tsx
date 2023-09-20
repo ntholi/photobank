@@ -27,12 +27,12 @@ export default function Form({ user }: Props) {
     formState: { errors },
   } = useForm<InputType>();
   const [loading, setLoading] = useState(false);
+  const [bioLength, setBioLength] = useState(0);
 
   const onSubmit: SubmitHandler<InputType> = async (formData) => {
     try {
       setLoading(true);
-      const { data } = await axios.put(`/api/users/${user.id}`, formData);
-      console.log({ data });
+      await axios.put(`/api/users/${user.id}`, formData);
     } finally {
       setLoading(false);
     }
@@ -44,6 +44,7 @@ export default function Form({ user }: Props) {
       setValue('lastName', user.lastName || '');
       setValue('bio', user.bio || '');
       setValue('website', user.website || '');
+      setBioLength(user.bio?.length || 0);
     }
   }, []);
 
@@ -86,8 +87,10 @@ export default function Form({ user }: Props) {
         variant="bordered"
         label="Bio"
         defaultValue={user?.bio || ''}
+        description={`${bioLength}/160`}
+        onValueChange={(e) => setBioLength(e.length)}
         errorMessage={errors.bio?.message}
-        {...(register('bio'), { maxLength: 160 })}
+        {...register('bio', { maxLength: 160 })}
       />
       <Input
         type="text"
