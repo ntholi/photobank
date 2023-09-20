@@ -8,6 +8,8 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { BiCheckCircle } from 'react-icons/bi';
+import { Spinner } from '@nextui-org/spinner';
 
 type InputType = {
   username: string;
@@ -25,31 +27,34 @@ export default function Form({ user }: Props) {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<InputType>();
   const [loading, setLoading] = useState(false);
   const [bioLength, setBioLength] = useState(0);
   const router = useRouter();
+  const [usernameIcon, setUsernameIcon] = useState<JSX.Element>(
+    <BiCheckCircle className="text-primary" />,
+  );
 
   const onSubmit: SubmitHandler<InputType> = async (formData) => {
     try {
       setLoading(true);
       await axios.put(`/api/users/${user.id}`, formData);
+      // router.push(profilePath(user));
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (user) {
-      setValue('firstName', user.firstName || '');
-      setValue('lastName', user.lastName || '');
-      setValue('bio', user.bio || '');
-      setValue('website', user.website || '');
-      setBioLength(user.bio?.length || 0);
+  const checkUsername = async (username: string) => {
+    setUsernameIcon(<Spinner size="sm" />);
+    const { data } = await axios.get(`/api/users/exists?username=${username}`);
+    if (data.exists) {
+      setUsernameIcon(<BiCheckCircle className="text-danger" />);
+    } else {
+      setUsernameIcon(<BiCheckCircle className="text-primary" />);
     }
-  }, []);
+  };
 
   return (
     <form
@@ -73,9 +78,12 @@ export default function Form({ user }: Props) {
         type="text"
         variant="bordered"
         label="Username"
+        isDisabled={true}
         defaultValue={user?.username || ''}
         errorMessage={errors.username?.message}
+        onValueChange={checkUsername}
         {...register('username', { required: true })}
+        endContent={usernameIcon}
       />
       <Input
         type="text"

@@ -13,7 +13,8 @@ type Props = {
 
 export async function PUT(request: Request, { params }: Props) {
     const session = await getServerSession(authOptions);
-    const { firstName, lastName, bio, website } = await request.json();
+    const { firstName, lastName, bio, website, username } =
+        await request.json();
 
     if (session?.user?.id !== params.id) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -28,6 +29,7 @@ export async function PUT(request: Request, { params }: Props) {
             id: params.id,
         },
         data: {
+            // username,
             firstName,
             lastName,
             bio,
