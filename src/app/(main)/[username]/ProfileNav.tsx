@@ -67,20 +67,19 @@ export default function ProfileNav() {
             <div className="p-5 max-md:hidden">
               <Divider />
             </div>
-            {user?.role !== 'user' && (
-              <li className="p-2 md:ps-6 md:pe-10 max-md:text-center">
-                <Button
-                  startContent={!isMobile && <GoUpload />}
-                  variant="ghost"
-                  isIconOnly={isMobile}
-                  href={`${profilePath(user)}/uploads/new`}
-                  as={NextLink}
-                  className="md:px-8 border-1.5 rounded-full md:rounded-md"
-                >
-                  {isMobile ? <GoUpload /> : 'Upload'}
-                </Button>
-              </li>
-            )}
+
+            <li className="p-2 md:ps-6 md:pe-10 max-md:text-center">
+              <Button
+                startContent={!isMobile && <GoUpload />}
+                variant="ghost"
+                isIconOnly={isMobile}
+                href={`${profilePath(user)}/uploads/new`}
+                as={NextLink}
+                className="md:px-8 border-1.5 rounded-full md:rounded-md"
+              >
+                {isMobile ? <GoUpload /> : 'Upload'}
+              </Button>
+            </li>
 
             <li className="p-2 max-sm:hidden absolute bottom-2">
               <button
