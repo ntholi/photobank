@@ -1,10 +1,13 @@
 'use client';
 import { profilePath } from '@/lib/constants';
 import { Button } from '@nextui-org/button';
+import { Chip } from '@nextui-org/chip';
 import { Image } from '@nextui-org/image';
+import { IconStar } from '@tabler/icons-react';
 import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { BiSolidBadgeCheck } from 'react-icons/bi';
 
 type Props = {
   image?: string | null;
@@ -27,17 +30,32 @@ export default function UserBio({ image, name, id }: Props) {
         alt="Profile Picture"
       />
       <div className="ml-5 sm:ml-16 mt-2 sm:mt-3">
-        <h1 className="text-xl sm:text-2xl font-bold text-zinc-600">{name}</h1>
-        {user?.id === id && (
-          <Button
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-zinc-600">
+            {name}
+          </h1>
+          {user?.id === id && (
+            <Button
+              size="sm"
+              className="mt-3"
+              radius="sm"
+              as={Link}
+              href={`${profilePath(user)}/edit`}
+            >
+              Edit Profile
+            </Button>
+          )}
+        </div>
+        {user?.role !== 'user' && (
+          <Chip
+            color="primary"
+            variant="bordered"
             size="sm"
-            className="mt-3"
-            radius="sm"
-            as={Link}
-            href={`${profilePath(user)}/edit`}
+            avatar={<BiSolidBadgeCheck size={8} />}
+            className="mt-3 capitalize text-xs border-1"
           >
-            Edit Profile
-          </Button>
+            {user?.role}
+          </Chip>
         )}
       </div>
     </div>
