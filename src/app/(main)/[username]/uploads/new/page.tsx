@@ -13,6 +13,8 @@ export default function UploadPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { status, data: session } = useSession();
 
+  if (status === 'loading') return null;
+
   return (
     <>
       <UploadModal isOpen={isOpen} onOpenChange={onOpenChange} />
