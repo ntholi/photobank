@@ -29,7 +29,7 @@ function SlideInfo({ transitionData, currentSlideData }: Props) {
         <Button
           color="default"
           onClick={() => {
-            onOpen();
+            // onOpen();
           }}
         >
           View Photo
