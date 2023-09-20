@@ -1,8 +1,8 @@
 import ProfileBody from './ProfileBody';
 import UserBio from './UserBio';
 import { notFound } from 'next/navigation';
-import { User } from 'next-auth';
 import { prisma } from '@/lib/db';
+import { User } from '@prisma/client';
 
 type Props = { params: { username: string } };
 
@@ -13,12 +13,7 @@ const getUser = async (username: string): Promise<User> => {
   if (!user) {
     return notFound();
   }
-  return {
-    id: user.id,
-    username: user.username,
-    name: `${user.firstName} ${user.lastName}`,
-    image: user.image,
-  };
+  return user;
 };
 
 export default async function Page({ params }: Props) {
@@ -30,7 +25,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <>
-      <UserBio {...user} />
+      <UserBio user={user} />
       <ProfileBody userId={user.id} />
     </>
   );
