@@ -5,10 +5,12 @@ import { Link } from '@nextui-org/link';
 import { User as UserComponent } from '@nextui-org/user';
 import { User } from '@prisma/client';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type InputType = {
+  username: string;
   firstName: string;
   lastName: string;
   bio: string;
@@ -28,6 +30,7 @@ export default function Form({ user }: Props) {
   } = useForm<InputType>();
   const [loading, setLoading] = useState(false);
   const [bioLength, setBioLength] = useState(0);
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<InputType> = async (formData) => {
     try {
@@ -54,18 +57,26 @@ export default function Form({ user }: Props) {
       onSubmit={handleSubmit(onSubmit)}
     >
       <UserComponent
-        name={user?.username}
+        name={user?.id}
         description={
           <Link href="#" size="sm" className={'text-xs'}>
             Change Profile Picture
           </Link>
         }
         avatarProps={{
-          src: user?.image || undefined,
+          src: user?.image || '/images/profile.png',
           size: 'lg',
         }}
       />
 
+      <Input
+        type="text"
+        variant="bordered"
+        label="Username"
+        defaultValue={user?.username || ''}
+        errorMessage={errors.username?.message}
+        {...register('username', { required: true })}
+      />
       <Input
         type="text"
         variant="bordered"
@@ -106,14 +117,27 @@ export default function Form({ user }: Props) {
           },
         })}
       />
-      <Button
-        type="submit"
-        className="w-full md:w-60"
-        color="primary"
-        isLoading={loading}
-      >
-        Save
-      </Button>
+      <footer className="flex gap-3 pt-5">
+        <Button
+          onClick={() => {
+            router.back();
+          }}
+          variant="bordered"
+          // color="danger"
+          className="w-40"
+          isDisabled={loading}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          color="primary"
+          className="w-40"
+          isLoading={loading}
+        >
+          Save
+        </Button>
+      </footer>
     </form>
   );
 }
