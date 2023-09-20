@@ -30,15 +30,15 @@ export default function UserBio({ image, name, id }: Props) {
         alt="Profile Picture"
       />
       <div className="ml-5 sm:ml-16 mt-2 sm:mt-3">
-        <div>
+        <div className="flex gap-4 items-baseline">
           <h1 className="text-xl sm:text-2xl font-bold text-zinc-600">
             {name}
           </h1>
           {user?.id === id && (
             <Button
               size="sm"
-              className="mt-3"
               radius="sm"
+              variant="bordered"
               as={Link}
               href={`${profilePath(user)}/edit`}
             >
@@ -52,7 +52,7 @@ export default function UserBio({ image, name, id }: Props) {
             variant="bordered"
             size="sm"
             avatar={<BiSolidBadgeCheck size={8} />}
-            className="mt-3 capitalize text-xs border-1"
+            className="capitalize text-xs border-1"
           >
             {user?.role}
           </Chip>
