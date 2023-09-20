@@ -31,7 +31,7 @@ model User {
   image           String?
   website         String?
   bio             String?
-  role            Role              @default(contributor)
+  role            Role              @default(user)
   photos          Photo[]
   purchasedPhotos PurchasedPhotos[]
   savedPhotos     SavedPhotos[]
