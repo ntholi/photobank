@@ -9,6 +9,7 @@ import { profilePath } from '@/lib/constants';
 import { PhotoWithData } from '@/lib/types';
 import { Image } from '@nextui-org/image';
 import { watermarked } from '@/lib/config/urls';
+import { User } from '@nextui-org/user';
 
 type Props = {
   isOpen: boolean;
@@ -39,25 +40,18 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                 </div>
                 <section className="md:col-span-2 h-full flex flex-col justify-between">
                   <div className="p-3">
-                    <h1 className="text-xl text-gray-700 mb-0">
-                      {photo.caption} {/* TODO: This should be a photo tag */}
-                    </h1>
                     <div className="flex items-center justify-between space-x-6">
-                      {photo.user && (
-                        <p className="text-sm">
-                          By{' '}
-                          <Link
-                            href={profilePath(photo.user)}
-                            className="text-gray-400 hover:text-black"
-                          >
-                            {photo.user.firstName + ' ' + photo.user.firstName}
-                          </Link>
-                        </p>
-                      )}
-
-                      <p className="flex items-center space-x-1 text-gray-500 text-sm pe-3">
-                        <TiLocation /> <span>{photo.location?.name}</span>
-                      </p>
+                      <User
+                        name={photo.user.firstName + ' ' + photo.user.lastName}
+                        description={
+                          <div className="flex items-center space-x-1 text-gray-500 text-tiny pe-3">
+                            <TiLocation /> <span>{photo.location?.name}</span>
+                          </div>
+                        }
+                        avatarProps={{
+                          src: photo.user.image || '/images/profile.png',
+                        }}
+                      />
                     </div>
 
                     <p className="mt-6 text-sm text-gray-700 border bg-gray-50 p-2">
