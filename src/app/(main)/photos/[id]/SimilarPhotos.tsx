@@ -25,6 +25,7 @@ const getSimilarPhotos = async (photoId: string) => {
         some: {
           labelId: {
             in: labelIds?.map((it) => it),
+            gt: 3,
           },
         },
       },
