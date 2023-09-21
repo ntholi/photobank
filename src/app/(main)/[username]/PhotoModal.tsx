@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, ModalBody, ModalContent } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import { FaCartArrowDown } from 'react-icons/fa';
 import { profilePath } from '@/lib/constants';
 import { PhotoWithData } from '@/lib/types';
 import { Image } from '@nextui-org/image';
+import { watermarked } from '@/lib/config/urls';
 
 type Props = {
   isOpen: boolean;
@@ -30,7 +31,7 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
               <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
                 <div className="md:col-span-3">
                   <Image
-                    src={photo.url}
+                    src={watermarked(photo.fileName)}
                     className="w-full h-[85vh] object-cover"
                     alt={photo.caption || ''}
                     radius="none"
@@ -49,7 +50,7 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                             href={profilePath(photo.user)}
                             className="text-gray-400 hover:text-black"
                           >
-                            @{photo.user?.username || ''}
+                            {photo.user.firstName + ' ' + photo.user.firstName}
                           </Link>
                         </p>
                       )}
