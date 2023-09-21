@@ -16,7 +16,7 @@ type Props = {
 };
 
 export default function WebsiteLink({ user }: Props) {
-  const icon = getIcon(user.website || '');
+  const icon = getIcon(user.website);
   return (
     <div className="flex mt-1.5 gap-2 items-center text-sm">
       {icon}
@@ -43,8 +43,11 @@ function displayWebsiteAs(website: string | null) {
     .replace('www.', '');
 }
 
-function getIcon(website: string) {
+function getIcon(website?: string | null) {
   const size = 16;
+  if (!website) {
+    return null;
+  }
   if (website.includes('twitter.com') || website.includes('x.com')) {
     return <FaXTwitter size={size} />;
   } else if (website.includes('facebook.com')) {
