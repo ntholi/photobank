@@ -64,9 +64,11 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                       <User
                         name={photo.user.firstName + ' ' + photo.user.lastName}
                         description={
-                          <div className="flex items-center space-x-1 text-gray-500 text-tiny pe-3">
-                            <TiLocation /> <span>{photo.location?.name}</span>
-                          </div>
+                          photo.location && (
+                            <div className="flex items-center space-x-1 text-gray-500 text-tiny pe-3">
+                              <TiLocation /> <span>{photo.location?.name}</span>
+                            </div>
+                          )
                         }
                         avatarProps={{
                           src: photo.user.image || '/images/profile.png',

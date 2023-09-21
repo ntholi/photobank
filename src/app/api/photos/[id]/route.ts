@@ -30,7 +30,7 @@ export async function GET(request: Request, { params }: Props) {
 
 export type PhotoData = {
     caption: string;
-    location: {
+    location?: {
         name: string;
         lat: number;
         lng: number;
@@ -46,7 +46,7 @@ export async function PUT(request: Request, { params }: Props) {
         data: {
             caption: caption,
             status: 'published',
-            location: {
+            location: location && {
                 connectOrCreate: {
                     where: {
                         name: location.name,
