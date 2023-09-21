@@ -35,6 +35,7 @@
     "@nextui-org/link": "^2.0.22",
     "@nextui-org/modal": "^2.0.23",
     "@nextui-org/navbar": "^2.0.22",
+    "@nextui-org/popover": "^2.1.9",
     "@nextui-org/progress": "^2.0.21",
     "@nextui-org/radio": "^2.0.22",
     "@nextui-org/react": "^2.1.13",
