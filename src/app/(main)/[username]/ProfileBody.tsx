@@ -11,6 +11,7 @@ import { GalleryType } from '@/lib/constants';
 import { PhotoWithData } from '@/lib/types';
 import { useDisclosure } from '@nextui-org/modal';
 import PhotoModal from './PhotoModal';
+import { Skeleton } from '@nextui-org/skeleton';
 
 interface Photo {
   id: string;
@@ -69,8 +70,12 @@ export const ProfileBody = ({ userId }: Props) => {
           {(item) => (
             <Tab key={item.title} title={item.title} className="capitalize">
               {loading ? (
-                <div className="sm:pt-24 flex justify-center">
-                  <CircularProgress aria-label="Loading..." />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {Array.from(Array(2).keys()).map((i) => (
+                    <Skeleton key={i} className="rounded-lg">
+                      <div className="h-60 sm:h-72 rounded-lg bg-default-300"></div>
+                    </Skeleton>
+                  ))}
                 </div>
               ) : (
                 <>
