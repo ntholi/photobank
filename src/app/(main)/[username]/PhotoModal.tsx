@@ -4,12 +4,17 @@ import { Modal, ModalBody, ModalContent } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
 import { TiLocation } from 'react-icons/ti';
-import { FaCartArrowDown } from 'react-icons/fa';
+import { IoMdOpen } from 'react-icons/io';
 import { profilePath } from '@/lib/constants';
 import { PhotoWithData } from '@/lib/types';
 import { Image } from '@nextui-org/image';
 import { watermarked } from '@/lib/config/urls';
 import { User } from '@nextui-org/user';
+import { FaBookmark } from 'react-icons/fa6';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import axios from 'axios';
+import api from '@/lib/config/api';
 
 type Props = {
   isOpen: boolean;
@@ -17,6 +22,21 @@ type Props = {
   photo: PhotoWithData;
 };
 export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
+  const [saving, setSaving] = React.useState(false);
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const handleSave = async () => {
+    if (session) {
+      setSaving(true);
+      axios.post(api(`/photos/${photo.id}/save`)).finally(() => {
+        setSaving(false);
+      });
+    } else {
+      router.push('/signup');
+    }
+  };
+
   return (
     <Modal
       size={'5xl'}
@@ -65,12 +85,21 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                   <footer>
                     <div className="flex items-center justify-between p-3 py-5 border-t border-gray-200">
                       <Button
-                        startContent={<FaCartArrowDown />}
+                        endContent={<IoMdOpen />}
                         color="primary"
                         as={Link}
                         href={'/photos/' + photo.id}
                       >
-                        Buy Photo
+                        Open
+                      </Button>
+                      <Button
+                        color="danger"
+                        variant="bordered"
+                        startContent={<FaBookmark />}
+                        onClick={handleSave}
+                        isLoading={saving}
+                      >
+                        Save
                       </Button>
                     </div>
                   </footer>
