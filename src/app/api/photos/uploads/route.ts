@@ -2,9 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/auth';
 import { prisma } from '@/lib/db';
 import { NextResponse } from 'next/server';
-import { GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { bucketName, s3Client } from '@/lib/config/aws';
+import { thumbnail } from '@/lib/config/urls';
 
 export async function GET(req: Request) {
     const session = await getServerSession(authOptions);
@@ -20,17 +18,14 @@ export async function GET(req: Request) {
             location: true,
         },
     });
-    const photoPromises = data.map(async (it) => {
-        const params = {
-            Bucket: bucketName,
-            Key: it.fileName,
+    const photos = data.map((photo) => {
+        const fileName = photo.fileName.split('.')[0];
+
+        return {
+            ...photo,
+            url: thumbnail(fileName),
         };
-        const url = await getSignedUrl(s3Client, new GetObjectCommand(params), {
-            expiresIn: 60,
-        });
-        return { ...it, url };
     });
-    const photos = await Promise.all(photoPromises);
 
     return NextResponse.json({ photos });
 }
