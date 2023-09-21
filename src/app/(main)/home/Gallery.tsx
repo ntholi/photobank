@@ -1,11 +1,13 @@
 'use client';
 import { Tag } from '@prisma/client';
 import { Image } from '@nextui-org/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { PhotoWithData } from '@/lib/types';
 import { useRouter } from 'next/navigation';
+import { set } from 'react-hook-form';
+import { Skeleton } from '@nextui-org/skeleton';
 
 type Props = {
   searchKey: string;
@@ -14,12 +16,26 @@ type Props = {
 
 export default function Gallery({ searchKey, tag }: Props) {
   const [photos, setPhotos] = React.useState<PhotoWithData[]>([]);
+  const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
-  React.useEffect(() => {
-    axios.post(`/api/photos/search?searchKey=${searchKey}`, tag).then((res) => {
-      setPhotos(res.data.photos);
-    });
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      setLoading(true);
+      setPhotos([]);
+      try {
+        const { data } = await axios.post(
+          `/api/photos/search?searchKey=${searchKey}`,
+          tag,
+        );
+        if (data.photos.length > 0) {
+          setPhotos(data.photos as PhotoWithData[]);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPhotos();
   }, [searchKey, tag]);
 
   return (
@@ -29,23 +45,33 @@ export default function Gallery({ searchKey, tag }: Props) {
         event.preventDefault();
       }}
     >
-      <ResponsiveMasonry
-        columnsCountBreakPoints={{ 350: 1, 750: 2, 1100: 3, 1700: 4 }}
-      >
-        <Masonry gutter={'1rem'}>
-          {photos.map((it) => (
-            <Image
-              key={it.id}
-              src={it.url}
-              alt={it.caption || 'Lesotho'}
-              width={600}
-              height={600}
-              className="cursor-pointer"
-              onClick={() => router.push(`/photos/${it.id}`)}
-            />
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {Array.from(Array(3).keys()).map((i) => (
+            <Skeleton key={i} className="rounded-lg">
+              <div className="h-60 sm:h-72 rounded-lg bg-default-300"></div>
+            </Skeleton>
           ))}
-        </Masonry>
-      </ResponsiveMasonry>
+        </div>
+      ) : (
+        <ResponsiveMasonry
+          columnsCountBreakPoints={{ 350: 1, 750: 2, 1100: 3, 1700: 4 }}
+        >
+          <Masonry gutter={'1rem'}>
+            {photos.map((it) => (
+              <Image
+                key={it.id}
+                src={it.url}
+                alt={it.caption || 'Lesotho'}
+                width={600}
+                height={600}
+                className="cursor-pointer"
+                onClick={() => router.push(`/photos/${it.id}`)}
+              />
+            ))}
+          </Masonry>
+        </ResponsiveMasonry>
+      )}
     </section>
   );
 }
