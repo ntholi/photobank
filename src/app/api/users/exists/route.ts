@@ -1,4 +1,3 @@
-import { adminAuth } from '@/lib/config/firebase-admin';
 import { prisma } from '@/lib/db';
 import { User } from '@prisma/client';
 import { NextResponse } from 'next/server';
@@ -17,13 +16,11 @@ export async function GET(req: Request) {
             },
         });
     } else if (email) {
-        if (await adminAuth.getUserByEmail(email)) {
-            user = await prisma.user.findFirst({
-                where: {
-                    email,
-                },
-            });
-        }
+        user = await prisma.user.findFirst({
+            where: {
+                email,
+            },
+        });
     }
 
     return NextResponse.json({

@@ -1,19 +1,52 @@
 'use client';
 import { Image } from '@nextui-org/image';
 import { Button } from '@nextui-org/button';
-import { GoUpload } from 'react-icons/go';
+import { GoCheck, GoUpload } from 'react-icons/go';
 import { useDisclosure } from '@nextui-org/modal';
 import UploadModal from './UploadModal';
 import { useSession } from 'next-auth/react';
+import { ContributorApplication, Role } from '@prisma/client';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { User } from 'next-auth';
-import { Link } from '@nextui-org/link';
-import NextLink from 'next/link';
 
-export default function UploadPage() {
+type Props = { params: { username: string } };
+
+export default function UploadPage({ params: { username } }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { status, data: session } = useSession();
+  const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
+  const [application, setApplication] = useState<ContributorApplication | null>(
+    null,
+  );
 
-  if (status === 'loading') return null;
+  useEffect(() => {
+    async function fetchUser() {
+      const { data } = await axios.get(
+        `/api/users/contributors/applications?username=${username}`,
+      );
+      if (data.application) {
+        setApplication(data.application);
+      }
+    }
+    fetchUser();
+  }, [username]);
+
+  if (!session?.user) return null;
+
+  const becomeContributor = async () => {
+    setLoading(true);
+    try {
+      console.log('sending request');
+      const { data } = await axios.post('/api/users/contributors/applications');
+      if (data.application) {
+        setApplication(data.application);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -42,9 +75,16 @@ export default function UploadPage() {
             Upload
           </Button>
         ) : (
-          <Link as={NextLink} href="#">
-            Become a Contributor
-          </Link>
+          <Button
+            color="primary"
+            variant="light"
+            onClick={becomeContributor}
+            isDisabled={!!application}
+            startContent={application && <GoCheck />}
+            isLoading={loading}
+          >
+            {application ? 'Application Sent' : 'Become a Contributor'}
+          </Button>
         )}
       </section>
     </>
@@ -52,9 +92,6 @@ export default function UploadPage() {
 }
 
 function canUpload(user: User | undefined) {
-  return (
-    user?.role === 'contributor' ||
-    user?.role === 'admin' ||
-    user?.role === 'moderator'
-  );
+  const validRoles: Role[] = ['contributor', 'moderator', 'admin'];
+  return user?.role && validRoles.includes(user.role);
 }

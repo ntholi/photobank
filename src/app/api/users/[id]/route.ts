@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { adminAuth } from '@/lib/config/firebase-admin';
-import { FirebaseError } from 'firebase-admin';
 import { prisma } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/auth';
@@ -10,6 +9,19 @@ type Props = {
         id: string;
     };
 };
+
+export async function GET(request: Request, { params }: Props) {
+    const session = await getServerSession(authOptions);
+    if (session?.user?.id !== params.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const user = await prisma.user.findUnique({
+        where: {
+            id: params.id,
+        },
+    });
+    return NextResponse.json({ user });
+}
 
 export async function PUT(request: Request, { params }: Props) {
     const session = await getServerSession(authOptions);
