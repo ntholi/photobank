@@ -39,6 +39,7 @@
     "@nextui-org/progress": "^2.0.21",
     "@nextui-org/radio": "^2.0.22",
     "@nextui-org/react": "^2.1.13",
+    "@nextui-org/scroll-shadow": "^2.1.9",
     "@nextui-org/skeleton": "^2.0.19",
     "@nextui-org/spinner": "^2.0.19",
     "@nextui-org/switch": "^2.0.21",
