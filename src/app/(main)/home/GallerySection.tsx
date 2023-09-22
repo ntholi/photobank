@@ -61,7 +61,7 @@ export default function GallerySection() {
             </div>
           }
         >
-          <div className="container mx-auto px-24">
+          <div className="container mx-auto px-2 md:px-24">
             <MapWrapper />
           </div>
         </Tab>
