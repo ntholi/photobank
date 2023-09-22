@@ -7,7 +7,7 @@ import { Divider } from '@nextui-org/divider';
 import { Input } from '@nextui-org/input';
 import FilterBar from './FilterBar';
 import { Tag } from '@prisma/client';
-import MapWrapper from '../map/MapWrapper';
+import MapWrapper from './map/MapWrapper';
 
 export default function GallerySection() {
   const [searchKey, setSearchKey] = React.useState('');
