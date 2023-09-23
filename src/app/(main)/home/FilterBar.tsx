@@ -4,7 +4,7 @@ import { Tag } from '@prisma/client';
 import { Chip } from '@nextui-org/chip';
 import { ScrollShadow } from '@nextui-org/scroll-shadow';
 import { Button } from '@nextui-org/button';
-import { FaChevronRight } from 'react-icons/fa6';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
 type Props = {
   setSelected: React.Dispatch<React.SetStateAction<Tag | null>>;
@@ -23,6 +23,16 @@ export default function FilterBar({ selected, setSelected }: Props) {
     });
   }, []);
 
+  const scrollLeft = () => {
+    if (scrollShadow.current) {
+      scrollShadow.current.scrollBy({
+        top: 0,
+        left: -100,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   const scrollRight = () => {
     if (scrollShadow.current) {
       scrollShadow.current.scrollBy({
@@ -34,6 +44,16 @@ export default function FilterBar({ selected, setSelected }: Props) {
   };
   return (
     <nav className="flex">
+      <Button
+        isIconOnly
+        onClick={scrollLeft}
+        variant="bordered"
+        size="sm"
+        aria-label="Scroll Right"
+        className="mt-2 me-1"
+      >
+        <FaChevronLeft />
+      </Button>
       <ScrollShadow
         orientation="horizontal"
         hideScrollBar
@@ -60,8 +80,10 @@ export default function FilterBar({ selected, setSelected }: Props) {
       <Button
         isIconOnly
         onClick={scrollRight}
-        variant="faded"
-        aria-label="Take a photo"
+        variant="bordered"
+        size="sm"
+        aria-label="Scroll Right"
+        className="mt-2 ms-1 -me-1"
       >
         <FaChevronRight />
       </Button>
