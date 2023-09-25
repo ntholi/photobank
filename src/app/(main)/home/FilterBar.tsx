@@ -43,23 +43,20 @@ export default function FilterBar({ selected, setSelected }: Props) {
     }
   };
   return (
-    <nav className="flex">
-      <Button
-        isIconOnly
-        onClick={scrollLeft}
-        variant="bordered"
-        size="sm"
-        aria-label="Scroll Right"
-        className="mt-2 me-1"
-      >
-        <FaChevronLeft />
-      </Button>
-      <ScrollShadow
-        orientation="horizontal"
-        hideScrollBar
-        offset={10}
-        ref={scrollShadow}
-      >
+    <nav className="flex relative">
+      <div className="absolute left-0 z-20 pe-2 bg-background/50 drop-shadow-2xl">
+        <Button
+          isIconOnly
+          onClick={scrollLeft}
+          size="sm"
+          color="success"
+          aria-label="Scroll Right"
+          className="mt-2"
+        >
+          <FaChevronLeft />
+        </Button>
+      </div>
+      <div className="flex overflow-x-scroll no-scrollbar" ref={scrollShadow}>
         <div className="flex mt-2 gap-x-2">
           {items.map((item) => (
             <Chip
@@ -67,8 +64,6 @@ export default function FilterBar({ selected, setSelected }: Props) {
               className={'px-4 py-4 cursor-pointer'}
               color={selected?.id === item.id ? 'primary' : 'default'}
               onClick={() => {
-                console.log({ item });
-                console.log({ selected });
                 setSelected(selected?.id === item.id ? null : item);
               }}
             >
@@ -76,14 +71,14 @@ export default function FilterBar({ selected, setSelected }: Props) {
             </Chip>
           ))}
         </div>
-      </ScrollShadow>
+      </div>
       <Button
         isIconOnly
         onClick={scrollRight}
         variant="bordered"
         size="sm"
         aria-label="Scroll Right"
-        className="mt-2 ms-1 -me-1"
+        className="mt-2 absolute right-0 z-10"
       >
         <FaChevronRight />
       </Button>
