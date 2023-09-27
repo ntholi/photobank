@@ -83,7 +83,9 @@ export default function UploadPage({ params: { username } }: Props) {
             startContent={application && <GoCheck />}
             isLoading={loading}
           >
-            {application ? 'Application Sent' : 'Become a Contributor'}
+            {application?.status == 'approved'
+              ? 'Application Sent'
+              : 'Become a Contributor'}
           </Button>
         )}
       </section>
