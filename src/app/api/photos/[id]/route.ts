@@ -30,6 +30,7 @@ export async function GET(request: Request, { params }: Props) {
 
 export type PhotoData = {
     caption: string;
+    useWithoutWatermark: boolean;
     location?: {
         name: string;
         lat: number;
@@ -38,7 +39,8 @@ export type PhotoData = {
 };
 
 export async function PUT(request: Request, { params }: Props) {
-    const { location, caption } = (await request.json()) as PhotoData;
+    const { location, caption, useWithoutWatermark } =
+        (await request.json()) as PhotoData;
     const photo = await prisma.photo.update({
         where: {
             id: params.id,
@@ -46,6 +48,7 @@ export async function PUT(request: Request, { params }: Props) {
         data: {
             caption: caption,
             status: 'published',
+            useWithoutWatermark: Boolean(useWithoutWatermark),
             location: location && {
                 connectOrCreate: {
                     where: {

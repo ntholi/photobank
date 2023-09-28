@@ -16,7 +16,7 @@ import { IconInfoCircle } from '@tabler/icons-react';
 type InputType = {
   caption: string;
   location: string;
-  allowHomepageDisplay: boolean;
+  useWithoutWatermark: boolean;
 };
 
 type Props = {
@@ -30,6 +30,7 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
   const { user } = useSession().data || {};
   const router = useRouter();
   const [location, setLocation] = useState<Location | null>(null);
+  const [useWithoutWatermark, setUseWithoutWatermark] = useState(false);
 
   const onSubmit: SubmitHandler<InputType> = async (data: any) => {
     setLoading(true);
@@ -41,6 +42,7 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
           lng: location.lng,
         };
       }
+      data.useWithoutWatermark = useWithoutWatermark;
       await axios.put(`/api/photos/${photoId}`, data);
       router.push(profilePath(user));
     } catch (error) {
@@ -66,7 +68,8 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
             <Checkbox
               className="mt-1"
               size="sm"
-              {...register('allowHomepageDisplay')}
+              checked={useWithoutWatermark}
+              onValueChange={setUseWithoutWatermark}
             >
               Allow for homepage display
             </Checkbox>
