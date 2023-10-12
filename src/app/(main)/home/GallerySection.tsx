@@ -35,7 +35,7 @@ export default function GallerySection() {
           }
         >
           <div className="min-h-screen mt-5">
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <Input
                 type="text"
                 size="lg"

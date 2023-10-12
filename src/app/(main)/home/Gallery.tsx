@@ -6,7 +6,6 @@ import axios from 'axios';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { PhotoWithData } from '@/lib/types';
 import { useRouter } from 'next/navigation';
-import { set } from 'react-hook-form';
 import { Skeleton } from '@nextui-org/skeleton';
 
 type Props = {
