@@ -8,7 +8,7 @@ const getPhotos = async () => {
   try {
     const res = await fetch(api('/photos/hero'), {
       next: {
-        revalidate: 0,
+        revalidate: 60 * 60 * 24 * 7, // 1 week
       },
     });
 
@@ -24,7 +24,7 @@ const getPhotos = async () => {
 };
 
 export default async function Page() {
-  const photos = (await getPhotos()).slice(0, 7); //Only take seven photos
+  const photos = await getPhotos();
 
   return (
     <>

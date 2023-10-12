@@ -1,9 +1,19 @@
+// https://www.prisma.io/docs/guides/other/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices
 import { PrismaClient } from '@prisma/client';
+import prismaRandom from 'prisma-extension-random';
 
-const globalForPrisma = globalThis as unknown as {
-    prisma: PrismaClient | undefined;
+const prismaClientSingleton = () => {
+  return new PrismaClient().$extends(prismaRandom());
 };
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient();
+type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
 
-if (process.env.NODE_ENV === 'development') globalForPrisma.prisma = prisma;
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClientSingleton | undefined;
+};
+
+const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
+
+export default prisma;
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
