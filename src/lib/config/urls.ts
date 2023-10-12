@@ -1,5 +1,17 @@
-export const imageProcessor = (fileName: string) =>
-    `https://ydhxmfgb3m.execute-api.eu-central-1.amazonaws.com/Prod/process-image?filename=${fileName}`;
+export const imageProcessor = (
+    fileName: string,
+    noWatermark: boolean = false,
+) => {
+    const queryParams = new URLSearchParams({
+        filename: fileName,
+    });
+    if (noWatermark) {
+        queryParams.append('noWatermark', 'true');
+    }
+    const url = new URL(process.env.IMAGE_PROCESSOR_URL || '');
+    url.search = queryParams.toString();
+    return url.toString();
+};
 
 export const thumbnail = (fileName: string) => {
     const name = fileName.split('.')[0];
