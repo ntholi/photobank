@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { thumbnail } from '@/lib/config/urls';
+import { z } from 'zod';
 
 type Props = {
   params: {
@@ -28,19 +29,23 @@ export async function GET(request: Request, { params }: Props) {
   });
 }
 
-export type PhotoData = {
-  caption: string;
-  useWithoutWatermark: boolean;
-  location?: {
-    name: string;
-    lat: number;
-    lng: number;
-  };
-};
+const PhotoData = z.object({
+  caption: z.string(),
+  useWithoutWatermark: z.boolean(),
+  location: z.object({
+    name: z.string(),
+    lat: z.number(),
+    lng: z.number(),
+  }),
+});
 
 export async function PUT(request: Request, { params }: Props) {
-  const { location, caption, useWithoutWatermark } =
-    (await request.json()) as PhotoData;
+  const { location, caption, useWithoutWatermark } = PhotoData.parse(
+    await request.json(),
+  );
+
+  console.log({ location, caption, useWithoutWatermark });
+
   const photo = await prisma.photo.update({
     where: {
       id: params.id,
