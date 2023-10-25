@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db';
+import prisma from '@/lib/db';
 import { notFound } from 'next/navigation';
 import React from 'react';
 import { GoLocation } from 'react-icons/go';

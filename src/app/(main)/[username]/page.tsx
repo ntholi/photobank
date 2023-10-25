@@ -1,7 +1,7 @@
 import ProfileBody from './ProfileBody';
 import UserBio from './UserBio';
 import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/db';
+import prisma from '@/lib/db';
 import { User } from '@prisma/client';
 
 type Props = { params: { username: string } };

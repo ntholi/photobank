@@ -2,7 +2,7 @@ import React from 'react';
 import { Paper, Space, Title, Button, Image } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
-import { prisma } from '@/lib/db';
+import prisma from '@/lib/db';
 import { toDateTime } from '@/lib/utils';
 import FieldDisplay from '@/app/(admin)/base/FieldDisplay';
 import PhotoStatusUpdate from './PhotoStatusUpdate';

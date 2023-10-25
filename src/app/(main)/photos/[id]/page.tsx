@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/db';
+import prisma from '@/lib/db';
 import { Image } from '@nextui-org/image';
 import DetailsCard from './DetailsCard';
 import { PhotoWithData } from '@/lib/types';
