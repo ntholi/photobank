@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { thumbnail } from '@/lib/config/urls';
+import { imageProcessor, thumbnail } from '@/lib/config/urls';
 import { z } from 'zod';
+import axios from 'axios';
 
 type Props = {
   params: {
@@ -44,7 +45,11 @@ export async function PUT(request: Request, { params }: Props) {
     await request.json(),
   );
 
-  console.log({ location, caption, useWithoutWatermark });
+  const { fileName } = (await prisma.photo.findUnique({
+    where: {
+      id: params.id,
+    },
+  })) as { fileName: string };
 
   const photo = await prisma.photo.update({
     where: {
@@ -53,7 +58,7 @@ export async function PUT(request: Request, { params }: Props) {
     data: {
       caption: caption,
       status: 'published',
-      useWithoutWatermark: Boolean(useWithoutWatermark),
+      useWithoutWatermark: useWithoutWatermark,
       location: location && {
         connectOrCreate: {
           where: {
@@ -68,5 +73,10 @@ export async function PUT(request: Request, { params }: Props) {
       },
     },
   });
+
+  if (photo.useWithoutWatermark) {
+    await axios.get(imageProcessor(fileName, false));
+  }
+
   return NextResponse.json(photo);
 }
