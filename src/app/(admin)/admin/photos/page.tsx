@@ -3,21 +3,14 @@ import { IconReload, IconSearch } from '@tabler/icons-react';
 import React from 'react';
 import PhotosTable from './PhotosTable';
 import { Photo } from '@prisma/client';
-import axios from 'axios';
-import api from '@/lib/config/api';
+import prisma from '@/lib/db';
 
 const fetchPhotos = async () => {
-  try {
-    const res = await axios.get(api('photos?fromAdmin=true')); //TODO: 'admin=true' SHOULD BE REMOVED
-    if (res.data.photos.length > 0) {
-      return res.data.photos as Photo[];
-    }
-  } catch (error) {}
-  return [] as Photo[];
+  const photos = prisma.photo.findMany({});
+  return photos;
 };
 
 export default async function PhotosPage() {
-  return null;
   const photos = await fetchPhotos();
   return (
     <div>

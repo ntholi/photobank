@@ -1,13 +1,12 @@
 'use client';
 import { toDateTime } from '@/lib/utils';
-import { Table } from '@mantine/core';
+import { Table, Image } from '@mantine/core';
 import { Photo } from '@prisma/client';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import PhotoStatusUpdate, { StatusDisplay } from './[id]/PhotoStatusUpdate';
+import { thumbnail } from '@/lib/config/urls';
 
 export default function PhotosTable({ photos }: { photos: Photo[] }) {
-  return null;
   const router = useRouter();
   const rows = photos.map((it) => (
     <Table.Tr
@@ -16,13 +15,13 @@ export default function PhotosTable({ photos }: { photos: Photo[] }) {
       onClick={() => router.push(`/admin/photos/${it.id}`)}
     >
       <Table.Td>
-        {/* <Image
-          src={it.url}
-          alt={it.name}
+        <Image
+          src={thumbnail(it.fileName)}
+          alt={it.caption || ''}
           width={100}
           height={100}
           className="w-11 h-11 rounded object-cover"
-        /> */}
+        />
       </Table.Td>
       <Table.Td>{it.id}</Table.Td>
       <Table.Td>{it.caption}</Table.Td>
