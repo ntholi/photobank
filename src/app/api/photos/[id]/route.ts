@@ -31,13 +31,15 @@ export async function GET(request: Request, { params }: Props) {
 }
 
 const PhotoData = z.object({
-  caption: z.string(),
-  useWithoutWatermark: z.boolean(),
-  location: z.object({
-    name: z.string(),
-    lat: z.number(),
-    lng: z.number(),
-  }),
+  caption: z.string().optional(),
+  useWithoutWatermark: z.boolean().default(false),
+  location: z
+    .object({
+      name: z.string(),
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .optional(),
 });
 
 export async function PUT(request: Request, { params }: Props) {
