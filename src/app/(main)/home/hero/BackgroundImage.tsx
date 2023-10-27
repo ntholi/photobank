@@ -12,7 +12,7 @@ function BackgroundImage({ transitionData, currentSlideData }: Props) {
     <>
       {transitionData && (
         <MotionImage
-          fill
+          fill="true"
           sizes="100vw"
           key={transitionData.url}
           layoutId={transitionData.url}
