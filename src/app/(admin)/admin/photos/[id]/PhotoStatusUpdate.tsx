@@ -1,10 +1,8 @@
 'use client';
 import FieldDisplay from '@/app/(admin)/base/FieldDisplay';
-import { Badge, Button } from '@mantine/core';
-import React, { useState } from 'react';
+import { Badge, Box, Button, ButtonGroup, MantineSize } from '@mantine/core';
 import { Photo, PhotoStatus } from '@prisma/client';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import { updateStatus } from './actions';
 
 const items = [
   {
@@ -16,44 +14,40 @@ const items = [
     value: 'rejected',
   },
   {
-    label: 'Pending',
-    value: 'pending',
+    label: 'Draft',
+    value: 'draft',
   },
 ] as const;
 
 export default function PhotoStatusUpdate({ photo }: { photo: Photo }) {
-  const router = useRouter();
-  const [loading, setLoading] = useState<string | null>(null);
-
-  function handleSelect(item: PhotoStatus) {
-    setLoading(item);
-    axios
-      .put(`/api/photos/${photo.id}`, { status: item })
-      .finally(() => setLoading(null));
-    router.refresh();
-  }
-
   return (
     <FieldDisplay label="Status">
       <StatusDisplay status={photo.status} />
-      <div className="mt-2 space-x-2">
-        {items.map((item) => (
-          <Button
-            key={item.value}
-            size="xs"
-            variant="default"
-            onClick={() => handleSelect(item.value)}
-            loading={loading === item.value}
-          >
-            {item.label}
-          </Button>
-        ))}
-      </div>
+      <Box mt="sm">
+        <ButtonGroup>
+          {items.map((item) => (
+            <Button
+              key={item.value}
+              size="sm"
+              variant="default"
+              onClick={() => updateStatus(photo.id, item.value)}
+            >
+              {item.label}
+            </Button>
+          ))}
+        </ButtonGroup>
+      </Box>
     </FieldDisplay>
   );
 }
 
-export const StatusDisplay = ({ status }: { status: PhotoStatus }) => {
+export const StatusDisplay = ({
+  status,
+  size,
+}: {
+  status: PhotoStatus;
+  size?: MantineSize;
+}) => {
   let color: string;
   switch (status) {
     case 'pending':
@@ -69,7 +63,7 @@ export const StatusDisplay = ({ status }: { status: PhotoStatus }) => {
       color = 'gray';
   }
   return (
-    <Badge color={color} variant="outline">
+    <Badge size={size} color={color} variant="outline">
       {status}
     </Badge>
   );
