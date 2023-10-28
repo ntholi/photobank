@@ -14,3 +14,19 @@ export async function updateStatus(
   revalidatePath(`/admin/photos`);
   revalidatePath(`/admin/photos/${photoId}`);
 }
+
+export async function updateCaption(photoId: string, caption: string) {
+  await prisma.photo.update({
+    where: { id: photoId },
+    data: { caption: caption },
+  });
+  revalidatePath(`/admin/photos/${photoId}`);
+}
+
+export async function updateLocation(photoId: string, location: string) {
+  // await prisma.photo.update({
+  //   where: { id: photoId },
+  //   data: { location: location },
+  // });
+  revalidatePath(`/admin/photos/${photoId}`);
+}

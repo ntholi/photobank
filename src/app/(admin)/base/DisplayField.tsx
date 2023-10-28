@@ -1,5 +1,4 @@
 import { Text } from '@mantine/core';
-import { type } from 'os';
 
 type Props = {
   label: string;
@@ -9,7 +8,7 @@ type Props = {
 
 export default function DisplayField({ label, value, children }: Props) {
   return (
-    <div className="">
+    <div>
       <Text c="dimmed" fw="bold" fs="sm">
         {label}
       </Text>

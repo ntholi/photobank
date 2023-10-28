@@ -21,6 +21,8 @@ import DisplayField from '@/app/(admin)/base/DisplayField';
 import PhotoStatusUpdate from './PhotoStatusUpdate';
 import { thumbnail } from '@/lib/config/urls';
 import { notFound } from 'next/navigation';
+import EditableField from '@/app/(admin)/base/EditableField';
+import { updateCaption } from './actions';
 
 type Props = {
   params: {
@@ -72,27 +74,23 @@ export default async function PhotoPage({ params }: Props) {
           <GridCol span={{ base: 12, md: 6 }}>
             <Stack mt="md" gap="sm">
               <DisplayField label="ID" value={photo.id} />
-              <DisplayField label="Caption">
-                <Group>
-                  {photo.caption || 'No Caption'}
-                  <ActionIcon variant="subtle">
-                    <IconEdit size="0.9rem" />
-                  </ActionIcon>
-                </Group>
-              </DisplayField>
+              <EditableField
+                id={photo.id}
+                label="Caption"
+                value={photo.caption}
+                action={updateCaption}
+              />
               <DisplayField label="Owner">
                 <Anchor component={NextLink} href={`/users/${photo.user.id}`}>
                   {fullName(photo.user)}
                 </Anchor>
               </DisplayField>
-              <DisplayField label="Location">
-                <Group>
-                  {photo?.location?.name}
-                  <ActionIcon variant="subtle">
-                    <IconEdit size="0.9rem" />
-                  </ActionIcon>
-                </Group>
-              </DisplayField>
+              <EditableField
+                id={photo.id}
+                label="Location"
+                value={photo.location?.name}
+                action={updateCaption}
+              />
               <DisplayField
                 label="Created At"
                 value={toDateTime(photo.createdAt)}
