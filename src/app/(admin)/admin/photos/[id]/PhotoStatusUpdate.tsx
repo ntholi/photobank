@@ -1,5 +1,5 @@
 'use client';
-import FieldDisplay from '@/app/(admin)/base/FieldDisplay';
+import DisplayField from '@/app/(admin)/base/DisplayField';
 import { Badge, Box, Button, ButtonGroup, MantineSize } from '@mantine/core';
 import { Photo, PhotoStatus } from '@prisma/client';
 import { updateStatus } from './actions';
@@ -23,7 +23,7 @@ const items = [
 export default function PhotoStatusUpdate({ photo }: { photo: Photo }) {
   const [isPending, startTransition] = useTransition();
   return (
-    <FieldDisplay label="Status">
+    <DisplayField label="Status">
       <StatusDisplay status={photo.status} />
       <Box mt="sm">
         <ButtonGroup>
@@ -42,7 +42,7 @@ export default function PhotoStatusUpdate({ photo }: { photo: Photo }) {
           ))}
         </ButtonGroup>
       </Box>
-    </FieldDisplay>
+    </DisplayField>
   );
 }
 

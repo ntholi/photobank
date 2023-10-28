@@ -10,14 +10,17 @@ import {
   Flex,
   Grid,
   GridCol,
+  Group,
+  ActionIcon,
 } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
+import { IconArrowLeft, IconEdit } from '@tabler/icons-react';
 import NextLink from 'next/link';
 import prisma from '@/lib/db';
 import { toDateTime } from '@/lib/utils';
-import FieldDisplay from '@/app/(admin)/base/FieldDisplay';
+import DisplayField from '@/app/(admin)/base/DisplayField';
 import PhotoStatusUpdate from './PhotoStatusUpdate';
 import { thumbnail } from '@/lib/config/urls';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: {
@@ -26,21 +29,21 @@ type Props = {
 };
 
 async function fetchPhoto(id: string) {
-  const photo = await prisma.photo.findUnique({
+  return await prisma.photo.findUnique({
     where: { id: id },
     include: {
       user: true,
       location: true,
     },
   });
-  if (!photo) {
-    throw new Error('Photo not found');
-  }
-  return photo;
 }
 
 export default async function PhotoPage({ params }: Props) {
   const photo = await fetchPhoto(params.id);
+
+  if (!photo) {
+    notFound();
+  }
 
   return (
     <div>
@@ -68,18 +71,29 @@ export default async function PhotoPage({ params }: Props) {
           </GridCol>
           <GridCol span={{ base: 12, md: 6 }}>
             <Stack mt="md" gap="sm">
-              <FieldDisplay label="ID" value={photo.id} />
-              <FieldDisplay
-                label="Caption"
-                value={photo.caption || 'No Caption'}
-              />
-              <FieldDisplay label="Owner">
+              <DisplayField label="ID" value={photo.id} />
+              <DisplayField label="Caption">
+                <Group>
+                  {photo.caption || 'No Caption'}
+                  <ActionIcon variant="subtle">
+                    <IconEdit size="0.9rem" />
+                  </ActionIcon>
+                </Group>
+              </DisplayField>
+              <DisplayField label="Owner">
                 <Anchor component={NextLink} href={`/users/${photo.user.id}`}>
                   {fullName(photo.user)}
                 </Anchor>
-              </FieldDisplay>
-              <FieldDisplay label="Location" value={photo?.location?.name} />
-              <FieldDisplay
+              </DisplayField>
+              <DisplayField label="Location">
+                <Group>
+                  {photo?.location?.name}
+                  <ActionIcon variant="subtle">
+                    <IconEdit size="0.9rem" />
+                  </ActionIcon>
+                </Group>
+              </DisplayField>
+              <DisplayField
                 label="Created At"
                 value={toDateTime(photo.createdAt)}
               />
