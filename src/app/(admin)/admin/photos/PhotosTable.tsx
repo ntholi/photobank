@@ -1,4 +1,13 @@
-import { Table, Image } from '@mantine/core';
+import {
+  Table,
+  Image,
+  TableTr,
+  TableTd,
+  TableThead,
+  TableTh,
+  TableTbody,
+  Anchor,
+} from '@mantine/core';
 import { Photo } from '@prisma/client';
 import { StatusDisplay } from './[id]/PhotoStatusUpdate';
 import { thumbnail } from '@/lib/config/urls';
@@ -6,37 +15,43 @@ import Link from 'next/link';
 
 export default function PhotosTable({ photos }: { photos: Photo[] }) {
   const rows = photos.map((it) => (
-    <Table.Tr key={it.id}>
-      <Table.Td w={80}>
+    <TableTr key={it.id}>
+      <TableTd w={80}>
         <Link href={`/admin/photos/${it.id}`}>
           <Image
             src={thumbnail(it.fileName)}
             alt={it.caption || ''}
+            width={50}
+            height={50}
             fit="contain"
           />
         </Link>
-      </Table.Td>
-      <Table.Td>{it.id}</Table.Td>
-      <Table.Td>{it.caption}</Table.Td>
-      <Table.Td>
+      </TableTd>
+      <TableTd>
+        <Anchor component={Link} href={`/admin/photos/${it.id}`}>
+          {it.id}
+        </Anchor>
+      </TableTd>
+      <TableTd>{it.caption}</TableTd>
+      <TableTd>
         <StatusDisplay status={it.status} size="xs" />
-      </Table.Td>
-      <Table.Td>{it.createdAt && it.createdAt.toLocaleString()}</Table.Td>
-    </Table.Tr>
+      </TableTd>
+      <TableTd>{it.createdAt && it.createdAt.toLocaleString()}</TableTd>
+    </TableTr>
   ));
 
   return (
     <Table striped withTableBorder highlightOnHover>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Photo</Table.Th>
-          <Table.Th>ID</Table.Th>
-          <Table.Th>Caption</Table.Th>
-          <Table.Th>Status</Table.Th>
-          <Table.Th>Date Uploaded</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
+      <TableThead>
+        <TableTr>
+          <TableTh>Photo</TableTh>
+          <TableTh>ID</TableTh>
+          <TableTh>Caption</TableTh>
+          <TableTh>Status</TableTh>
+          <TableTh>Date Uploaded</TableTh>
+        </TableTr>
+      </TableThead>
+      <TableTbody>{rows}</TableTbody>
     </Table>
   );
 }
