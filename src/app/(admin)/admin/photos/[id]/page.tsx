@@ -1,11 +1,23 @@
 import React from 'react';
-import { Paper, Space, Title, Button, Image } from '@mantine/core';
+import {
+  Paper,
+  Space,
+  Title,
+  Button,
+  Image,
+  Stack,
+  Anchor,
+  Flex,
+  Grid,
+  GridCol,
+} from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import prisma from '@/lib/db';
 import { toDateTime } from '@/lib/utils';
 import FieldDisplay from '@/app/(admin)/base/FieldDisplay';
 import PhotoStatusUpdate from './PhotoStatusUpdate';
+import { thumbnail } from '@/lib/config/urls';
 
 type Props = {
   params: {
@@ -30,48 +42,54 @@ async function fetchPhoto(id: string) {
 export default async function PhotoPage({ params }: Props) {
   const photo = await fetchPhoto(params.id);
 
-  return <></>;
-  // return (
-  //   <div>
-  //     <Paper withBorder p="lg">
-  //       <header className="flex items-center justify-between">
-  //         <Title order={1} size={'h5'}>
-  //           {photo.caption || 'No Caption'}
-  //         </Title>
+  return (
+    <div>
+      <Paper withBorder p="lg">
+        <header className="flex items-center justify-between">
+          <Title order={1} size={'h5'}>
+            {photo.caption || 'No Caption'}
+          </Title>
 
-  //         <Button
-  //           color="dark"
-  //           leftSection={<IconArrowLeft size="1rem" />}
-  //           component={Link}
-  //           href={'./'}
-  //         >
-  //           Back
-  //         </Button>
-  //       </header>
-  //     </Paper>
-  //     <Space h="md" />
-  //     <Paper withBorder p="lg">
-  //       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-  //         <Image src={photo.url} alt={photo.name} width={500} />
-  //         <div className="space-y-3">
-  //           <FieldDisplay label="ID" value={photo.id} />
-  //           <FieldDisplay label="Name" value={photo.name} />
-  //           <FieldDisplay label="Owner">
-  //             <Link className="text-blue-600 hover:underline" href={`#`}>
-  //               {/* {fullName(photo.user)} */} [GET USER FROM FIREBASE]
-  //             </Link>
-  //           </FieldDisplay>
-  //           <FieldDisplay label="Location" value={photo?.location?.name} />
-  //           <FieldDisplay
-  //             label="Created At"
-  //             value={toDateTime(photo.createdAt)}
-  //           />
-  //           <PhotoStatusUpdate photo={photo} />
-  //         </div>
-  //       </div>
-  //     </Paper>
-  //   </div>
-  // );
+          <Button
+            color="dark"
+            leftSection={<IconArrowLeft size="1rem" />}
+            component={NextLink}
+            href={'./'}
+          >
+            Back
+          </Button>
+        </header>
+      </Paper>
+      <Space h="md" />
+      <Paper withBorder p="lg">
+        <Grid>
+          <GridCol span={{ base: 12, md: 6 }}>
+            <Image src={thumbnail(photo.fileName)} alt={photo.caption || ''} />
+          </GridCol>
+          <GridCol span={{ base: 12, md: 6 }}>
+            <Stack mt="md" gap="sm">
+              <FieldDisplay label="ID" value={photo.id} />
+              <FieldDisplay
+                label="Caption"
+                value={photo.caption || 'No Caption'}
+              />
+              <FieldDisplay label="Owner">
+                <Anchor component={NextLink} href={`/users/${photo.user.id}`}>
+                  {fullName(photo.user)}
+                </Anchor>
+              </FieldDisplay>
+              <FieldDisplay label="Location" value={photo?.location?.name} />
+              <FieldDisplay
+                label="Created At"
+                value={toDateTime(photo.createdAt)}
+              />
+              <PhotoStatusUpdate photo={photo} />
+            </Stack>
+          </GridCol>
+        </Grid>
+      </Paper>
+    </div>
+  );
 }
 
 const fullName = (user: {

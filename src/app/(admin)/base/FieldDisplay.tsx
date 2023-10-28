@@ -1,3 +1,5 @@
+import { Text } from '@mantine/core';
+
 const FieldDisplay = ({
   label,
   value,
@@ -8,8 +10,10 @@ const FieldDisplay = ({
   children?: any;
 }) => (
   <div className="">
-    <div className="text-gray-500 font-bold text-sm">{label}</div>
-    {value ? <div className="text-gray-900">{value}</div> : children}
+    <Text c="dimmed" fw="bold" fs="sm">
+      {label}
+    </Text>
+    {value ? <Text fs="sm">{value}</Text> : children}
   </div>
 );
 
