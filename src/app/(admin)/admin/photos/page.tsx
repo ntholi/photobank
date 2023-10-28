@@ -1,4 +1,12 @@
-import { ActionIcon, Paper, Space, Input, Title, Group } from '@mantine/core';
+import {
+  ActionIcon,
+  Paper,
+  Space,
+  Input,
+  Title,
+  Group,
+  Flex,
+} from '@mantine/core';
 import { IconReload, IconSearch } from '@tabler/icons-react';
 import React from 'react';
 import PhotosTable from './PhotosTable';
@@ -15,7 +23,7 @@ export default async function PhotosPage() {
   return (
     <div>
       <Paper withBorder p="lg">
-        <header className="flex items-center justify-between">
+        <Flex justify={'space-between'} align={'center'}>
           <Group>
             <Title order={1} size={'h5'}>
               Photos
@@ -33,7 +41,7 @@ export default async function PhotosPage() {
           >
             <IconReload size={'1rem'} />
           </ActionIcon>
-        </header>
+        </Flex>
       </Paper>
       <Space h="md" />
       <PhotosTable photos={photos} />

@@ -45,7 +45,7 @@ export default async function PhotoPage({ params }: Props) {
   return (
     <div>
       <Paper withBorder p="lg">
-        <header className="flex items-center justify-between">
+        <Flex justify={'space-between'} align={'center'}>
           <Title order={1} size={'h5'}>
             {photo.caption || 'No Caption'}
           </Title>
@@ -58,7 +58,7 @@ export default async function PhotoPage({ params }: Props) {
           >
             Back
           </Button>
-        </header>
+        </Flex>
       </Paper>
       <Space h="md" />
       <Paper withBorder p="lg">

@@ -7,10 +7,10 @@ export async function updateStatus(
   photoId: string,
   status: 'draft' | 'published' | 'rejected',
 ) {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
   await prisma.photo.update({
     where: { id: photoId },
     data: { status: status },
   });
+  revalidatePath(`/admin/photos`);
   revalidatePath(`/admin/photos/${photoId}`);
 }
