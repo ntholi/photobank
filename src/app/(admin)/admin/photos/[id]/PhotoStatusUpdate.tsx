@@ -3,6 +3,7 @@ import FieldDisplay from '@/app/(admin)/base/FieldDisplay';
 import { Badge, Box, Button, ButtonGroup, MantineSize } from '@mantine/core';
 import { Photo, PhotoStatus } from '@prisma/client';
 import { updateStatus } from './actions';
+import { useTransition } from 'react';
 
 const items = [
   {
@@ -20,6 +21,7 @@ const items = [
 ] as const;
 
 export default function PhotoStatusUpdate({ photo }: { photo: Photo }) {
+  const [isPending, startTransition] = useTransition();
   return (
     <FieldDisplay label="Status">
       <StatusDisplay status={photo.status} />
@@ -29,8 +31,11 @@ export default function PhotoStatusUpdate({ photo }: { photo: Photo }) {
             <Button
               key={item.value}
               size="sm"
+              disabled={isPending}
               variant="default"
-              onClick={() => updateStatus(photo.id, item.value)}
+              onClick={() =>
+                startTransition(() => updateStatus(photo.id, item.value))
+              }
             >
               {item.label}
             </Button>
