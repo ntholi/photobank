@@ -1,8 +1,9 @@
 import '@mantine/core/styles.css';
-import '../globals.css';
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core';
 import { APP_NAME } from '@/lib/constants';
+import { SessionProvider } from 'next-auth/react';
+import { Providers } from './providers';
 
 export const metadata = {
   title: `${APP_NAME} Admin`,
@@ -20,7 +21,7 @@ export default function MantineLayout({
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider defaultColorScheme="light">{children}</MantineProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -10,17 +10,15 @@ export default function PhotosTable({ photos }: { photos: Photo[] }) {
   const router = useRouter();
   const rows = photos.map((it) => (
     <Table.Tr
-      className="cursor-pointer"
+      style={{ cursor: 'pointer' }}
       key={it.id}
       onClick={() => router.push(`/admin/photos/${it.id}`)}
     >
-      <Table.Td>
+      <Table.Td w={80}>
         <Image
           src={thumbnail(it.fileName)}
           alt={it.caption || ''}
-          width={100}
-          height={100}
-          className="w-11 h-11 rounded object-cover"
+          fit="contain"
         />
       </Table.Td>
       <Table.Td>{it.id}</Table.Td>

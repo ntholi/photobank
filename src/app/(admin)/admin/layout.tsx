@@ -1,26 +1,17 @@
 'use client';
 import { useDisclosure } from '@mantine/hooks';
-import { AppShell, Burger, NavLink, useMantineTheme } from '@mantine/core';
-import {
-  IconCash,
-  IconHome,
-  IconHome2,
-  IconMoneybag,
-  IconPhoto,
-  IconReportMoney,
-  IconUser,
-  IconUserDollar,
-  IconZoomMoney,
-} from '@tabler/icons-react';
+import { AppShell, Burger, Flex, NavLink, Title } from '@mantine/core';
+import { IconCash, IconHome, IconPhoto, IconUser } from '@tabler/icons-react';
 import Logo from '@/app/(main)/base/Logo';
 import NextLink from 'next/link';
+import { useSession } from 'next-auth/react';
 
 type Props = {
   children: React.ReactNode;
 };
 
 export default function AdminLayout({ children }: Props) {
-  const theme = useMantineTheme();
+  const session = useSession();
   const [opened, { toggle }] = useDisclosure();
 
   return (
@@ -29,12 +20,14 @@ export default function AdminLayout({ children }: Props) {
       navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
       padding="md"
     >
-      <AppShell.Header className="ps-3 md:ps-1 flex items-center">
+      <AppShell.Header>
         <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-        <div className="hidden md:flex items-center gap-3 h-full">
+        <Flex h={'100%'} align="center" visibleFrom="sm" gap="md" ml="xs">
           <Logo size={40} />
-          <h1 className="text-xl font-bold">Admin</h1>
-        </div>
+          <Title order={3} tt="capitalize">
+            {session.data?.user?.role}
+          </Title>
+        </Flex>
       </AppShell.Header>
 
       <AppShell.Navbar p="md">
