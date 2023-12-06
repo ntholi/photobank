@@ -2,22 +2,27 @@
 
 import { ActionIcon, Group, Text, TextInput } from '@mantine/core';
 import { IconDeviceFloppy, IconEdit } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 
 type Props = {
   label: string;
   id: any;
   value?: any;
-  action: (id: string, value: any) => void;
+  action: (id: string, value: any) => Promise<void>;
 };
 
 export default function EditableField({ id, label, value, action }: Props) {
   const [editOn, setEditOn] = useState(false);
   const [newValue, setNewValue] = useState(value);
+  const [isPending, startTransition] = useTransition();
 
-  const handleUpdate = () => {
-    action(id, newValue);
-    setEditOn(false);
+  const handleUpdate = async () => {
+    startTransition(async () => {
+      console.log('start');
+      await action(id, newValue);
+      console.log('end');
+      setEditOn(false);
+    });
   };
 
   return (
