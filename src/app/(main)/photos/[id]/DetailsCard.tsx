@@ -1,18 +1,23 @@
 'use client';
-import React from 'react';
-import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/card';
-import { Divider } from '@nextui-org/divider';
-import { PhotoWithData } from '@/lib/types';
-import { Avatar } from '@nextui-org/avatar';
-import { Link } from '@nextui-org/link';
-import { Button } from '@nextui-org/button';
-import PricingPlans from './PricingPlans';
-import { FaBookmark, FaCartArrowDown } from 'react-icons/fa6';
+import api from '@/lib/config/api';
 import { profilePath } from '@/lib/constants';
+import { PhotoWithData } from '@/lib/types';
+import {
+  Avatar,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+  Link,
+} from '@nextui-org/react';
+import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import api from '@/lib/config/api';
+import React from 'react';
+import { FaBookmark, FaCartArrowDown } from 'react-icons/fa6';
+import PricingPlans from './PricingPlans';
 
 type Props = {
   photo: PhotoWithData;

@@ -1,34 +1,31 @@
 'use client';
 import {
-  Navbar as NextUINavbar,
-  NavbarContent,
-  NavbarMenu,
-  NavbarMenuToggle,
-  NavbarBrand,
-  NavbarItem,
-  NavbarMenuItem,
-} from '@nextui-org/navbar';
-import {
   Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
   DropdownItem,
+  DropdownMenu,
   DropdownSection,
+  DropdownTrigger,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
+  Navbar as NextUINavbar,
 } from '@nextui-org/react';
 
-import { Link } from '@nextui-org/link';
+import { Link } from '@nextui-org/react';
 
-import NextLink from 'next/link';
-import Logo from './Logo';
-import { Avatar } from '@nextui-org/react';
-import { usePathname } from 'next/navigation';
-import { BiLogOut, BiUser } from 'react-icons/bi';
-import { useRouter } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
 import commonUrlPatterns from '@/app/api/users/commonUrlPatterns';
-import React, { useEffect } from 'react';
 import { profilePath } from '@/lib/constants';
+import { Avatar } from '@nextui-org/react';
+import { signOut, useSession } from 'next-auth/react';
+import NextLink from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { BiLogOut, BiUser } from 'react-icons/bi';
 import { nameToInitials } from '../[username]/UserBio';
+import Logo from './Logo';
 
 const navItems = [
   {

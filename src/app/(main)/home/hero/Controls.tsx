@@ -1,7 +1,6 @@
+import { CurrentSlideData, PhotoWithData } from '@/lib/types';
 import React from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import Progress from './Progress';
-import { CurrentSlideData, PhotoWithData } from '@/lib/types';
 
 type Props = {
   currentSlideData: CurrentSlideData;

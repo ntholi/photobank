@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/db';
-import { Image } from '@nextui-org/image';
+import { Image } from '@nextui-org/react';
 import DetailsCard from './DetailsCard';
 import { PhotoWithData } from '@/lib/types';
 import SimilarPhotos from './SimilarPhotos';

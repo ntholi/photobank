@@ -4,7 +4,7 @@ import { CircleMarker, MapContainer, Popup, TileLayer } from 'react-leaflet';
 import { Location } from '@prisma/client';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
-import { Card } from '@nextui-org/card';
+import { Card } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 
 type LocationWithCount = Location & { photoCount: number };

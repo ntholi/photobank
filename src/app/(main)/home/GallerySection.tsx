@@ -1,12 +1,10 @@
 'use client';
-import { Tab, Tabs } from '@nextui-org/tabs';
-import React, { useEffect } from 'react';
-import Gallery from './Gallery';
-import { FaImages, FaMap, FaSearch } from 'react-icons/fa';
-import { Divider } from '@nextui-org/divider';
-import { Input } from '@nextui-org/input';
-import FilterBar from './FilterBar';
+import { Divider, Input, Tab, Tabs } from '@nextui-org/react';
 import { Tag } from '@prisma/client';
+import React, { useEffect } from 'react';
+import { FaImages, FaMap, FaSearch } from 'react-icons/fa';
+import FilterBar from './FilterBar';
+import Gallery from './Gallery';
 import MapWrapper from './map/MapWrapper';
 
 export default function GallerySection() {

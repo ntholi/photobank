@@ -1,16 +1,13 @@
 'use client';
 
-import Image from 'next/image';
-import { Link } from '@nextui-org/link';
-import NextLink from 'next/link';
-import { Button } from '@nextui-org/button';
-import { Input } from '@nextui-org/input';
-import { SubmitHandler, set, useForm } from 'react-hook-form';
-import React, { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { signIn, useSession } from 'next-auth/react';
-import { profile } from 'console';
 import { profilePath } from '@/lib/constants';
+import { Button, Input, Link } from '@nextui-org/react';
+import { signIn, useSession } from 'next-auth/react';
+import Image from 'next/image';
+import NextLink from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 type InputType = {
   names: string;

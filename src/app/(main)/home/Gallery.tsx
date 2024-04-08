@@ -1,12 +1,11 @@
 'use client';
-import { Tag } from '@prisma/client';
-import { Image } from '@nextui-org/image';
-import React, { useEffect } from 'react';
-import axios from 'axios';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { PhotoWithData } from '@/lib/types';
+import { Image, Skeleton } from '@nextui-org/react';
+import { Tag } from '@prisma/client';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { Skeleton } from '@nextui-org/skeleton';
+import React, { useEffect } from 'react';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
 type Props = {
   searchKey: string;

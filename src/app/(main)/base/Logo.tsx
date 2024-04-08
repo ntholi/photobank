@@ -1,4 +1,4 @@
-import { Image } from '@nextui-org/image';
+import { Image } from '@nextui-org/react';
 
 type Props = {
   size?: number | string;

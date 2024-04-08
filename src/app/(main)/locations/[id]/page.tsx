@@ -1,11 +1,9 @@
-import prisma from '@/lib/db';
-import { notFound } from 'next/navigation';
-import React from 'react';
-import { GoLocation } from 'react-icons/go';
-import { MdLocationCity, MdLocationPin } from 'react-icons/md';
-import Gallery from './Gallary';
-import { PhotoWithData } from '@/lib/types';
 import { thumbnail } from '@/lib/config/urls';
+import prisma from '@/lib/db';
+import { PhotoWithData } from '@/lib/types';
+import { notFound } from 'next/navigation';
+import { MdLocationPin } from 'react-icons/md';
+import Gallery from './Gallary';
 
 type Props = { params: { id: string } };
 

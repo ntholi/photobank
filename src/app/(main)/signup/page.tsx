@@ -1,20 +1,16 @@
 'use client';
 
-import Image from 'next/image';
-import { Link } from '@nextui-org/link';
-import NextLink from 'next/link';
-import { Button } from '@nextui-org/button';
-import { Input } from '@nextui-org/input';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import React from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
-import { Divider } from '@nextui-org/react';
-import { signIn, useSession } from 'next-auth/react';
-import router from 'next/navigation';
 import { profilePath } from '@/lib/constants';
+import { Button, Divider, Input, Link } from '@nextui-org/react';
+import axios from 'axios';
+import { signIn, useSession } from 'next-auth/react';
+import Image from 'next/image';
+import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { FaFacebook } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
 
 type InputType = {
   names: string;

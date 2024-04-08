@@ -1,4 +1,4 @@
-import { Input } from '@nextui-org/input';
+import { Input } from '@nextui-org/react';
 import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
 import React, { useRef } from 'react';
 import { Location } from '@/lib/types';

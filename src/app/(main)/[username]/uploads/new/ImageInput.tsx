@@ -1,9 +1,8 @@
 'use client';
-import React from 'react';
-import { Button } from '@nextui-org/button';
-import { BiSolidCloudUpload } from 'react-icons/bi';
-import { Image } from '@nextui-org/image';
+import { Button, Image } from '@nextui-org/react';
 import { IconX } from '@tabler/icons-react';
+import React from 'react';
+import { BiSolidCloudUpload } from 'react-icons/bi';
 
 type Props = {
   file: File | null;

@@ -1,7 +1,7 @@
 'use client'; // Error components must be Client Components
 
 import { useEffect } from 'react';
-import { Button } from '@nextui-org/button';
+import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 
 export default function Error({

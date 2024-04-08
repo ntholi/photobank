@@ -1,4 +1,4 @@
-import { Image } from '@nextui-org/image';
+import { Image } from '@nextui-org/react';
 import PhotoUploadForm from './Form';
 import prisma from '@/lib/db';
 import { thumbnail } from '@/lib/config/urls';

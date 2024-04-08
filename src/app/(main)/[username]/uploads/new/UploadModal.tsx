@@ -1,20 +1,20 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import { profilePath } from '@/lib/constants';
+import useIsMobile from '@/lib/hooks/useIsMobile';
 import {
+  Button,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from '@nextui-org/modal';
-import { Button } from '@nextui-org/button';
-import useIsMobile from '@/lib/hooks/useIsMobile';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+  Progress,
+} from '@nextui-org/react';
 import axios, { AxiosProgressEvent } from 'axios';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 import ImageInput from './ImageInput';
-import { Progress } from '@nextui-org/progress';
-import { profilePath } from '@/lib/constants';
 
 type Props = {
   isOpen: boolean;

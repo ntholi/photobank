@@ -1,4 +1,4 @@
-import { Skeleton } from '@nextui-org/skeleton';
+import { Skeleton } from '@nextui-org/react';
 import React from 'react';
 
 export default function PhotoLoading() {

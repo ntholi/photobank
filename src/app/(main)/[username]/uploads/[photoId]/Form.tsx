@@ -1,17 +1,14 @@
 'use client';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { Textarea } from '@nextui-org/input';
-import { Button } from '@nextui-org/button';
-import { Tooltip } from '@nextui-org/tooltip';
-import { Checkbox } from '@nextui-org/checkbox';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import LocationInput from './LocationInput';
-import { useState } from 'react';
-import { Location } from '@/lib/types';
 import { profilePath } from '@/lib/constants';
+import { Location } from '@/lib/types';
+import { Button, Checkbox, Textarea, Tooltip } from '@nextui-org/react';
 import { IconInfoCircle } from '@tabler/icons-react';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import LocationInput from './LocationInput';
 
 type InputType = {
   caption: string;

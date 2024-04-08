@@ -1,6 +1,6 @@
 'use client';
 import { Tag } from '@prisma/client';
-import { Image } from '@nextui-org/image';
+import { Image } from '@nextui-org/react';
 import React from 'react';
 import { PhotoWithData } from '@/lib/types';
 import { useRouter } from 'next/navigation';

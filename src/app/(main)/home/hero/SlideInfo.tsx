@@ -1,10 +1,8 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import OtherInfo from './OtherInfo';
 import { CurrentSlideData, PhotoWithData } from '@/lib/types';
-import { Button } from '@nextui-org/button';
-import { useDisclosure } from '@nextui-org/modal';
+import { Button, useDisclosure } from '@nextui-org/react';
+import { motion } from 'framer-motion';
 import PhotoModal from '../../[username]/PhotoModal';
+import OtherInfo from './OtherInfo';
 
 type Props = {
   transitionData: PhotoWithData;

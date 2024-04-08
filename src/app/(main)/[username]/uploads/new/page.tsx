@@ -1,15 +1,12 @@
 'use client';
-import { Image } from '@nextui-org/image';
-import { Button } from '@nextui-org/button';
-import { GoCheck, GoUpload } from 'react-icons/go';
-import { useDisclosure } from '@nextui-org/modal';
-import UploadModal from './UploadModal';
-import { useSession } from 'next-auth/react';
+import { Button, Image, useDisclosure } from '@nextui-org/react';
 import { ContributorApplication, Role } from '@prisma/client';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import { User } from 'next-auth';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { GoCheck, GoUpload } from 'react-icons/go';
+import UploadModal from './UploadModal';
 
 type Props = { params: { username: string } };
 

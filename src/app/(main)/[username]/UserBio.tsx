@@ -1,13 +1,17 @@
 'use client';
 import { profilePath } from '@/lib/constants';
-import { Button } from '@nextui-org/button';
-import { Image } from '@nextui-org/image';
+import {
+  Button,
+  Image,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@nextui-org/react';
 import { Role, User } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { BiSolidBadgeCheck } from 'react-icons/bi';
 import WebsiteLink from './WebsiteLink';
-import { Popover, PopoverTrigger, PopoverContent } from '@nextui-org/popover';
 
 type Props = {
   user: User;

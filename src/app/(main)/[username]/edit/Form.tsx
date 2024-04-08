@@ -1,15 +1,18 @@
 'use client';
-import { Button } from '@nextui-org/button';
-import { Input, Textarea } from '@nextui-org/input';
-import { Link } from '@nextui-org/link';
-import { User as UserComponent } from '@nextui-org/user';
+import {
+  Button,
+  Input,
+  Link,
+  Spinner,
+  Textarea,
+  User as UserComponent,
+} from '@nextui-org/react';
 import { User } from '@prisma/client';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BiCheckCircle } from 'react-icons/bi';
-import { Spinner } from '@nextui-org/spinner';
 
 type InputType = {
   username: string;

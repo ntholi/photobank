@@ -1,17 +1,19 @@
 'use client';
-import { Tab, Tabs } from '@nextui-org/tabs';
-import { Image } from '@nextui-org/image';
-import { CircularProgress } from '@nextui-org/progress';
-import React, { Key } from 'react';
-import axios from 'axios';
-import { Chip } from '@nextui-org/chip';
-import { MdOutlineNoPhotography } from 'react-icons/md';
-import { PhotoStatus } from '@prisma/client';
 import { GalleryType } from '@/lib/constants';
 import { PhotoWithData } from '@/lib/types';
-import { useDisclosure } from '@nextui-org/modal';
+import {
+  Chip,
+  Image,
+  Skeleton,
+  Tab,
+  Tabs,
+  useDisclosure,
+} from '@nextui-org/react';
+import { PhotoStatus } from '@prisma/client';
+import axios from 'axios';
+import React, { Key } from 'react';
+import { MdOutlineNoPhotography } from 'react-icons/md';
 import PhotoModal from './PhotoModal';
-import { Skeleton } from '@nextui-org/skeleton';
 
 interface Photo {
   id: string;

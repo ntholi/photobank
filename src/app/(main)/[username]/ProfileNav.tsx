@@ -1,8 +1,11 @@
 'use client';
 
+import { profilePath } from '@/lib/constants';
+import useIsMobile from '@/lib/hooks/useIsMobile';
 import { Avatar, Button, Divider } from '@nextui-org/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
-import NextLink from 'next/link';
+import { default as Link, default as NextLink } from 'next/link';
 import React from 'react';
 import {
   GoBell,
@@ -12,11 +15,6 @@ import {
   GoSignOut,
   GoUpload,
 } from 'react-icons/go';
-import Link from 'next/link';
-import { signOut, useSession } from 'next-auth/react';
-import useIsMobile from '@/lib/hooks/useIsMobile';
-import { profileEnd } from 'console';
-import { profilePath } from '@/lib/constants';
 
 export default function ProfileNav() {
   const isMobile = useIsMobile();

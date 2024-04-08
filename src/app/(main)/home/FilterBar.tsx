@@ -1,8 +1,7 @@
-import React from 'react';
-import axios from 'axios';
+import { Chip, ScrollShadow } from '@nextui-org/react';
 import { Tag } from '@prisma/client';
-import { Chip } from '@nextui-org/chip';
-import { ScrollShadow } from '@nextui-org/scroll-shadow';
+import axios from 'axios';
+import React from 'react';
 
 type Props = {
   setSelected: React.Dispatch<React.SetStateAction<Tag | null>>;

@@ -1,20 +1,23 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { Modal, ModalBody, ModalContent } from '@nextui-org/modal';
-import { Button } from '@nextui-org/button';
-import Link from 'next/link';
-import { TiLocation } from 'react-icons/ti';
-import { IoMdOpen } from 'react-icons/io';
-import { profilePath } from '@/lib/constants';
-import { PhotoWithData } from '@/lib/types';
-import { Image } from '@nextui-org/image';
-import { watermarked } from '@/lib/config/urls';
-import { User } from '@nextui-org/user';
-import { FaBookmark } from 'react-icons/fa6';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import axios from 'axios';
 import api from '@/lib/config/api';
+import { watermarked } from '@/lib/config/urls';
+import { PhotoWithData } from '@/lib/types';
+import {
+  Button,
+  Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  User,
+} from '@nextui-org/react';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { FaBookmark } from 'react-icons/fa6';
+import { IoMdOpen } from 'react-icons/io';
+import { TiLocation } from 'react-icons/ti';
 
 type Props = {
   isOpen: boolean;

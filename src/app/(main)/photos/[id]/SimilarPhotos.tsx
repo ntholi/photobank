@@ -1,7 +1,7 @@
 import prisma from '@/lib/db';
 import { PhotoWithData } from '@/lib/types';
 import React from 'react';
-import { Image } from '@nextui-org/image';
+import { Image } from '@nextui-org/react';
 import Link from 'next/link';
 import { thumbnail } from '@/lib/config/urls';
 
