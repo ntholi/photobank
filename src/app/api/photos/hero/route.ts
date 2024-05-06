@@ -17,12 +17,13 @@ export async function GET(req: Request) {
   });
 
   const photos = data.map((photo) => {
-    const fileName = photo.fileName.split('.')[0];
-    return {
-      ...photo,
-      url: thumbnail(fileName),
-    };
+    if (typeof photo.fileName === 'string') {
+      const fileName = (photo.fileName as string).split('.')[0];
+      return {
+        ...photo,
+        url: thumbnail(fileName),
+      };
+    }
   });
-
   return NextResponse.json({ photos });
 }
