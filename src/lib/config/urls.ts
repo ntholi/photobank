@@ -14,10 +14,10 @@ export const imageProcessor = (
 
 export const thumbnail = (fileName: string) => {
   const name = fileName.split('.')[0];
-  return `https://d3tw6tl1trq98w.cloudfront.net/${name}-thumb.jpg`;
+  return `${process.env.AWS_CLOUDFRONT_URL}/${name}-thumb.jpg`;
 };
 
 export const watermarked = (fileName: string) => {
   const name = fileName.split('.')[0];
-  return `https://d3tw6tl1trq98w.cloudfront.net/${name}.webp`;
+  return `${process.env.AWS_CLOUDFRONT_URL}/${name}.webp`;
 };
