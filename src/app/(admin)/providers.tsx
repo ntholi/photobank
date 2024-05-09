@@ -1,11 +1,29 @@
 'use client';
-import { SessionProvider } from 'next-auth/react';
-import { MantineProvider } from '@mantine/core';
+import {
+  MantineColorSchemeManager,
+  MantineProvider,
+  createTheme,
+} from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import React, { Suspense } from 'react';
+import { ModalsProvider } from '@mantine/modals';
+import SessionProvider from './auth/SessionProvider';
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({ children }: { children: React.ReactNode }) {
+  const theme = createTheme({
+    breakpoints: {
+      xl: '1538px',
+    },
+  });
+
   return (
-    <MantineProvider>
-      <SessionProvider>{children}</SessionProvider>
-    </MantineProvider>
+    <Suspense>
+      <MantineProvider defaultColorScheme='auto' theme={theme}>
+        <Notifications />
+        <ModalsProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </ModalsProvider>
+      </MantineProvider>
+    </Suspense>
   );
 }

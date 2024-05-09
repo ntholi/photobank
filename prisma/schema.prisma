@@ -148,3 +148,8 @@ model SavedPhotos {
 
   @@map("saved_photos")
 }
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String
+}
