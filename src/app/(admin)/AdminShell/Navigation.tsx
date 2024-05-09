@@ -19,43 +19,19 @@ export default function Navigation() {
   const searchParams = useSearchParams();
 
   return (
-    <AppShell.Navbar p='xs'>
+    <AppShell.Navbar p="xs">
       <AppShell.Section grow component={ScrollArea}>
         <NavLink
-          label='Home Page'
-          component={Link}
-          active={pathname.startsWith('/admin/home-page')}
-          href={'/admin/home-page'}
-          leftSection={<IconHome size='1.1rem' />}
-          rightSection={<IconChevronRight size='0.8rem' stroke={1.5} />}
-        />
-        <NavLink
-          label='Posts'
-          component={Link}
-          active={pathname.startsWith('/admin/posts')}
-          href={'/admin/posts'}
-          leftSection={<IconNews size='1.1rem' />}
-          rightSection={<IconChevronRight size='0.8rem' stroke={1.5} />}
-        />
-        <NavLink
-          label='Categories'
+          label="Categories"
           component={Link}
           active={pathname.startsWith('/admin/categories')}
           href={'/admin/categories'}
-          leftSection={<IconCategory size='1.1rem' />}
-          rightSection={<IconChevronRight size='0.8rem' stroke={1.5} />}
-        />
-        <NavLink
-          label='Authors'
-          component={Link}
-          active={pathname.startsWith('/admin/authors')}
-          href={'/admin/authors'}
-          leftSection={<IconUserEdit size='1.1rem' />}
-          rightSection={<IconChevronRight size='0.8rem' stroke={1.5} />}
+          leftSection={<IconCategory size="1.1rem" />}
+          rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
         />
       </AppShell.Section>
       <AppShell.Section>
-        <Divider mb='md' />
+        <Divider mb="md" />
         <UserButton />
       </AppShell.Section>
     </AppShell.Navbar>
@@ -77,11 +53,11 @@ function UserButton() {
 
   return (
     <NavLink
-      label='Logout'
+      label="Logout"
       description={user?.displayName}
       onClick={openModal}
       leftSection={<Avatar src={user?.photoURL} />}
-      rightSection={<IconLogout2 size='1.1rem' />}
+      rightSection={<IconLogout2 size="1.1rem" />}
     />
   );
 }
