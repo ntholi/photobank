@@ -23,7 +23,7 @@ interface WithId {
 }
 type Props<T extends WithId> = {
   navLinkProps: (item: T) => NavItem;
-  onDelete?: (id: string | number) => Promise<void>;
+  onDelete?: (id: any) => Promise<void>;
   data: Promise<T[]>;
   baseUrl: string;
   children: React.ReactNode;
@@ -70,7 +70,7 @@ interface WithId {
 
 type NavContainerProps<T extends WithId> = {
   navLinkProps: (item: T, index: number) => NavItem;
-  onDelete?: (id: string | number) => Promise<void>;
+  onDelete?: (id: any) => Promise<void>;
   data: Promise<T[]>;
   baseUrl: string;
 };

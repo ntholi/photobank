@@ -21,7 +21,7 @@ export interface NavItem extends NavLinkProps {
 type Props = {
   navLinks: NavItem[];
   baseUrl: string;
-  onDelete?: (id: string | number) => Promise<void>;
+  onDelete?: (id: any) => Promise<void>;
 };
 
 export default function Navbar({ navLinks, baseUrl, onDelete }: Props) {
@@ -35,7 +35,7 @@ export default function Navbar({ navLinks, baseUrl, onDelete }: Props) {
         <CreateButton href={`${baseUrl}/new`} />
         <DeleteButton
           onClick={async () => {
-            await onDelete?.(active as string | number);
+            await onDelete?.(active);
           }}
         />
       </Flex>
