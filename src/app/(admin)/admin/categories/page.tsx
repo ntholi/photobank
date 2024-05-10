@@ -1,4 +1,5 @@
+import NothingSelected from '../../admin-core/components/NothingSelected';
+
 export default async function CategoryPage() {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return <>Hello World</>;
+  return <NothingSelected title="Categories" />;
 }
