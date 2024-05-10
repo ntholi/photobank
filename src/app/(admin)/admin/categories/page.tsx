@@ -50,7 +50,10 @@ export default async function CategoryPage() {
               <ScrollArea h={{ base: 150, sm: '71vh' }} type="always" p={'sm'}>
                 <Navbar
                   data={data}
-                  navLinkProps={(it) => ({ label: it.name })}
+                  navLinkProps={(it) => ({
+                    label: it.name,
+                    href: `/admin/categories/${it.id}`,
+                  })}
                 />
               </ScrollArea>
             </Stack>

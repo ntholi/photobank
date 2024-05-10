@@ -9,7 +9,7 @@ type Props<T> = {
   navLinkProps: (
     item: T,
     index: number,
-  ) => NavLinkProps & { href?: string | UrlObject };
+  ) => NavLinkProps & { href: string | UrlObject };
   data: Promise<T[]>;
 };
 export default async function Navbar<T>(props: Props<T>) {
@@ -30,7 +30,7 @@ async function Display<T>({ data, navLinkProps }: Props<T>) {
       {items.map((item, index) => {
         return (
           <NavLink
-            component="button"
+            component={Link}
             key={index}
             // active={id === item.id}
             {...navLinkProps(item, index)}
