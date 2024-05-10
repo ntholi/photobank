@@ -12,7 +12,7 @@ import {
   Title,
 } from '@mantine/core';
 import Link from 'next/link';
-import { PropsWithChildren, Suspense } from 'react';
+import { Suspense } from 'react';
 import Navbar, { NavItem } from './Navbar';
 import CreateButton from './components/CreateButton';
 import DeleteButton from './components/DeleteButton';
@@ -23,7 +23,7 @@ interface WithId {
 }
 type Props<T extends WithId> = {
   navLinkProps: (item: T) => NavItem;
-  onDelete?: (id: string) => Promise<void>;
+  onDelete?: (id: string | number) => Promise<void>;
   data: Promise<T[]>;
   baseUrl: string;
   children: React.ReactNode;
@@ -65,12 +65,12 @@ export default async function ResourcePage<T extends WithId>({
 }
 
 interface WithId {
-  id: number | string;
+  id: string | number;
 }
 
 type NavContainerProps<T extends WithId> = {
   navLinkProps: (item: T, index: number) => NavItem;
-  onDelete?: (id: string) => Promise<void>;
+  onDelete?: (id: string | number) => Promise<void>;
   data: Promise<T[]>;
   baseUrl: string;
 };

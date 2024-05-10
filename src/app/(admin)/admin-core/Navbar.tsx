@@ -6,8 +6,8 @@ import {
   NavLinkProps,
   ScrollArea,
 } from '@mantine/core';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { UrlObject } from 'url';
 import CreateButton from './components/CreateButton';
 import DeleteButton from './components/DeleteButton';
@@ -21,17 +21,23 @@ export interface NavItem extends NavLinkProps {
 type Props = {
   navLinks: NavItem[];
   baseUrl: string;
-  onDelete?: (id: string) => Promise<void>;
+  onDelete?: (id: string | number) => Promise<void>;
 };
 
 export default function Navbar({ navLinks, baseUrl, onDelete }: Props) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [active, setActive] = useState<string | number | null>(null);
 
   return (
     <>
       <Flex h={60} p="md" justify="space-between">
         <CreateButton href={`${baseUrl}/new`} />
-        <DeleteButton onClick={onDelete} />
+        <DeleteButton
+          onClick={async () => {
+            await onDelete?.(active as string | number);
+          }}
+        />
       </Flex>
       <SearchField />
       <Divider />
@@ -39,9 +45,11 @@ export default function Navbar({ navLinks, baseUrl, onDelete }: Props) {
         {navLinks.map(({ id, href, ...link }) => (
           <NavLink
             key={id}
-            href={href}
-            component={Link}
             {...link}
+            onClick={() => {
+              setActive(id);
+              router.push(href as string);
+            }}
             active={pathname.endsWith(href as string)}
           />
         ))}
