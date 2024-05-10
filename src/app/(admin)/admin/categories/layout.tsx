@@ -7,6 +7,7 @@ export default async function Layout({ children }: PropsWithChildren) {
   return (
     <ResourcePage
       data={data}
+      baseUrl="/admin/categories"
       navLinkProps={(it) => ({
         id: it.id,
         label: it.name,

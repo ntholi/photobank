@@ -20,15 +20,18 @@ export interface NavItem extends NavLinkProps {
 
 type Props = {
   navLinks: NavItem[];
+  baseUrl: string;
+  onDelete?: (id: string) => Promise<void>;
 };
 
-export default function Navbar({ navLinks }: Props) {
+export default function Navbar({ navLinks, baseUrl, onDelete }: Props) {
   const pathname = usePathname();
+
   return (
     <>
       <Flex h={60} p="md" justify="space-between">
-        <CreateButton href="/admin/categories/new" />
-        <DeleteButton />
+        <CreateButton href={`${baseUrl}/new`} />
+        <DeleteButton onClick={onDelete} />
       </Flex>
       <SearchField />
       <Divider />

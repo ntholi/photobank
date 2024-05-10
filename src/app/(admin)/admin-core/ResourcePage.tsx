@@ -22,16 +22,19 @@ interface WithId {
   id: string | number;
 }
 type Props<T extends WithId> = {
+  navLinkProps: (item: T) => NavItem;
   onDelete?: (id: string) => Promise<void>;
   data: Promise<T[]>;
-  navLinkProps: (item: T) => NavItem;
-} & PropsWithChildren;
+  baseUrl: string;
+  children: React.ReactNode;
+};
 
 export default async function ResourcePage<T extends WithId>({
   children,
   data,
   navLinkProps,
   onDelete,
+  baseUrl,
 }: Props<T>) {
   return (
     <Grid columns={14} gutter={'xl'}>
@@ -39,7 +42,12 @@ export default async function ResourcePage<T extends WithId>({
         <Paper withBorder>
           <Stack gap={0} w={'100%'}>
             <Suspense fallback={<Loader />}>
-              <NavContainer data={data} navLinkProps={navLinkProps} />
+              <NavContainer
+                baseUrl={baseUrl}
+                onDelete={onDelete}
+                data={data}
+                navLinkProps={navLinkProps}
+              />
             </Suspense>
           </Stack>
         </Paper>
@@ -62,13 +70,15 @@ interface WithId {
 
 type NavContainerProps<T extends WithId> = {
   navLinkProps: (item: T, index: number) => NavItem;
+  onDelete?: (id: string) => Promise<void>;
   data: Promise<T[]>;
+  baseUrl: string;
 };
 
 async function NavContainer<T extends WithId>(props: NavContainerProps<T>) {
-  const { navLinkProps, data } = props;
+  const { navLinkProps, data, baseUrl, onDelete } = props;
   const items = (await data).map((item, index) => navLinkProps(item, index));
-  return <Navbar navLinks={items} />;
+  return <Navbar navLinks={items} baseUrl={baseUrl} onDelete={onDelete} />;
 }
 
 function Loader() {
