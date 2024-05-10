@@ -1,12 +1,10 @@
 'use client';
 
-import { Box, CloseButton, TextInput } from '@mantine/core';
+import { Box, CloseButton, TextInput, TextInputProps } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import React from 'react';
 
-type Props = {};
-
-export default function SearchField({}: Props) {
+export default function SearchField(props: TextInputProps) {
   const [value, setValue] = React.useState('');
 
   const leftSection = value ? (
@@ -30,6 +28,7 @@ export default function SearchField({}: Props) {
           // onSearch(event.currentTarget.value);
         }}
         rightSection={leftSection}
+        {...props}
       />
     </Box>
   );

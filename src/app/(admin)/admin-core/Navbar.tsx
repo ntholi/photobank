@@ -1,57 +1,36 @@
-import { NavLink, NavLinkProps, Skeleton, Stack } from '@mantine/core';
-import { headers } from 'next/headers';
+'use client';
+import {
+  Divider,
+  Flex,
+  NavLink,
+  NavLinkProps,
+  ScrollArea,
+} from '@mantine/core';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { UrlObject } from 'url';
+import CreateButton from './components/CreateButton';
+import DeleteButton from './components/DeleteButton';
+import SearchField from './components/SearchField';
+import { useState } from 'react';
 
-interface WithId {
-  id: number | string;
-}
-
-type Props<T extends WithId> = {
-  navLinkProps: (
-    item: T,
-    index: number,
-  ) => NavLinkProps & { href: string | UrlObject };
-  data: Promise<T[]>;
+type Props = {
+  navLinks: NavLinkProps & { href: string | UrlObject }[];
 };
-export default async function Navbar<T extends WithId>(props: Props<T>) {
-  const { navLinkProps, data } = props;
-
-  return (
-    <Suspense fallback={<Loader />}>
-      <Display data={data} navLinkProps={navLinkProps} />
-    </Suspense>
-  );
-}
-
-async function Display<T extends WithId>({ data, navLinkProps }: Props<T>) {
-  const headersList = headers();
-  const fullUrl = headersList.get('referer') || '';
-  const items = await data;
-
+export default function Navbar({ navLinks }: Props) {
+  const [active, setActive] = useState(0);
   return (
     <>
-      {items.map((item, index) => {
-        return (
-          <NavLink
-            component={Link}
-            key={index}
-            active={fullUrl.endsWith(String(item.id))}
-            {...navLinkProps(item, index)}
-          />
-        );
-      })}
+      <Flex h={60} p="md" justify="space-between">
+        <CreateButton href="/admin/categories/new" />
+        <DeleteButton />
+      </Flex>
+      <SearchField />
+      <Divider />
+      <ScrollArea h={{ base: 150, sm: '71vh' }} type="always" p={'sm'}>
+        {navLinks.map((it, index) => (
+          <NavLink component={Link} key={index} {...it} />
+        ))}
+      </ScrollArea>
     </>
-  );
-}
-
-function Loader() {
-  return (
-    <Stack>
-      {[...Array(7)].map((_, i) => (
-        <Skeleton key={i} h={41} />
-      ))}
-    </Stack>
   );
 }
