@@ -13,9 +13,15 @@ import CreateButton from './components/CreateButton';
 import DeleteButton from './components/DeleteButton';
 import SearchField from './components/SearchField';
 
+export interface NavItem extends NavLinkProps {
+  id: string | number;
+  href: string | UrlObject;
+}
+
 type Props = {
-  navLinks: NavLinkProps & { id: string | number; href: string | UrlObject }[];
+  navLinks: NavItem[];
 };
+
 export default function Navbar({ navLinks }: Props) {
   const pathname = usePathname();
   return (

@@ -5,7 +5,6 @@ import {
   Grid,
   GridCol,
   Group,
-  NavLinkProps,
   Paper,
   ScrollArea,
   Skeleton,
@@ -14,11 +13,10 @@ import {
 } from '@mantine/core';
 import Link from 'next/link';
 import { PropsWithChildren, Suspense } from 'react';
-import Navbar from './Navbar';
+import Navbar, { NavItem } from './Navbar';
 import CreateButton from './components/CreateButton';
 import DeleteButton from './components/DeleteButton';
 import SearchField from './components/SearchField';
-import { UrlObject } from 'url';
 
 interface WithId {
   id: string | number;
@@ -26,12 +24,7 @@ interface WithId {
 type Props<T extends WithId> = {
   onDelete?: (id: string) => Promise<void>;
   data: Promise<T[]>;
-  navLinkProps: (item: T) => {
-    id: string | number;
-    description?: string;
-    label: string;
-    href: string;
-  };
+  navLinkProps: (item: T) => NavItem;
 } & PropsWithChildren;
 
 export default async function ResourcePage<T extends WithId>({
@@ -68,10 +61,7 @@ interface WithId {
 }
 
 type NavContainerProps<T extends WithId> = {
-  navLinkProps: (
-    item: T,
-    index: number,
-  ) => NavLinkProps & { id: string | number; href: string | UrlObject };
+  navLinkProps: (item: T, index: number) => NavItem;
   data: Promise<T[]>;
 };
 
