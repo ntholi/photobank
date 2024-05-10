@@ -7,19 +7,17 @@ import {
   ScrollArea,
 } from '@mantine/core';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { UrlObject } from 'url';
 import CreateButton from './components/CreateButton';
 import DeleteButton from './components/DeleteButton';
 import SearchField from './components/SearchField';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 type Props = {
   navLinks: NavLinkProps & { id: string | number; href: string | UrlObject }[];
 };
 export default function Navbar({ navLinks }: Props) {
-  const [active, setActive] = useState<string | number | undefined>();
-  const router = useRouter();
+  const pathname = usePathname();
   return (
     <>
       <Flex h={60} p="md" justify="space-between">
@@ -32,12 +30,10 @@ export default function Navbar({ navLinks }: Props) {
         {navLinks.map(({ id, href, ...link }) => (
           <NavLink
             key={id}
+            href={href}
+            component={Link}
             {...link}
-            active={active === id}
-            onClick={() => {
-              setActive(id);
-              router.push(href as string);
-            }}
+            active={pathname.endsWith(href as string)}
           />
         ))}
       </ScrollArea>

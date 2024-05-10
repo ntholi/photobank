@@ -77,9 +77,7 @@ type NavContainerProps<T extends WithId> = {
 
 async function NavContainer<T extends WithId>(props: NavContainerProps<T>) {
   const { navLinkProps, data } = props;
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-  const _data = await data;
-  const items = _data.map((item, index) => navLinkProps(item, index));
+  const items = (await data).map((item, index) => navLinkProps(item, index));
   return <Navbar navLinks={items} />;
 }
 
