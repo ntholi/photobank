@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, CloseButton, TextInput } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import React from 'react';
@@ -19,9 +21,9 @@ export default function SearchField({}: Props) {
   );
 
   return (
-    <Box p='md' pt={0}>
+    <Box p="md" pt={0}>
       <TextInput
-        placeholder='Search'
+        placeholder="Search"
         value={value}
         onChange={(event) => {
           setValue(event.currentTarget.value);

@@ -1,3 +1,5 @@
+'use client';
+
 import {
   ActionIcon,
   ActionIconProps,
@@ -11,7 +13,7 @@ export default function ThemedIconButton({ children, ...props }: Props) {
   const colorScheme = useComputedColorScheme();
   return (
     <ActionIcon
-      color='dark'
+      color="dark"
       variant={colorScheme === 'dark' ? 'default' : 'filled'}
       {...props}
     >

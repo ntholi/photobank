@@ -1,5 +1,3 @@
-'use client';
-
 import {
   CreateView,
   CreateViewProps,
@@ -32,8 +30,11 @@ import CreateButton from '../../admin-core/components/CreateButton';
 import DeleteButton from '../../admin-core/components/DeleteButton';
 import SearchField from '../../admin-core/components/SearchField';
 import Navbar from '../../admin-core/Navbar';
+import { deleteCategory } from './actions';
+import prisma from '@/lib/db';
 
-export default function CategoryPage() {
+export default async function CategoryPage() {
+  const data = prisma.category.findMany();
   return (
     <Grid columns={14} gutter={'xl'}>
       <GridCol span={{ base: 13, sm: 4 }} pr={{ base: 7, sm: 0 }}>
@@ -41,13 +42,16 @@ export default function CategoryPage() {
           <Flex>
             <Stack gap={0} w={'100%'}>
               <Flex h={60} p="md" justify="space-between">
-                <CreateButton disabled={false} />
-                <DeleteButton repository={null} />
+                <CreateButton href="/admin/categories/new" />
+                <DeleteButton onClick={deleteCategory} />
               </Flex>
               <SearchField />
               <Divider />
               <ScrollArea h={{ base: 150, sm: '71vh' }} type="always" p={'sm'}>
-                <Navbar navLinkProps={undefined} />
+                <Navbar
+                  data={data}
+                  navLinkProps={(it) => ({ label: it.name })}
+                />
               </ScrollArea>
             </Stack>
           </Flex>
@@ -72,8 +76,8 @@ function Header({
   showEditButton: boolean;
   resourceLabel: string;
 }) {
-  const [_, setView] = useQueryState('view');
-  const [id, setId] = useQueryState('id');
+  // const [_, setView] = useQueryState('view');
+  // const [id, setId] = useQueryState('id');
 
   return (
     <>
@@ -82,19 +86,19 @@ function Header({
           {resourceLabel}
         </Title>
         <Group>
-          {id && showEditButton && (
+          {/* {id && showEditButton && (
             <Button type="submit" color="dark" onClick={() => setView('edit')}>
               Edit
             </Button>
-          )}
+          )} */}
           <Divider orientation="vertical" />
           <CloseButton
             size="lg"
             variant="transparent"
-            onClick={async () => {
-              await setView(null);
-              await setId(null);
-            }}
+            // onClick={async () => {
+            //   await setView(null);
+            //   await setId(null);
+            // }}
           />
         </Group>
       </Flex>

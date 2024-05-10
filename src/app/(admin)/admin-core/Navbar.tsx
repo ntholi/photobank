@@ -1,37 +1,43 @@
 import { NavLink, NavLinkProps, Skeleton, Stack } from '@mantine/core';
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { Suspense, useContext } from 'react';
 import { UrlObject } from 'url';
-import { Resource } from './repository/repository';
 import { FirestoreDataContext } from './RepositoryDataProvider';
-import { useQueryState } from 'nuqs';
+// import { useQueryState } from 'nuqs';
 
-type Props<T extends Resource> = {
+type Props<T> = {
   navLinkProps: (
     item: T,
     index: number,
   ) => NavLinkProps & { href?: string | UrlObject };
+  data: Promise<T[]>;
 };
-export default function Navbar<T extends Resource>(props: Props<T>) {
-  const { navLinkProps } = props;
-  const { data, loading } = useContext(FirestoreDataContext);
-  const [id, setId] = useQueryState('id');
+export default async function Navbar<T>(props: Props<T>) {
+  const { navLinkProps, data } = props;
+  // const [id, setId] = useQueryState('id');
 
   return (
+    <Suspense fallback={<Loader />}>
+      <Display data={data} navLinkProps={navLinkProps} />
+    </Suspense>
+  );
+}
+
+async function Display<T>({ data, navLinkProps }: Props<T>) {
+  const items = await data;
+  return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        data.map((item, index) => (
+      {items.map((item, index) => {
+        return (
           <NavLink
-            component='button'
+            component="button"
             key={index}
-            active={id === item.id}
+            // active={id === item.id}
             {...navLinkProps(item, index)}
-            onClick={() => setId(item.id)}
+            // onClick={() => setId(item.id)}
           />
-        ))
-      )}
+        );
+      })}
     </>
   );
 }

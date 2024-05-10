@@ -30,15 +30,17 @@ export default function Logo({ size = 'xs' }: Props) {
     xl: 120,
   };
 
+  return <Text>Logo</Text>;
+
   return (
-    <Link href='/'>
+    <Link href="/">
       <Image
         component={NextImage}
         h={sizeMap[size]}
         width={sizeMap[size] * 5}
         height={sizeMap[size] * 2}
         src={logo}
-        alt='Logo'
+        alt="Logo"
       />
     </Link>
   );
