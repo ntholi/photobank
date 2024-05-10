@@ -8,6 +8,7 @@ export default async function Layout({ children }: PropsWithChildren) {
     <ResourcePage
       data={data}
       navLinkProps={(it) => ({
+        id: it.id,
         label: it.name,
         href: `/admin/categories/${it.id}`,
       })}

@@ -5,7 +5,6 @@ import {
   Grid,
   GridCol,
   Group,
-  NavLink,
   NavLinkProps,
   Paper,
   ScrollArea,
@@ -27,7 +26,12 @@ interface WithId {
 type Props<T extends WithId> = {
   onDelete?: (id: string) => Promise<void>;
   data: Promise<T[]>;
-  navLinkProps: (item: T) => { label: string; href: string };
+  navLinkProps: (item: T) => {
+    id: string | number;
+    description?: string;
+    label: string;
+    href: string;
+  };
 } & PropsWithChildren;
 
 export default async function ResourcePage<T extends WithId>({
@@ -67,7 +71,7 @@ type NavContainerProps<T extends WithId> = {
   navLinkProps: (
     item: T,
     index: number,
-  ) => NavLinkProps & { href: string | UrlObject };
+  ) => NavLinkProps & { id: string | number; href: string | UrlObject };
   data: Promise<T[]>;
 };
 
