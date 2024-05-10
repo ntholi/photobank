@@ -8,17 +8,16 @@ import {
   Group,
   Paper,
   ScrollArea,
-  Skeleton,
   Stack,
-  Text,
   Title,
 } from '@mantine/core';
+import Link from 'next/link';
+import { PropsWithChildren } from 'react';
 import Navbar from '../../admin-core/Navbar';
 import CreateButton from '../../admin-core/components/CreateButton';
 import DeleteButton from '../../admin-core/components/DeleteButton';
 import SearchField from '../../admin-core/components/SearchField';
 import { deleteCategory } from './actions';
-import { PropsWithChildren } from 'react';
 
 export default async function Layout({ children }: PropsWithChildren) {
   const data = prisma.category.findMany();
@@ -49,7 +48,7 @@ export default async function Layout({ children }: PropsWithChildren) {
       </GridCol>
       <GridCol span={{ base: 13, sm: 10 }} pos={'relative'}>
         <Paper withBorder>
-          <Header showEditButton={false} resourceLabel={'Hello World'} />
+          <Header resourceLabel={'Hello World'} />
           <ScrollArea h="78vh" type="always">
             {children}
           </ScrollArea>
@@ -59,16 +58,7 @@ export default async function Layout({ children }: PropsWithChildren) {
   );
 }
 
-function Header({
-  showEditButton,
-  resourceLabel,
-}: {
-  showEditButton: boolean;
-  resourceLabel: string;
-}) {
-  // const [_, setView] = useQueryState('view');
-  // const [id, setId] = useQueryState('id');
-
+function Header({ resourceLabel }: { resourceLabel: string }) {
   return (
     <>
       <Flex justify="space-between" align={'center'} h={60} p="md">
@@ -76,19 +66,12 @@ function Header({
           {resourceLabel}
         </Title>
         <Group>
-          {/* {id && showEditButton && (
-            <Button type="submit" color="dark" onClick={() => setView('edit')}>
-              Edit
-            </Button>
-          )} */}
           <Divider orientation="vertical" />
           <CloseButton
+            component={Link}
+            href={'.'}
             size="lg"
             variant="transparent"
-            // onClick={async () => {
-            //   await setView(null);
-            //   await setId(null);
-            // }}
           />
         </Group>
       </Flex>
