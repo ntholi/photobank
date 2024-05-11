@@ -7,12 +7,12 @@ import Providers from './providers';
 import { PropsWithChildren } from 'react';
 
 export const metadata = {
-  title: 'Mamosetse Admin',
+  title: 'Lehakoe Admin',
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         <ColorSchemeScript />
       </head>
