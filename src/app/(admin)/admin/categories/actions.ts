@@ -11,10 +11,10 @@ export async function createCategory(data: Category) {
 }
 
 export async function deleteCategory(id: string) {
-  console.log('*********** deleteCategory', id);
-  // await prisma.category.delete({
-  //   where: {
-  //     id: Number(id),
-  //   },
-  // });
+  await prisma.category.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+  revalidatePath('/admin/categories');
 }

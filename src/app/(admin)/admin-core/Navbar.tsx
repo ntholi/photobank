@@ -21,23 +21,19 @@ export interface NavItem extends NavLinkProps {
 type Props = {
   navLinks: NavItem[];
   baseUrl: string;
-  onDelete?: (id: any) => Promise<void>;
+  onDelete?: (id: string | number) => Promise<void>;
 };
 
 export default function Navbar({ navLinks, baseUrl, onDelete }: Props) {
   const pathname = usePathname();
   const router = useRouter();
-  const [active, setActive] = useState<string | number | null>(null);
+  const [active, setActive] = useState<string | number | undefined>();
 
   return (
     <>
       <Flex h={60} p="md" justify="space-between">
         <CreateButton href={`${baseUrl}/new`} />
-        <DeleteButton
-          onClick={async () => {
-            await onDelete?.(active);
-          }}
-        />
+        <DeleteButton disabled={!active} onClick={onDelete} id={active} />
       </Flex>
       <SearchField />
       <Divider />

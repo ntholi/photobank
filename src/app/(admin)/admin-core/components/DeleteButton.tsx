@@ -3,15 +3,18 @@
 import { ActionIcon, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconTrashFilled } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
 type Props = {
   disabled?: boolean;
-  onClick?: () => Promise<void>;
+  id?: string | number;
+  onClick?: (id: string | number) => Promise<void>;
 };
 
-export default function DeleteButton({ disabled, onClick }: Props) {
+export default function DeleteButton({ disabled, id, onClick }: Props) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const openDeleteModal = () =>
     modals.openConfirmModal({
@@ -22,8 +25,9 @@ export default function DeleteButton({ disabled, onClick }: Props) {
       confirmProps: { color: 'red' },
       onConfirm: () => {
         startTransition(async () => {
-          if (onClick) {
-            await onClick();
+          if (id && onClick) {
+            await onClick(id);
+            router.back();
           }
         });
       },
