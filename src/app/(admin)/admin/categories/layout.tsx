@@ -8,6 +8,7 @@ export default async function Layout({ children }: PropsWithChildren) {
   return (
     <ResourcePage
       data={data}
+      label={'Categories'}
       baseUrl="/admin/categories"
       onDelete={deleteCategory}
       navLinkProps={(it) => ({

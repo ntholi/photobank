@@ -26,6 +26,7 @@ type Props<T extends WithId> = {
   onDelete?: (id: any) => Promise<void>;
   data: Promise<T[]>;
   baseUrl: string;
+  label?: string;
   children: React.ReactNode;
 };
 
@@ -35,6 +36,7 @@ export default async function ResourcePage<T extends WithId>({
   navLinkProps,
   onDelete,
   baseUrl,
+  label,
 }: Props<T>) {
   return (
     <Grid columns={14} gutter={'xl'}>
@@ -54,7 +56,7 @@ export default async function ResourcePage<T extends WithId>({
       </GridCol>
       <GridCol span={{ base: 13, sm: 10 }} pos={'relative'}>
         <Paper withBorder>
-          <Header resourceLabel={'Hello World'} />
+          <Header label={label} />
           <ScrollArea h="78vh" type="always">
             {children}
           </ScrollArea>
@@ -101,12 +103,12 @@ function Loader() {
   );
 }
 
-function Header({ resourceLabel }: { resourceLabel: string }) {
+function Header({ label }: { label?: string }) {
   return (
     <>
       <Flex justify="space-between" align={'center'} h={60} p="md">
         <Title size={18} fw={500}>
-          {resourceLabel}
+          {label}
         </Title>
         <Group>
           <Divider orientation="vertical" />
