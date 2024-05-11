@@ -7,6 +7,7 @@ import {
   IconHome,
   IconLogout2,
   IconNews,
+  IconUser,
   IconUserEdit,
 } from '@tabler/icons-react';
 import { signOut } from 'firebase/auth';
@@ -27,6 +28,14 @@ export default function Navigation() {
           active={pathname.startsWith('/admin/categories')}
           href={'/admin/categories'}
           leftSection={<IconCategory size="1.1rem" />}
+          rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+        />
+        <NavLink
+          label="Users"
+          component={Link}
+          active={pathname.startsWith('/admin/users')}
+          href={'/admin/users'}
+          leftSection={<IconUser size="1.1rem" />}
           rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
         />
       </AppShell.Section>
