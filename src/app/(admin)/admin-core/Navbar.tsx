@@ -2,6 +2,7 @@
 import {
   Divider,
   Flex,
+  Group,
   NavLink,
   NavLinkProps,
   ScrollArea,
@@ -12,6 +13,7 @@ import { UrlObject } from 'url';
 import CreateButton from './components/CreateButton';
 import DeleteButton from './components/DeleteButton';
 import SearchField from './components/SearchField';
+import EditButton from './components/EditButton';
 
 export interface NavItem extends NavLinkProps {
   id: string | number;
@@ -33,7 +35,10 @@ export default function Navbar({ navLinks, baseUrl, onDelete }: Props) {
     <>
       <Flex h={60} p="md" justify="space-between">
         <CreateButton href={`${baseUrl}/new`} />
-        <DeleteButton disabled={!active} onClick={onDelete} id={active} />
+        <Group>
+          <DeleteButton disabled={!active} onClick={onDelete} id={active} />
+          <EditButton disabled={!active} />
+        </Group>
       </Flex>
       <SearchField />
       <Divider />
