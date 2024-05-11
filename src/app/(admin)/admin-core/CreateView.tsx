@@ -4,26 +4,34 @@ import { useForm, zodResolver } from '@mantine/form';
 import React, { PropsWithChildren } from 'react';
 import { ZodObject, ZodTypeAny } from 'zod';
 import SubmitButton from './form/SubmitButton';
-import { Resource, ResourceCreate } from './repository/repository';
+import { ResourceCreate } from './repository/repository';
+import { usePathname, useRouter } from 'next/navigation';
 
-export type CreateViewProps<T extends Resource> = {
+export type CreateViewProps<T> = {
   schema?: ZodObject<{ [K in any]: ZodTypeAny }>;
   initialValues?: ResourceCreate<T>;
-  onCreate?: (value: any) => Promise<void>;
+  onSubmit?: (value: any) => Promise<any>;
+  afterSubmit?: (value: T) => Promise<void>;
 };
 
-export default function CreateView<T extends Resource>(
+export default function CreateView<T>(
   props: PropsWithChildren<CreateViewProps<T>>,
 ) {
-  const { children, schema, onCreate, initialValues } = props;
+  const { children, schema, onSubmit, afterSubmit, initialValues } = props;
+  const router = useRouter();
   const form = useForm<ResourceCreate<T>>({
     validate: schema && zodResolver(schema),
     initialValues,
   });
 
   const handleSubmit = async (values: ResourceCreate<T>) => {
-    if (onCreate) {
-      await onCreate(values as T);
+    if (onSubmit) {
+      await onSubmit(values as T);
+    }
+    if (afterSubmit) {
+      await afterSubmit(values as T);
+    } else {
+      router.back();
     }
   };
 

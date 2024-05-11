@@ -2,9 +2,12 @@
 
 import prisma from '@/lib/db';
 import { Category } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
 export async function createCategory(data: Category) {
-  await prisma.category.create({ data });
+  const { id } = await prisma.category.create({ data });
+  revalidatePath('/admin/categories');
+  revalidatePath(`/admin/categories/${id}`);
 }
 
 export async function deleteCategory(id: string) {
