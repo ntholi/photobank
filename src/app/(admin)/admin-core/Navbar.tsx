@@ -8,12 +8,13 @@ import {
   ScrollArea,
 } from '@mantine/core';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UrlObject } from 'url';
 import CreateButton from './components/CreateButton';
 import DeleteButton from './components/DeleteButton';
 import SearchField from './components/SearchField';
 import EditButton from './components/EditButton';
+import Link from 'next/link';
 
 export interface NavItem extends NavLinkProps {
   id: string | number;
@@ -28,8 +29,12 @@ type Props = {
 
 export default function Navbar({ navLinks, baseUrl, onDelete }: Props) {
   const pathname = usePathname();
-  const router = useRouter();
   const [active, setActive] = useState<string | number | undefined>();
+
+  useEffect(() => {
+    const link = navLinks.find(({ href }) => pathname.includes(href as string));
+    setActive(link?.id);
+  }, [pathname]);
 
   return (
     <>
@@ -52,11 +57,9 @@ export default function Navbar({ navLinks, baseUrl, onDelete }: Props) {
           <NavLink
             key={id}
             {...link}
-            onClick={() => {
-              setActive(id);
-              router.push(href as string);
-            }}
-            active={pathname.endsWith(href as string)}
+            component={Link}
+            href={href as string}
+            active={active === id}
           />
         ))}
       </ScrollArea>
