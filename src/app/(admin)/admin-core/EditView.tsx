@@ -1,36 +1,43 @@
-import { Box, Stack } from '@mantine/core';
+'use client';
+import { Stack } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import { useRouter } from 'next/navigation';
 import React, { PropsWithChildren } from 'react';
 import { ZodObject, ZodTypeAny } from 'zod';
 import SubmitButton from './form/SubmitButton';
-import { Repository, Resource } from './repository/repository';
-import { useQueryState } from 'nuqs';
 
-export type EditViewProps<T extends Resource> = {
+interface WithId {
+  id: string | number;
+}
+
+export type EditViewProps<T extends WithId> = {
   schema?: ZodObject<{ [K in any]: ZodTypeAny }>;
-  repository: Repository<T>;
   resource: T;
+  onSubmit?: (id: any, value: any) => Promise<any>;
   afterSubmit?: (value: T) => Promise<void>;
 };
 
-export default function EditView<T extends Resource>(
+export default function EditView<T extends WithId>(
   props: PropsWithChildren<EditViewProps<T>>,
 ) {
-  const { children, schema, repository, resource } = props;
+  const { children, schema, onSubmit, afterSubmit, resource } = props;
+  const router = useRouter();
   const form = useForm<T>({
     initialValues: {
       ...resource,
     },
     validate: schema && zodResolver(schema),
   });
-  const [_, setView] = useQueryState('view');
 
   const handleSubmit = async (values: T) => {
-    if (repository && resource) {
-      if (!resource.id) throw new Error('Resource does not have an id');
-      const res = await repository.update(resource.id, values);
-      await props.afterSubmit?.(res);
-      await setView(null);
+    if (onSubmit && resource) {
+      if (!resource.id) throw new Error('WithId does not have an id');
+      const res = await onSubmit(resource.id, values);
+      if (afterSubmit) {
+        await afterSubmit(values as T);
+      } else {
+        router.back();
+      }
     }
   };
 
@@ -42,7 +49,6 @@ export default function EditView<T extends Resource>(
           return React.cloneElement(child as React.ReactElement, {
             ...child.props,
             ...form.getInputProps(child.props.name),
-            repository,
           });
         })}
         <SubmitButton>Update</SubmitButton>

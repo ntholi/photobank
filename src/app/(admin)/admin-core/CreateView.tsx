@@ -1,11 +1,11 @@
 'use client';
 import { Stack } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import { useRouter } from 'next/navigation';
 import React, { PropsWithChildren } from 'react';
 import { ZodObject, ZodTypeAny } from 'zod';
 import SubmitButton from './form/SubmitButton';
 import { ResourceCreate } from './repository/repository';
-import { usePathname, useRouter } from 'next/navigation';
 
 export type CreateViewProps<T> = {
   schema?: ZodObject<{ [K in any]: ZodTypeAny }>;

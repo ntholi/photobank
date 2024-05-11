@@ -10,6 +10,17 @@ export async function createCategory(data: Category) {
   revalidatePath(`/admin/categories/${id}`);
 }
 
+export async function updateCategory(id: string, data: Category) {
+  await prisma.category.update({
+    where: {
+      id: Number(id),
+    },
+    data,
+  });
+  revalidatePath('/admin/categories');
+  revalidatePath(`/admin/categories/${id}`);
+}
+
 export async function deleteCategory(id: string) {
   await prisma.category.delete({
     where: {
