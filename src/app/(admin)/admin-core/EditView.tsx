@@ -34,7 +34,7 @@ export default function EditView<T extends WithId>(
       if (!resource.id) throw new Error('WithId does not have an id');
       const res = await onSubmit(resource.id, values);
       if (afterSubmit) {
-        await afterSubmit(values as T);
+        await afterSubmit(res);
       } else {
         router.back();
       }
