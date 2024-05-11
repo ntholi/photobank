@@ -9,10 +9,12 @@ import { useTransition } from 'react';
 type Props = {
   disabled?: boolean;
   id?: string | number;
+  baseUrl?: string;
   onClick?: (id: string | number) => Promise<void>;
 };
 
-export default function DeleteButton({ disabled, id, onClick }: Props) {
+export default function DeleteButton(props: Props) {
+  const { disabled, id, baseUrl, onClick } = props;
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -27,7 +29,9 @@ export default function DeleteButton({ disabled, id, onClick }: Props) {
         startTransition(async () => {
           if (id && onClick) {
             await onClick(id);
-            router.back();
+            if (baseUrl) {
+              router.push(baseUrl);
+            } else router.back();
           }
         });
       },

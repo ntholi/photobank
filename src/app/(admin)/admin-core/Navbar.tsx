@@ -36,7 +36,12 @@ export default function Navbar({ navLinks, baseUrl, onDelete }: Props) {
       <Flex h={60} p="md" justify="space-between">
         <CreateButton href={`${baseUrl}/new`} />
         <Group>
-          <DeleteButton disabled={!active} onClick={onDelete} id={active} />
+          <DeleteButton
+            baseUrl={baseUrl}
+            disabled={!active}
+            onClick={onDelete}
+            id={active}
+          />
           <EditButton disabled={!active} />
         </Group>
       </Flex>
