@@ -5,26 +5,25 @@ import { useRouter } from 'next/navigation';
 import React, { PropsWithChildren } from 'react';
 import { ZodObject, ZodTypeAny } from 'zod';
 import SubmitButton from './form/SubmitButton';
-import { ResourceCreate } from './repository/repository';
 
 export type CreateViewProps<T> = {
   schema?: ZodObject<{ [K in any]: ZodTypeAny }>;
-  initialValues?: ResourceCreate<T>;
+  initialValues?: T;
   onSubmit?: (value: any) => Promise<any>;
   afterSubmit?: (value: T) => Promise<void>;
 };
 
-export default function CreateView<T>(
+export default function CreateView<T extends {}>(
   props: PropsWithChildren<CreateViewProps<T>>,
 ) {
   const { children, schema, onSubmit, afterSubmit, initialValues } = props;
   const router = useRouter();
-  const form = useForm<ResourceCreate<T>>({
+  const form = useForm<T>({
     validate: schema && zodResolver(schema),
     initialValues,
   });
 
-  const handleSubmit = async (values: ResourceCreate<T>) => {
+  const handleSubmit = async (values: T) => {
     if (onSubmit) {
       await onSubmit(values as T);
     }
