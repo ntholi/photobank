@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../auth/[...nextauth]/auth';
+import { auth } from '@/auth';
 import prisma from '@/lib/db';
 import { NextResponse } from 'next/server';
 
@@ -25,8 +24,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
+  const session = await auth();
+  if (!session?.user?.id) {
     return NextResponse.json({ error: 'Not logged in' }, { status: 401 });
   }
   let application = await prisma.contributorApplication.upsert({

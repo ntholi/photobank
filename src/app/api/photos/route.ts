@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/auth';
 import axios from 'axios';
 import { imageProcessor } from '@/lib/config/urls';
+import { auth } from '@/auth';
 
 type Label = {
   Name: string;
@@ -12,7 +11,7 @@ type Label = {
 };
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (session?.user?.role !== 'admin') {
     return NextResponse.json(
@@ -26,9 +25,9 @@ export async function GET(req: Request) {
 }
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const { fileName } = await request.json();
-  if (!session?.user) {
+  if (!session?.user?.id) {
     return NextResponse.json(
       { error: 'You must be logged in to upload a photo' },
       { status: 401 },
