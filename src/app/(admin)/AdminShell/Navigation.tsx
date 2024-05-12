@@ -1,4 +1,3 @@
-import { auth } from '@/lib/config/firebase';
 import { AppShell, Avatar, Divider, NavLink, ScrollArea } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import {
@@ -10,13 +9,13 @@ import {
   IconUser,
   IconUserEdit,
 } from '@tabler/icons-react';
-import { signOut } from 'firebase/auth';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useSession } from '../auth/SessionProvider';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function Navigation() {
   const pathname = usePathname();
+
   const searchParams = useSearchParams();
 
   return (
@@ -48,7 +47,7 @@ export default function Navigation() {
 }
 
 function UserButton() {
-  const { user } = useSession();
+  const { data: session } = useSession();
 
   const openModal = () =>
     modals.openConfirmModal({
@@ -57,15 +56,15 @@ function UserButton() {
       children: 'Are you sure you want to logout?',
       confirmProps: { color: 'dark' },
       labels: { confirm: 'Logout', cancel: 'Cancel' },
-      onConfirm: () => signOut(auth),
+      onConfirm: () => signOut(),
     });
 
   return (
     <NavLink
       label="Logout"
-      description={user?.displayName}
+      description={session?.user?.name}
       onClick={openModal}
-      leftSection={<Avatar src={user?.photoURL} />}
+      leftSection={<Avatar src={session?.user?.image} />}
       rightSection={<IconLogout2 size="1.1rem" />}
     />
   );

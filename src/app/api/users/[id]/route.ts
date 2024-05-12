@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { adminAuth } from '@/lib/config/firebase-admin';
 import prisma from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/auth';
@@ -30,10 +29,6 @@ export async function PUT(request: Request, { params }: Props) {
   if (session?.user?.id !== params.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-
-  await adminAuth.updateUser(params.id, {
-    displayName: `${firstName} ${lastName}`,
-  });
 
   const user = await prisma.user.update({
     where: {

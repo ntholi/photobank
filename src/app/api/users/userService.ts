@@ -1,22 +1,21 @@
 import prisma from '@/lib/db';
 import commonUrlPatterns from './commonUrlPatterns';
-import { User as FirebaseUser } from 'firebase/auth';
-import { UserRecord } from 'firebase-admin/lib/auth/user-record';
+import { User } from 'next-auth';
 
-export const saveUserToDB = async (firebaseUser: FirebaseUser | UserRecord) => {
-  const { firstName, lastName } = destructureNames(firebaseUser.displayName);
+export const saveUserToDB = async (user: User) => {
+  const { firstName, lastName } = destructureNames(user.name);
   return await prisma.user.upsert({
     where: {
-      id: firebaseUser.uid,
+      id: user.id,
     },
     update: {},
     create: {
-      id: firebaseUser.uid,
+      id: user.id,
       username: await generateUsername(firstName, lastName),
-      email: firebaseUser.email,
+      email: user.email,
       firstName: firstName,
       lastName: lastName,
-      image: firebaseUser.photoURL,
+      image: user.image,
     },
   });
 };

@@ -1,27 +1,25 @@
-import { auth } from '@/lib/config/firebase';
 import { Image, Stack, Title, Text, Button, Anchor } from '@mantine/core';
-import { signOut } from 'firebase/auth';
 import Link from 'next/link';
 import React from 'react';
-import { useSession } from '../auth/SessionProvider';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function AccessDenied() {
-  const { user } = useSession();
+  const { data: session } = useSession();
   return (
-    <Stack align='center' justify='center' h={'100vh'}>
+    <Stack align="center" justify="center" h={'100vh'}>
       <div>
         <Image
-          src='/images/access-denied.png'
+          src="/images/access-denied.png"
           h={300}
-          w='auto'
-          fit='contain'
-          alt='Access Denied'
+          w="auto"
+          fit="contain"
+          alt="Access Denied"
         />
       </div>
       <Title>Access Denied</Title>
       <Text>
-        You are logged in as {user?.displayName},{' '}
-        <Anchor component='button' onClick={() => signOut(auth)}>
+        You are logged in as {session?.user?.name},{' '}
+        <Anchor component="button" onClick={() => signOut()}>
           Sign Out
         </Anchor>
       </Text>

@@ -1,5 +1,4 @@
 'use client';
-import { auth } from '@/lib/config/firebase';
 import {
   ActionIcon,
   AppShell,
@@ -23,14 +22,13 @@ import {
   IconMoon,
   IconSun,
 } from '@tabler/icons-react';
-import { signOut } from 'firebase/auth';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PropsWithChildren } from 'react';
-import { useSession } from '../auth/SessionProvider';
 import AccessDenied from './AccessDenied';
 import Logo from './Logo';
 import Navigation from './Navigation';
+import { useSession } from 'next-auth/react';
 
 export default function AdminShell({ children }: PropsWithChildren) {
   const [opened, { toggle }] = useDisclosure();
