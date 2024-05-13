@@ -25,7 +25,6 @@ const getPhotos = async () => {
 
 export default async function Page() {
   const photos = await getPhotos();
-
   return (
     <>
       {photos && photos.length > 0 ? (
