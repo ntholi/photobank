@@ -27,10 +27,11 @@ model User {
   username               String                  @unique @default(cuid())
   name                   String?
   email                  String                  @unique
+  emailVerified          DateTime?               @map("email_verified")
+  image                  String?
   role                   Role                    @default(user)
   website                String?
   bio                    String?
-  image                  String?
   contributorApplication ContributorApplication?
   photos                 Photo[]
   purchasedPhotos        PurchasedPhotos[]
@@ -83,6 +84,7 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+  @@map("verification_tokens")
 }
 
 enum ApplicationStatus {
