@@ -35,7 +35,7 @@ export default function UserBio({ user }: Props) {
           <div className="flex flex-col md:flex-row gap-4 items-baseline">
             <div className="flex items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-bold text-zinc-600">
-                {`${user.firstName} ${user.lastName}`}
+                {user.name}
               </h1>
               {hasCheckMark(user) && (
                 <Popover placement="right">

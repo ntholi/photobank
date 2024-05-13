@@ -11,7 +11,7 @@ export default async function Layout({ children }: PropsWithChildren) {
       baseUrl="/admin/users"
       navLinkProps={(it) => ({
         id: it.id,
-        label: it.firstName + ' ' + it.lastName,
+        label: it.name,
         href: `/admin/users/${it.id}`,
       })}
     >

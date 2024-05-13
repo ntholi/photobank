@@ -16,8 +16,7 @@ import { BiCheckCircle } from 'react-icons/bi';
 
 type InputType = {
   username: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   bio: string;
   website: string;
 };
@@ -91,18 +90,10 @@ export default function Form({ user }: Props) {
       <Input
         type="text"
         variant="bordered"
-        label="First Name"
-        defaultValue={user?.firstName || ''}
-        errorMessage={errors.firstName?.message}
-        {...register('firstName', { required: true })}
-      />
-      <Input
-        type="text"
-        variant="bordered"
-        label="Last Name"
-        defaultValue={user?.lastName || ''}
-        errorMessage={errors.lastName?.message}
-        {...register('lastName', { required: true })}
+        label="Names"
+        defaultValue={user?.name || ''}
+        errorMessage={errors.name?.message}
+        {...register('name', { required: true })}
       />
       <Textarea
         type="text"

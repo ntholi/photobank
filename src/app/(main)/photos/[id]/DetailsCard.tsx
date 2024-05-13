@@ -63,7 +63,7 @@ export default function DetailsCard({ photo }: Props) {
             target="_blank"
             className="text-tiny text-default-500"
           >
-            {photo.user.firstName + ' ' + photo.user.lastName}
+            {photo.user.name}
           </Link>
         </div>
       </CardHeader>

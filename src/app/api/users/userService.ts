@@ -4,6 +4,10 @@ import { User } from 'next-auth';
 
 export const saveUserToDB = async (user: User) => {
   const { firstName, lastName } = destructureNames(user.name);
+  if (!user.email) {
+    //TODO: Is this necessary?
+    throw new Error('User email is required');
+  }
   return await prisma.user.upsert({
     where: {
       id: user.id,
@@ -13,8 +17,7 @@ export const saveUserToDB = async (user: User) => {
       id: user.id,
       username: await generateUsername(firstName, lastName),
       email: user.email,
-      firstName: firstName,
-      lastName: lastName,
+      name: user.name,
       image: user.image,
     },
   });

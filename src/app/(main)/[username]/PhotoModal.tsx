@@ -65,7 +65,7 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                   <div className="p-3">
                     <div className="flex items-center justify-between space-x-6">
                       <User
-                        name={photo.user.firstName + ' ' + photo.user.lastName}
+                        name={photo.user.name}
                         description={
                           photo.location && (
                             <div className="flex items-center space-x-1 text-gray-500 text-tiny pe-3">
