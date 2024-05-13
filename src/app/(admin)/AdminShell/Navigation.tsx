@@ -22,14 +22,6 @@ export default function Navigation() {
     <AppShell.Navbar p="xs">
       <AppShell.Section grow component={ScrollArea}>
         <NavLink
-          label="Categories"
-          component={Link}
-          active={pathname.startsWith('/admin/categories')}
-          href={'/admin/categories'}
-          leftSection={<IconCategory size="1.1rem" />}
-          rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
-        />
-        <NavLink
           label="Users"
           component={Link}
           active={pathname.startsWith('/admin/users')}
