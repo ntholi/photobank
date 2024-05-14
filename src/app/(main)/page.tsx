@@ -34,7 +34,7 @@ export default async function Page() {
         </>
       ) : (
         <section className="h-screen flex justify-center items-center">
-          <p>PhotoBank Empty</p>
+          <p>Photobank Empty</p>
         </section>
       )}
       <Footer className="mt-10" />

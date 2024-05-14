@@ -2,11 +2,12 @@ import '../globals.css';
 import { Inter } from 'next/font/google';
 import { Providers } from './providers';
 import Navbar from './base/Navbar';
+import { APP_NAME } from '@/lib/constants';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'PhotoBank',
+  title: APP_NAME,
   description: 'Lesotho photo bank',
 };
 

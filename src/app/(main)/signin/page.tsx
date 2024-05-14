@@ -1,6 +1,6 @@
 'use client';
 
-import { profilePath } from '@/lib/constants';
+import { APP_NAME, profilePath } from '@/lib/constants';
 import { Button, Input, Link } from '@nextui-org/react';
 import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -59,7 +59,7 @@ export default function LoginPage() {
             height={80}
             width={80}
             src="/images/logo.jpg"
-            alt="PhotoBank Logo"
+            alt={APP_NAME}
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign In
