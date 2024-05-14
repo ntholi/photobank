@@ -7,6 +7,7 @@ import {
 import { Notifications } from '@mantine/notifications';
 import React, { Suspense } from 'react';
 import { ModalsProvider } from '@mantine/modals';
+import { SessionProvider } from 'next-auth/react';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const theme = createTheme({
@@ -18,8 +19,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Suspense>
       <MantineProvider defaultColorScheme="auto" theme={theme}>
-        <Notifications />
-        <ModalsProvider>{children}</ModalsProvider>
+        <SessionProvider>
+          <Notifications />
+          <ModalsProvider>{children}</ModalsProvider>
+        </SessionProvider>
       </MantineProvider>
     </Suspense>
   );
