@@ -3,8 +3,18 @@ import UserBio from './UserBio';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/db';
 import { User } from '@prisma/client';
+import type { Metadata } from 'next';
 
 type Props = { params: { username: string } };
+
+export async function generateMetadata({ params }: Props) {
+  const user = await getUser(params.username);
+  return {
+    title: user.name,
+    description: user.bio,
+    image: user.image,
+  } as Metadata;
+}
 
 const getUser = async (username: string): Promise<User> => {
   const user = await prisma.user.findUnique({
