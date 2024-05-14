@@ -1,18 +1,20 @@
 import prisma from '@/lib/db';
 import { PropsWithChildren } from 'react';
 import { ResourcePage } from '../../admin-core';
+import { deleteCategory } from './actions';
 
 export default async function Layout({ children }: PropsWithChildren) {
-  const data = prisma.user.findMany();
+  const data = prisma.category.findMany();
   return (
     <ResourcePage
       data={data}
-      label={'Users'}
-      baseUrl="/admin/users"
+      label={'Categories'}
+      baseUrl="/admin/categories"
+      onDelete={deleteCategory}
       navLinkProps={(it) => ({
         id: it.id,
         label: it.name,
-        href: `/admin/users/${it.id}`,
+        href: `/admin/categories/${it.id}`,
       })}
     >
       {children}

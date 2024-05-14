@@ -30,6 +30,7 @@ model User {
   emailVerified          DateTime?               @map("email_verified")
   image                  String?
   role                   Role                    @default(user)
+  blocked                Boolean                 @default(false)
   website                String?
   bio                    String?
   contributorApplication ContributorApplication?

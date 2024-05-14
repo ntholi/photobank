@@ -44,7 +44,7 @@ export default function AdminShell({ children }: PropsWithChildren) {
       </Flex>
     );
   } else if (status == 'unauthenticated') {
-    router.push('/auth/signin');
+    router.push('/api/auth/signin');
     return null;
   }
 
