@@ -12,12 +12,17 @@ import {
 } from '@mantine/core';
 import { toDateTime } from '@/lib/utils';
 import RowActions from './RowActions';
+import Link from 'next/link';
 
 export default async function UserPage() {
   const data = await prisma.user.findMany();
   const rows = data.map((user) => (
     <TableTr key={user.id}>
-      <TableTd>{user.id}</TableTd>
+      <TableTd>
+        <Anchor component={Link} target="_blank" href={`/${user.username}`}>
+          {user.username}
+        </Anchor>
+      </TableTd>
       <TableTd>{user.name}</TableTd>
       <TableTd>{user.email}</TableTd>
       <TableTd>{user.role}</TableTd>
@@ -37,7 +42,7 @@ export default async function UserPage() {
         <Table highlightOnHover>
           <TableThead>
             <TableTr>
-              <TableTh>ID</TableTh>
+              <TableTh>Username</TableTh>
               <TableTh>Name</TableTh>
               <TableTh>Email</TableTh>
               <TableTh>Role</TableTh>
