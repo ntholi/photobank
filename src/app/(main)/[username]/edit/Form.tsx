@@ -1,4 +1,5 @@
 'use client';
+import { profilePath } from '@/lib/constants';
 import {
   Button,
   Input,
@@ -42,7 +43,7 @@ export default function Form({ user }: Props) {
     try {
       setLoading(true);
       await axios.put(`/api/users/${user.id}`, formData);
-      // router.push(profilePath(user));
+      router.push(profilePath(user));
     } finally {
       setLoading(false);
     }
@@ -80,7 +81,6 @@ export default function Form({ user }: Props) {
         type="text"
         variant="bordered"
         label="Username"
-        isDisabled={true}
         defaultValue={user?.username || ''}
         errorMessage={errors.username?.message}
         onValueChange={checkUsername}
