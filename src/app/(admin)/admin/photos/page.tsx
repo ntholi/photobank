@@ -1,5 +1,5 @@
 import NothingSelected from '../../admin-core/components/NothingSelected';
 
-export default async function CategoryPage() {
-  return <NothingSelected title="Categories" />;
+export default async function PhotosPage() {
+  return <NothingSelected title="Photos" />;
 }
