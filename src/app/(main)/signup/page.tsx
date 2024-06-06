@@ -7,7 +7,7 @@ import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FaFacebook } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
@@ -25,9 +25,11 @@ export default function SignUpPage() {
   const [step, setStep] = React.useState(0);
   const router = useRouter();
 
-  if (session) {
-    router.push(profilePath(session.user));
-  }
+  useEffect(() => {
+    if (session) {
+      router.push(profilePath(session.user));
+    }
+  }, [session]);
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
