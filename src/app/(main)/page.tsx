@@ -1,8 +1,7 @@
-import Hero from './home/hero/Hero';
 import api from '@/lib/config/api';
-import GallerySection from './home/GallerySection';
-import Footer from './home/Footer';
 import { PhotoWithData } from '@/lib/types';
+import GallerySection from './home/GallerySection';
+import Hero from './home/hero/Hero';
 
 const getPhotos = async () => {
   try {
