@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { Providers } from './providers';
 import Navbar from './base/Navbar';
 import { APP_NAME } from '@/lib/constants';
+import Footer from './home/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: any }) {
         <Providers>
           <Navbar />
           {children}
+          <Footer className="mt-10" />
         </Providers>
       </body>
     </html>

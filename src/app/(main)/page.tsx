@@ -37,7 +37,6 @@ export default async function Page() {
           <p>Photobank Empty</p>
         </section>
       )}
-      <Footer className="mt-10" />
     </>
   );
 }
