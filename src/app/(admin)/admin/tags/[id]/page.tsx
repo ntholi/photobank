@@ -15,22 +15,15 @@ import {
 } from '@mantine/core';
 import { Label } from '@prisma/client';
 import { notFound } from 'next/navigation';
-import { deleteTag } from '../actions';
+import { deleteTag, getTag } from '../actions';
+
 type Props = {
   params: {
     id: string;
   };
 };
 export default async function Page({ params: { id } }: Props) {
-  const item = await prisma.tag.findUnique({
-    where: {
-      id: Number(id),
-    },
-    include: {
-      labels: true,
-    },
-  });
-
+  const item = await getTag(Number(id));
   if (!item) {
     return notFound();
   }

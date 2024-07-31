@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
 type Props = {
+  value?: Tag;
   onSubmit: (
     values: Tag & {
       labels: Label[];
@@ -26,11 +27,12 @@ type Props = {
   ) => Promise<Tag>;
 };
 
-export default function Form({ onSubmit }: Props) {
+export default function Form({ onSubmit, value }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [labels, setLabels] = useState<Label[]>([]);
   const { setValues, ...form } = useForm<Tag>({
+    initialValues: value,
     validate: {
       name: isNotEmpty('Name is required'),
     },
