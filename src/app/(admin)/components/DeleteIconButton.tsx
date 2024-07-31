@@ -21,7 +21,6 @@ export default function DeleteIconButton({ action, id, ...props }: Props) {
   }
   return (
     <ActionIcon
-      variant="light"
       color="red"
       loading={isPending}
       onClick={handleDelete}

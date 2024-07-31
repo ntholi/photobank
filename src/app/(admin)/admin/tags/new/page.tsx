@@ -1,11 +1,9 @@
-import { Box } from '@mantine/core';
-import Form from './Form';
-import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
-import { auth } from '@/auth';
+import { Box } from '@mantine/core';
+import { revalidatePath } from 'next/cache';
+import Form from './Form';
 
 export default async function NewPage() {
-  const session = await auth();
   return (
     <Box p={'lg'}>
       <Form

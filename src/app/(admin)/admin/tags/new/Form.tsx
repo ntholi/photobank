@@ -79,7 +79,7 @@ function LabelsInput({ labels, setLabels }: LabelsInputProps) {
   const rows = labels.map((it) => (
     <Table.Tr key={it.id}>
       <Table.Td>{it.name}</Table.Td>
-      <Table.Td>
+      <Table.Td align="right">
         <ActionIcon
           color="red"
           variant="light"
