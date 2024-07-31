@@ -6,20 +6,17 @@ import {
   Divider,
   Flex,
   Group,
-  NumberInput,
   Paper,
   Stack,
   Table,
   TextInput,
-  Textarea,
   Title,
 } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { Label, Tag } from '@prisma/client';
 import { IconTrashFilled } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 
 type Props = {
   onSubmit: (

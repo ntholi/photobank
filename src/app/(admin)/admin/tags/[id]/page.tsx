@@ -1,9 +1,9 @@
+import DeleteIconButton from '@/app/(admin)/components/DeleteIconButton';
 import FieldView from '@/app/(admin)/components/FieldView';
 import HeaderDisplay from '@/app/(admin)/components/HeaderDisplay';
 import prisma from '@/lib/prisma';
 import {
   Box,
-  Button,
   Fieldset,
   Stack,
   Table,
@@ -15,6 +15,7 @@ import {
 } from '@mantine/core';
 import { Label } from '@prisma/client';
 import { notFound } from 'next/navigation';
+import { deleteTag } from '../actions';
 type Props = {
   params: {
     id: string;
@@ -38,7 +39,7 @@ export default async function Page({ params: { id } }: Props) {
     <Box p={'lg'}>
       <HeaderDisplay
         title={item.name}
-        actionButtons={[<Button>Button</Button>]}
+        actionButtons={[<DeleteIconButton action={deleteTag} id={id} />]}
       />
 
       <Box p={'xl'}>
