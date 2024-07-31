@@ -1,5 +1,5 @@
 import { thumbnail } from '@/lib/config/urls';
-import prisma from '@/lib/db';
+import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {

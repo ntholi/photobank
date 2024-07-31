@@ -1,5 +1,5 @@
 import { thumbnail } from '@/lib/config/urls';
-import prisma from '@/lib/db';
+import prisma from '@/lib/prisma';
 import { PhotoWithData } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import { MdLocationPin } from 'react-icons/md';

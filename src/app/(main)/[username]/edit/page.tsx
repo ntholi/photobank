@@ -1,4 +1,4 @@
-import prisma from '@/lib/db';
+import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Form from './Form';
 import { auth } from '@/auth';

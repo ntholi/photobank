@@ -1,4 +1,4 @@
-import prisma from '@/lib/db';
+import prisma from '@/lib/prisma';
 import { PhotoWithData } from '@/lib/types';
 import React from 'react';
 import { Image } from '@nextui-org/react';

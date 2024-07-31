@@ -1,4 +1,4 @@
-import prisma from '@/lib/db';
+import prisma from '@/lib/prisma';
 import commonUrlPatterns from './commonUrlPatterns';
 import { User } from 'next-auth';
 

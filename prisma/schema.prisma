@@ -37,6 +37,7 @@ model User {
   updatedAt              DateTime                @updatedAt @map("updated_at")
   account                Account[]
   session                Session[]
+  AuditLog               AuditLog[]
 
   @@map("users")
 }
@@ -194,4 +195,16 @@ model SavedPhotos {
 model Category {
   id   Int    @id @default(autoincrement())
   name String
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  model     String
+  value     Json?
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  userId    String   @map("user_id")
+
+  @@map("audit_logs")
 }

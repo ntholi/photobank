@@ -1,6 +1,6 @@
 import { Image } from '@nextui-org/react';
 import PhotoUploadForm from './Form';
-import prisma from '@/lib/db';
+import prisma from '@/lib/prisma';
 import { thumbnail } from '@/lib/config/urls';
 import { notFound } from 'next/navigation';
 

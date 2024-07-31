@@ -1,6 +1,6 @@
-import React, { PropsWithChildren } from 'react';
-import AdminShell from '../AdminShell';
+import React from 'react';
+import AdminShell from '../base/AdminShell';
 
-export default function AdminLayout({ children }: PropsWithChildren) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <AdminShell>{children}</AdminShell>;
 }

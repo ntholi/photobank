@@ -1,13 +1,10 @@
 'use client';
-import {
-  MantineColorSchemeManager,
-  MantineProvider,
-  createTheme,
-} from '@mantine/core';
-import { Notifications } from '@mantine/notifications';
-import React, { Suspense } from 'react';
+import { MantineProvider, createTheme } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
+import { Notifications } from '@mantine/notifications';
 import { SessionProvider } from 'next-auth/react';
+import { AppProgressBar } from 'next-nprogress-bar';
+import React, { Suspense } from 'react';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const theme = createTheme({
@@ -18,11 +15,19 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <Suspense>
-      <MantineProvider defaultColorScheme="auto" theme={theme}>
-        <SessionProvider>
-          <Notifications />
-          <ModalsProvider>{children}</ModalsProvider>
-        </SessionProvider>
+      <MantineProvider forceColorScheme='dark' theme={theme}>
+        <Notifications />
+        <ModalsProvider>
+          <SessionProvider>
+            {children}
+            <AppProgressBar
+              height='3px'
+              color='#2196F3'
+              options={{ showSpinner: false }}
+              shallowRouting
+            />
+          </SessionProvider>
+        </ModalsProvider>
       </MantineProvider>
     </Suspense>
   );

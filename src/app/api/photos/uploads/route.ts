@@ -1,4 +1,4 @@
-import prisma from '@/lib/db';
+import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { thumbnail } from '@/lib/config/urls';
 import { auth } from '@/auth';

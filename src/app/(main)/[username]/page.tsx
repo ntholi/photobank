@@ -1,7 +1,7 @@
 import ProfileBody from './ProfileBody';
 import UserBio from './UserBio';
 import { notFound } from 'next/navigation';
-import prisma from '@/lib/db';
+import prisma from '@/lib/prisma';
 import { User } from '@prisma/client';
 import type { Metadata } from 'next';
 import { APP_NAME } from '@/lib/constants';

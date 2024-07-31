@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db';
+import prisma from '@/lib/prisma';
 import { imageProcessor, thumbnail } from '@/lib/config/urls';
 import { z } from 'zod';
 import axios from 'axios';

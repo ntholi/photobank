@@ -1,19 +1,23 @@
-// Import styles of packages that you've installed.
-// All packages except `@mantine/hooks` require styles imports
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
-import './admin.css';
-import { ColorSchemeScript } from '@mantine/core';
-import Providers from './providers';
-import { PropsWithChildren } from 'react';
 
-export const metadata = {
-  title: 'Lehakoe Admin',
+import { ColorSchemeScript } from '@mantine/core';
+import type { Metadata } from 'next';
+import Providers from './providers';
+
+export const metadata: Metadata = {
+  title: 'Registry Admin',
+  description:
+    'Limkokwing University of Creative Technology Registry System, Lesotho',
 };
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
         <ColorSchemeScript />
       </head>
