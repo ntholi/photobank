@@ -6,9 +6,8 @@ import type { Metadata } from 'next';
 import Providers from './providers';
 
 export const metadata: Metadata = {
-  title: 'Registry Admin',
-  description:
-    'Limkokwing University of Creative Technology Registry System, Lesotho',
+  title: 'Lehakoe Admin',
+  description: 'Admin panel for Lehakoe Photobank',
 };
 
 export default function RootLayout({
@@ -17,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         <ColorSchemeScript />
       </head>
