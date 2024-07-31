@@ -47,7 +47,11 @@ export default function Form({ onSubmit }: Props) {
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <FormHeader title="Tags" isLoading={pending} />
       <Stack p={'xl'}>
-        <TextInput label="Tag" {...form.getInputProps('name')} />
+        <TextInput
+          label="Tag"
+          placeholder="Name"
+          {...form.getInputProps('name')}
+        />
         <ItemsInput items={labels} setItems={setLabels} />
       </Stack>
     </form>

@@ -1,5 +1,5 @@
-import { Box } from '@mantine/core';
+import HomeComponent from '../../components/HomeComponent';
 
 export default async function RequisitionPage() {
-  return <Box>Hello World</Box>;
+  return <HomeComponent title="Tags" />;
 }
