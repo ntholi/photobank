@@ -4,10 +4,10 @@ import { Image } from '@mantine/core';
 
 export default function Logo() {
   return (
-    <NextLink href='/admin'>
+    <NextLink href="/admin">
       <Image
-        alt=''
-        src='/images/logo-transparent.png'
+        alt=""
+        src="/images/logo/white.png"
         h={50}
         component={NextImage}
         width={100}
