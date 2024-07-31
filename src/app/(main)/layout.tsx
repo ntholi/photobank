@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: any }) {
       <body className={inter.className}>
         <Providers>
           <Navbar />
-          {children}
+          <div className="min-h-dvh">{children}</div>
           <Footer className="mt-10" />
         </Providers>
       </body>
