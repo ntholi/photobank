@@ -16,13 +16,13 @@ export default function DeleteIconButton({ action, id, ...props }: Props) {
   function handleDelete() {
     startTransition(async () => {
       await action(id);
-      router.refresh();
+      router.back();
     });
   }
   return (
     <ActionIcon
-      variant='light'
-      color='red'
+      variant="light"
+      color="red"
       loading={isPending}
       onClick={handleDelete}
       {...props}

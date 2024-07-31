@@ -2,12 +2,13 @@
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 import { Tag } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
 export async function deleteTag(id: number) {
   const session = await auth();
   if (session?.user?.role != 'admin') throw new Error('User not admin');
-
-  prisma.tag.delete({ where: { id } });
+  await prisma.tag.delete({ where: { id: Number(id) } });
+  revalidatePath('/admin/tags');
 }
 
 export async function createTag(data: Tag) {
