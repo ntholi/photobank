@@ -52,31 +52,31 @@ export default function Form({ onSubmit }: Props) {
           placeholder="Name"
           {...form.getInputProps('name')}
         />
-        <ItemsInput items={labels} setItems={setLabels} />
+        <LabelsInput labels={labels} setLabels={setLabels} />
       </Stack>
     </form>
   );
 }
 
-type ItemsInputProps = {
-  items: Label[];
-  setItems: React.Dispatch<React.SetStateAction<Label[]>>;
+type LabelsInputProps = {
+  labels: Label[];
+  setLabels: React.Dispatch<React.SetStateAction<Label[]>>;
 };
 
-function ItemsInput({ items, setItems }: ItemsInputProps) {
+function LabelsInput({ labels, setLabels }: LabelsInputProps) {
   const form = useForm<Label>();
 
   function handleSubmit() {
     console.log(form.validate());
     if (!form.validate().hasErrors) {
-      setItems((prev) => [...prev, form.values]);
+      setLabels((prev) => [...prev, form.values]);
       form.setValues({
         name: '',
       });
     }
   }
 
-  const rows = items.map((it) => (
+  const rows = labels.map((it) => (
     <Table.Tr key={it.id}>
       <Table.Td>{it.name}</Table.Td>
       <Table.Td>
@@ -84,7 +84,7 @@ function ItemsInput({ items, setItems }: ItemsInputProps) {
           color="red"
           variant="light"
           onClick={() => {
-            setItems((prev) => prev.filter((item) => item.id !== it.id));
+            setLabels((prev) => prev.filter((label) => label.name !== it.name));
           }}
         >
           <IconTrashFilled size={'1rem'} />
@@ -96,7 +96,7 @@ function ItemsInput({ items, setItems }: ItemsInputProps) {
   return (
     <Paper mt={'lg'} p={'sm'} pb={'xl'} withBorder>
       <Title order={4} fw={100} mb={5}>
-        Items
+        Labels
       </Title>
       <Divider />
       <form>
