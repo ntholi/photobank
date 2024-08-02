@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 enum Role {
@@ -133,27 +133,17 @@ model PhotoLabel {
   photo      Photo    @relation(fields: [photoId], references: [id])
   photoId    String   @map("photo_id")
   confidence Float
-  label      Label    @relation(fields: [labelId], references: [id])
-  labelId    Int      @map("label_id")
+  label      String
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
   @@map("photo_labels")
 }
 
-model Label {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique
-  tags        Tag[]
-  photoLabels PhotoLabel[]
-
-  @@map("labels")
-}
-
 model Tag {
-  id     Int     @id @default(autoincrement())
-  name   String  @unique
-  labels Label[]
+  id     Int      @id @default(autoincrement())
+  name   String   @unique
+  labels String[]
 
   @@map("tags")
 }
