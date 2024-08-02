@@ -16,15 +16,13 @@ import { isNotEmpty, useForm } from '@mantine/form';
 import { Label, Tag } from '@prisma/client';
 import { IconTrashFilled } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
+
+type TagWithLabels = Tag & { labels: Label[] };
 
 type Props = {
-  value?: Tag;
-  onSubmit: (
-    values: Tag & {
-      labels: Label[];
-    },
-  ) => Promise<Tag>;
+  value?: TagWithLabels;
+  onSubmit: (values: TagWithLabels) => Promise<Tag>;
 };
 
 export default function Form({ onSubmit, value }: Props) {
@@ -37,6 +35,12 @@ export default function Form({ onSubmit, value }: Props) {
       name: isNotEmpty('Name is required'),
     },
   });
+
+  useEffect(() => {
+    if (value) {
+      setLabels(value?.labels);
+    }
+  }, [value]);
 
   async function handleSubmit(values: Tag) {
     startTransition(async () => {
@@ -69,7 +73,6 @@ function LabelsInput({ labels, setLabels }: LabelsInputProps) {
   const form = useForm<Label>();
 
   function handleSubmit() {
-    console.log(form.validate());
     if (!form.validate().hasErrors) {
       setLabels((prev) => [...prev, form.values]);
       form.setValues({

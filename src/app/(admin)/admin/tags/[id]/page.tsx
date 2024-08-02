@@ -1,7 +1,6 @@
 import DeleteIconButton from '@/app/(admin)/components/DeleteIconButton';
 import FieldView from '@/app/(admin)/components/FieldView';
 import HeaderDisplay from '@/app/(admin)/components/HeaderDisplay';
-import prisma from '@/lib/prisma';
 import {
   Box,
   Fieldset,

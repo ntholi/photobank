@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import { Box } from '@mantine/core';
 import { revalidatePath } from 'next/cache';
 import Form from '../Form';
+import { createTag } from '../actions';
 
 export default async function NewPage() {
   return (
@@ -9,15 +10,7 @@ export default async function NewPage() {
       <Form
         onSubmit={async (value) => {
           'use server';
-          const { labels, ...data } = value;
-          const res = await prisma.tag.create({
-            data: {
-              ...data,
-              labels: {
-                create: labels,
-              },
-            },
-          });
+          const res = await createTag(value);
           revalidatePath('/admin/tags');
           return res;
         }}

@@ -1,9 +1,8 @@
-import prisma from '@/lib/prisma';
 import { Box } from '@mantine/core';
 import { revalidatePath } from 'next/cache';
-import Form from '../../Form';
-import { getTag } from '../../actions';
 import { notFound } from 'next/navigation';
+import Form from '../../Form';
+import { getTag, updateTag } from '../../actions';
 
 type Props = {
   params: {
@@ -22,15 +21,8 @@ export default async function EditPage({ params: { id } }: Props) {
         onSubmit={async (value) => {
           'use server';
           const { labels, ...data } = value;
-          const res = await prisma.tag.create({
-            data: {
-              ...data,
-              labels: {
-                create: labels,
-              },
-            },
-          });
-          revalidatePath('/admin/tags');
+          const res = await updateTag(Number(id), value);
+          revalidatePath(`/admin/tags/${res.id}`);
           return res;
         }}
       />
