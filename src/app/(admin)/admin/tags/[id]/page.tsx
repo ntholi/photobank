@@ -3,16 +3,13 @@ import FieldView from '@/app/(admin)/components/FieldView';
 import HeaderDisplay from '@/app/(admin)/components/HeaderDisplay';
 import {
   Box,
+  Divider,
   Fieldset,
+  List,
+  ListItem,
   Stack,
-  Table,
-  TableTbody,
-  TableTd,
-  TableTh,
-  TableThead,
-  TableTr,
+  Text,
 } from '@mantine/core';
-import { Label } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import { deleteTag, getTag } from '../actions';
 
@@ -34,34 +31,16 @@ export default async function Page({ params: { id } }: Props) {
         actionButtons={[<DeleteIconButton action={deleteTag} id={id} />]}
       />
 
-      <Box p={'xl'}>
-        <Stack>
-          <FieldView label="Name" value={item.name} />
-          <Fieldset legend="Labels" mt={'md'}>
-            <ItemsTable labels={item.labels} />
-          </Fieldset>
-        </Stack>
-      </Box>
+      <Stack p={'xl'}>
+        <FieldView label="Name" value={item.name} />
+        <Fieldset legend="Labels">
+          <List type="ordered" mt={'sm'}>
+            {item.labels.map((it) => (
+              <ListItem>{it}</ListItem>
+            ))}
+          </List>
+        </Fieldset>
+      </Stack>
     </Box>
-  );
-}
-
-function ItemsTable({ labels }: { labels: Label[] }) {
-  const rows = labels.map((it) => (
-    <TableTr key={it.id}>
-      <TableTd>{it.id}</TableTd>
-      <TableTd>{it.name}</TableTd>
-    </TableTr>
-  ));
-  return (
-    <Table>
-      <TableThead>
-        <TableTr>
-          <TableTh></TableTh>
-          <TableTh>Name</TableTh>
-        </TableTr>
-      </TableThead>
-      <TableTbody>{rows}</TableTbody>
-    </Table>
   );
 }

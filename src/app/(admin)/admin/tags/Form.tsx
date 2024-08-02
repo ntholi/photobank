@@ -13,22 +13,20 @@ import {
   Title,
 } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
-import { Label, Tag } from '@prisma/client';
+import { Tag } from '@prisma/client';
 import { IconTrashFilled } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 
-type TagWithLabels = Tag & { labels: Label[] };
-
 type Props = {
-  value?: TagWithLabels;
-  onSubmit: (values: TagWithLabels) => Promise<Tag>;
+  value?: Tag;
+  onSubmit: (values: Tag) => Promise<Tag>;
 };
 
 export default function Form({ onSubmit, value }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [labels, setLabels] = useState<Label[]>([]);
+  const [labels, setLabels] = useState<String[]>([]);
   const { setValues, ...form } = useForm<Tag>({
     initialValues: value,
     validate: {
@@ -65,65 +63,55 @@ export default function Form({ onSubmit, value }: Props) {
 }
 
 type LabelsInputProps = {
-  labels: Label[];
-  setLabels: React.Dispatch<React.SetStateAction<Label[]>>;
+  labels: String[];
+  setLabels: React.Dispatch<React.SetStateAction<String[]>>;
 };
 
 function LabelsInput({ labels, setLabels }: LabelsInputProps) {
-  const form = useForm<Label>();
+  const [value, setValue] = useState<String>('');
 
   function handleSubmit() {
-    if (!form.validate().hasErrors) {
-      setLabels((prev) => [...prev, form.values]);
-      form.setValues({
-        name: '',
-      });
+    if (value) {
+      setLabels((prev) => [...prev, value]);
+      setValue('');
     }
   }
 
-  const rows = labels.map((it) => (
-    <Table.Tr key={it.id}>
-      <Table.Td>{it.name}</Table.Td>
-      <Table.Td align="right">
-        <ActionIcon
-          color="red"
-          variant="light"
-          onClick={() => {
-            setLabels((prev) => prev.filter((label) => label.name !== it.name));
-          }}
-        >
-          <IconTrashFilled size={'1rem'} />
-        </ActionIcon>
-      </Table.Td>
-    </Table.Tr>
-  ));
+  function handleDelete(index: number) {
+    setLabels((prev) => prev.filter((_, i) => i !== index));
+  }
 
   return (
-    <Paper mt={'lg'} p={'sm'} pb={'xl'} withBorder>
-      <Title order={4} fw={100} mb={5}>
-        Labels
-      </Title>
+    <Stack mt={'lg'}>
+      <Flex justify="space-between">
+        <Title order={3}>Labels</Title>
+      </Flex>
+      <Group justify="space-between">
+        <TextInput
+          placeholder="Label"
+          w={300}
+          value={value as string}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <Button onClick={handleSubmit} variant="default">
+          Add
+        </Button>
+      </Group>
       <Divider />
-      <form>
-        <Flex mt={'lg'} justify="space-between" align={'center'}>
-          <Group>
-            <TextInput placeholder="Name" {...form.getInputProps('name')} />
-          </Group>
-          <Button variant="default" onClick={handleSubmit}>
-            Add
-          </Button>
-        </Flex>
-      </form>
-      <Divider my={15} />
       <Table>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Name</Table.Th>
-            <Table.Th></Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Tbody>
+          {labels.map((label, index) => (
+            <Table.Tr key={index}>
+              <Table.Td>{label}</Table.Td>
+              <Table.Td align="right">
+                <ActionIcon color="red" onClick={() => handleDelete(index)}>
+                  <IconTrashFilled size={'1rem'} />
+                </ActionIcon>
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
       </Table>
-    </Paper>
+    </Stack>
   );
 }
