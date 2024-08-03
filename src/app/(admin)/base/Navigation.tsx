@@ -17,6 +17,7 @@ import {
   IconHome,
   IconLogout2,
   IconNote,
+  IconPhoto,
   IconUser,
   IconUsers,
 } from '@tabler/icons-react';
@@ -35,6 +36,14 @@ export default function Navigation() {
           active={pathname.startsWith('/admin/landing-page')}
           href={'/admin/landing-page'}
           leftSection={<IconHome size="1.1rem" />}
+          rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+        />
+        <NavLink
+          label="Photos"
+          component={Link}
+          active={pathname.startsWith('/admin/photos')}
+          href={'/admin/photos'}
+          leftSection={<IconPhoto size="1.1rem" />}
           rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
         />
         <NavLink
