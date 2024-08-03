@@ -1,23 +1,24 @@
 import DeleteIconButton from '@/app/(admin)/components/DeleteIconButton';
-import FieldView from '@/app/(admin)/components/FieldView';
 import HeaderDisplay from '@/app/(admin)/components/HeaderDisplay';
+import { thumbnail } from '@/lib/config/urls';
 import {
+  Anchor,
+  Badge,
   Box,
   Card,
+  Divider,
   Grid,
   GridCol,
-  Stack,
-  Image,
-  Title,
-  Text,
   Group,
-  Divider,
-  Anchor,
+  Image,
+  Stack,
+  Text,
 } from '@mantine/core';
+import { PhotoStatus } from '@prisma/client';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import React from 'react';
 import { deletePhoto, getPhoto } from '../actions';
-import { thumbnail } from '@/lib/config/urls';
-import NextLink from 'next/link';
 
 type Props = {
   params: {
@@ -51,31 +52,75 @@ export default async function Page({ params: { id } }: Props) {
             <Group justify="space-between" mt={'md'}>
               <Text>ID</Text>
               <Text size={'xs'} c="dimmed">
-                <Anchor href="">{item.id}</Anchor>
+                <Anchor
+                  component={Link}
+                  target="_blank"
+                  href={`/photos/${item.id}`}
+                >
+                  {item.id}
+                </Anchor>
               </Text>
             </Group>
             <Stack mt="xl" gap="sm">
-              <Group justify="space-between">
-                <Text>Name</Text>
-                <Text fw={500} size="0.9rem">
-                  {item.fileName}
-                </Text>
-              </Group>
+              <FieldView label="File Name">{item.fileName}</FieldView>
               <Divider my={5} />
-              <Group justify="space-between">
-                <Text>Email</Text>
-                <Text fw={500}>{item.status}</Text>
-              </Group>
+              <FieldView label="Status">
+                <Status value={item.status} />
+              </FieldView>
               <Divider />
-              <Group justify="space-between">
-                <Text>Phone</Text>
-                <Text fw={500}>{item.locationId}</Text>
-              </Group>
+              <FieldView label="Owner">
+                <Anchor
+                  size="0.9rem"
+                  target="_blank"
+                  component={Link}
+                  href={`/${item.userId}`}
+                >
+                  {item.user.name}
+                </Anchor>
+              </FieldView>
               <Divider />
+              <FieldView label="Location">{item.location?.name}</FieldView>
             </Stack>
           </Card>
         </GridCol>
       </Grid>
     </Box>
+  );
+}
+
+type FieldViewProps = {
+  label: string;
+  children: React.ReactNode;
+};
+
+function FieldView({ label, children }: FieldViewProps) {
+  return (
+    <Group justify="space-between">
+      <Text size="0.9rem">{label}</Text>
+      {React.isValidElement(children) ? (
+        children
+      ) : (
+        <Text size="0.85rem" fw={500}>
+          {children}
+        </Text>
+      )}
+    </Group>
+  );
+}
+
+function Status({ value }: { value: PhotoStatus }) {
+  let color = 'gray';
+  switch (value) {
+    case 'pending':
+      color = 'orange';
+      break;
+    case 'rejected':
+      color = 'red';
+      break;
+  }
+  return (
+    <Badge size="sm" color={color}>
+      {value}
+    </Badge>
   );
 }
