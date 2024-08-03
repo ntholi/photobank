@@ -1,6 +1,6 @@
 'use client';
 import { Center, SegmentedControl, Text } from '@mantine/core';
-import { ApplicationStatus } from '@prisma/client';
+import { ApplicationStatus, ContributorApplication } from '@prisma/client';
 import {
   IconBan,
   IconCheck,
@@ -13,17 +13,16 @@ import { revalidatePath } from 'next/cache';
 import { useRouter } from 'next/navigation';
 
 type Props = {
-  status: ApplicationStatus;
-  id: number;
+  application: ContributorApplication;
 };
 
-export default function StatusUpdater({ status, id }: Props) {
-  const [value, setValue] = React.useState(status);
+export default function StatusUpdater({ application }: Props) {
+  const [value, setValue] = React.useState(application.status);
   const router = useRouter();
 
   async function handleUpdate(status: ApplicationStatus) {
     setValue(status);
-    await updateApplicationStatus(id, status);
+    await updateApplicationStatus(application.id, application.userId, status);
     router.refresh();
   }
 

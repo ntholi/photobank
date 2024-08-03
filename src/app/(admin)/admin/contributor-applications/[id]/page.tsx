@@ -43,7 +43,7 @@ export default async function Page({ params: { id } }: Props) {
             <FieldView label="Name" value={item.user.name} />
             <FieldView label="Email" value={item.user.email} />
           </Stack>
-          <StatusUpdater status={item.status} id={Number(id)} />
+          <StatusUpdater application={item} />
         </Group>
         <Stack mt={'lg'} gap={'xs'}>
           <Text size="sm" fw={500}>

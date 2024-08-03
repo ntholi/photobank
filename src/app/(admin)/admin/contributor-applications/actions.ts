@@ -33,6 +33,7 @@ export async function createApplication(data: ContributorApplication) {
 
 export async function updateApplicationStatus(
   id: number,
+  userId: string,
   status: ContributorApplication['status'],
 ) {
   const session = await auth();
@@ -42,5 +43,12 @@ export async function updateApplicationStatus(
     where: { id: Number(id) },
     data: { status },
   });
+  if (status === 'approved') {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { role: 'contributor' },
+    });
+  }
+
   revalidatePath(`/admin/contributor-applications/${id}`);
 }
