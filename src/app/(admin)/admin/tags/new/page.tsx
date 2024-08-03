@@ -1,4 +1,3 @@
-import prisma from '@/lib/prisma';
 import { Box } from '@mantine/core';
 import { revalidatePath } from 'next/cache';
 import Form from '../Form';

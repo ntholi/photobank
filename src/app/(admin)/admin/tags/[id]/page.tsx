@@ -1,15 +1,7 @@
 import DeleteIconButton from '@/app/(admin)/components/DeleteIconButton';
 import FieldView from '@/app/(admin)/components/FieldView';
 import HeaderDisplay from '@/app/(admin)/components/HeaderDisplay';
-import {
-  Box,
-  Divider,
-  Fieldset,
-  List,
-  ListItem,
-  Stack,
-  Text,
-} from '@mantine/core';
+import { Box, Fieldset, List, ListItem, Stack } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import { deleteTag, getTag } from '../actions';
 
