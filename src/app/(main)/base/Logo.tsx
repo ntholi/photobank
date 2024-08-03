@@ -7,7 +7,7 @@ type Props = {
 export default function Logo({ size = 45, className }: Props) {
   return (
     <Image
-      src="/images/logo.jpg"
+      src="/images/logo/black.png"
       alt="logo"
       className={className}
       height={size}

@@ -4,20 +4,20 @@ import { BsTwitter, BsFacebook, BsInstagram } from 'react-icons/bs';
 import { APP_NAME } from '@/lib/constants';
 
 export default function Footer({ className }: { className?: string }) {
-  const logoHeight = 25;
+  const logoHeight = 35;
   return (
     <footer className={`bg-gray-100 border-t ${className}`}>
       <div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div>
             <Image
-              src={`/images/logo.jpg`}
+              src={`/images/logo/transparent.png`}
               width={logoHeight * 3.22}
               height={logoHeight}
               alt="logo"
             />
 
-            <p className="mt-4 max-w-xs text-gray-500">
+            <p className="max-w-xs text-gray-500">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse non
               cupiditate quae nam molestias.
             </p>

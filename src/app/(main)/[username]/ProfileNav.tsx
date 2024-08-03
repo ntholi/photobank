@@ -41,7 +41,12 @@ export default function ProfileNav() {
   return (
     <nav className="z-50 bg-background fixed bottom-0 w-full sm:w-[20vw] sm:h-screen border-t border-t-zinc-100 sm:border-e sm:border-t-0 border-zinc-300">
       <Link href={'/'} className="inline-block p-8 max-sm:hidden">
-        <Image alt="logo" src="/images/logo.jpg" width={100} height={100} />
+        <Image
+          alt="logo"
+          src="/images/logo/black.png"
+          width={100}
+          height={100}
+        />
       </Link>
       <ul className="flex justify-evenly sm:block">
         <NevItem name="Home" link="/" icon={<GoHome />} />

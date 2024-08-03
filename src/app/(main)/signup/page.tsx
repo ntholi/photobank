@@ -67,7 +67,7 @@ export default function SignUpPage() {
             className="mx-auto w-auto"
             height={80}
             width={80}
-            src="/images/logo.jpg"
+            src="/images/logo/black.png"
             alt={APP_NAME}
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">

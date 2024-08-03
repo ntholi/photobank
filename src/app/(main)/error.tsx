@@ -20,12 +20,12 @@ export default function Error({
   return (
     <div className="flex h-screen flex-col justify-center items-center capitalize">
       <Image
-        src={`/images/logo.jpg`}
+        src={`/images/logo/black.png`}
         width={logoHeight * 3.22}
         height={logoHeight}
         alt="logo"
       />
-      <h2 className="text-3xl font-semibold mt-8">Something went wrong!</h2>
+      <h2 className="text-xl font-semibold mt-8">Something went wrong!</h2>
       <Button
         className="mt-5"
         radius="none"
