@@ -84,7 +84,9 @@ function LabelsInput({ labels, setLabels }: LabelsInputProps) {
   return (
     <Stack mt={'lg'}>
       <Flex justify="space-between">
-        <Title order={3}>Labels</Title>
+        <Title order={4} fw={'normal'}>
+          Labels
+        </Title>
       </Flex>
       <Group justify="space-between">
         <TextInput
