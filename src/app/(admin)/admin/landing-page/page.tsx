@@ -8,6 +8,8 @@ import {
   SimpleGrid,
   Stack,
   Title,
+  Text,
+  Divider,
 } from '@mantine/core';
 import { revalidatePath } from 'next/cache';
 import AddButton from './AddButton';
@@ -51,8 +53,14 @@ export default async function HomePage() {
           <AddButton handleAdd={handleAdd} />
         </Flex>
       </Paper>
-      <Paper p="lg" withBorder>
-        <SimpleGrid cols={4}>
+      <Paper withBorder p={50}>
+        <Stack gap={'xs'}>
+          <Text size="0.9rem">
+            Image that will be shown on the landing page
+          </Text>
+          <Divider />
+        </Stack>
+        <SimpleGrid cols={4} mt={'xl'}>
           {photos.map((it) => (
             <Box key={it.photo.id} pos={'relative'}>
               <Image src={thumbnail(it.photo.fileName)} />

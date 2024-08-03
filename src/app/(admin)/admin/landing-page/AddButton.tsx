@@ -16,6 +16,7 @@ import {
   Divider,
   Chip,
   Group,
+  Flex,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Tag } from '@prisma/client';
@@ -76,11 +77,9 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
                 <Loader size={30} />
               </Center>
             ) : (
-              <Stack>
+              <Stack mt={'lg'}>
                 <Box>
-                  <Text c={'dimmed'} size="0.95rem">
-                    Pick a Photo
-                  </Text>
+                  <Text size="0.9rem">Pick a Photo</Text>
                   <Divider mt={'xs'} />
                 </Box>
                 <SimpleGrid cols={3}>
@@ -115,7 +114,7 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
         variant="default"
         onClick={open}
       >
-        New
+        Add Photo
       </Button>
     </>
   );
@@ -141,8 +140,9 @@ function TagSelect({ setTag }: TagSelectProps) {
       onChange={(it) => {
         setTag(data.find((i) => i.name === it) || null);
       }}
+      defaultValue={'All'}
     >
-      <Group justify="center">
+      <Group>
         {data.map((item) => (
           <Chip key={item.id} value={item.name}>
             {item.name}
