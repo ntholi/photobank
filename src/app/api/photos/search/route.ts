@@ -13,15 +13,12 @@ export async function POST(req: Request) {
     console.error('Error parsing request body');
   }
 
-  const labels = await prisma.label.findMany({
+  const tag = await prisma.tag.findFirst({
     where: {
-      tags: {
-        some: {
-          id: tagId,
-        },
-      },
+      id: tagId,
     },
   });
+  const labels: string[] = tag ? tag.labels : [];
 
   const data = await prisma.photo.findMany({
     where: {
@@ -32,8 +29,8 @@ export async function POST(req: Request) {
       },
       labels: tagId && {
         some: {
-          labelId: {
-            in: labels.map((it) => it.id),
+          label: {
+            in: labels,
           },
         },
       },
