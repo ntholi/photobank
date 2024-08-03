@@ -23,6 +23,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import React from 'react';
 import { deletePhoto, getPhoto } from '../actions';
+import { dateTime } from '@/lib/format';
 
 type Props = {
   params: {
@@ -84,6 +85,10 @@ export default async function Page({ params: { id } }: Props) {
               </FieldView>
               <Divider />
               <FieldView label="Location">{item.location?.name}</FieldView>
+              <Divider />
+              <FieldView label="Date Uploaded">
+                {dateTime(item.createdAt)}
+              </FieldView>
             </Stack>
           </Card>
         </GridCol>
