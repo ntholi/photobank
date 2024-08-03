@@ -8,7 +8,7 @@ type Props = {
   };
 };
 
-export async function GET(request: Request, { params }: Props) {
+export async function GET(_: Request, { params }: Props) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -20,11 +20,8 @@ export async function GET(request: Request, { params }: Props) {
       userId: session.user.id,
     },
   });
-  if (!photo) {
-    throw new Error(`Photo with id ${params.id} not found`);
-  }
 
-  const isSaved = photo.id ? true : false;
+  const isSaved = photo?.id ? true : false;
 
   return NextResponse.json({
     isSaved,

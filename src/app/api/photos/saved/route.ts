@@ -2,23 +2,50 @@ import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { thumbnail } from '@/lib/config/urls';
 import { auth } from '@/auth';
+import { z } from 'zod';
+
+// action is 'save' or 'remove'
+const schema = z.object({
+  photoId: z.string(),
+  action: z.enum(['save', 'remove']),
+});
 
 export async function POST(req: Request) {
-  const { photoId } = await req.json();
-  const session = await auth();
+  try {
+    const body = await req.json();
+    const { photoId, action } = schema.parse(body);
+    const session = await auth();
 
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (action === 'save') {
+      const savedPhoto = await prisma.savedPhotos.create({
+        data: {
+          userId: session.user.id,
+          photoId,
+        },
+      });
+      return NextResponse.json(savedPhoto);
+    } else if (action === 'remove') {
+      const removedPhoto = await prisma.savedPhotos.delete({
+        where: {
+          userId: session.user.id,
+          photoId,
+        },
+      });
+      return NextResponse.json(removedPhoto);
+    }
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
+    }
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 },
+    );
   }
-
-  const savedPhoto = await prisma.savedPhotos.create({
-    data: {
-      userId: session.user?.id,
-      photoId,
-    },
-  });
-
-  return NextResponse.json(savedPhoto);
 }
 
 export async function GET(req: Request) {

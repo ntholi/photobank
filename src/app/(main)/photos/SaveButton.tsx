@@ -20,7 +20,6 @@ export default function SaveButton({ photoId }: Props) {
   useEffect(() => {
     if (session) {
       axios.get(api(`/photos/saved/${photoId}`)).then((res) => {
-        console.log(res.data);
         setSaved(res.data.isSaved);
       });
     }
@@ -37,7 +36,7 @@ export default function SaveButton({ photoId }: Props) {
           photoId,
           action: saved ? 'remove' : 'save',
         });
-        setSaved(true);
+        setSaved((it) => !it);
       });
     } else {
       router.push('/signup');
@@ -48,6 +47,7 @@ export default function SaveButton({ photoId }: Props) {
     <Button
       color="danger"
       variant="bordered"
+      className="w-32"
       startContent={saved ? <FaBookmark /> : <FaRegBookmark />}
       onClick={handleSave}
       onMouseOver={() => {
