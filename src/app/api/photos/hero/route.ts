@@ -3,18 +3,11 @@ import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
-  const data = await prisma.photo.findManyRandom(7, {
-    where: {
-      status: 'published',
-      useWithoutWatermark: true,
-    },
-    select: {
-      fileName: true,
-      id: true,
-      user: true,
-      location: true,
-    },
-  });
+  const data = (
+    await prisma.homePhoto.findMany({
+      select: { photo: true },
+    })
+  ).map((it) => it.photo);
 
   const photos = data.map((photo) => {
     if (typeof photo.fileName === 'string') {
