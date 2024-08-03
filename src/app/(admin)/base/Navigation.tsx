@@ -14,6 +14,7 @@ import {
 import {
   IconChevronRight,
   IconFileDescription,
+  IconHome,
   IconLogout2,
   IconNote,
   IconPaperclip,
@@ -33,6 +34,14 @@ export default function Navigation() {
   return (
     <AppShell.Navbar p="xs">
       <AppShell.Section grow component={ScrollArea}>
+        <NavLink
+          label="Home"
+          component={Link}
+          active={pathname.startsWith('/admin/home')}
+          href={'/admin/home'}
+          leftSection={<IconHome size="1.1rem" />}
+          rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+        />
         <NavLink
           label="Tags"
           component={Link}
