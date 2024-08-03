@@ -7,12 +7,16 @@ import {
   Box,
   Card,
   Divider,
+  Fieldset,
   Grid,
   GridCol,
   Group,
   Image,
+  List,
+  ListItem,
   Stack,
   Text,
+  Title,
 } from '@mantine/core';
 import { PhotoStatus } from '@prisma/client';
 import Link from 'next/link';
@@ -39,7 +43,7 @@ export default async function Page({ params: { id } }: Props) {
       />
 
       <Grid p="lg">
-        <GridCol span={{ base: 12, md: 5 }}>
+        <GridCol span={{ base: 12, md: 6 }}>
           <Card shadow="sm" padding="lg" radius="md" withBorder>
             <Image
               radius="md"
@@ -83,7 +87,25 @@ export default async function Page({ params: { id } }: Props) {
             </Stack>
           </Card>
         </GridCol>
+        <GridCol span={{ base: 12, md: 6 }}>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Text size="0.9rem">{item.caption}</Text>
+          </Card>
+        </GridCol>
       </Grid>
+      <Stack p={'xl'} gap={'sm'}>
+        <Title order={3} fw={'lighter'}>
+          Labels
+        </Title>
+        <Divider />
+        <List>
+          {item.labels.map((it) => (
+            <ListItem>
+              <Text size="0.8rem">{it.label}</Text>
+            </ListItem>
+          ))}
+        </List>
+      </Stack>
     </Box>
   );
 }
