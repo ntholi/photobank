@@ -26,7 +26,7 @@ export default async function HomePage() {
         photoId,
       },
     });
-    revalidatePath('/admin/home');
+    revalidatePath('/admin/landing-page');
     revalidatePath('/');
   }
 
@@ -37,7 +37,7 @@ export default async function HomePage() {
         photoId,
       },
     });
-    revalidatePath('/admin/home');
+    revalidatePath('/admin/landing-page');
     revalidatePath('/');
   }
 
@@ -46,7 +46,7 @@ export default async function HomePage() {
       <Paper p="lg" withBorder>
         <Flex justify={'space-between'} align={'center'}>
           <Title fw={'lighter'} size={18} c="gray">
-            Home Page Photos
+            Landing Page
           </Title>
           <AddButton handleAdd={handleAdd} />
         </Flex>

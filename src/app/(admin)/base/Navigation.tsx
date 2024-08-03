@@ -35,10 +35,10 @@ export default function Navigation() {
     <AppShell.Navbar p="xs">
       <AppShell.Section grow component={ScrollArea}>
         <NavLink
-          label="Home"
+          label="Landing Page"
           component={Link}
-          active={pathname.startsWith('/admin/home')}
-          href={'/admin/home'}
+          active={pathname.startsWith('/admin/landing-page')}
+          href={'/admin/landing-page'}
           leftSection={<IconHome size="1.1rem" />}
           rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
         />
