@@ -7,43 +7,16 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { GoCheck, GoUpload } from 'react-icons/go';
 import UploadModal from './UploadModal';
+import ContributorButton from './ContributorButton';
+import { canUpload } from './utils';
 
 type Props = { params: { username: string } };
 
 export default function UploadPage({ params: { username } }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
-  const [application, setApplication] = useState<ContributorApplication | null>(
-    null,
-  );
-
-  useEffect(() => {
-    async function fetchUser() {
-      const { data } = await axios.get(
-        `/api/users/contributors/applications?username=${username}`,
-      );
-      if (data.application) {
-        setApplication(data.application);
-      }
-    }
-    fetchUser();
-  }, [username]);
 
   if (!session?.user) return null;
-
-  const becomeContributor = async () => {
-    setLoading(true);
-    try {
-      console.log('sending request');
-      const { data } = await axios.post('/api/users/contributors/applications');
-      if (data.application) {
-        setApplication(data.application);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <>
@@ -62,35 +35,8 @@ export default function UploadPage({ params: { username } }: Props) {
             ? 'Please note that all photos are subject to review before they can be published on the photo bank'
             : 'You have to be a contributor to upload photos'}
         </p>
-        {canUpload(session?.user) ? (
-          <Button
-            onPress={onOpen}
-            startContent={<GoUpload />}
-            color="primary"
-            className="mt-5"
-          >
-            Upload
-          </Button>
-        ) : (
-          <Button
-            color="primary"
-            variant="light"
-            onClick={becomeContributor}
-            isDisabled={!!application}
-            startContent={application && <GoCheck />}
-            isLoading={loading}
-          >
-            {application?.status == 'approved'
-              ? 'Application Sent'
-              : 'Become a Contributor'}
-          </Button>
-        )}
+        <ContributorButton username={username} onOpen={onOpen} />
       </section>
     </>
   );
-}
-
-function canUpload(user: User | undefined) {
-  const validRoles: Role[] = ['contributor', 'moderator', 'admin'];
-  return user?.role && validRoles.includes(user.role);
 }
