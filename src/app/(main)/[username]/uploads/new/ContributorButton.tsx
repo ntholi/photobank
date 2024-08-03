@@ -5,7 +5,7 @@ import { ContributorApplication } from '@prisma/client';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { GoCheck, GoUpload } from 'react-icons/go';
+import { GoCheck, GoStop, GoUpload } from 'react-icons/go';
 import { canUpload } from './utils';
 
 type Props = {
@@ -50,21 +50,57 @@ export default function ContributorButton({ username, onOpen }: Props) {
       startContent={<GoUpload />}
       color="primary"
       className="mt-5"
+      isLoading={loading}
     >
       Upload
     </Button>
   ) : (
     <Button
-      color="primary"
+      color={getStatusColor(application?.status)}
       variant="light"
       onClick={becomeContributor}
       isDisabled={!!application}
-      startContent={application && <GoCheck />}
+      startContent={<StatusIcon status={application?.status} />}
       isLoading={loading}
     >
-      {application?.status == 'approved'
-        ? 'Application Sent'
-        : 'Become a Contributor'}
+      {statusMessage(application?.status)}
     </Button>
   );
+}
+
+function getStatusColor(status?: ContributorApplication['status']) {
+  switch (status) {
+    case 'approved':
+      return 'success';
+    case 'rejected':
+      return 'danger';
+    default:
+      return 'primary';
+  }
+}
+
+function statusMessage(status?: ContributorApplication['status']) {
+  switch (status) {
+    case 'pending':
+      return 'Application Sent';
+    case 'approved':
+      return 'Application Approved';
+    case 'rejected':
+      return 'Contributor Application Rejected';
+    default:
+      return 'Become a Contributor';
+  }
+}
+
+function StatusIcon({ status }: { status?: ContributorApplication['status'] }) {
+  switch (status) {
+    case 'pending':
+      return <GoCheck />;
+    case 'approved':
+      return <GoCheck />;
+    case 'rejected':
+      return <GoStop />;
+    default:
+      return null;
+  }
 }
