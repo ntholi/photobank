@@ -3,6 +3,7 @@
 import { ActionIcon, Menu, Text } from '@mantine/core';
 import { Role, User } from '@prisma/client';
 import {
+  IconCheck,
   IconDotsVertical,
   IconHandStop,
   IconLockOpen,
@@ -65,19 +66,21 @@ export default function RowActions({ user }: Props) {
         <Menu.Divider />
 
         <Menu.Label>Update Role</Menu.Label>
-        <Menu.Item onClick={() => handleRole('user')}>
-          <Text size="xs">User</Text>
-        </Menu.Item>
-        <Menu.Item onClick={() => handleRole('contributor')}>
-          <Text size="xs">Contributor</Text>
-        </Menu.Item>
-        <Menu.Item onClick={() => handleRole('moderator')}>
-          <Text size="xs">Moderator</Text>
-        </Menu.Item>
-        <Menu.Item onClick={() => handleRole('admin')}>
-          <Text size="xs">Admin</Text>
-        </Menu.Item>
+        {Object.keys(Role).map((role) => (
+          <RoleItem key={role} user={user} role={role as Role} />
+        ))}
       </Menu.Dropdown>
     </Menu>
+  );
+}
+
+function RoleItem({ user, role }: { user: User; role: Role }) {
+  return (
+    <Menu.Item
+      onClick={() => updateRole(user.id, role)}
+      rightSection={user.role == role && <IconCheck size="1rem" />}
+    >
+      <Text size="xs">{role.charAt(0).toUpperCase() + role.slice(1)}</Text>
+    </Menu.Item>
   );
 }
