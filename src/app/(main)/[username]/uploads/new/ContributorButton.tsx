@@ -50,7 +50,6 @@ export default function ContributorButton({ username, onOpen }: Props) {
       startContent={<GoUpload />}
       color="primary"
       className="mt-5"
-      isLoading={loading}
     >
       Upload
     </Button>
