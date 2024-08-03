@@ -15,6 +15,7 @@ import AddButton from './AddButton';
 import { revalidatePath } from 'next/cache';
 import { thumbnail } from '@/lib/config/urls';
 import { IconTrashFilled } from '@tabler/icons-react';
+import DeleteButton from './DeleteButton';
 
 export default async function HomePage() {
   const photos = await prisma.homePhoto.findMany({
@@ -25,6 +26,16 @@ export default async function HomePage() {
     'use server';
     await prisma.homePhoto.create({
       data: {
+        photoId,
+      },
+    });
+    revalidatePath('/admin/home');
+  }
+
+  async function handleDelete(photoId: string) {
+    'use server';
+    await prisma.homePhoto.delete({
+      where: {
         photoId,
       },
     });
@@ -46,15 +57,13 @@ export default async function HomePage() {
           {photos.map((it) => (
             <Box key={it.photo.id} pos={'relative'}>
               <Image src={thumbnail(it.photo.fileName)} />
-              <ActionIcon
-                color="red"
+              <DeleteButton
                 pos={'absolute'}
                 top={5}
                 right={5}
-                variant="default"
-              >
-                <IconTrashFilled size={'1rem'} />
-              </ActionIcon>
+                photo={it.photo}
+                handleDelete={handleDelete}
+              />
             </Box>
           ))}
         </SimpleGrid>
