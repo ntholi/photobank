@@ -36,7 +36,9 @@ export default async function UserPage() {
   return (
     <Stack>
       <Paper p="lg" withBorder>
-        <Title size={'sm'}>Users</Title>
+        <Title fw={400} size={18} c="gray">
+          Users
+        </Title>
       </Paper>
       <Paper p="lg" withBorder>
         <Table highlightOnHover>
