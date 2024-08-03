@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 import { ContributorApplication } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
-export async function getContributorApplication(id: number) {
+export async function getApplication(id: number) {
   return await prisma.contributorApplication.findUnique({
     where: {
       id: Number(id),
@@ -15,16 +15,14 @@ export async function getContributorApplication(id: number) {
   });
 }
 
-export async function deleteContributorApplication(id: number) {
+export async function deleteApplication(id: number) {
   const session = await auth();
   if (session?.user?.role != 'admin') throw new Error('User not admin');
   await prisma.contributorApplication.delete({ where: { id: Number(id) } });
   revalidatePath('/admin/contributorApplications');
 }
 
-export async function createContributorApplication(
-  data: ContributorApplication,
-) {
+export async function createApplication(data: ContributorApplication) {
   const session = await auth();
   if (session?.user?.role != 'admin') throw new Error('User not admin');
 
@@ -33,15 +31,16 @@ export async function createContributorApplication(
   });
 }
 
-export async function updateContributorApplication(
+export async function updateApplicationStatus(
   id: number,
-  data: ContributorApplication,
+  status: ContributorApplication['status'],
 ) {
   const session = await auth();
   if (session?.user?.role != 'admin') throw new Error('User not admin');
 
-  return prisma.contributorApplication.update({
+  await prisma.contributorApplication.update({
     where: { id: Number(id) },
-    data,
+    data: { status },
   });
+  revalidatePath(`/admin/contributor-applications/${id}`);
 }
