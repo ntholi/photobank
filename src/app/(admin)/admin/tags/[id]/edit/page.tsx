@@ -20,7 +20,6 @@ export default async function EditPage({ params: { id } }: Props) {
         value={item}
         onSubmit={async (value) => {
           'use server';
-          const { labels, ...data } = value;
           const res = await updateTag(Number(id), value);
           revalidatePath(`/admin/tags/${res.id}`);
           return res;
