@@ -15,6 +15,8 @@ import {
   IconChevronRight,
   IconFileDescription,
   IconLogout2,
+  IconNote,
+  IconPaperclip,
   IconUser,
   IconUsers,
 } from '@tabler/icons-react';
@@ -46,6 +48,14 @@ export default function Navigation() {
             active={pathname.startsWith('/admin/users')}
             href={'/admin/users'}
             leftSection={<IconUser size="1.1rem" />}
+            rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+          />
+          <NavLink
+            label="Applications"
+            component={Link}
+            active={pathname.startsWith('/admin/contributor-applications')}
+            href={'/admin/contributor-applications'}
+            leftSection={<IconNote size="1.1rem" />}
             rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
           />
         </NavLink>
