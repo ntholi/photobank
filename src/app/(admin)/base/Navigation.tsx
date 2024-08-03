@@ -2,7 +2,6 @@ import {
   ActionIcon,
   AppShell,
   Avatar,
-  Box,
   Divider,
   Flex,
   Group,
@@ -11,26 +10,22 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import {
   IconChevronRight,
   IconFileDescription,
   IconHome,
   IconLogout2,
   IconNote,
-  IconPaperclip,
   IconUser,
   IconUsers,
 } from '@tabler/icons-react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
-import React from 'react';
-import { modals } from '@mantine/modals';
+import { usePathname } from 'next/navigation';
 
 export default function Navigation() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-
   return (
     <AppShell.Navbar p="xs">
       <AppShell.Section grow component={ScrollArea}>

@@ -23,11 +23,15 @@ export default async function HomePage() {
 
   async function handleAdd(photoId: string) {
     'use server';
-    await prisma.homePhoto.create({
-      data: {
-        photoId,
-      },
-    });
+    try {
+      await prisma.homePhoto.create({
+        data: {
+          photoId,
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
     revalidatePath('/admin/landing-page');
     revalidatePath('/');
   }
