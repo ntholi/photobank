@@ -16,16 +16,14 @@ const getSimilarPhotos = async (photoId: string) => {
       labels: true,
     },
   });
-  const labelIds = photo?.labels.map((label) => label.labelId);
 
   const data = await prisma.photo.findMany({
     where: {
       status: 'published',
       labels: {
         some: {
-          labelId: {
-            in: labelIds?.map((it) => it),
-            gt: 3,
+          label: {
+            in: photo?.labels.map((it) => it.label),
           },
         },
       },
