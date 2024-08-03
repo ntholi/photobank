@@ -5,7 +5,11 @@ import { Image } from '@mantine/core';
 import { thumbnail } from '@/lib/config/urls';
 
 export default async function Layout({ children }: PropsWithChildren) {
-  const list = await prisma.photo.findMany();
+  const list = await prisma.photo.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
   return (
     <ListPage
       path="admin/photos"
