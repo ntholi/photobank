@@ -6,6 +6,7 @@ export async function GET(req: Request) {
   const data = (
     await prisma.homePhoto.findMany({
       select: { photo: true },
+      orderBy: { createdAt: 'desc' },
     })
   ).map((it) => it.photo);
 

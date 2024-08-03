@@ -1,25 +1,22 @@
+import { thumbnail } from '@/lib/config/urls';
+import prisma from '@/lib/prisma';
 import {
+  Box,
+  Flex,
+  Image,
+  Paper,
+  SimpleGrid,
   Stack,
   Title,
-  Paper,
-  Flex,
-  Button,
-  Image,
-  SimpleGrid,
-  Box,
-  ActionIcon,
 } from '@mantine/core';
-import React from 'react';
-import prisma from '@/lib/prisma';
-import AddButton from './AddButton';
 import { revalidatePath } from 'next/cache';
-import { thumbnail } from '@/lib/config/urls';
-import { IconTrashFilled } from '@tabler/icons-react';
+import AddButton from './AddButton';
 import DeleteButton from './DeleteButton';
 
 export default async function HomePage() {
   const photos = await prisma.homePhoto.findMany({
     select: { photo: true },
+    orderBy: { createdAt: 'desc' },
   });
 
   async function handleAdd(photoId: string) {
@@ -55,7 +52,7 @@ export default async function HomePage() {
         </Flex>
       </Paper>
       <Paper p="lg" withBorder>
-        <SimpleGrid cols={6}>
+        <SimpleGrid cols={4}>
           {photos.map((it) => (
             <Box key={it.photo.id} pos={'relative'}>
               <Image src={thumbnail(it.photo.fileName)} />
