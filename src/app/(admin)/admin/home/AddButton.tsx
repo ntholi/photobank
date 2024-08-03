@@ -6,11 +6,16 @@ import {
   ScrollArea,
   SimpleGrid,
   TextInput,
+  Text,
   Image,
   Center,
   Loader,
   Stack,
   ActionIcon,
+  Box,
+  Divider,
+  Chip,
+  Group,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Tag } from '@prisma/client';
@@ -58,30 +63,41 @@ export default function AddButton() {
             onChange={(e) => setFilter(e.target.value)}
             value={filter}
           />
-          <ScrollArea h={'70vh'}>
+          <ScrollArea scrollbars="y">
+            <TagSelect tag={tag} setTag={setTag} />
+          </ScrollArea>
+          <ScrollArea h={'60vh'}>
             {loading ? (
               <Center mt={'xl'}>
                 <Loader size={30} />
               </Center>
             ) : (
-              <SimpleGrid cols={3}>
-                {photos.map((it) => (
-                  <ActionIcon
-                    key={it.id}
-                    h={200}
-                    w={'100%'}
-                    variant="default"
-                    p={'sm'}
-                  >
-                    <Image
+              <Stack>
+                <Box>
+                  <Text c={'dimmed'} size="0.95rem">
+                    Pick a Photo
+                  </Text>
+                  <Divider mt={'xs'} />
+                </Box>
+                <SimpleGrid cols={3}>
+                  {photos.map((it) => (
+                    <ActionIcon
                       key={it.id}
-                      src={it.url}
-                      alt={it.caption || 'Lesotho'}
-                      h={'100%'}
-                    />
-                  </ActionIcon>
-                ))}
-              </SimpleGrid>
+                      h={200}
+                      w={'100%'}
+                      variant="default"
+                      p={'sm'}
+                    >
+                      <Image
+                        key={it.id}
+                        src={it.url}
+                        alt={it.caption || 'Lesotho'}
+                        h={'100%'}
+                      />
+                    </ActionIcon>
+                  ))}
+                </SimpleGrid>
+              </Stack>
             )}
           </ScrollArea>
         </Stack>
@@ -94,5 +110,38 @@ export default function AddButton() {
         New
       </Button>
     </>
+  );
+}
+
+type TagSelectProps = {
+  tag: Tag | null;
+  setTag: React.Dispatch<React.SetStateAction<Tag | null>>;
+};
+
+function TagSelect({ tag, setTag }: TagSelectProps) {
+  const [data, setData] = useState<Tag[]>([]);
+
+  React.useEffect(() => {
+    axios.get('/api/filters').then((res) => {
+      if (res.data.filters) {
+        setData(res.data.filters);
+      }
+    });
+  }, []);
+
+  return (
+    <Chip.Group
+      onChange={(it) => {
+        setTag(data.find((i) => i.name === it) || null);
+      }}
+    >
+      <Group justify="center">
+        {data.map((item) => (
+          <Chip key={item.id} value={item.name}>
+            {item.name}
+          </Chip>
+        ))}
+      </Group>
+    </Chip.Group>
   );
 }
