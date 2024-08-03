@@ -48,6 +48,11 @@ export async function updateApplicationStatus(
       where: { id: userId },
       data: { role: 'contributor' },
     });
+  } else {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { role: 'user' },
+    });
   }
 
   revalidatePath(`/admin/contributor-applications/${id}`);
