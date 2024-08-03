@@ -30,6 +30,7 @@ export default async function HomePage() {
       },
     });
     revalidatePath('/admin/home');
+    revalidatePath('/');
   }
 
   async function handleDelete(photoId: string) {
@@ -40,6 +41,7 @@ export default async function HomePage() {
       },
     });
     revalidatePath('/admin/home');
+    revalidatePath('/');
   }
 
   return (
