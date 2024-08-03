@@ -4,6 +4,7 @@ import React from 'react';
 import { Image } from '@nextui-org/react';
 import Link from 'next/link';
 import { thumbnail } from '@/lib/config/urls';
+import { Prisma } from '@prisma/client';
 
 type Props = {
   photo: PhotoWithData;
@@ -21,32 +22,26 @@ const getSimilarPhotos = async (photoId: string) => {
   }
   const labels = photo.labels.map((it) => it.label);
 
-  const data = await prisma.photo.findMany({
-    where: {
-      status: 'published',
-      labels: {
-        some: {
-          label: {
-            in: labels,
-          },
-        },
-      },
-      id: {
-        not: photoId,
-      },
-    },
-    take: 20,
-  });
+  const similarPhotos = await prisma.$queryRaw<PhotoWithData[]>`
+    SELECT p.*, 
+           COUNT(l.label) as matching_labels_count
+    FROM "photos" p
+    JOIN "photo_labels" l ON p.id = l."photo_id"
+    WHERE p.status = 'published'
+      AND p.id != ${photoId}
+      AND l.label IN (${Prisma.join(labels)})
+    GROUP BY p.id
+    HAVING COUNT(DISTINCT l.label) >= 3
+    ORDER BY matching_labels_count DESC
+    LIMIT 20
+  `;
 
-  const photos = data.map((it) => {
-    const fileName = it.fileName.split('.')[0];
-    return {
-      ...it,
-      url: thumbnail(fileName),
-    };
-  });
+  const photos = similarPhotos.map((photo) => ({
+    ...photo,
+    url: thumbnail(photo.fileName.split('.')[0]),
+  }));
 
-  return photos as PhotoWithData[];
+  return photos;
 };
 
 export default async function SimilarPhotos({ photo }: Props) {
