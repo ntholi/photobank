@@ -9,6 +9,11 @@ export async function getPhoto(id: string) {
     where: {
       id: id,
     },
+    include: {
+      labels: true,
+      user: true,
+      location: true,
+    },
   });
 }
 
