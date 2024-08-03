@@ -18,6 +18,7 @@ import React from 'react';
 import { FaBookmark } from 'react-icons/fa6';
 import { IoMdOpen } from 'react-icons/io';
 import { TiLocation } from 'react-icons/ti';
+import SaveButton from '../photos/SaveButton';
 
 type Props = {
   isOpen: boolean;
@@ -25,20 +26,8 @@ type Props = {
   photo: PhotoWithData;
 };
 export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
-  const [saving, setSaving] = React.useState(false);
   const { data: session } = useSession();
   const router = useRouter();
-
-  const handleSave = async () => {
-    if (session) {
-      setSaving(true);
-      axios.post(api(`/photos/${photo.id}/save`)).finally(() => {
-        setSaving(false);
-      });
-    } else {
-      router.push('/signup');
-    }
-  };
 
   return (
     <Modal
@@ -97,15 +86,7 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                       >
                         Open
                       </Button>
-                      <Button
-                        color="danger"
-                        variant="bordered"
-                        startContent={<FaBookmark />}
-                        onClick={handleSave}
-                        isLoading={saving}
-                      >
-                        Save
-                      </Button>
+                      <SaveButton photoId={photo.id} />
                     </div>
                   </footer>
                 </section>

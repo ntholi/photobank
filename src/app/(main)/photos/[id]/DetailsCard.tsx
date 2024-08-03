@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FaBookmark, FaCartArrowDown } from 'react-icons/fa6';
 import PricingPlans from './PricingPlans';
+import SaveButton from '../SaveButton';
 
 type Props = {
   photo: PhotoWithData;
@@ -26,7 +27,6 @@ type Props = {
 export default function DetailsCard({ photo }: Props) {
   const [price, setPrice] = React.useState('');
   const [purchasing, setPurchasing] = React.useState(false);
-  const [saving, setSaving] = React.useState(false);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -35,17 +35,6 @@ export default function DetailsCard({ photo }: Props) {
       setPurchasing(true);
       axios.post(api(`/photos/${photo.id}/purchase`)).finally(() => {
         setPurchasing(false);
-      });
-    } else {
-      router.push('/signup');
-    }
-  };
-
-  const handleSave = async () => {
-    if (session) {
-      setSaving(true);
-      axios.post(api(`/photos/${photo.id}/save`)).finally(() => {
-        setSaving(false);
       });
     } else {
       router.push('/signup');
@@ -83,15 +72,7 @@ export default function DetailsCard({ photo }: Props) {
         >
           Download
         </Button>
-        <Button
-          color="danger"
-          variant="bordered"
-          startContent={<FaBookmark />}
-          onClick={handleSave}
-          isLoading={saving}
-        >
-          Save
-        </Button>
+        <SaveButton photoId={photo.id} />
       </CardFooter>
     </Card>
   );
