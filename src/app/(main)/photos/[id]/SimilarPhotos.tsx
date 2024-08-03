@@ -16,6 +16,10 @@ const getSimilarPhotos = async (photoId: string) => {
       labels: true,
     },
   });
+  if (!photo) {
+    return [];
+  }
+  const labels = photo.labels.map((it) => it.label);
 
   const data = await prisma.photo.findMany({
     where: {
@@ -23,7 +27,7 @@ const getSimilarPhotos = async (photoId: string) => {
       labels: {
         some: {
           label: {
-            in: photo?.labels.map((it) => it.label),
+            in: labels,
           },
         },
       },
