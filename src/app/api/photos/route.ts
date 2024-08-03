@@ -52,16 +52,7 @@ export async function POST(request: Request) {
       labels: {
         create: labels.map((it) => ({
           confidence: it.confidence,
-          label: {
-            connectOrCreate: {
-              where: {
-                name: it.name,
-              },
-              create: {
-                name: it.name,
-              },
-            },
-          },
+          label: it.name,
         })),
       },
     },
