@@ -23,7 +23,11 @@ import { IconPlus } from '@tabler/icons-react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-export default function AddButton() {
+type AddButtonProps = {
+  handleAdd: (photoId: string) => Promise<void>;
+};
+
+export default function AddButton({ handleAdd }: AddButtonProps) {
   const [opened, { open, close }] = useDisclosure(false);
   const [filter, setFilter] = React.useState('');
   const [photos, setPhotos] = useState<PhotoWithData[]>([]);
@@ -87,6 +91,10 @@ export default function AddButton() {
                       w={'100%'}
                       variant="default"
                       p={'sm'}
+                      onClick={() => {
+                        handleAdd(it.id);
+                        close();
+                      }}
                     >
                       <Image
                         key={it.id}

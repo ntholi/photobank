@@ -1,9 +1,36 @@
-import { Stack, Title, Paper, Flex, Button } from '@mantine/core';
+import {
+  Stack,
+  Title,
+  Paper,
+  Flex,
+  Button,
+  Image,
+  SimpleGrid,
+  Box,
+  ActionIcon,
+} from '@mantine/core';
 import React from 'react';
-import { IconPlus } from '@tabler/icons-react';
+import prisma from '@/lib/prisma';
 import AddButton from './AddButton';
+import { revalidatePath } from 'next/cache';
+import { thumbnail } from '@/lib/config/urls';
+import { IconTrashFilled } from '@tabler/icons-react';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const photos = await prisma.homePhoto.findMany({
+    select: { photo: true },
+  });
+
+  async function handleAdd(photoId: string) {
+    'use server';
+    await prisma.homePhoto.create({
+      data: {
+        photoId,
+      },
+    });
+    revalidatePath('/admin/home');
+  }
+
   return (
     <Stack>
       <Paper p="lg" withBorder>
@@ -11,11 +38,26 @@ export default function HomePage() {
           <Title fw={'lighter'} size={18} c="gray">
             Home Page Photos
           </Title>
-          <AddButton />
+          <AddButton handleAdd={handleAdd} />
         </Flex>
       </Paper>
       <Paper p="lg" withBorder>
-        xxx
+        <SimpleGrid cols={6}>
+          {photos.map((it) => (
+            <Box key={it.photo.id} pos={'relative'}>
+              <Image src={thumbnail(it.photo.fileName)} />
+              <ActionIcon
+                color="red"
+                pos={'absolute'}
+                top={5}
+                right={5}
+                variant="default"
+              >
+                <IconTrashFilled size={'1rem'} />
+              </ActionIcon>
+            </Box>
+          ))}
+        </SimpleGrid>
       </Paper>
     </Stack>
   );

@@ -122,6 +122,7 @@ model Photo {
   purchasedPhotos     PurchasedPhotos[]
   savedPhotos         SavedPhotos[]
   labels              PhotoLabel[]
+  homePhoto           HomePhoto[]
   createdAt           DateTime          @default(now()) @map("created_at")
   updatedAt           DateTime          @updatedAt @map("updated_at")
 
@@ -138,6 +139,16 @@ model PhotoLabel {
   updatedAt  DateTime @updatedAt @map("updated_at")
 
   @@map("photo_labels")
+}
+
+model HomePhoto {
+  id        Int      @id @default(autoincrement())
+  photo     Photo    @relation(fields: [photoId], references: [id])
+  photoId   String   @unique @map("photo_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("home_photos")
 }
 
 model Tag {
