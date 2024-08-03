@@ -21,7 +21,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { Tag } from '@prisma/client';
 import { IconPlus } from '@tabler/icons-react';
 import axios from 'axios';
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function AddButton() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -64,7 +64,7 @@ export default function AddButton() {
             value={filter}
           />
           <ScrollArea scrollbars="y">
-            <TagSelect tag={tag} setTag={setTag} />
+            <TagSelect setTag={setTag} />
           </ScrollArea>
           <ScrollArea h={'60vh'}>
             {loading ? (
@@ -91,7 +91,7 @@ export default function AddButton() {
                       <Image
                         key={it.id}
                         src={it.url}
-                        alt={it.caption || 'Lesotho'}
+                        alt={it.caption || 'Lehakoe'}
                         h={'100%'}
                       />
                     </ActionIcon>
@@ -114,11 +114,10 @@ export default function AddButton() {
 }
 
 type TagSelectProps = {
-  tag: Tag | null;
   setTag: React.Dispatch<React.SetStateAction<Tag | null>>;
 };
 
-function TagSelect({ tag, setTag }: TagSelectProps) {
+function TagSelect({ setTag }: TagSelectProps) {
   const [data, setData] = useState<Tag[]>([]);
 
   React.useEffect(() => {

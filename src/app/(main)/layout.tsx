@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: APP_NAME,
-  description: 'Lesotho photo bank',
+  description: "Lehakoe, Lesotho's photo bank",
 };
 
 export default function RootLayout({ children }: { children: any }) {

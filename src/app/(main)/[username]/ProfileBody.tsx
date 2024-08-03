@@ -105,7 +105,7 @@ export const ProfileBody = ({ userId }: Props) => {
                               'min-w-full h-60 sm:h-72 object-cover cursor-pointer'
                             }
                             src={photo.url}
-                            alt={photo.caption || 'Lesotho'}
+                            alt={photo.caption || 'Lehakoe'}
                             onClick={() => {
                               setSelectedPhoto(photo);
                               onOpen();
