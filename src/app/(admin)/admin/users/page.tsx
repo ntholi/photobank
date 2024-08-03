@@ -2,6 +2,9 @@ import prisma from '@/lib/prisma';
 import { toDateTime } from '@/lib/utils';
 import {
   Anchor,
+  Badge,
+  Divider,
+  Group,
   Paper,
   Stack,
   Table,
@@ -13,9 +16,23 @@ import {
 } from '@mantine/core';
 import Link from 'next/link';
 import RowActions from './RowActions';
+import { Role } from '@prisma/client';
+import UserFilter from './UserFilter';
 
-export default async function UserPage() {
-  const data = await prisma.user.findMany();
+type Props = {
+  searchParams: { role?: Role };
+};
+
+async function getUsers(role?: Role) {
+  if (role) {
+    return await prisma.user.findMany({ where: { role } });
+  }
+  return await prisma.user.findMany();
+}
+
+export default async function UserPage({ searchParams }: Props) {
+  const data = await getUsers(searchParams.role);
+
   const rows = data.map((user) => (
     <TableTr key={user.id}>
       <TableTd>
@@ -23,9 +40,14 @@ export default async function UserPage() {
           {user.username}
         </Anchor>
       </TableTd>
-      <TableTd>{user.name}</TableTd>
+      <TableTd>{user.name || '(Empty)'}</TableTd>
       <TableTd>{user.email}</TableTd>
       <TableTd>{user.role}</TableTd>
+      <TableTd>
+        <Badge variant="default" size="sm">
+          {user.blocked ? 'Blocked' : 'Active'}
+        </Badge>
+      </TableTd>
       <TableTd>{toDateTime(user.createdAt)}</TableTd>
       <TableTd>
         <RowActions user={user} />
@@ -36,9 +58,13 @@ export default async function UserPage() {
   return (
     <Stack>
       <Paper p="lg" withBorder>
-        <Title fw={400} size={18} c="gray">
-          Users
-        </Title>
+        <Group>
+          <Title fw={400} size={18} c="gray">
+            Users
+          </Title>
+          <Divider orientation="vertical" />
+          <UserFilter />
+        </Group>
       </Paper>
       <Paper p="lg" withBorder>
         <Table highlightOnHover>
@@ -48,6 +74,7 @@ export default async function UserPage() {
               <TableTh>Name</TableTh>
               <TableTh>Email</TableTh>
               <TableTh>Role</TableTh>
+              <TableTh>Status</TableTh>
               <TableTh>Date Created</TableTh>
             </TableTr>
           </TableThead>
