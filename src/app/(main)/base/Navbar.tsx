@@ -25,7 +25,7 @@ import React, { useEffect } from 'react';
 import { BiLogOut, BiUser } from 'react-icons/bi';
 import { nameToInitials } from '../users/[id]/UserBio';
 import Logo from './Logo';
-import { excludePaths, isAppPath } from './excludePaths';
+import { isAppPath } from './excludePaths';
 
 const navItems = [
   {
