@@ -9,7 +9,8 @@ export default async function NewPage() {
       <Form
         onSubmit={async (value) => {
           'use server';
-          const res = await createLocation(value);
+          if (!value.location) throw new Error('Location is required');
+          const res = await createLocation(value, value.location);
           revalidatePath('/admin/locations');
           return res;
         }}
