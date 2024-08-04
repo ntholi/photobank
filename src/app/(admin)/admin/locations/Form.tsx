@@ -1,11 +1,13 @@
 'use client';
 import FormHeader from '@/app/(admin)/components/FormHeader';
-import { Stack } from '@mantine/core';
+import { Stack, Textarea } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Location, LocationDetails } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import LocationInput from './LocationInput';
+import { RichTextEditor } from '@mantine/tiptap';
+import RichTextField from '../../components/RichTextField';
 
 type LocationDetailsFormData = LocationDetails & {
   location: Location | null;
@@ -48,7 +50,7 @@ export default function Form({ onSubmit, value }: Props) {
             form.setFieldValue('location', location);
           }}
         />
-        {/* Add other fields for LocationDetails here */}
+        <RichTextField label="About" {...form.getInputProps('about')} />
       </Stack>
     </form>
   );
