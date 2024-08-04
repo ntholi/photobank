@@ -60,12 +60,12 @@ export default function LocationChooser({ location, setLocation }: Props) {
       googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}
       libraries={['places']}
     >
-      <div className="flex items-center gap-1">
-        <StandaloneSearchBox
-          onLoad={(ref) => (inputRef.current = ref)}
-          onPlacesChanged={handlePlaceChanged}
-          bounds={bounds}
-        >
+      <StandaloneSearchBox
+        onLoad={(ref) => (inputRef.current = ref)}
+        onPlacesChanged={handlePlaceChanged}
+        bounds={bounds}
+      >
+        <div className="flex items-start gap-1">
           <Input
             label="Location"
             type="text"
@@ -75,9 +75,9 @@ export default function LocationChooser({ location, setLocation }: Props) {
             value={inputValue}
             onChange={handleInputChange}
           />
-        </StandaloneSearchBox>
-        <LocationPing setLocation={setLocation} />
-      </div>
+          <LocationPing setLocation={setLocation} />
+        </div>
+      </StandaloneSearchBox>
     </LoadScript>
   );
 }

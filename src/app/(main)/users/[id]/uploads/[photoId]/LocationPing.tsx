@@ -35,8 +35,9 @@ export default function LocationPing({ setLocation }: Props) {
   return (
     <Button
       isIconOnly
+      radius="full"
       variant="bordered"
-      className="h-12 w-14"
+      className="h-14 w-16"
       aria-label="Pick Location"
       onClick={pingLocation}
       isLoading={loading}
