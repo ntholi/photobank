@@ -18,6 +18,7 @@ import Link from 'next/link';
 import RowActions from './RowActions';
 import { Role } from '@prisma/client';
 import UserFilter from './UserFilter';
+import { profilePath } from '@/lib/constants';
 
 type Props = {
   searchParams: { role?: Role };
@@ -36,7 +37,7 @@ export default async function UserPage({ searchParams }: Props) {
   const rows = data.map((user) => (
     <TableTr key={user.id}>
       <TableTd>
-        <Anchor component={Link} target="_blank" href={`/${user.id}`}>
+        <Anchor component={Link} target="_blank" href={profilePath(user)}>
           {user.id}
         </Anchor>
       </TableTd>

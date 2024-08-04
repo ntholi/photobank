@@ -24,6 +24,7 @@ import { notFound } from 'next/navigation';
 import React from 'react';
 import { deletePhoto, getPhoto } from '../actions';
 import { dateTime } from '@/lib/format';
+import { profilePath } from '@/lib/constants';
 
 type Props = {
   params: {
@@ -78,7 +79,7 @@ export default async function Page({ params: { id } }: Props) {
                   size="0.9rem"
                   target="_blank"
                   component={Link}
-                  href={`/${item.userId}`}
+                  href={profilePath(item.user)}
                 >
                   {item.user.name}
                 </Anchor>
