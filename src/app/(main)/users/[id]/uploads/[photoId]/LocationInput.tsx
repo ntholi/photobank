@@ -1,6 +1,6 @@
+import React, { useRef, useState } from 'react';
 import { Input } from '@nextui-org/react';
 import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
-import React, { useRef } from 'react';
 import { Location } from '@/lib/types';
 
 type Props = {
@@ -16,6 +16,7 @@ const bounds = {
 
 export default function LocationInput({ setLocation }: Props) {
   const inputRef = useRef<any>();
+  const [inputValue, setInputValue] = useState('');
 
   const handlePlaceChanged = () => {
     if (!inputRef.current) return;
@@ -26,7 +27,12 @@ export default function LocationInput({ setLocation }: Props) {
         lat: place.geometry?.location.lat() as number,
         lng: place.geometry?.location.lng() as number,
       });
+      setInputValue(place.name as string);
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
   };
 
   return (
@@ -45,6 +51,8 @@ export default function LocationInput({ setLocation }: Props) {
           variant="bordered"
           placeholder=""
           description="Where was the photo taken?"
+          value={inputValue}
+          onChange={handleInputChange}
         />
       </StandaloneSearchBox>
     </LoadScript>
