@@ -7,18 +7,11 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import LocationChooser from './LocationChooser';
-import { MapLocation } from './MapLocation';
-import { Photo } from '@prisma/client';
+import LocationChooser, { Location } from './LocationChooser';
 
 type InputType = {
   caption: string;
-  location: {
-    id: number;
-    name: string;
-    latitude: number;
-    longitude: number;
-  };
+  location: Location | null;
   useWithoutWatermark: boolean;
 };
 
@@ -32,7 +25,7 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
   const [loading, setLoading] = useState(false);
   const { user } = useSession().data || {};
   const router = useRouter();
-  const [location, setLocation] = useState<MapLocation | null>(null);
+  const [location, setLocation] = useState<InputType['location'] | null>(null);
   const [useWithoutWatermark, setUseWithoutWatermark] = useState(false);
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {
@@ -40,12 +33,7 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
     console.log(location);
     try {
       if (location) {
-        data.location = {
-          id: location.place_id,
-          name: location.display_name,
-          latitude: Number(location.lat),
-          longitude: Number(location.lon),
-        };
+        data.location = location;
       }
       data.useWithoutWatermark = useWithoutWatermark;
       // await axios.put(`/api/photos/${photoId}`, data);
