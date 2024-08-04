@@ -37,49 +37,72 @@ const PhotoData = z.object({
     .object({
       id: z.string(),
       name: z.string(),
-      lat: z.number(),
-      lng: z.number(),
+      latitude: z.number(),
+      longitude: z.number(),
     })
     .optional(),
 });
 
 export async function PUT(request: Request, { params }: Props) {
-  const { location, caption, useWithoutWatermark } = PhotoData.parse(
-    await request.json(),
-  );
+  try {
+    const { location, caption, useWithoutWatermark } = PhotoData.parse(
+      await request.json(),
+    );
 
-  const { fileName } = (await prisma.photo.findUnique({
-    where: {
-      id: params.id,
-    },
-  })) as { fileName: string };
+    const { fileName } = (await prisma.photo.findUnique({
+      where: {
+        id: params.id,
+      },
+    })) as { fileName: string };
 
-  const photo = await prisma.photo.update({
-    where: {
-      id: params.id,
-    },
-    data: {
-      caption: caption,
-      status: 'published',
-      useWithoutWatermark: useWithoutWatermark,
-      location: location && {
-        connectOrCreate: {
-          where: {
-            name: location.name,
-          },
-          create: {
-            name: location.name,
-            lat: location.lat,
-            lng: location.lng,
+    const photo = await prisma.photo.update({
+      where: {
+        id: params.id,
+      },
+      data: {
+        caption: caption,
+        status: 'published',
+        useWithoutWatermark: useWithoutWatermark,
+        location: location && {
+          connectOrCreate: {
+            where: {
+              id: location.id,
+            },
+            create: {
+              id: location.id,
+              name: location.name,
+              latitude: location.latitude,
+              longitude: location.longitude,
+            },
           },
         },
       },
-    },
-  });
+    });
 
-  if (photo.useWithoutWatermark) {
-    await axios.get(imageProcessor(fileName, false));
+    if (photo.useWithoutWatermark) {
+      await axios.get(imageProcessor(fileName, false));
+    }
+
+    return NextResponse.json(photo);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          error: 'Validation failed',
+          details: error.errors.map((err) => ({
+            path: err.path.join('.'),
+            message: err.message,
+          })),
+        },
+        { status: 400 },
+      );
+    }
+
+    // Handle other types of errors
+    console.error('Unexpected error:', error);
+    return NextResponse.json(
+      { error: 'An unexpected error occurred' },
+      { status: 500 },
+    );
   }
-
-  return NextResponse.json(photo);
 }

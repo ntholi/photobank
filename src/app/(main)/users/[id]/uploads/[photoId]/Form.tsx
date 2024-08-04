@@ -26,7 +26,7 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
   const { user } = useSession().data || {};
   const router = useRouter();
   const [location, setLocation] = useState<InputType['location'] | null>(null);
-  const [useWithoutWatermark, setUseWithoutWatermark] = useState(false);
+  const [useWithoutWatermark, setUseWithoutWatermark] = useState(true);
 
   const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
