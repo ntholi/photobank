@@ -5,7 +5,7 @@ import { isNotEmpty, useForm } from '@mantine/form';
 import { Location } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
-import LocationChooser from './LocationChooser';
+import LocationInput from './LocationInput';
 
 type Props = {
   value?: Location;
@@ -33,7 +33,7 @@ export default function Form({ onSubmit, value }: Props) {
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <FormHeader title="Locations" isLoading={pending} />
       <Stack p={'xl'}>
-        <LocationChooser
+        <LocationInput
           location={form.values}
           setLocation={(newLocation) => {
             if (newLocation) {

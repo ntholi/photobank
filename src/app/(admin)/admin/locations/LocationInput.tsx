@@ -11,7 +11,7 @@ type Props = {
 
 interface GooglePlace extends google.maps.places.PlaceResult {}
 
-export default function LocationChooser({ location, setLocation }: Props) {
+export default function LocationInput({ location, setLocation }: Props) {
   const inputRef = useRef<google.maps.places.SearchBox | null>(null);
   const [inputValue, setInputValue] = useState('');
 
