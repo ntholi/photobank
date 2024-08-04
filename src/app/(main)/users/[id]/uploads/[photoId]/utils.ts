@@ -24,36 +24,45 @@ export const getLocation = async (
 ): Promise<MapLocation> => {
   const { latitude, longitude } = position.coords;
 
-  if (!window.google || !window.google.maps) {
-    throw new Error('Google Maps API not loaded');
+  if (!window.google || !window.google.maps || !window.google.maps.places) {
+    throw new Error('Google Maps Places API not loaded');
   }
 
-  const geocoder = new window.google.maps.Geocoder();
+  const service = new window.google.maps.places.PlacesService(
+    document.createElement('div'),
+  );
 
   try {
-    const result = await new Promise<google.maps.GeocoderResult>(
+    const result = await new Promise<google.maps.places.PlaceResult>(
       (resolve, reject) => {
-        geocoder.geocode(
-          { location: { lat: latitude, lng: longitude } },
+        service.nearbySearch(
+          {
+            location: { lat: latitude, lng: longitude },
+            radius: 500,
+          },
           (results, status) => {
-            if (status === 'OK' && results && results[0]) {
+            if (
+              status === google.maps.places.PlacesServiceStatus.OK &&
+              results &&
+              results[0]
+            ) {
               resolve(results[0]);
             } else {
-              reject(new Error(`Geocoding failed: ${status}`));
+              reject(new Error(`Place search failed: ${status}`));
             }
           },
         );
       },
     );
 
-    console.log(result);
+    console.log('Location:', result);
 
     return {
       id: result.place_id || `${latitude},${longitude}`,
-      name: result.formatted_address || 'Unknown location',
-      latitude,
-      longitude,
-      formatted_address: result.formatted_address,
+      name: result.name || 'Unknown location',
+      latitude: result.geometry?.location?.lat() || latitude,
+      longitude: result.geometry?.location?.lng() || longitude,
+      formatted_address: result.vicinity || 'Unknown address',
     };
   } catch (error) {
     console.error('Error getting location:', error);
