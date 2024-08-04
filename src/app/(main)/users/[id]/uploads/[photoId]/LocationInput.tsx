@@ -44,7 +44,7 @@ export default function LocationChooser({ location, setLocation }: Props) {
       const latitude = place.geometry?.location?.lat();
       const longitude = place.geometry?.location?.lng();
       const id = place.place_id;
-      console.log('Place', place);
+
       if (id && latitude && longitude) {
         setLocation({ id, name: place.name, latitude, longitude });
       }

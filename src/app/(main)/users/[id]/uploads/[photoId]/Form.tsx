@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import LocationInput, { Location } from './LocationInput';
+import axios from 'axios';
+import { profilePath } from '@/lib/constants';
 
 type InputType = {
   caption: string;
@@ -34,8 +36,8 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
         data.location = location;
       }
       data.useWithoutWatermark = useWithoutWatermark;
-      // await axios.put(`/api/photos/${photoId}`, data);
-      // router.push(profilePath(user));
+      await axios.put(`/api/photos/${photoId}`, data);
+      router.push(profilePath(user));
     } catch (error) {
       console.log(error);
     } finally {
