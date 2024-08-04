@@ -3,11 +3,11 @@ import prisma from '@/lib/prisma';
 import { PhotoWithData } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import { MdLocationPin } from 'react-icons/md';
-import Gallery from './Gallary';
+import Gallery from './Gallery';
 
 type Props = { params: { id: string } };
 
-const getLocation = async (id: number) => {
+const getLocation = async (id: string) => {
   const location = await prisma.location.findUnique({
     where: { id },
     include: {
@@ -27,7 +27,7 @@ const getLocation = async (id: number) => {
 };
 
 export default async function LocationPage({ params: { id } }: Props) {
-  const { location, photos } = await getLocation(parseInt(id));
+  const { location, photos } = await getLocation(id);
 
   if (!location) {
     return notFound();
