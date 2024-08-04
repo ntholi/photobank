@@ -159,11 +159,11 @@ model Tag {
 }
 
 model Location {
-  id     String  @id @default(cuid())
-  name   String  @unique
-  lat    Float
-  lng    Float
-  photos Photo[]
+  id        String  @id
+  name      String
+  latitude  Float
+  longitude Float
+  photos    Photo[]
 
   @@map("locations")
 }
