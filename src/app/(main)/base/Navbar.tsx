@@ -25,7 +25,7 @@ import React, { useEffect } from 'react';
 import { BiLogOut, BiUser } from 'react-icons/bi';
 import { nameToInitials } from '../users/[id]/UserBio';
 import Logo from './Logo';
-import { isAppPath } from './excludePaths';
+import { isExcludePath } from './excludePaths';
 
 const navItems = [
   {
@@ -67,7 +67,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname]);
 
-  if (!isAppPath(pathname)) {
+  if (isExcludePath(pathname)) {
     return null;
   }
 
@@ -133,7 +133,7 @@ export default function Navbar() {
                     onClick={() => router.push(profilePath(user))}
                     key="profile"
                   >
-                    View Profile
+                    My Profile
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection>
