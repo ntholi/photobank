@@ -1,10 +1,11 @@
 'use client';
 import FormHeader from '@/app/(admin)/components/FormHeader';
-import { Stack, TextInput } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { Location } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
+import LocationChooser from './LocationChooser';
 
 type Props = {
   value?: Location;
@@ -14,8 +15,8 @@ type Props = {
 export default function Form({ onSubmit, value }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const { setValues, ...form } = useForm<Location>({
-    initialValues: value,
+  const form = useForm<Location>({
+    initialValues: value || { id: '', name: '', latitude: 0, longitude: 0 },
     validate: {
       name: isNotEmpty('Name is required'),
     },
@@ -23,7 +24,7 @@ export default function Form({ onSubmit, value }: Props) {
 
   async function handleSubmit(values: Location) {
     startTransition(async () => {
-      const { id } = await onSubmit(Object.assign(values));
+      const { id } = await onSubmit(values);
       router.push(`/admin/locations/${id}`);
     });
   }
@@ -32,10 +33,13 @@ export default function Form({ onSubmit, value }: Props) {
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <FormHeader title="Locations" isLoading={pending} />
       <Stack p={'xl'}>
-        <TextInput
-          label="Location"
-          placeholder="Name"
-          {...form.getInputProps('name')}
+        <LocationChooser
+          location={form.values}
+          setLocation={(newLocation) => {
+            if (newLocation) {
+              form.setValues({ ...newLocation });
+            }
+          }}
         />
       </Stack>
     </form>
