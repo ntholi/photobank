@@ -3,17 +3,11 @@ import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
 import { useEffect, useRef, useState } from 'react';
 import LocationPing from './LocationPing';
 import { LOCATION_BOUNDS } from '@/lib/constants';
+import { Location } from '@prisma/client';
 
 type Props = {
   location: Location | null;
   setLocation: React.Dispatch<React.SetStateAction<Location | null>>;
-};
-
-export type Location = {
-  id: string;
-  name?: string;
-  latitude: number;
-  longitude: number;
 };
 
 interface GooglePlace extends google.maps.places.PlaceResult {}
@@ -38,9 +32,10 @@ export default function LocationInput({ location, setLocation }: Props) {
       const latitude = place.geometry?.location?.lat();
       const longitude = place.geometry?.location?.lng();
       const id = place.place_id;
+      const name = place.name;
 
-      if (id && latitude && longitude) {
-        setLocation({ id, name: place.name, latitude, longitude });
+      if (id && latitude && longitude && name) {
+        setLocation({ id, name, latitude, longitude });
       }
     }
   };

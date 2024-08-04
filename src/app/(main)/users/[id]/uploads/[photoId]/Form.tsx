@@ -5,9 +5,10 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import LocationInput, { Location } from './LocationInput';
+import LocationInput from './LocationInput';
 import axios from 'axios';
 import { profilePath } from '@/lib/constants';
+import { Location } from '@prisma/client';
 
 type InputType = {
   caption: string;

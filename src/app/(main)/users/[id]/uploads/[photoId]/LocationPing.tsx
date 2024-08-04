@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { getLocation } from './utils';
 import { Button } from '@nextui-org/react';
 import { MdLocationOn } from 'react-icons/md';
-import { Location } from './LocationInput';
+import { Location } from '@prisma/client';
 
 type Props = {
   setLocation: React.Dispatch<React.SetStateAction<Location | null>>;
@@ -17,7 +17,7 @@ export default function LocationPing({ setLocation }: Props) {
       (position) => {
         getLocation(position)
           .then((data) => {
-            if (data.id && data.latitude && data.longitude) {
+            if (data.id && data.latitude && data.longitude && data.name) {
               setLocation({
                 id: data.id,
                 latitude: data.latitude,
