@@ -52,7 +52,7 @@ export default function LocationChooser({ location, setLocation }: Props) {
 
   return (
     <LoadScript
-      googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY || ''}
+      googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}
       libraries={['places']}
     >
       <div className="flex items-center gap-1">
@@ -71,7 +71,7 @@ export default function LocationChooser({ location, setLocation }: Props) {
             onChange={handleInputChange}
           />
         </StandaloneSearchBox>
-        {/* <LocationPing setLocation={setLocation} /> */}
+        <LocationPing setLocation={setLocation} />
       </div>
     </LoadScript>
   );

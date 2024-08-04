@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { MapLocation } from './MapLocation';
 import { getLocation } from './utils';
 import { Button } from '@nextui-org/react';
 import { MdLocationOn } from 'react-icons/md';
+import { Location } from './LocationChooser';
 
 type Props = {
-  setLocation: React.Dispatch<React.SetStateAction<MapLocation | null>>;
+  setLocation: React.Dispatch<React.SetStateAction<Location | null>>;
 };
 
 export default function LocationPing({ setLocation }: Props) {
