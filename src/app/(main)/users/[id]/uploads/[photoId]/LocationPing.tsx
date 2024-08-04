@@ -12,6 +12,7 @@ export default function LocationPing({ setLocation }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
 
   function pingLocation() {
+    setLoading(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
         getLocation(position)

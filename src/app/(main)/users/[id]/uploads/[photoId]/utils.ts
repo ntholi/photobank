@@ -46,6 +46,8 @@ export const getLocation = async (
       },
     );
 
+    console.log(result);
+
     return {
       id: result.place_id || `${latitude},${longitude}`,
       name: result.formatted_address || 'Unknown location',
