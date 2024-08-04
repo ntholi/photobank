@@ -5,17 +5,10 @@ import { NextResponse } from 'next/server';
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url || '');
   const email = searchParams.get('email') || '';
-  const username = searchParams.get('username') || '';
 
   let user: User | null = null;
 
-  if (username) {
-    user = await prisma.user.findFirst({
-      where: {
-        username,
-      },
-    });
-  } else if (email) {
+  if (email) {
     user = await prisma.user.findFirst({
       where: {
         email,

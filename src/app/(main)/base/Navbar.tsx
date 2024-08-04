@@ -24,7 +24,7 @@ import NextLink from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { BiLogOut, BiUser } from 'react-icons/bi';
-import { nameToInitials } from '../[username]/UserBio';
+import { nameToInitials } from '../users/[id]/UserBio';
 import Logo from './Logo';
 
 const navItems = [

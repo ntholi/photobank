@@ -13,10 +13,8 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { BiCheckCircle } from 'react-icons/bi';
 
 type InputType = {
-  username: string;
   name: string;
   bio: string;
   website: string;
@@ -35,9 +33,6 @@ export default function Form({ user }: Props) {
   const [loading, setLoading] = useState(false);
   const [bioLength, setBioLength] = useState(0);
   const router = useRouter();
-  const [usernameIcon, setUsernameIcon] = useState<JSX.Element>(
-    <BiCheckCircle className="text-primary" />,
-  );
 
   const onSubmit: SubmitHandler<InputType> = async (formData) => {
     try {
@@ -46,16 +41,6 @@ export default function Form({ user }: Props) {
       router.push(profilePath(user));
     } finally {
       setLoading(false);
-    }
-  };
-
-  const checkUsername = async (username: string) => {
-    setUsernameIcon(<Spinner size="sm" />);
-    const { data } = await axios.get(`/api/users/exists?username=${username}`);
-    if (data.exists) {
-      setUsernameIcon(<BiCheckCircle className="text-danger" />);
-    } else {
-      setUsernameIcon(<BiCheckCircle className="text-primary" />);
     }
   };
 
@@ -75,17 +60,6 @@ export default function Form({ user }: Props) {
           src: user?.image || '/images/profile.png',
           size: 'lg',
         }}
-      />
-
-      <Input
-        type="text"
-        variant="bordered"
-        label="Username"
-        defaultValue={user?.username || ''}
-        errorMessage={errors.username?.message}
-        onValueChange={checkUsername}
-        {...register('username', { required: true })}
-        endContent={usernameIcon}
       />
       <Input
         type="text"

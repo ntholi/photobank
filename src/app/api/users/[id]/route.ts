@@ -23,7 +23,7 @@ export async function GET(request: Request, { params }: Props) {
 
 export async function PUT(request: Request, { params }: Props) {
   const session = await auth();
-  const { name, bio, website, username } = await request.json();
+  const { name, bio, website } = await request.json();
 
   if (session?.user?.id !== params.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -34,7 +34,6 @@ export async function PUT(request: Request, { params }: Props) {
       id: params.id,
     },
     data: {
-      // username,
       name,
       bio,
       website,

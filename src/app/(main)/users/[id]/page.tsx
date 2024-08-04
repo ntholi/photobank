@@ -6,10 +6,10 @@ import { User } from '@prisma/client';
 import type { Metadata } from 'next';
 import { APP_NAME } from '@/lib/constants';
 
-type Props = { params: { username: string } };
+type Props = { params: { id: string } };
 
 export async function generateMetadata({ params }: Props) {
-  const user = await getUser(params.username);
+  const user = await getUser(params.id);
   return {
     title: `${user.name} ${APP_NAME}`,
     description: user.bio,
@@ -17,9 +17,9 @@ export async function generateMetadata({ params }: Props) {
   } as Metadata;
 }
 
-const getUser = async (username: string): Promise<User> => {
+const getUser = async (id: string): Promise<User> => {
   const user = await prisma.user.findUnique({
-    where: { username },
+    where: { id },
   });
   if (!user) {
     return notFound();
@@ -28,7 +28,7 @@ const getUser = async (username: string): Promise<User> => {
 };
 
 export default async function Page({ params }: Props) {
-  const user = await getUser(params.username);
+  const user = await getUser(params.id);
 
   if (!user) {
     return notFound();

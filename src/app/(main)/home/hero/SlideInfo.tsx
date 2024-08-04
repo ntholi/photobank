@@ -1,7 +1,7 @@
 import { CurrentSlideData, PhotoWithData } from '@/lib/types';
 import { Button, useDisclosure } from '@nextui-org/react';
 import { motion } from 'framer-motion';
-import PhotoModal from '../../[username]/PhotoModal';
+import PhotoModal from '../../users/[id]/PhotoModal';
 import OtherInfo from './OtherInfo';
 
 type Props = {

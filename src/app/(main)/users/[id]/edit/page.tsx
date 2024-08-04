@@ -3,17 +3,17 @@ import { notFound } from 'next/navigation';
 import Form from './Form';
 import { auth } from '@/auth';
 
-const getUser = async (username?: string) => {
+const getUser = async (id?: string) => {
   return prisma.user.findUnique({
     where: {
-      username: username,
+      id: id,
     },
   });
 };
 
 export default async function EditPage() {
   const session = await auth();
-  const user = await getUser(session?.user?.username);
+  const user = await getUser(session?.user?.id);
 
   if (!user) {
     return notFound();

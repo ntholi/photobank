@@ -18,7 +18,7 @@ import React from 'react';
 import { FaBookmark } from 'react-icons/fa6';
 import { IoMdOpen } from 'react-icons/io';
 import { TiLocation } from 'react-icons/ti';
-import SaveButton from '../photos/SaveButton';
+import SaveButton from '../../photos/SaveButton';
 
 type Props = {
   isOpen: boolean;

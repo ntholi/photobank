@@ -36,8 +36,8 @@ export default async function UserPage({ searchParams }: Props) {
   const rows = data.map((user) => (
     <TableTr key={user.id}>
       <TableTd>
-        <Anchor component={Link} target="_blank" href={`/${user.username}`}>
-          {user.username}
+        <Anchor component={Link} target="_blank" href={`/${user.id}`}>
+          {user.id}
         </Anchor>
       </TableTd>
       <TableTd>{user.name || '(Empty)'}</TableTd>
@@ -70,7 +70,7 @@ export default async function UserPage({ searchParams }: Props) {
         <Table highlightOnHover>
           <TableThead>
             <TableTr>
-              <TableTh>Username</TableTh>
+              <TableTh>ID</TableTh>
               <TableTh>Name</TableTh>
               <TableTh>Email</TableTh>
               <TableTh>Role</TableTh>

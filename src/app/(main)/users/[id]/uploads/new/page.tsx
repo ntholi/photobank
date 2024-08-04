@@ -10,9 +10,9 @@ import UploadModal from './UploadModal';
 import ContributorButton from './ContributorButton';
 import { canUpload } from './utils';
 
-type Props = { params: { username: string } };
+type Props = { params: { id: string } };
 
-export default function UploadPage({ params: { username } }: Props) {
+export default function UploadPage({ params: { id } }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { data: session } = useSession();
 
@@ -35,7 +35,7 @@ export default function UploadPage({ params: { username } }: Props) {
             ? 'Please note that all photos are subject to review before they can be published on the photo bank'
             : 'You have to be a contributor to upload photos'}
         </p>
-        <ContributorButton username={username} onOpen={onOpen} />
+        <ContributorButton userId={id} onOpen={onOpen} />
       </section>
     </>
   );

@@ -9,11 +9,11 @@ import { GoCheck, GoStop, GoUpload } from 'react-icons/go';
 import { canUpload } from './utils';
 
 type Props = {
-  username: string;
+  userId: string;
   onOpen: () => void;
 };
 
-export default function ContributorButton({ username, onOpen }: Props) {
+export default function ContributorButton({ userId, onOpen }: Props) {
   const [loading, setLoading] = useState(false);
   const [application, setApplication] = useState<ContributorApplication | null>(
     null,
@@ -23,14 +23,14 @@ export default function ContributorButton({ username, onOpen }: Props) {
   useEffect(() => {
     async function fetchUser() {
       const { data } = await axios.get(
-        `/api/users/contributors/applications?username=${username}`,
+        `/api/users/contributors/applications?id=${userId}`,
       );
       if (data.application) {
         setApplication(data.application);
       }
     }
     fetchUser();
-  }, [username]);
+  }, [userId]);
 
   const becomeContributor = async () => {
     setLoading(true);

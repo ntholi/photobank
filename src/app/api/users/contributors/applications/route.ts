@@ -4,12 +4,10 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const username = searchParams.get('username') || '';
+  const id = searchParams.get('id') || '';
 
   const user = await prisma.user.findUnique({
-    where: {
-      username: username,
-    },
+    where: { id },
   });
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
