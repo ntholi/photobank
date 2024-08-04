@@ -15,11 +15,16 @@ export default function LocationPing({ setLocation }: Props) {
     setLoading(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        console.log('Coordinates', position.coords);
         getLocation(position)
           .then((data) => {
-            console.log(data);
-            setLocation(data);
+            if (data.id && data.latitude && data.longitude) {
+              setLocation({
+                id: data.id,
+                latitude: data.latitude,
+                longitude: data.longitude,
+                name: data.name,
+              });
+            }
           })
           .catch(console.error)
           .finally(() => {

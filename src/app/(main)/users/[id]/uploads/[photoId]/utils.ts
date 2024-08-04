@@ -1,10 +1,10 @@
 import { useJsApiLoader, Libraries } from '@react-google-maps/api';
 
 export interface MapLocation {
-  id: string;
-  name: string;
-  latitude: number;
-  longitude: number;
+  id?: string;
+  name?: string;
+  latitude?: number;
+  longitude?: number;
   formatted_address?: string;
 }
 
@@ -55,10 +55,8 @@ export const getLocation = async (
       },
     );
 
-    console.log('Location:', result);
-
     return {
-      id: result.place_id || `${latitude},${longitude}`,
+      id: result.place_id,
       name: result.name || 'Unknown location',
       latitude: result.geometry?.location?.lat() || latitude,
       longitude: result.geometry?.location?.lng() || longitude,
