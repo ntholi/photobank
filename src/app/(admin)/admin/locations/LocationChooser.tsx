@@ -2,17 +2,11 @@ import { TextInput, Box, Group } from '@mantine/core';
 import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
 import { useEffect, useRef, useState } from 'react';
 import { Location } from '@prisma/client';
+import { LOCATION_BOUNDS } from '@/lib/constants';
 
 type Props = {
   location: Location | null;
   setLocation: React.Dispatch<React.SetStateAction<Location | null>>;
-};
-
-const bounds = {
-  north: -28.572872,
-  south: -30.668418,
-  east: 29.465229,
-  west: 27.011223,
 };
 
 interface GooglePlace extends google.maps.places.PlaceResult {}
@@ -57,7 +51,7 @@ export default function LocationChooser({ location, setLocation }: Props) {
       <StandaloneSearchBox
         onLoad={(ref) => (inputRef.current = ref)}
         onPlacesChanged={handlePlaceChanged}
-        bounds={bounds}
+        bounds={LOCATION_BOUNDS}
       >
         <Box>
           <Group align="flex-start" gap="xs">

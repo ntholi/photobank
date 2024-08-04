@@ -18,3 +18,10 @@ export const profilePath = (user?: User | null) => {
   }
   return '#';
 };
+
+export const LOCATION_BOUNDS = {
+  north: -28.572872,
+  south: -30.668418,
+  east: 29.465229,
+  west: 27.011223,
+};

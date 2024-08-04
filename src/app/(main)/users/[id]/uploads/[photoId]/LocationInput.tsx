@@ -2,17 +2,11 @@ import { Input } from '@nextui-org/react';
 import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
 import { useEffect, useRef, useState } from 'react';
 import LocationPing from './LocationPing';
+import { LOCATION_BOUNDS } from '@/lib/constants';
 
 type Props = {
   location: Location | null;
   setLocation: React.Dispatch<React.SetStateAction<Location | null>>;
-};
-
-const bounds = {
-  north: -28.572872,
-  south: -30.668418,
-  east: 29.465229,
-  west: 27.011223,
 };
 
 export type Location = {
@@ -63,7 +57,7 @@ export default function LocationChooser({ location, setLocation }: Props) {
       <StandaloneSearchBox
         onLoad={(ref) => (inputRef.current = ref)}
         onPlacesChanged={handlePlaceChanged}
-        bounds={bounds}
+        bounds={LOCATION_BOUNDS}
       >
         <div className="flex items-start gap-1">
           <Input
