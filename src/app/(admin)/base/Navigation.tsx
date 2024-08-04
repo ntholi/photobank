@@ -16,6 +16,8 @@ import {
   IconFileDescription,
   IconHome,
   IconLogout2,
+  IconMap,
+  IconMap2,
   IconNote,
   IconPhoto,
   IconUser,
@@ -44,6 +46,14 @@ export default function Navigation() {
           active={pathname.startsWith('/admin/photos')}
           href={'/admin/photos'}
           leftSection={<IconPhoto size="1.1rem" />}
+          rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+        />
+        <NavLink
+          label="Locations"
+          component={Link}
+          active={pathname.startsWith('/admin/locations')}
+          href={'/admin/locations'}
+          leftSection={<IconMap2 size="1.1rem" />}
           rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
         />
         <NavLink
