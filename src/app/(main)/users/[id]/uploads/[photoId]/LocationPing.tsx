@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { getLocation } from './utils';
 import { Button } from '@nextui-org/react';
 import { MdLocationOn } from 'react-icons/md';
-import { Location } from './LocationChooser';
+import { Location } from './LocationInput';
 
 type Props = {
   setLocation: React.Dispatch<React.SetStateAction<Location | null>>;

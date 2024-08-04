@@ -1,13 +1,11 @@
 'use client';
-import { profilePath } from '@/lib/constants';
 import { Button, Checkbox, Textarea, Tooltip } from '@nextui-org/react';
 import { IconInfoCircle } from '@tabler/icons-react';
-import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import LocationChooser, { Location } from './LocationChooser';
+import LocationInput, { Location } from './LocationInput';
 
 type InputType = {
   caption: string;
@@ -49,7 +47,7 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
     <div>
       <form onSubmit={handleSubmit(onSubmit)} method="POST">
         <div className="-mt-6">
-          <LocationChooser location={location} setLocation={setLocation} />
+          <LocationInput location={location} setLocation={setLocation} />
           <Textarea
             className="mt-6"
             label="Caption"
