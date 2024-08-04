@@ -117,6 +117,7 @@ model Photo {
   userId              String            @map("user_id")
   location            Location?         @relation(fields: [locationId], references: [id])
   locationId          String?
+  locationCoverFor    LocationDetails?  @relation("LocationCoverPhoto")
   useWithoutWatermark Boolean?          @map("use_without_watermark")
   purchasedPhotos     PurchasedPhotos[]
   savedPhotos         SavedPhotos[]
@@ -159,13 +160,27 @@ model Tag {
 }
 
 model Location {
-  id        String  @id
-  name      String
-  latitude  Float
-  longitude Float
-  photos    Photo[]
+  id              String           @id
+  name            String
+  latitude        Float
+  longitude       Float
+  photos          Photo[]
+  locationDetails LocationDetails?
 
   @@map("locations")
+}
+
+model LocationDetails {
+  id           String   @id @default(cuid())
+  location     Location @relation(fields: [locationId], references: [id])
+  locationId   String   @unique @map("location_id")
+  coverPhoto   Photo?   @relation("LocationCoverPhoto", fields: [coverPhotoId], references: [id])
+  coverPhotoId String?  @unique @map("cover_photo_id")
+  about        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("location_details")
 }
 
 model PurchasedPhotos {
