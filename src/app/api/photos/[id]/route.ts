@@ -35,6 +35,7 @@ const PhotoData = z.object({
   useWithoutWatermark: z.boolean().default(false),
   location: z
     .object({
+      id: z.string(),
       name: z.string(),
       lat: z.number(),
       lng: z.number(),

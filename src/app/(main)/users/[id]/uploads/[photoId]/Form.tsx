@@ -1,6 +1,5 @@
 'use client';
 import { profilePath } from '@/lib/constants';
-import { Location } from '@/lib/types';
 import { Button, Checkbox, Textarea, Tooltip } from '@nextui-org/react';
 import { IconInfoCircle } from '@tabler/icons-react';
 import axios from 'axios';
@@ -8,11 +7,18 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import LocationInput from './LocationInput';
+import LocationChooser from './LocationChooser';
+import { MapLocation } from './MapLocation';
+import { Photo } from '@prisma/client';
 
 type InputType = {
   caption: string;
-  location: string;
+  location: {
+    id: number;
+    name: string;
+    latitude: number;
+    longitude: number;
+  };
   useWithoutWatermark: boolean;
 };
 
@@ -26,22 +32,24 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
   const [loading, setLoading] = useState(false);
   const { user } = useSession().data || {};
   const router = useRouter();
-  const [location, setLocation] = useState<Location | null>(null);
+  const [location, setLocation] = useState<MapLocation | null>(null);
   const [useWithoutWatermark, setUseWithoutWatermark] = useState(false);
 
-  const onSubmit: SubmitHandler<InputType> = async (data: any) => {
+  const onSubmit: SubmitHandler<InputType> = async (data) => {
     setLoading(true);
+    console.log(location);
     try {
       if (location) {
         data.location = {
-          name: location.name,
-          lat: location.lat,
-          lng: location.lng,
+          id: location.place_id,
+          name: location.display_name,
+          latitude: Number(location.lat),
+          longitude: Number(location.lon),
         };
       }
       data.useWithoutWatermark = useWithoutWatermark;
-      await axios.put(`/api/photos/${photoId}`, data);
-      router.push(profilePath(user));
+      // await axios.put(`/api/photos/${photoId}`, data);
+      // router.push(profilePath(user));
     } catch (error) {
       console.log(error);
     } finally {
@@ -53,7 +61,7 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
     <div>
       <form onSubmit={handleSubmit(onSubmit)} method="POST">
         <div className="-mt-6">
-          <LocationInput setLocation={setLocation} />
+          <LocationChooser location={location} setLocation={setLocation} />
           <Textarea
             className="mt-6"
             label="Caption"

@@ -1,20 +1,14 @@
-import { Label, Photo, User } from '@prisma/client';
+import { Photo, User } from '@prisma/client';
 
 export type SessionUser = import('next-auth').User | undefined;
 
 export type PhotoWithData = Photo & { url: string } & { user: User } & {
-    location: Location | null;
+  location: Location | null;
 } & {
-    labels: Label[];
+  labels: string[];
 };
 
 export type CurrentSlideData = {
-    data: PhotoWithData;
-    index: number;
-};
-
-export type Location = {
-    name: string;
-    lat: number;
-    lng: number;
+  data: PhotoWithData;
+  index: number;
 };
