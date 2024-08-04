@@ -4,6 +4,7 @@ import { PhotoWithData } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import { MdLocationPin } from 'react-icons/md';
 import Gallery from './Gallery';
+import ClientOnly from '../../base/ClientOnly';
 
 type Props = { params: { id: string } };
 
@@ -45,7 +46,9 @@ export default async function LocationPage({ params: { id } }: Props) {
         </div>
       </header>
       <section className="container mx-auto px-4 py-10">
-        <Gallery photos={photos} />
+        <ClientOnly>
+          <Gallery photos={photos} />
+        </ClientOnly>
       </section>
     </div>
   );
