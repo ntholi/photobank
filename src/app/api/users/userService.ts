@@ -1,5 +1,4 @@
 import prisma from '@/lib/prisma';
-import commonUrlPatterns from './commonUrlPatterns';
 import { User } from 'next-auth';
 
 export const saveUserToDB = async (user: User) => {

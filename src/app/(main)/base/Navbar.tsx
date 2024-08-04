@@ -16,7 +16,6 @@ import {
 
 import { Link } from '@nextui-org/react';
 
-import commonUrlPatterns from '@/app/api/users/commonUrlPatterns';
 import { profilePath } from '@/lib/constants';
 import { Avatar } from '@nextui-org/react';
 import { signOut, useSession } from 'next-auth/react';
@@ -26,6 +25,7 @@ import React, { useEffect } from 'react';
 import { BiLogOut, BiUser } from 'react-icons/bi';
 import { nameToInitials } from '../users/[id]/UserBio';
 import Logo from './Logo';
+import { excludePaths, isAppPath } from './excludePaths';
 
 const navItems = [
   {
@@ -41,11 +41,6 @@ const navItems = [
     href: '#',
   },
 ];
-
-const isAppPath = (pathname: string) => {
-  const name = pathname.split('/')[1];
-  return pathname === '/' || commonUrlPatterns.includes(name.replace('/', ''));
-};
 
 export default function Navbar() {
   const { data: session } = useSession();
