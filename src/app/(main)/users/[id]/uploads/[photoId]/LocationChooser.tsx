@@ -1,6 +1,6 @@
 import { Input } from '@nextui-org/react';
 import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import LocationPing from './LocationPing';
 
 type Props = {
@@ -28,6 +28,12 @@ export default function LocationChooser({ location, setLocation }: Props) {
   const inputRef = useRef<google.maps.places.SearchBox | null>(null);
   const [inputValue, setInputValue] = useState('');
 
+  useEffect(() => {
+    if (location) {
+      setInputValue(location.name || '');
+    }
+  }, [location]);
+
   const handlePlaceChanged = () => {
     const searchBox = inputRef.current;
     if (!searchBox) return;
@@ -42,7 +48,6 @@ export default function LocationChooser({ location, setLocation }: Props) {
       if (id && latitude && longitude) {
         setLocation({ id, name: place.name, latitude, longitude });
       }
-      setInputValue(place.name || 'Unnamed Location');
     }
   };
 
