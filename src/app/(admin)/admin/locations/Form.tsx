@@ -5,6 +5,7 @@ import {
   Flex,
   Paper,
   Stack,
+  Tabs,
   useComputedColorScheme,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
@@ -15,8 +16,9 @@ import ImagePicker from '../../components/ImagePicker';
 import RichTextField from '../../components/RichTextField';
 import LocationInput from './LocationInput';
 import { IconPhoto } from '@tabler/icons-react';
+import TourInput from './TourInput';
 
-type LocationDetailsFormData = LocationDetails & {
+export type LocationDetailsFormData = LocationDetails & {
   location: Location | null;
   coverPhoto: Photo | null;
 };
@@ -41,6 +43,7 @@ export default function Form({ onSubmit, value }: Props) {
       updatedAt: new Date(),
       location: null,
       coverPhoto: null,
+      tourUrl: null,
     },
   });
 
@@ -54,30 +57,44 @@ export default function Form({ onSubmit, value }: Props) {
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <FormHeader title="Locations" isLoading={pending} />
-      <Stack p={'xl'}>
-        <LocationInput
-          disabled={!!value}
-          location={form.values.location}
-          setLocation={(location) => {
-            form.setFieldValue('location', location);
-          }}
-        />
-        {form.values.location ? (
-          <ImagePicker
-            location={form.values.location}
-            photoFileName={value?.coverPhoto?.fileName}
-            {...form.getInputProps('coverPhotoId')}
-          />
-        ) : (
-          <Paper
-            withBorder
-            h={265}
-            w="100%"
-            bg={colorScheme == 'dark' ? 'dark.7' : 'gray.1'}
-          ></Paper>
-        )}
-        <RichTextField label="About" {...form.getInputProps('about')} />
-      </Stack>
+      <Tabs defaultValue="details">
+        <Tabs.List>
+          <Tabs.Tab value="details">Details</Tabs.Tab>
+          <Tabs.Tab value="tour">Virtual Tour</Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value="details">
+          <Stack px={'lg'}>
+            <LocationInput
+              disabled={!!value}
+              location={form.values.location}
+              setLocation={(location) => {
+                form.setFieldValue('location', location);
+              }}
+            />
+            {form.values.location ? (
+              <ImagePicker
+                location={form.values.location}
+                photoFileName={value?.coverPhoto?.fileName}
+                {...form.getInputProps('coverPhotoId')}
+              />
+            ) : (
+              <Paper
+                withBorder
+                h={265}
+                w="100%"
+                bg={colorScheme == 'dark' ? 'dark.7' : 'gray.1'}
+              ></Paper>
+            )}
+            <RichTextField label="About" {...form.getInputProps('about')} />
+          </Stack>
+        </Tabs.Panel>
+        <Tabs.Panel value="tour">
+          <Stack p={'lg'}>
+            <TourInput form={form} />
+          </Stack>
+        </Tabs.Panel>
+      </Tabs>
     </form>
   );
 }
