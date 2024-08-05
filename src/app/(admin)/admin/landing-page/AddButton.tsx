@@ -44,8 +44,8 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
           `/api/photos/search?searchKey=${filter}`,
           { tagId: tag?.id },
         );
-        if (data.photos.length > 0) {
-          setPhotos(data.photos as PhotoWithData[]);
+        if (data.length > 0) {
+          setPhotos(data as PhotoWithData[]);
         }
       } finally {
         setLoading(false);

@@ -26,8 +26,8 @@ export default function Gallery({ searchKey, tag }: Props) {
           `/api/photos/search?searchKey=${searchKey}`,
           { tagId: tag?.id },
         );
-        if (data.photos.length > 0) {
-          setPhotos(data.photos as PhotoWithData[]);
+        if (data.length > 0) {
+          setPhotos(data as PhotoWithData[]);
         }
       } finally {
         setLoading(false);

@@ -38,8 +38,8 @@ export default function UploadButton({ handleImageChange }: Props) {
         const { data } = await axios.post(
           `/api/photos/search?searchKey=${filter}`,
         );
-        if (data.photos.length > 0) {
-          setPhotos(data.photos as PhotoWithData[]);
+        if (data.length > 0) {
+          setPhotos(data as PhotoWithData[]);
         }
       } finally {
         setLoading(false);
