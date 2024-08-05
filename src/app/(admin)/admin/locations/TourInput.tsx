@@ -1,4 +1,4 @@
-import { Group, Text, rem } from '@mantine/core';
+import { Group, RingProgress, Text, rem } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
@@ -20,7 +20,6 @@ export default function TourInput({ form }: Props) {
   const handleFileUpload = async () => {
     if (file) {
       setProgress(0);
-      const ext = file.name.split('.').pop();
       try {
         const { url, fileName } = (
           await axios.get(`/api/virtualtours/upload-url`)
@@ -94,15 +93,26 @@ export default function TourInput({ form }: Props) {
             stroke={1.5}
           />
         </Dropzone.Idle>
-
-        <div>
-          <Text size="xl" inline>
-            Drag or click to select tour file
-          </Text>
-          <Text size="sm" c="dimmed" inline mt={7}>
-            Inside the zipped file the tour should be contained in a folder
-          </Text>
-        </div>
+        {progress ? (
+          <RingProgress
+            sections={[{ value: progress, color: 'blue' }]}
+            thickness={2}
+            label={
+              <Text c="blue" ta="center" size="xl">
+                {progress ? `${progress.toFixed(0)}%` : '0%'}
+              </Text>
+            }
+          />
+        ) : (
+          <div>
+            <Text size="xl" inline>
+              Drag or click to select tour file
+            </Text>
+            <Text size="sm" c="dimmed" inline mt={7}>
+              Inside the zipped file the tour should be contained in a folder
+            </Text>
+          </div>
+        )}
       </Group>
     </Dropzone>
   );
