@@ -22,10 +22,11 @@ import React, { useEffect, useState } from 'react';
 import { Location } from '@prisma/client';
 
 type Props = {
+  location: Location;
   handleImageChange: (photo: Photo) => void;
 };
 
-export default function UploadButton({ handleImageChange }: Props) {
+export default function UploadButton({ handleImageChange, location }: Props) {
   const [opened, { open, close }] = useDisclosure(false);
   const [filter, setFilter] = React.useState('');
   const [photos, setPhotos] = useState<PhotoWithData[]>([]);
@@ -38,7 +39,7 @@ export default function UploadButton({ handleImageChange }: Props) {
       try {
         const { data } = await axios.post(
           `/api/photos/search?searchKey=${filter}`,
-          { locationId: location },
+          { locationId: location.id },
         );
         if (data.length > 0) {
           setPhotos(data as PhotoWithData[]);

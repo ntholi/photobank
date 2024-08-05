@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import ImageDisplay from './ImageDisplay';
 import UploadButton from './UploadButton';
 import { thumbnail } from '@/lib/config/urls';
+import { Location } from '@prisma/client';
 
 export type ImagePickerProps = {
   name?: string;
@@ -24,6 +25,7 @@ export type ImagePickerProps = {
   folder?: string;
   height?: number;
   photoFileName?: string;
+  location: Location;
 };
 
 export default function ImagePicker(props: ImagePickerProps) {
@@ -76,6 +78,7 @@ export default function ImagePicker(props: ImagePickerProps) {
           />
         ) : (
           <UploadButton
+            location={props.location}
             handleImageChange={(it) => {
               const imgUrl = thumbnail(it.fileName);
               setImage(imgUrl);
