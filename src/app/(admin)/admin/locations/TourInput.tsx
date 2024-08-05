@@ -23,7 +23,7 @@ export default function TourInput({ form }: Props) {
       const ext = file.name.split('.').pop();
       try {
         const { url, fileName } = (
-          await axios.get(`/api/virtualtours/upload-url?ext=${ext}`)
+          await axios.get(`/api/virtualtours/upload-url`)
         ).data;
 
         await axios.put(url, file, {
@@ -97,10 +97,10 @@ export default function TourInput({ form }: Props) {
 
         <div>
           <Text size="xl" inline>
-            Drag images here or click to select files
+            Drag or click to select tour file
           </Text>
           <Text size="sm" c="dimmed" inline mt={7}>
-            Attach as many files as you like, each file should not exceed 5mb
+            Inside the zipped file the tour should be contained in a folder
           </Text>
         </div>
       </Group>
