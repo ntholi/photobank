@@ -1,38 +1,32 @@
-'use client';
 import { PhotoWithData } from '@/lib/types';
 import {
-  Button,
+  ActionIcon,
+  Box,
+  Center,
+  Divider,
+  Flex,
+  Image,
+  Loader,
   Modal,
   ScrollArea,
   SimpleGrid,
-  TextInput,
-  Text,
-  Image,
-  Center,
-  Loader,
   Stack,
-  ActionIcon,
-  Box,
-  Divider,
-  Chip,
-  Group,
-  Flex,
+  Text,
+  TextInput,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Tag } from '@prisma/client';
-import { IconPlus } from '@tabler/icons-react';
+import { IconPhoto } from '@tabler/icons-react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-type AddButtonProps = {
-  handleAdd: (photoId: string) => Promise<void>;
+type Props = {
+  handleImageChange: (imageId: string) => void;
 };
 
-export default function AddButton({ handleAdd }: AddButtonProps) {
+export default function UploadButton({ handleImageChange }: Props) {
   const [opened, { open, close }] = useDisclosure(false);
   const [filter, setFilter] = React.useState('');
   const [photos, setPhotos] = useState<PhotoWithData[]>([]);
-  const [tag, setTag] = useState<Tag | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -42,7 +36,6 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
       try {
         const { data } = await axios.post(
           `/api/photos/search?searchKey=${filter}`,
-          tag,
         );
         if (data.photos.length > 0) {
           setPhotos(data.photos as PhotoWithData[]);
@@ -52,7 +45,7 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
       }
     };
     fetchPhotos();
-  }, [filter, tag]);
+  }, [filter]);
 
   return (
     <>
@@ -68,9 +61,6 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
             onChange={(e) => setFilter(e.target.value)}
             value={filter}
           />
-          <ScrollArea scrollbars="y">
-            <TagSelect setTag={setTag} />
-          </ScrollArea>
           <ScrollArea h={'60vh'}>
             {loading ? (
               <Center mt={'xl'}>
@@ -91,7 +81,7 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
                       variant="default"
                       p={'sm'}
                       onClick={() => {
-                        handleAdd(it.id);
+                        handleImageChange(it.id);
                         close();
                       }}
                     >
@@ -109,46 +99,11 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
           </ScrollArea>
         </Stack>
       </Modal>
-      <Button
-        leftSection={<IconPlus size={'1rem'} />}
-        variant="default"
-        onClick={open}
-      >
-        Add Photo
-      </Button>
+      <Flex justify="center" align="center" h={'100%'} w={'100%'}>
+        <ActionIcon variant="default" size="xl" onClick={open}>
+          <IconPhoto />
+        </ActionIcon>
+      </Flex>
     </>
-  );
-}
-
-type TagSelectProps = {
-  setTag: React.Dispatch<React.SetStateAction<Tag | null>>;
-};
-
-function TagSelect({ setTag }: TagSelectProps) {
-  const [data, setData] = useState<Tag[]>([]);
-
-  React.useEffect(() => {
-    axios.get('/api/filters').then((res) => {
-      if (res.data.filters) {
-        setData(res.data.filters);
-      }
-    });
-  }, []);
-
-  return (
-    <Chip.Group
-      onChange={(it) => {
-        setTag(data.find((i) => i.name === it) || null);
-      }}
-      defaultValue={'All'}
-    >
-      <Group>
-        {data.map((item) => (
-          <Chip key={item.id} value={item.name}>
-            {item.name}
-          </Chip>
-        ))}
-      </Group>
-    </Chip.Group>
   );
 }

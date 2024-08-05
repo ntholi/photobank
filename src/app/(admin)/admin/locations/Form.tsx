@@ -8,6 +8,7 @@ import { useTransition } from 'react';
 import LocationInput from './LocationInput';
 import { RichTextEditor } from '@mantine/tiptap';
 import RichTextField from '../../components/RichTextField';
+import ImagePicker from '../../components/ImagePicker';
 
 type LocationDetailsFormData = LocationDetails & {
   location: Location | null;
@@ -50,6 +51,7 @@ export default function Form({ onSubmit, value }: Props) {
             form.setFieldValue('location', location);
           }}
         />
+        <ImagePicker {...form.getInputProps('coverPhotoId')} />
         <RichTextField label="About" {...form.getInputProps('about')} />
       </Stack>
     </form>
