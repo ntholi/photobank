@@ -4,17 +4,26 @@ import { dateTime } from '@/lib/format';
 
 type Props = {
   label: string;
-  value: any;
-  valueProps?: TextProps;
+  children: React.ReactNode;
 };
 
-export default function FieldView({ label, value, valueProps }: Props) {
+export default function FieldView({ label, children }: Props) {
   return (
     <Box>
-      <Text size='sm' fw={500} {...valueProps}>
-        {formatValue(value)}
-      </Text>
-      <Text size='sm' c='dimmed'>
+      {children ? (
+        <>
+          {React.isValidElement(children) ? (
+            children
+          ) : (
+            <Text size="sm" fw={500}>
+              {children}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Text size="sm">Empty</Text>
+      )}
+      <Text size="sm" c="dimmed">
         {label}
       </Text>
       <Divider />

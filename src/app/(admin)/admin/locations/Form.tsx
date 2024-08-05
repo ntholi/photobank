@@ -1,13 +1,6 @@
 'use client';
 import FormHeader from '@/app/(admin)/components/FormHeader';
-import {
-  ActionIcon,
-  Flex,
-  Paper,
-  Stack,
-  Tabs,
-  useComputedColorScheme,
-} from '@mantine/core';
+import { Paper, Stack, Tabs, useComputedColorScheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Location, LocationDetails, Photo } from '@prisma/client';
 import { useRouter } from 'next/navigation';
@@ -15,7 +8,6 @@ import { useTransition } from 'react';
 import ImagePicker from '../../components/ImagePicker';
 import RichTextField from '../../components/RichTextField';
 import LocationInput from './LocationInput';
-import { IconPhoto } from '@tabler/icons-react';
 import TourInput from './TourInput';
 
 export type LocationDetailsFormData = LocationDetails & {

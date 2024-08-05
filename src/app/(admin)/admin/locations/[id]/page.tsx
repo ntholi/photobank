@@ -1,7 +1,7 @@
 import DeleteIconButton from '@/app/(admin)/components/DeleteIconButton';
 import FieldView from '@/app/(admin)/components/FieldView';
 import HeaderDisplay from '@/app/(admin)/components/HeaderDisplay';
-import { Box, Fieldset, Text, Image, Stack } from '@mantine/core';
+import { Box, Fieldset, Text, Image, Stack, Anchor } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import { deleteLocation, getLocation } from '../actions';
 import { thumbnail } from '@/lib/config/urls';
@@ -25,7 +25,14 @@ export default async function Page({ params: { id } }: Props) {
       />
 
       <Stack p={'xl'}>
-        <FieldView label="Name" value={item.location.name} />
+        <FieldView label="Name">{item.location.name}</FieldView>
+        <FieldView label="Virtual Tour">
+          {item.tourUrl && (
+            <Anchor target="_blank" href={item.tourUrl || '#'}>
+              {item.tourUrl?.split('/').at(-1)}
+            </Anchor>
+          )}
+        </FieldView>
         {item.coverPhoto && (
           <Image
             style={{ maxHeight: '40vh' }}
