@@ -51,7 +51,7 @@ export default function UploadButton({ handleImageChange, location }: Props) {
       }
     };
     fetchPhotos();
-  }, [filter]);
+  }, [filter, location.id]);
 
   return (
     <>
