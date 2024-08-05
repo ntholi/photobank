@@ -8,6 +8,8 @@ import ClientOnly from '../../base/ClientOnly';
 import { LocationDetails, Photo } from '@prisma/client';
 import { Dosis } from 'next/font/google';
 import { cn } from '@nextui-org/react';
+import Container from '../../base/Container';
+import MapDisplay from './MapDisplay';
 
 const titleFont = Dosis({ weight: '700', subsets: ['latin'] });
 
@@ -76,6 +78,20 @@ export default async function LocationPage({ params: { id } }: Props) {
           </h1>
         </div>
       </header>
+      {locationDetails && (
+        <Container className="grid grid-cols-1 md:grid-cols-2">
+          <section>
+            <h2 className="text-4xl font-semibold">About {location.name}</h2>
+            <article
+              dangerouslySetInnerHTML={{ __html: locationDetails.about || '' }}
+              className="prose"
+            />
+          </section>
+          <section>
+            <MapDisplay location={location} />
+          </section>
+        </Container>
+      )}
       <section className="container mx-auto px-4 py-10">
         <ClientOnly>
           <Gallery photos={photos} />
