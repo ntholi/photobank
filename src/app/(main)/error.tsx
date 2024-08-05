@@ -11,7 +11,7 @@ export default function Error({
   error: Error;
   reset: () => void;
 }) {
-  const logoHeight = 32;
+  const logoHeight = 60;
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error);
@@ -25,10 +25,9 @@ export default function Error({
         height={logoHeight}
         alt="logo"
       />
-      <h2 className="text-xl font-semibold mt-8">Something went wrong!</h2>
+      <h2 className="font-extralight">Something went wrong!</h2>
       <Button
-        className="mt-5"
-        radius="none"
+        className="mt-3"
         color="primary"
         onClick={
           // Attempt to recover by trying to re-render the segment

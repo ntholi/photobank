@@ -6,8 +6,8 @@ export async function GET(req: Request) {
     select: {
       id: true,
       name: true,
-      lat: true,
-      lng: true,
+      latitude: true,
+      longitude: true,
       _count: {
         select: {
           photos: true,
@@ -20,8 +20,8 @@ export async function GET(req: Request) {
     return {
       id: it.id,
       name: it.name,
-      lat: it.lat,
-      lng: it.lng,
+      lat: it.latitude,
+      lng: it.longitude,
       photoCount: it._count.photos,
     };
   });
