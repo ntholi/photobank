@@ -8,6 +8,7 @@ import Container from '../../base/Container';
 import FilterBar from '../../home/FilterBar';
 import { thumbnail } from '@/lib/config/urls';
 import axios from 'axios';
+import { shorten } from '@/lib/utils';
 
 type Props = {
   location: Location;
@@ -22,7 +23,7 @@ export default function Gallery({ location }: Props) {
     setLoading(true);
     const fetchData = async () => {
       axios
-        .post('/api/photos/search', { locationId: location.id })
+        .post('/api/photos/search', { locationId: location.id, tagId: tag?.id })
         .then((res) => {
           setPhotos(res.data);
         })
@@ -41,21 +42,20 @@ export default function Gallery({ location }: Props) {
           <Spinner size="lg" />
         </div>
       ) : (
-        <ResponsiveMasonry
-          columnsCountBreakPoints={{ 350: 1, 750: 2, 1100: 3, 1700: 4 }}
-        >
-          <Masonry gutter={'1rem'}>
-            {photos?.map((it) => (
+        <section className="grid cursor-pointer grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          {photos?.map((it) => (
+            <article key={it.id} className="hover:shadow-sm rounded-xl pb-2">
               <Image
-                key={it.id}
                 src={thumbnail(it.fileName)}
                 alt={it.caption || 'Lehakoe'}
-                className="cursor-pointer"
                 onClick={() => router.push(`/photos/${it.id}`)}
               />
-            ))}
-          </Masonry>
-        </ResponsiveMasonry>
+              <p className="text-gray-800 mt-3 px-2 font-light">
+                {shorten(it.caption, 80)}
+              </p>
+            </article>
+          ))}
+        </section>
       )}
     </Container>
   );
