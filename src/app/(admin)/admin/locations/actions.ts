@@ -11,8 +11,12 @@ function hasAccess(role?: Role) {
 }
 
 export async function getLocation(id: string) {
-  return await prisma.location.findUnique({
+  return await prisma.locationDetails.findUnique({
     where: { id },
+    include: {
+      coverPhoto: true,
+      location: true,
+    },
   });
 }
 
