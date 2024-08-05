@@ -43,6 +43,8 @@ export default function UploadButton({ handleImageChange }: Props) {
         if (data.length > 0) {
           setPhotos(data as PhotoWithData[]);
         }
+      } catch (error) {
+        console.error(error);
       } finally {
         setLoading(false);
       }

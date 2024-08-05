@@ -50,11 +50,7 @@ export async function createLocation(
   });
 }
 
-export async function updateLocationDetails(
-  id: string,
-  data: LocationDetails,
-  location: Location,
-) {
+export async function updateLocation(id: string, data: LocationDetails) {
   const session = await auth();
   if (!hasAccess(session?.user?.role)) throw new Error('User not admin');
 
