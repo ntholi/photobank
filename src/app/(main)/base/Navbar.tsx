@@ -52,7 +52,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const checkIfHome = () => {
-      if (window.scrollY < 100 && pathname === '/') {
+      if (
+        (window.scrollY < 100 && pathname === '/') ||
+        pathname.includes('/locations/')
+      ) {
         setHomeStyle('absolute text-white bg-black/30');
       } else {
         setHomeStyle('');

@@ -1,11 +1,9 @@
 'use client';
-import { Tag } from '@prisma/client';
-import { Image } from '@nextui-org/react';
-import React from 'react';
 import { PhotoWithData } from '@/lib/types';
+import { Image } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import FilterBar from '../../home/FilterBar';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import Container from '../../base/Container';
 
 type Props = {
   photos: PhotoWithData[];
@@ -13,13 +11,9 @@ type Props = {
 
 export default function Gallery({ photos }: Props) {
   const router = useRouter();
-  const [tag, setTag] = React.useState<Tag | null>(null);
 
   return (
-    <section className="container mx-auto px-4">
-      <div className="p-4 flex justify-center">
-        <FilterBar setSelected={setTag} selected={tag} />
-      </div>
+    <Container width="xl">
       <ResponsiveMasonry
         columnsCountBreakPoints={{ 350: 1, 750: 2, 1100: 3, 1700: 4 }}
       >
@@ -37,6 +31,6 @@ export default function Gallery({ photos }: Props) {
           ))}
         </Masonry>
       </ResponsiveMasonry>
-    </section>
+    </Container>
   );
 }

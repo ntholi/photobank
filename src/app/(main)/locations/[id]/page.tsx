@@ -57,7 +57,7 @@ export default async function LocationPage({ params: { id } }: Props) {
   return (
     <div>
       <header
-        className="h-[50vh] flex justify-center items-center relative"
+        className="h-[60vh] flex justify-center items-center relative"
         style={{
           backgroundImage: `url(${cover})`,
           backgroundSize: 'cover',
