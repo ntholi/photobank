@@ -177,6 +177,7 @@ model LocationDetails {
   coverPhoto   Photo?   @relation("LocationCoverPhoto", fields: [coverPhotoId], references: [id])
   coverPhotoId String?  @unique @map("cover_photo_id")
   about        String?
+  tourUrl      String?  @map("tour_url")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
