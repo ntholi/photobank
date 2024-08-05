@@ -35,7 +35,7 @@ export default function LocationPing({ setLocation }: Props) {
         console.log(error);
         setLoading(false);
       },
-      { timeout: 1000 * 10, enableHighAccuracy: true },
+      { timeout: 1000 * 20, enableHighAccuracy: true },
     );
   }
 
