@@ -19,6 +19,7 @@ import { Photo } from '@prisma/client';
 import { IconPhoto } from '@tabler/icons-react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Location } from '@prisma/client';
 
 type Props = {
   handleImageChange: (photo: Photo) => void;
@@ -37,6 +38,7 @@ export default function UploadButton({ handleImageChange }: Props) {
       try {
         const { data } = await axios.post(
           `/api/photos/search?searchKey=${filter}`,
+          { locationId: location },
         );
         if (data.length > 0) {
           setPhotos(data as PhotoWithData[]);

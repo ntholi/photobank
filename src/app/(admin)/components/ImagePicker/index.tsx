@@ -23,6 +23,7 @@ export type ImagePickerProps = {
   description?: string;
   folder?: string;
   height?: number;
+  photoFileName?: string;
 };
 
 export default function ImagePicker(props: ImagePickerProps) {
@@ -30,9 +31,11 @@ export default function ImagePicker(props: ImagePickerProps) {
   const colorScheme = useComputedColorScheme('dark');
   const [opened, { open: openDrawer, close }] = useDisclosure(false);
 
-  // useEffect(() => {
-  //   setImage(props.value ? props.value : null);
-  // }, [props.value]);
+  useEffect(() => {
+    if (props.photoFileName) {
+      setImage(thumbnail(props.photoFileName));
+    }
+  }, [props.photoFileName]);
 
   const handleDelete = () => {
     return modals.openConfirmModal({

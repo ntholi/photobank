@@ -1,17 +1,17 @@
 'use client';
 import FormHeader from '@/app/(admin)/components/FormHeader';
-import { Stack, Textarea } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { Location, LocationDetails } from '@prisma/client';
+import { Location, LocationDetails, Photo } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
-import LocationInput from './LocationInput';
-import { RichTextEditor } from '@mantine/tiptap';
-import RichTextField from '../../components/RichTextField';
 import ImagePicker from '../../components/ImagePicker';
+import RichTextField from '../../components/RichTextField';
+import LocationInput from './LocationInput';
 
 type LocationDetailsFormData = LocationDetails & {
   location: Location | null;
+  coverPhoto: Photo | null;
 };
 
 type Props = {
@@ -31,6 +31,7 @@ export default function Form({ onSubmit, value }: Props) {
       createdAt: new Date(),
       updatedAt: new Date(),
       location: null,
+      coverPhoto: null,
     },
   });
 
@@ -46,12 +47,16 @@ export default function Form({ onSubmit, value }: Props) {
       <FormHeader title="Locations" isLoading={pending} />
       <Stack p={'xl'}>
         <LocationInput
+          disabled={!!form.values.location}
           location={form.values.location}
           setLocation={(location) => {
             form.setFieldValue('location', location);
           }}
         />
-        <ImagePicker {...form.getInputProps('coverPhotoId')} />
+        <ImagePicker
+          photoFileName={value?.coverPhoto?.fileName}
+          {...form.getInputProps('coverPhotoId')}
+        />
         <RichTextField label="About" {...form.getInputProps('about')} />
       </Stack>
     </form>

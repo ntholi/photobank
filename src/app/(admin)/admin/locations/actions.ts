@@ -50,12 +50,25 @@ export async function createLocation(
   });
 }
 
-export async function updateLocation(id: string, data: Location) {
+export async function updateLocationDetails(
+  id: string,
+  data: LocationDetails,
+  location: Location,
+) {
   const session = await auth();
-  if (hasAccess(session?.user?.role)) throw new Error('User not admin');
+  if (!hasAccess(session?.user?.role)) throw new Error('User not admin');
 
-  return prisma.location.update({
+  const { locationId, coverPhotoId, ...rest } = data;
+  const updatedLocationDetails = await prisma.locationDetails.update({
     where: { id },
-    data,
+    data: {
+      about: rest.about,
+      coverPhoto: coverPhotoId
+        ? { connect: { id: coverPhotoId } }
+        : { disconnect: true },
+    },
   });
+
+  revalidatePath('/admin/locations');
+  return updatedLocationDetails;
 }
