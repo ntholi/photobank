@@ -20,7 +20,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 type Props = {
-  handleImageChange: (imageId: string) => void;
+  handleImageChange: (fileName: string) => void;
 };
 
 export default function UploadButton({ handleImageChange }: Props) {
@@ -81,7 +81,7 @@ export default function UploadButton({ handleImageChange }: Props) {
                       variant="default"
                       p={'sm'}
                       onClick={() => {
-                        handleImageChange(it.id);
+                        handleImageChange(it.fileName);
                         close();
                       }}
                     >

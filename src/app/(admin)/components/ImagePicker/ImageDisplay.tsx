@@ -7,18 +7,18 @@ import {
   Stack,
   useMantineColorScheme,
 } from '@mantine/core';
-import { IconCrop, IconTrash } from '@tabler/icons-react';
+import { IconTrash } from '@tabler/icons-react';
 
 type Props = {
   disabled?: boolean;
   image: string;
-  showCropper: () => void;
   handleDelete: () => void;
 };
 
 export default function ImageDisplay(props: Props) {
-  const { disabled, image, showCropper, handleDelete } = props;
+  const { disabled, image, handleDelete } = props;
   const { colorScheme } = useMantineColorScheme();
+  console.log('Image', image);
   return (
     <Stack w="100%" h="100%" pos="relative">
       <Overlay pos={'absolute'} top={0} h={43} backgroundOpacity={0.2}>

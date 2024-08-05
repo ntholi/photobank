@@ -2,9 +2,10 @@
 import { Box, Modal, Paper, Text, useComputedColorScheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ImageDisplay from './ImageDisplay';
 import UploadButton from './UploadButton';
+import { thumbnail } from '@/lib/config/urls';
 
 export type ImagePickerProps = {
   name?: string;
@@ -40,7 +41,10 @@ export default function ImagePicker(props: ImagePickerProps) {
       children: 'Are you sure you want to delete this image?',
       confirmProps: { color: 'red' },
       labels: { confirm: 'Delete', cancel: 'Cancel' },
-      onConfirm: () => console.log('Delete Confirmed'),
+      onConfirm: () => {
+        setImage(null);
+        props.onChange(null);
+      },
     });
   };
 
@@ -66,12 +70,13 @@ export default function ImagePicker(props: ImagePickerProps) {
             disabled={props.disabled}
             image={image}
             handleDelete={handleDelete}
-            showCropper={openDrawer}
           />
         ) : (
           <UploadButton
             handleImageChange={(it) => {
-              console.log('Image Changed', it);
+              const imgUrl = thumbnail(it);
+              setImage(imgUrl);
+              props.onChange(imgUrl);
             }}
           />
         )}
