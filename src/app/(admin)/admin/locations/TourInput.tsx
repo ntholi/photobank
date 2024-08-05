@@ -35,7 +35,7 @@ export default function TourInput({ form }: Props) {
         });
         if (fileName) {
           setProgress(0);
-          form.setFieldValue('tour', `${toursUrl}${fileName.split('.')[0]}`);
+          form.setFieldValue('tourUrl', `${toursUrl}${fileName.split('.')[0]}`);
         }
       } catch (error) {
         console.error(error);
