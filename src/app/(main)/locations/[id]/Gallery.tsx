@@ -50,8 +50,6 @@ export default function Gallery({ location }: Props) {
                 key={it.id}
                 src={thumbnail(it.fileName)}
                 alt={it.caption || 'Lehakoe'}
-                width={600}
-                height={600}
                 className="cursor-pointer"
                 onClick={() => router.push(`/photos/${it.id}`)}
               />

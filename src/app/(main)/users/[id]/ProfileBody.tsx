@@ -110,8 +110,6 @@ export const ProfileBody = ({ userId }: Props) => {
                               setSelectedPhoto(photo);
                               onOpen();
                             }}
-                            height={900}
-                            width={900}
                           />
                         </div>
                       ))}

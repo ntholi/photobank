@@ -24,8 +24,6 @@ export default function UserBio({ user }: Props) {
     <>
       <div className="flex mt-8">
         <Image
-          width={250}
-          height={250}
           referrerPolicy="no-referrer"
           src={largeSize(user.image) || '/images/profile.png'}
           className="rounded-full border border-zinc-400 w-28 h-28 sm:w-40 sm:h-40"

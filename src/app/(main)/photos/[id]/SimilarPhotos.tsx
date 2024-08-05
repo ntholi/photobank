@@ -59,8 +59,6 @@ export default async function SimilarPhotos({ photo }: Props) {
               className={'min-w-full h-60 sm:h-72 object-cover cursor-pointer'}
               src={photo.url}
               alt={photo.caption || 'Lehakoe'}
-              height={900}
-              width={900}
             />
           </Link>
         ))}

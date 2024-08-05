@@ -61,8 +61,6 @@ export default function Gallery({ searchKey, tag }: Props) {
                 key={it.id}
                 src={it.url}
                 alt={it.caption || 'Lehakoe'}
-                width={600}
-                height={600}
                 className="cursor-pointer"
                 onClick={() => router.push(`/photos/${it.id}`)}
               />
