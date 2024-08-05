@@ -30,9 +30,9 @@ export default function ImagePicker(props: ImagePickerProps) {
   const colorScheme = useComputedColorScheme('dark');
   const [opened, { open: openDrawer, close }] = useDisclosure(false);
 
-  useEffect(() => {
-    setImage(props.value ? props.value : null);
-  }, [props.value]);
+  // useEffect(() => {
+  //   setImage(props.value ? props.value : null);
+  // }, [props.value]);
 
   const handleDelete = () => {
     return modals.openConfirmModal({
@@ -74,9 +74,9 @@ export default function ImagePicker(props: ImagePickerProps) {
         ) : (
           <UploadButton
             handleImageChange={(it) => {
-              const imgUrl = thumbnail(it);
+              const imgUrl = thumbnail(it.fileName);
               setImage(imgUrl);
-              props.onChange(imgUrl);
+              props.onChange(it.id);
             }}
           />
         )}

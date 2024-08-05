@@ -27,7 +27,10 @@ export default async function Page({ params: { id } }: Props) {
       <Stack p={'xl'}>
         <FieldView label="Name" value={item.location.name} />
         {item.coverPhoto && (
-          <Image src={thumbnail(item.coverPhoto?.fileName)} />
+          <Image
+            style={{ maxHeight: '40vh' }}
+            src={thumbnail(item.coverPhoto?.fileName)}
+          />
         )}
         <Fieldset legend={'About Location'}>
           <Text>{item.about}</Text>

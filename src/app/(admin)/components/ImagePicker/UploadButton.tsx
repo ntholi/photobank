@@ -15,12 +15,13 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { Photo } from '@prisma/client';
 import { IconPhoto } from '@tabler/icons-react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 type Props = {
-  handleImageChange: (fileName: string) => void;
+  handleImageChange: (photo: Photo) => void;
 };
 
 export default function UploadButton({ handleImageChange }: Props) {
@@ -81,7 +82,7 @@ export default function UploadButton({ handleImageChange }: Props) {
                       variant="default"
                       p={'sm'}
                       onClick={() => {
-                        handleImageChange(it.fileName);
+                        handleImageChange(it);
                         close();
                       }}
                     >

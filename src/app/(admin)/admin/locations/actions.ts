@@ -44,6 +44,7 @@ export async function createLocation(
   return await prisma.locationDetails.create({
     data: {
       ...rest,
+      coverPhoto: coverPhotoId ? { connect: { id: coverPhotoId } } : undefined,
       location: { connect: { id: locationData.id } },
     },
   });
