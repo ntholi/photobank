@@ -25,7 +25,7 @@ export default function Error({
         height={logoHeight}
         alt="logo"
       />
-      <h2 className="font-extralight">Something went wrong!</h2>
+      <h2 className="">Something went wrong!</h2>
       <Button
         className="mt-3"
         color="primary"
