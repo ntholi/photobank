@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { nanoid } from 'nanoid';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { canUpload } from '@/lib/helpers/user-helper';
 import { auth } from '@/auth';
 
 export const bucketName = 'lehakoe-virtual-tours'; //TODO: Make this an environment variable
@@ -26,7 +25,7 @@ export async function GET(_: Request) {
       { status: 401 },
     );
   }
-  if (!canUpload(session.user)) {
+  if (session.user.role !== 'admin') {
     return NextResponse.json(
       { error: 'You do not have permission to upload a photo' },
       { status: 403 },
@@ -38,7 +37,7 @@ export async function GET(_: Request) {
     Bucket: bucketName,
     Key: fileName,
   });
-  const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 });
+  const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 * 2 });
 
   return NextResponse.json({ url, fileName });
 }

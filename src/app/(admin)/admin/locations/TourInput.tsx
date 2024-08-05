@@ -1,20 +1,62 @@
 import { Group, Text, rem } from '@mantine/core';
-import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
+import axios, { AxiosProgressEvent } from 'axios';
+import { use, useEffect, useState } from 'react';
 import { LocationDetailsFormData } from './Form';
 
 type Props = {
   form: ReturnType<typeof useForm<LocationDetailsFormData>>;
 };
 
+const toursUrl = //TODO: This should be an environment variable
+  'http://lehakoe-virtual-tours.s3-website.eu-central-1.amazonaws.com/';
+
 export default function TourInput({ form }: Props) {
+  const [file, setFile] = useState<File | null>(null);
+  const [progress, setProgress] = useState<number>();
+
+  const handleFileUpload = async () => {
+    if (file) {
+      setProgress(0);
+      const ext = file.name.split('.').pop();
+      try {
+        const { url, fileName } = (
+          await axios.get(`/api/photos/upload-url?ext=${ext}`)
+        ).data;
+
+        await axios.put(url, file, {
+          onUploadProgress: (e: AxiosProgressEvent) => {
+            if (e.total) {
+              setProgress((e.loaded / e.total) * 100);
+            }
+          },
+        });
+        if (fileName) {
+          setProgress(0);
+          form.setFieldValue('tour', `${toursUrl}${fileName.split('.')[0]}`);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setFile(null);
+        setProgress(undefined);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (file) {
+      handleFileUpload();
+    }
+  }, [file]);
+
   return (
     <Dropzone
-      onDrop={(files) => console.log('accepted files', files)}
+      accept={[MIME_TYPES.zip]}
+      onDrop={(files) => setFile(files[0])}
       onReject={(files) => console.log('rejected files', files)}
-      // maxSize={5 * 1024 ** 2}
-      accept={IMAGE_MIME_TYPE}
     >
       <Group
         justify="center"
