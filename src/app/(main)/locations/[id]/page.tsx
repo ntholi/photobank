@@ -5,6 +5,11 @@ import { notFound } from 'next/navigation';
 import { MdLocationPin } from 'react-icons/md';
 import Gallery from './Gallery';
 import ClientOnly from '../../base/ClientOnly';
+import { LocationDetails, Photo } from '@prisma/client';
+import { Dosis } from 'next/font/google';
+import { cn } from '@nextui-org/react';
+
+const titleFont = Dosis({ weight: '700', subsets: ['latin'] });
 
 type Props = { params: { id: string } };
 
@@ -27,8 +32,22 @@ const getLocation = async (id: string) => {
   return { location, photos: photos as PhotoWithData[] };
 };
 
+async function getLocationDetails(locationId: string) {
+  const details = prisma.locationDetails.findUnique({
+    where: {
+      locationId,
+    },
+    include: {
+      coverPhoto: true,
+    },
+  });
+  return details;
+}
+
 export default async function LocationPage({ params: { id } }: Props) {
   const { location, photos } = await getLocation(id);
+  const locationDetails = await getLocationDetails(id);
+  const cover = getCoverPhoto(photos, locationDetails?.coverPhoto);
 
   if (!location) {
     return notFound();
@@ -36,13 +55,25 @@ export default async function LocationPage({ params: { id } }: Props) {
 
   return (
     <div>
-      <header className="h-44 flex justify-center items-center bg-gradient-to-l from-slate-800 via-violet-700 to-gray-300">
-        <div>
-          <h1 className="text-3xl text-white">{location.name}</h1>
-          <p className="text-gray-100 flex items-center gap-2">
-            <MdLocationPin />
-            Browse Photos in Location
-          </p>
+      <header
+        className="h-[50vh] flex justify-center items-center relative"
+        style={{
+          backgroundImage: `url(${cover})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <div className="absolute inset-0 bg-black opacity-10"></div>
+        <div className="relative z-10">
+          <h1
+            className={cn(
+              titleFont.className,
+              'text-5xl text-white font-bold uppercase border border-gray-100 px-10 py-4',
+            )}
+          >
+            {location.name}
+          </h1>
         </div>
       </header>
       <section className="container mx-auto px-4 py-10">
@@ -52,4 +83,10 @@ export default async function LocationPage({ params: { id } }: Props) {
       </section>
     </div>
   );
+}
+
+function getCoverPhoto(photos: Photo[], photo?: Photo | null) {
+  const randomIndex = Math.floor(Math.random() * photos.length);
+  const cover = photo || photos[randomIndex];
+  return thumbnail(cover.fileName);
 }

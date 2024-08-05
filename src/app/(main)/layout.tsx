@@ -1,11 +1,11 @@
 import '../globals.css';
-import { Inter } from 'next/font/google';
+import { Jost } from 'next/font/google';
 import { Providers } from './providers';
 import Navbar from './base/Navbar';
 import { APP_NAME } from '@/lib/constants';
 import Footer from './home/Footer';
 
-const inter = Inter({ subsets: ['latin'] });
+const font = Jost({ subsets: ['latin'] });
 
 export const metadata = {
   title: APP_NAME,
@@ -15,7 +15,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: any }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={font.className}>
         <Providers>
           <Navbar />
           <div className="min-h-dvh">{children}</div>

@@ -7,7 +7,7 @@ import Slides from './Slides';
 import Controls from './Controls';
 import BackgroundImage from './BackgroundImage';
 
-export default function Home({ sliderData }: { sliderData: PhotoWithData[] }) {
+export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
   const initData = sliderData[0];
 
   const [data, setData] = React.useState<PhotoWithData[]>(sliderData.slice(1));
