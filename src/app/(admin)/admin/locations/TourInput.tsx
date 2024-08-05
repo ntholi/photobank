@@ -23,7 +23,7 @@ export default function TourInput({ form }: Props) {
       const ext = file.name.split('.').pop();
       try {
         const { url, fileName } = (
-          await axios.get(`/api/photos/upload-url?ext=${ext}`)
+          await axios.get(`/api/virtualtours/upload-url?ext=${ext}`)
         ).data;
 
         await axios.put(url, file, {
