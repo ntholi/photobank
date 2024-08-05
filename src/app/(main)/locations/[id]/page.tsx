@@ -1,14 +1,13 @@
 import { thumbnail } from '@/lib/config/urls';
 import prisma from '@/lib/prisma';
 import { PhotoWithData } from '@/lib/types';
-import { notFound } from 'next/navigation';
-import { MdLocationPin } from 'react-icons/md';
-import Gallery from './Gallery';
-import ClientOnly from '../../base/ClientOnly';
-import { LocationDetails, Photo } from '@prisma/client';
-import { Dosis } from 'next/font/google';
 import { cn } from '@nextui-org/react';
+import { Photo } from '@prisma/client';
+import { Dosis } from 'next/font/google';
+import { notFound } from 'next/navigation';
+import ClientOnly from '../../base/ClientOnly';
 import Container from '../../base/Container';
+import Gallery from './Gallery';
 import MapDisplay from './MapDisplay';
 
 const titleFont = Dosis({ weight: '700', subsets: ['latin'] });
@@ -79,12 +78,15 @@ export default async function LocationPage({ params: { id } }: Props) {
         </div>
       </header>
       {locationDetails && (
-        <Container className="grid grid-cols-1 md:grid-cols-2">
-          <section>
+        <Container
+          width="lg"
+          className="grid grid-cols-1 md:grid-cols-3 mt-10 gap-10"
+        >
+          <section className="md:col-span-2">
             <h2 className="text-4xl font-semibold">About {location.name}</h2>
             <article
               dangerouslySetInnerHTML={{ __html: locationDetails.about || '' }}
-              className="prose"
+              className="prose text-lg mt-5"
             />
           </section>
           <section>
