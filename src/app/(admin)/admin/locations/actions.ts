@@ -4,10 +4,6 @@ import prisma from '@/lib/prisma';
 import { Location, LocationDetails, Role } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
-type LocationDetailsFormData = LocationDetails & {
-  location: Location | null;
-};
-
 function hasAccess(role?: Role) {
   if (!role) return false;
   const roles = ['admin', 'moderator'];
@@ -22,7 +18,7 @@ export async function getLocation(id: string) {
 
 export async function deleteLocation(id: string) {
   const session = await auth();
-  if (hasAccess(session?.user?.role)) throw new Error('User not admin');
+  if (!hasAccess(session?.user?.role)) throw new Error('User not admin');
   await prisma.location.delete({ where: { id } });
   revalidatePath('/admin/locations');
 }
@@ -40,7 +36,7 @@ export async function createLocation(
     where: { id: location.id },
   });
 
-  const { locationId, coverPhotoId, ...rest } = data;
+  const { id, locationId, coverPhotoId, ...rest } = data;
   return await prisma.locationDetails.create({
     data: {
       ...rest,
