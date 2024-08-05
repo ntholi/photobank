@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
   let tagId = undefined;
   try {
-    tagId = (await req.json()).id;
+    tagId = (await req.json()).tagId;
   } catch (err) {
     console.error('Error parsing request body');
   }

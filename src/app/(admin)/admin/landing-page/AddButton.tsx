@@ -42,7 +42,7 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
       try {
         const { data } = await axios.post(
           `/api/photos/search?searchKey=${filter}`,
-          tag,
+          { tagId: tag?.id },
         );
         if (data.photos.length > 0) {
           setPhotos(data.photos as PhotoWithData[]);

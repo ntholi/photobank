@@ -24,7 +24,7 @@ export default function Gallery({ searchKey, tag }: Props) {
       try {
         const { data } = await axios.post(
           `/api/photos/search?searchKey=${searchKey}`,
-          tag,
+          { tagId: tag?.id },
         );
         if (data.photos.length > 0) {
           setPhotos(data.photos as PhotoWithData[]);

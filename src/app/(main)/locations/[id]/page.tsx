@@ -18,7 +18,9 @@ const getLocation = async (id: string) => {
   const location = await prisma.location.findUnique({
     where: { id },
     include: {
-      photos: true,
+      photos: {
+        take: 10,
+      },
     },
   });
 
@@ -96,7 +98,7 @@ export default async function LocationPage({ params: { id } }: Props) {
       )}
       <section className="container mx-auto px-4 py-10">
         <ClientOnly>
-          <Gallery photos={photos} />
+          <Gallery location={location} />
         </ClientOnly>
       </section>
     </div>
