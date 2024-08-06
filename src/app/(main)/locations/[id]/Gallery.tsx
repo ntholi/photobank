@@ -42,7 +42,7 @@ export default function Gallery({ location }: Props) {
           <Spinner size="lg" />
         </div>
       ) : (
-        <section className="grid cursor-pointer grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        <section className="grid cursor-pointer grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
           {photos?.map((it) => (
             <article key={it.id} className="hover:shadow-sm rounded-xl pb-2">
               <Image
