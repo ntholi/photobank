@@ -28,7 +28,7 @@ export default async function Page({ params: { id } }: Props) {
         <FieldView label="Name">{item.location.name}</FieldView>
         <FieldView label="Virtual Tour">
           {item.tourUrl && (
-            <Anchor target="_blank" href={item.tourUrl || '#'}>
+            <Anchor target="_blank" href={`${item.tourUrl}/index.htm`}>
               {item.tourUrl?.split('/').at(-1)}
             </Anchor>
           )}
