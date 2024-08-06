@@ -11,6 +11,7 @@ import Gallery from './Gallery';
 import MapDisplay from './MapDisplay';
 import { FaImage } from 'react-icons/fa6';
 import { GrThreeD } from 'react-icons/gr';
+import VirtualTour from './VirtualTour';
 
 const titleFont = Dosis({ weight: '700', subsets: ['latin'] });
 
@@ -122,7 +123,12 @@ export default async function LocationPage({ params: { id } }: Props) {
       )}
       <section className="container mx-auto px-4 py-10">
         <ClientOnly>
-          <Gallery location={location} />
+          {/* <Gallery location={location} /> */}
+          <div className="flex justify-center">
+            <div className="w-[80vw]">
+              <VirtualTour url={locationDetails?.tourUrl} />
+            </div>
+          </div>
         </ClientOnly>
       </section>
     </div>
