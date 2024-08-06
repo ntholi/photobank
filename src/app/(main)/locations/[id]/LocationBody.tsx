@@ -37,7 +37,7 @@ export default function LocationBody({ tourUrl, location }: Props) {
         title={
           <div className="flex items-center space-x-2 text-medium">
             <GrThreeD className="text-xl" />
-            <span>Map</span>
+            <span>Virtual Tour</span>
           </div>
         }
       >
