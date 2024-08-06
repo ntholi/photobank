@@ -46,10 +46,9 @@ export default async function Page({ params: { id } }: Props) {
           <StatusUpdater application={item} />
         </Group>
         <Stack mt={'lg'} gap={'xs'}>
-          <Text size="sm" fw={500}>
-            Motivation
-          </Text>
-          <Divider />
+          <Fieldset legend="Motivation">
+            <Text>{item.message}</Text>
+          </Fieldset>
         </Stack>
       </Stack>
     </Box>
