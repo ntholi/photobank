@@ -4,12 +4,12 @@ import { nanoid } from 'nanoid';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { auth } from '@/auth';
 
-export const bucketName = 'lehakoe-virtual-tours'; //TODO: Make this an environment variable
+const bucketName = 'lehakoe-virtual-tours'; //TODO: Make this an environment variable
 const bucketRegion = process.env.AWS_BUCKET_REGION || '';
 const bucketAccessKey = process.env.AWS_BUCKET_ACCESS_KEY || '';
 const bucketSecretKey = process.env.AWS_BUCKET_SECRET_KEY || '';
 
-export const s3Client = new S3Client({
+const s3Client = new S3Client({
   region: bucketRegion,
   credentials: {
     accessKeyId: bucketAccessKey,

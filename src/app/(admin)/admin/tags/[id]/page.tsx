@@ -24,7 +24,7 @@ export default async function Page({ params: { id } }: Props) {
       />
 
       <Stack p={'xl'}>
-        <FieldView label="Name" value={item.name} />
+        <FieldView label="Name">{item.name}</FieldView>
         <Fieldset legend="Labels">
           <List type="ordered" mt={'sm'}>
             {item.labels.map((it) => (

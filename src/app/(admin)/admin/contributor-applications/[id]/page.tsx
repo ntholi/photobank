@@ -40,8 +40,8 @@ export default async function Page({ params: { id } }: Props) {
       <Stack p={'xl'}>
         <Group justify={'space-between'} align="start">
           <Stack w={'50%'}>
-            <FieldView label="Name" value={item.user.name} />
-            <FieldView label="Email" value={item.user.email} />
+            <FieldView label="Name">{item.user.name}</FieldView>
+            <FieldView label="Email">{item.user.email}</FieldView>
           </Stack>
           <StatusUpdater application={item} />
         </Group>
