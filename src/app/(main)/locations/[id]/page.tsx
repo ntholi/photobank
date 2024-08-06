@@ -13,6 +13,7 @@ import { FaImage } from 'react-icons/fa6';
 import { GrThreeD } from 'react-icons/gr';
 import VirtualTour from './VirtualTour';
 import LocationBody from './LocationBody';
+import NavButtons from './NavButtons';
 
 const titleFont = Dosis({ weight: '700', subsets: ['latin'] });
 
@@ -82,28 +83,7 @@ export default async function LocationPage({ params: { id } }: Props) {
             {location.name}
           </h1>
         </div>
-        <nav className="absolute bottom-16 flex gap-5">
-          <Button
-            startContent={<FaImage />}
-            radius="full"
-            color="primary"
-            variant="bordered"
-            className="border-1 border-white px-8 text-white"
-            href="/#about-us"
-          >
-            Images
-          </Button>
-          <Button
-            startContent={<GrThreeD />}
-            radius="full"
-            color="primary"
-            variant="bordered"
-            className="border-1 border-white px-8 text-white"
-            href="/#about-us"
-          >
-            Virtual Tour
-          </Button>
-        </nav>
+        <NavButtons />
       </header>
       {locationDetails?.about && (
         <Container
@@ -122,7 +102,7 @@ export default async function LocationPage({ params: { id } }: Props) {
           </section>
         </Container>
       )}
-      <section className="container mx-auto px-4 py-10">
+      <section className="container mx-auto px-4 py-10" id="body">
         <LocationBody location={location} tourUrl={locationDetails?.tourUrl} />
       </section>
     </div>
