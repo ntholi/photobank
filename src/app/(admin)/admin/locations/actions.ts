@@ -23,7 +23,7 @@ export async function getLocation(id: string) {
 export async function deleteLocation(id: string) {
   const session = await auth();
   if (!hasAccess(session?.user?.role)) throw new Error('User not admin');
-  await prisma.location.delete({ where: { id } });
+  await prisma.locationDetails.delete({ where: { id } });
   revalidatePath('/admin/locations');
 }
 
