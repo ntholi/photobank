@@ -79,7 +79,7 @@ export default async function LocationPage({ params: { id } }: Props) {
           </h1>
         </div>
       </header>
-      {locationDetails && (
+      {locationDetails?.about && (
         <Container
           width="lg"
           className="grid grid-cols-1 md:grid-cols-3 mt-10 gap-10"
