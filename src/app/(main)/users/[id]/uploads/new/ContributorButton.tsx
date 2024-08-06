@@ -1,12 +1,21 @@
 'use client';
 
-import { Button } from '@nextui-org/react';
 import { ContributorApplication } from '@prisma/client';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { GoCheck, GoStop, GoUpload } from 'react-icons/go';
 import { canUpload } from './utils';
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Textarea,
+  useDisclosure,
+} from '@nextui-org/react';
 
 type Props = {
   userId: string;
@@ -18,6 +27,9 @@ export default function ContributorButton({ userId, onOpen }: Props) {
   const [application, setApplication] = useState<ContributorApplication | null>(
     null,
   );
+  const [motivation, setMotivation] = useState('');
+  const { isOpen, onOpen: openModel, onOpenChange } = useDisclosure();
+
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -36,7 +48,12 @@ export default function ContributorButton({ userId, onOpen }: Props) {
     setLoading(true);
     try {
       console.log('sending request');
-      const { data } = await axios.post('/api/users/contributors/applications');
+      const { data } = await axios.post(
+        '/api/users/contributors/applications',
+        {
+          motivation,
+        },
+      );
       if (data.application) {
         setApplication(data.application);
       }
@@ -54,16 +71,49 @@ export default function ContributorButton({ userId, onOpen }: Props) {
       Upload
     </Button>
   ) : (
-    <Button
-      color={getStatusColor(application?.status)}
-      variant="light"
-      onClick={becomeContributor}
-      isDisabled={!!application}
-      startContent={<StatusIcon status={application?.status} />}
-      isLoading={loading}
-    >
-      {statusMessage(application?.status)}
-    </Button>
+    <>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Modal Title
+              </ModalHeader>
+              <ModalBody>
+                <Textarea
+                  value={motivation}
+                  onChange={(e) => setMotivation(e.target.value)}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={async () => {
+                    await becomeContributor();
+                    onClose();
+                  }}
+                >
+                  Apply
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Button
+        color={getStatusColor(application?.status)}
+        variant="light"
+        onClick={openModel}
+        isDisabled={!!application}
+        startContent={<StatusIcon status={application?.status} />}
+        isLoading={loading}
+      >
+        {statusMessage(application?.status)}
+      </Button>
+    </>
   );
 }
 
