@@ -1,7 +1,7 @@
 import { thumbnail } from '@/lib/config/urls';
 import prisma from '@/lib/prisma';
 import { PhotoWithData } from '@/lib/types';
-import { cn } from '@nextui-org/react';
+import { Button, cn } from '@nextui-org/react';
 import { Photo } from '@prisma/client';
 import { Dosis } from 'next/font/google';
 import { notFound } from 'next/navigation';
@@ -9,6 +9,8 @@ import ClientOnly from '../../base/ClientOnly';
 import Container from '../../base/Container';
 import Gallery from './Gallery';
 import MapDisplay from './MapDisplay';
+import { FaImage } from 'react-icons/fa6';
+import { GrThreeD } from 'react-icons/gr';
 
 const titleFont = Dosis({ weight: '700', subsets: ['latin'] });
 
@@ -59,7 +61,7 @@ export default async function LocationPage({ params: { id } }: Props) {
   return (
     <div>
       <header
-        className="h-[60vh] flex justify-center items-center relative"
+        className="h-[65vh] flex justify-center items-center relative"
         style={{
           backgroundImage: `url(${cover})`,
           backgroundSize: 'cover',
@@ -67,8 +69,8 @@ export default async function LocationPage({ params: { id } }: Props) {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-10"></div>
-        <div className="relative z-10">
+        <div className="absolute inset-0 bg-black opacity-20"></div>
+        <div className="relative z-10 flex flex-col items-center">
           <h1
             className={cn(
               titleFont.className,
@@ -78,6 +80,28 @@ export default async function LocationPage({ params: { id } }: Props) {
             {location.name}
           </h1>
         </div>
+        <nav className="absolute bottom-16 flex gap-5">
+          <Button
+            startContent={<FaImage />}
+            radius="full"
+            color="primary"
+            variant="bordered"
+            className="border-1 border-white px-8 text-white"
+            href="/#about-us"
+          >
+            Images
+          </Button>
+          <Button
+            startContent={<GrThreeD />}
+            radius="full"
+            color="primary"
+            variant="bordered"
+            className="border-1 border-white px-8 text-white"
+            href="/#about-us"
+          >
+            Virtual Tour
+          </Button>
+        </nav>
       </header>
       {locationDetails?.about && (
         <Container
