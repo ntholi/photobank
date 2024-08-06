@@ -1,18 +1,18 @@
 'use client';
+import { thumbnail } from '@/lib/config/urls';
+import { shorten } from '@/lib/utils';
 import { Image, Spinner } from '@nextui-org/react';
 import { Location, Photo, Tag } from '@prisma/client';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import Container from '../../base/Container';
 import FilterBar from '../../home/FilterBar';
-import { thumbnail } from '@/lib/config/urls';
-import axios from 'axios';
-import { shorten } from '@/lib/utils';
 
 type Props = {
   location: Location;
 };
+
 export default function Gallery({ location }: Props) {
   const router = useRouter();
   const [tag, setTag] = React.useState<Tag | null>(null);

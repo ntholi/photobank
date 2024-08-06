@@ -1,7 +1,7 @@
 import { thumbnail } from '@/lib/config/urls';
 import prisma from '@/lib/prisma';
 import { PhotoWithData } from '@/lib/types';
-import { Button, cn } from '@nextui-org/react';
+import { Button, cn, Tab, Tabs } from '@nextui-org/react';
 import { Photo } from '@prisma/client';
 import { Dosis } from 'next/font/google';
 import { notFound } from 'next/navigation';
@@ -12,6 +12,7 @@ import MapDisplay from './MapDisplay';
 import { FaImage } from 'react-icons/fa6';
 import { GrThreeD } from 'react-icons/gr';
 import VirtualTour from './VirtualTour';
+import LocationBody from './LocationBody';
 
 const titleFont = Dosis({ weight: '700', subsets: ['latin'] });
 
@@ -122,14 +123,7 @@ export default async function LocationPage({ params: { id } }: Props) {
         </Container>
       )}
       <section className="container mx-auto px-4 py-10">
-        <ClientOnly>
-          {/* <Gallery location={location} /> */}
-          <div className="flex justify-center">
-            <div className="w-[80vw]">
-              <VirtualTour url={locationDetails?.tourUrl} />
-            </div>
-          </div>
-        </ClientOnly>
+        <LocationBody location={location} tourUrl={locationDetails?.tourUrl} />
       </section>
     </div>
   );
