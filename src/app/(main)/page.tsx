@@ -2,6 +2,7 @@ import api from '@/lib/config/api';
 import { PhotoWithData } from '@/lib/types';
 import GallerySection from './home/GallerySection';
 import Hero from './home/hero/Hero';
+import Splash from './home/Splash';
 
 const getPhotos = async () => {
   try {
@@ -25,7 +26,7 @@ const getPhotos = async () => {
 export default async function Page() {
   const photos = await getPhotos();
   return (
-    <>
+    <Splash>
       {photos && photos.length > 0 ? (
         <>
           <Hero sliderData={photos} />
@@ -36,6 +37,6 @@ export default async function Page() {
           <p>Photobank Empty</p>
         </section>
       )}
-    </>
+    </Splash>
   );
 }
