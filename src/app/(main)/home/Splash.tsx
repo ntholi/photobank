@@ -11,16 +11,16 @@ export default function Splash({ children }: Props) {
   const { data: session } = useSession();
   const logoHeight = 60;
 
-  return session?.user?.id ? (
-    <div className="w-dvw h-dvh flex justify-center items-center">
-      <Image
-        src={`/images/logo/transparent.png`}
-        width={logoHeight * 3.22}
-        height={logoHeight}
-        alt="logo"
-      />
-    </div>
-  ) : (
-    children
-  );
+  // return session?.user?.id ? (
+  //   <div className="w-dvw h-dvh flex justify-center items-center">
+  //     <Image
+  //       src={`/images/logo/transparent.png`}
+  //       width={logoHeight * 3.22}
+  //       height={logoHeight}
+  //       alt="logo"
+  //     />
+  //   </div>
+  // ) : (
+  return children;
+  // );
 }
