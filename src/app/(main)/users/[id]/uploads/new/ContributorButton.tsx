@@ -77,10 +77,13 @@ export default function ContributorButton({ userId, onOpen }: Props) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Modal Title
+                Become a Contributor
               </ModalHeader>
               <ModalBody>
                 <Textarea
+                  placeholder="Why do you want to become a contributor?"
+                  cols={10}
+                  height={100}
                   value={motivation}
                   onChange={(e) => setMotivation(e.target.value)}
                 />
@@ -91,6 +94,8 @@ export default function ContributorButton({ userId, onOpen }: Props) {
                 </Button>
                 <Button
                   color="primary"
+                  isDisabled={!motivation}
+                  isLoading={loading}
                   onPress={async () => {
                     await becomeContributor();
                     onClose();
