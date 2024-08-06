@@ -5,7 +5,15 @@ import { NextResponse } from 'next/server';
 export async function GET(req: Request) {
   const data = (
     await prisma.homePhoto.findMany({
-      select: { photo: true },
+      select: {
+        photo: {
+          select: {
+            location: true,
+            fileName: true,
+            caption: true,
+          },
+        },
+      },
       orderBy: { createdAt: 'desc' },
     })
   ).map((it) => it.photo);

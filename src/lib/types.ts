@@ -1,4 +1,4 @@
-import { Photo, User } from '@prisma/client';
+import { Photo, User, Location } from '@prisma/client';
 
 export type SessionUser = import('next-auth').User | undefined;
 

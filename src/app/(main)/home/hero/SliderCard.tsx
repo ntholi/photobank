@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { PhotoWithData } from '@/lib/types';
 import MotionImage from './MotionImage';
+import { shorten } from '@/lib/utils';
 
 type Props = {
   data: PhotoWithData;
@@ -41,17 +42,13 @@ function SliderCard({ data }: Props) {
             layout
             className=" mb-2 h-[2px] w-3 rounded-full bg-white"
           ></motion.div>
-          <motion.p
-            layoutId={data.url + 'data.location'}
-            className="text-xs text-[#D5D5D6]"
-          >
-            {data?.location?.name}
-          </motion.p>
           <motion.h1
             layoutId={data.url + 'data.name'}
-            className="text-xl leading-6 text-white"
+            className="text-sm leading-6 text-white"
           >
-            {data.caption}
+            {data?.location?.name
+              ? data?.location?.name
+              : shorten(data.caption, 25)}
           </motion.h1>
         </motion.div>
       </motion.div>
