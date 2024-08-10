@@ -36,6 +36,7 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
       backdrop="blur"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
+      closeButton={true}
     >
       <ModalContent>
         {(onClose) => (
@@ -45,7 +46,7 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                 <div className="md:col-span-3">
                   <Image
                     src={watermarked(photo.fileName)}
-                    className="w-full h-[85vh] object-cover"
+                    className="w-full md:w-[600px] h-[85vh] object-cover"
                     alt={photo.caption || ''}
                     radius="none"
                   />
