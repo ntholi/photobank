@@ -1,4 +1,5 @@
 'use client';
+import React, { useState } from 'react';
 import { GalleryType } from '@/lib/constants';
 import { PhotoWithData } from '@/lib/types';
 import {
@@ -11,16 +12,8 @@ import {
 } from '@nextui-org/react';
 import { PhotoStatus } from '@prisma/client';
 import axios from 'axios';
-import React, { Key } from 'react';
 import { MdOutlineNoPhotography } from 'react-icons/md';
 import PhotoModal from './PhotoModal';
-
-interface Photo {
-  id: string;
-  url: string;
-  name: string;
-  status: PhotoStatus;
-}
 
 type Props = {
   userId: string;
@@ -28,18 +21,19 @@ type Props = {
 
 export const ProfileBody = ({ userId }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [selectedPhoto, setSelectedPhoto] =
-    React.useState<PhotoWithData | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<PhotoWithData | null>(
+    null,
+  );
+  const [photos, setPhotos] = useState<PhotoWithData[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const [photos, setPhotos] = React.useState<PhotoWithData[]>([]);
-  const [loading, setLoading] = React.useState(false);
-  let tabs = [
+  const tabs = [
     { title: GalleryType.UPLOADS },
     { title: GalleryType.PURCHASED },
     { title: GalleryType.SAVED },
   ];
 
-  async function handleTabChange(key: Key) {
+  async function handleTabChange(key: React.Key) {
     setLoading(true);
     setPhotos([]);
     try {
@@ -91,7 +85,7 @@ export const ProfileBody = ({ userId }: Props) => {
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                       {photos.map((photo: PhotoWithData) => (
-                        <div className="relative flex flex-1" key={photo.id}>
+                        <div className="relative" key={photo.id}>
                           {photo.status !== 'published' && (
                             <Chip
                               className="absolute top-2 right-2 z-20 text-xs bg-opacity-80"
@@ -101,9 +95,7 @@ export const ProfileBody = ({ userId }: Props) => {
                             </Chip>
                           )}
                           <Image
-                            className={
-                              'min-w-full h-60 sm:h-72 object-cover cursor-pointer'
-                            }
+                            className="size-full aspect-[4/3] object-cover cursor-pointer"
                             src={photo.url}
                             alt={photo.caption || 'Lehakoe'}
                             onClick={() => {
