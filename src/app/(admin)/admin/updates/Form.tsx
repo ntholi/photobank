@@ -17,15 +17,14 @@ const schema = z.object({});
 export default function Form({ onSubmit, value }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [labels, setLabels] = useState<String[]>([]);
   const { setValues, ...form } = useForm<Update>({
     initialValues: value,
     validate: zodResolver(schema),
   });
 
-  async function handleSubmit(values: Update) {
+  async function handleSubmit(value: Update) {
     startTransition(async () => {
-      const { id } = await onSubmit(Object.assign(values, { labels }));
+      const { id } = await onSubmit(value);
       router.push(`/admin/updates/${id}`);
     });
   }

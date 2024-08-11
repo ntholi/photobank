@@ -16,10 +16,10 @@ import {
   IconFileDescription,
   IconHome,
   IconLogout2,
-  IconMap,
   IconMap2,
   IconNote,
   IconPhoto,
+  IconSquaresFilled,
   IconUser,
   IconUsers,
 } from '@tabler/icons-react';
@@ -82,6 +82,14 @@ export default function Navigation() {
             rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
           />
         </NavLink>
+        <NavLink
+          label="Updates"
+          component={Link}
+          active={pathname.startsWith('/admin/updates')}
+          href={'/admin/updates'}
+          leftSection={<IconSquaresFilled size="1.1rem" />}
+          rightSection={<IconChevronRight size="0.8rem" stroke={1.5} />}
+        />
       </AppShell.Section>
       <AppShell.Section>
         <Divider />
