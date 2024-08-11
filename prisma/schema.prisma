@@ -208,9 +208,13 @@ model SavedPhotos {
   @@map("saved_photos")
 }
 
-model Category {
-  id   Int    @id @default(autoincrement())
-  name String
+model Update {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("updates")
 }
 
 model AuditLog {
