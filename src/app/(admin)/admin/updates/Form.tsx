@@ -1,27 +1,32 @@
 'use client';
 import FormHeader from '@/app/(admin)/components/FormHeader';
+import { formatDate } from '@/lib/format';
 import {
   ActionIcon,
   Button,
   Divider,
   Flex,
   Group,
-  Paper,
   Stack,
   Table,
   TextInput,
   Title,
 } from '@mantine/core';
-import { isNotEmpty, useForm } from '@mantine/form';
+import { useForm, zodResolver } from '@mantine/form';
 import { Update } from '@prisma/client';
 import { IconTrashFilled } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
+import { z } from 'zod';
 
 type Props = {
   value?: Update;
   onSubmit: (values: Update) => Promise<Update>;
 };
+
+const schema = z.object({
+  name: z.string(),
+});
 
 export default function Form({ onSubmit, value }: Props) {
   const router = useRouter();
@@ -29,9 +34,7 @@ export default function Form({ onSubmit, value }: Props) {
   const [features, setFeatures] = useState<String[]>([]);
   const { setValues, ...form } = useForm<Update>({
     initialValues: value,
-    validate: {
-      name: isNotEmpty('Name is required'),
-    },
+    validate: zodResolver(schema),
   });
 
   useEffect(() => {
@@ -53,6 +56,7 @@ export default function Form({ onSubmit, value }: Props) {
       <Stack p={'xl'}>
         <TextInput
           label="Update"
+          defaultValue={formatDate(new Date())}
           placeholder="Name"
           {...form.getInputProps('name')}
         />
