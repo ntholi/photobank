@@ -209,10 +209,10 @@ model SavedPhotos {
 }
 
 model Update {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String
-  createdAt   DateTime @default(now()) @map("created_at")
+  id        Int      @id @default(autoincrement())
+  name      String
+  features  String[]
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("updates")
 }

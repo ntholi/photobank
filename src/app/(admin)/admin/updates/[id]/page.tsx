@@ -1,7 +1,7 @@
 import DeleteIconButton from '@/app/(admin)/components/DeleteIconButton';
 import FieldView from '@/app/(admin)/components/FieldView';
 import HeaderDisplay from '@/app/(admin)/components/HeaderDisplay';
-import { Box, Fieldset, Stack, Text } from '@mantine/core';
+import { Box, Fieldset, List, ListItem, Stack } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import { deleteUpdate, getUpdate } from '../actions';
 
@@ -25,8 +25,12 @@ export default async function Page({ params: { id } }: Props) {
 
       <Stack p={'xl'}>
         <FieldView label="Name">{item.name}</FieldView>
-        <Fieldset legend="Description">
-          <Text size="xs">{item.description}</Text>
+        <Fieldset legend="Labels">
+          <List type="ordered" mt={'sm'}>
+            {item.labels.map((it) => (
+              <ListItem>{it}</ListItem>
+            ))}
+          </List>
         </Fieldset>
       </Stack>
     </Box>
