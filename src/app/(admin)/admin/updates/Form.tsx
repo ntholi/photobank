@@ -28,12 +28,19 @@ const schema = z.object({
   name: z.string(),
 });
 
+const defaultValues = {
+  id: 0,
+  name: formatDate(new Date()),
+  features: [],
+  createdAt: new Date(),
+};
+
 export default function Form({ onSubmit, value }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [features, setFeatures] = useState<String[]>([]);
   const { setValues, ...form } = useForm<Update>({
-    initialValues: value,
+    initialValues: value || defaultValues,
     validate: zodResolver(schema),
   });
 
