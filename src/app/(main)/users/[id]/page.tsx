@@ -11,7 +11,7 @@ type Props = { params: { id: string } };
 export async function generateMetadata({ params }: Props) {
   const user = await getUser(params.id);
   return {
-    title: `${user.name} ${APP_NAME}`,
+    title: `${user.name} • ${APP_NAME}`,
     description: user.bio,
     image: user.image,
   } as Metadata;
