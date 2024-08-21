@@ -24,7 +24,6 @@ type Props = {
   photo: PhotoWithData;
 };
 export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
-  const { data: session } = useSession();
   const router = useRouter();
 
   return (
