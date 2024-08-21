@@ -32,7 +32,6 @@ export async function GET(request: Request, { params }: Props) {
 
 const PhotoData = z.object({
   caption: z.string().optional(),
-  useWithoutWatermark: z.boolean().default(false),
   location: z
     .object({
       id: z.string(),
@@ -45,9 +44,7 @@ const PhotoData = z.object({
 
 export async function PUT(request: Request, { params }: Props) {
   try {
-    const { location, caption, useWithoutWatermark } = PhotoData.parse(
-      await request.json(),
-    );
+    const { location, caption } = PhotoData.parse(await request.json());
 
     const { fileName } = (await prisma.photo.findUnique({
       where: {
@@ -62,7 +59,6 @@ export async function PUT(request: Request, { params }: Props) {
       data: {
         caption: caption,
         status: 'published',
-        useWithoutWatermark: useWithoutWatermark,
         location: location && {
           connectOrCreate: {
             where: {
@@ -78,10 +74,6 @@ export async function PUT(request: Request, { params }: Props) {
         },
       },
     });
-
-    if (photo.useWithoutWatermark) {
-      await axios.get(imageProcessor(fileName, false));
-    }
 
     return NextResponse.json(photo);
   } catch (error) {

@@ -13,7 +13,6 @@ import { Location } from '@prisma/client';
 type InputType = {
   caption: string;
   location: Location | null;
-  useWithoutWatermark: boolean;
 };
 
 type Props = {

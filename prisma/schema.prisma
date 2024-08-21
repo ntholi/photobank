@@ -109,22 +109,21 @@ enum PhotoStatus {
 }
 
 model Photo {
-  id                  String            @id @default(cuid())
-  fileName            String
-  status              PhotoStatus       @default(draft)
-  caption             String?
-  user                User              @relation(fields: [userId], references: [id])
-  userId              String            @map("user_id")
-  location            Location?         @relation(fields: [locationId], references: [id])
-  locationId          String?
-  locationCoverFor    LocationDetails?  @relation("LocationCoverPhoto")
-  useWithoutWatermark Boolean?          @map("use_without_watermark")
-  purchasedPhotos     PurchasedPhotos[]
-  savedPhotos         SavedPhotos[]
-  labels              PhotoLabel[]
-  homePhoto           HomePhoto[]
-  createdAt           DateTime          @default(now()) @map("created_at")
-  updatedAt           DateTime          @updatedAt @map("updated_at")
+  id               String            @id @default(cuid())
+  fileName         String
+  status           PhotoStatus       @default(draft)
+  caption          String?
+  user             User              @relation(fields: [userId], references: [id])
+  userId           String            @map("user_id")
+  location         Location?         @relation(fields: [locationId], references: [id])
+  locationId       String?
+  locationCoverFor LocationDetails?  @relation("LocationCoverPhoto")
+  purchasedPhotos  PurchasedPhotos[]
+  savedPhotos      SavedPhotos[]
+  labels           PhotoLabel[]
+  homePhoto        HomePhoto[]
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
 
   @@map("photos")
 }
