@@ -18,7 +18,7 @@ const getPhoto = async (photoId: string) => {
 
 export default async function Page({ params: { photoId } }: Props) {
   return (
-    <section className="md:px-16 pt-5 md:mt-8 grid lg:grid-cols-2 gap-5">
+    <section className='grid gap-5 pt-5 md:mt-8 md:px-16 lg:grid-cols-2'>
       <Suspense fallback={<Loader />}>
         <Display photoId={photoId} />
       </Suspense>
@@ -35,7 +35,7 @@ async function Display({ photoId }: { photoId: string }) {
   return (
     <>
       <div>
-        <Image src={photoUrl} alt={'Uploaded Image'} shadow="sm" />
+        <Image src={photoUrl} alt={'Uploaded Image'} shadow='sm' />
       </div>
       <div>
         <PhotoUploadForm photoId={photoId} />
@@ -48,11 +48,11 @@ function Loader() {
   return (
     <>
       <div>
-        <Skeleton className="h-40 w-full rounded-xl" />
+        <Skeleton className='h-40 w-full rounded-xl' />
       </div>
-      <div className="space-y-3">
-        <Skeleton className="h-8 w-full rounded-lg" />
-        <Skeleton className="h-8 w-full rounded-lg" />
+      <div className='space-y-3'>
+        <Skeleton className='h-8 w-full rounded-lg' />
+        <Skeleton className='h-8 w-full rounded-lg' />
       </div>
     </>
   );

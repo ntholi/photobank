@@ -48,19 +48,19 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} method="POST">
+      <form onSubmit={handleSubmit(onSubmit)} method='POST'>
         <LocationInput location={location} setLocation={setLocation} />
         <Textarea
-          className="mt-6"
-          label="Caption"
-          variant="bordered"
-          placeholder="(Optional)"
+          className='mt-6'
+          label='Caption'
+          variant='bordered'
+          placeholder='(Optional)'
           {...register('caption')}
         />
-        <div className="flex gap-2 items-center">
+        <div className='flex items-center gap-2'>
           <Checkbox
-            className="mt-1"
-            size="sm"
+            className='mt-1'
+            size='sm'
             checked={useWithoutWatermark}
             onValueChange={setUseWithoutWatermark}
           >
@@ -68,25 +68,25 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
           </Checkbox>
           <Tooltip
             content={
-              <div className="px-1 py-2">
-                <p className="text-small font-bold">Homepage Display</p>
-                <p className="text-tiny mt-1">
+              <div className='px-1 py-2'>
+                <p className='text-small font-bold'>Homepage Display</p>
+                <p className='mt-1 text-tiny'>
                   Allow your photo to be displayed on the homepage without a
                   watermark. <br /> Proper measures will be taken to prevent
                   unauthorized use of your photo.
                 </p>
               </div>
             }
-            placement="top"
+            placement='top'
           >
-            <IconInfoCircle size="1rem" className="mt-[15px] text-gray-400" />
+            <IconInfoCircle size='1rem' className='mt-[15px] text-gray-400' />
           </Tooltip>
         </div>
         <Button
-          color="primary"
-          type="submit"
+          color='primary'
+          type='submit'
           isLoading={loading}
-          className="w-full mt-6"
+          className='mt-6 w-full'
           disabled={disabled}
         >
           Save

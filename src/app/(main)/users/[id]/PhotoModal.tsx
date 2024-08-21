@@ -31,18 +31,18 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
     <>
       {isOpen && (
         <Button
-          variant="light"
+          variant='light'
           isIconOnly
           onClick={() => router.back()}
-          className="absolute top-5 right-10 z-[100]"
+          className='absolute right-10 top-5 z-[100]'
         >
-          <IoMdClose className="text-3xl text-white font-bold" />
+          <IoMdClose className='text-3xl font-bold text-white' />
         </Button>
       )}
       <Modal
         size={'5xl'}
-        className="h-[85vh]"
-        backdrop="blur"
+        className='h-[85vh]'
+        backdrop='blur'
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         hideCloseButton
@@ -50,24 +50,24 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalBody className="p-0 md:pe-3">
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-                  <div className="md:col-span-3">
+              <ModalBody className='p-0 md:pe-3'>
+                <div className='grid grid-cols-1 gap-3 md:grid-cols-5'>
+                  <div className='md:col-span-3'>
                     <Image
                       src={watermarked(photo.fileName)}
-                      className="w-full md:w-[600px] h-[85vh] object-cover"
+                      className='h-[85vh] w-full object-cover md:w-[600px]'
                       alt={photo.caption || ''}
-                      radius="none"
+                      radius='none'
                     />
                   </div>
-                  <section className="md:col-span-2 h-full flex flex-col justify-between">
-                    <div className="p-3">
+                  <section className='flex h-full flex-col justify-between md:col-span-2'>
+                    <div className='p-3'>
                       <div className={'flex items-center justify-between'}>
                         <User
                           name={photo.user.name}
                           description={
                             photo.location && (
-                              <div className="flex items-center space-x-1 text-gray-500 text-tiny pe-3">
+                              <div className='flex items-center space-x-1 pe-3 text-tiny text-gray-500'>
                                 <TiLocation />{' '}
                                 <span>{photo.location?.name}</span>
                               </div>
@@ -79,27 +79,27 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                         />
                         <Button
                           isIconOnly
-                          size="sm"
-                          aria-label="Options"
-                          variant="light"
+                          size='sm'
+                          aria-label='Options'
+                          variant='light'
                         >
-                          <SlOptions className="text-base" />
+                          <SlOptions className='text-base' />
                         </Button>
                       </div>
 
-                      <p className="mt-6 text-sm text-gray-700 border bg-gray-50 p-2">
+                      <p className='mt-6 border bg-gray-50 p-2 text-sm text-gray-700'>
                         {photo.caption ? (
                           photo.caption
                         ) : (
-                          <span className="italic">(No Caption)</span>
+                          <span className='italic'>(No Caption)</span>
                         )}
                       </p>
                     </div>
                     <footer>
-                      <div className="flex items-center justify-between p-3 py-5 border-t border-gray-200">
+                      <div className='flex items-center justify-between border-t border-gray-200 p-3 py-5'>
                         <Button
                           endContent={<IoMdOpen />}
-                          color="primary"
+                          color='primary'
                           as={Link}
                           href={'/photos/' + photo.id}
                         >
