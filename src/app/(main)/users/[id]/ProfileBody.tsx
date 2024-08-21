@@ -13,7 +13,7 @@ import {
 import { PhotoStatus } from '@prisma/client';
 import axios from 'axios';
 import { MdOutlineNoPhotography } from 'react-icons/md';
-import PhotoModal from './PhotoModal';
+import PhotoModal from '../../photos/PhotoModal';
 
 type Props = {
   userId: string;
@@ -56,46 +56,46 @@ export const ProfileBody = ({ userId }: Props) => {
         />
       )}
 
-      <div className="flex w-full flex-col mt-10">
+      <div className='mt-10 flex w-full flex-col'>
         <Tabs
-          variant="underlined"
-          className="border-t-1 justify-center"
+          variant='underlined'
+          className='justify-center border-t-1'
           items={tabs}
           onSelectionChange={handleTabChange}
         >
           {(item) => (
-            <Tab key={item.title} title={item.title} className="capitalize">
+            <Tab key={item.title} title={item.title} className='capitalize'>
               {loading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div className='grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3'>
                   {Array.from(Array(2).keys()).map((i) => (
-                    <Skeleton key={i} className="rounded-lg">
-                      <div className="h-60 sm:h-72 rounded-lg bg-default-300"></div>
+                    <Skeleton key={i} className='rounded-lg'>
+                      <div className='h-60 rounded-lg bg-default-300 sm:h-72'></div>
                     </Skeleton>
                   ))}
                 </div>
               ) : (
                 <>
                   {photos.length === 0 ? (
-                    <div className="mt-20 flex flex-col justify-center items-center text-zinc-400">
-                      <div className="border border-gray-200 bg-gray-50 rounded px-6 py-3">
-                        <MdOutlineNoPhotography className="" size="4rem" />
-                        <p className="text-center text-xs mt-2">Empty</p>
+                    <div className='mt-20 flex flex-col items-center justify-center text-zinc-400'>
+                      <div className='rounded border border-gray-200 bg-gray-50 px-6 py-3'>
+                        <MdOutlineNoPhotography className='' size='4rem' />
+                        <p className='mt-2 text-center text-xs'>Empty</p>
                       </div>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className='grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3'>
                       {photos.map((photo: PhotoWithData) => (
-                        <div className="relative" key={photo.id}>
+                        <div className='relative' key={photo.id}>
                           {photo.status !== 'published' && (
                             <Chip
-                              className="absolute top-2 right-2 z-20 text-xs bg-opacity-80"
+                              className='absolute right-2 top-2 z-20 bg-opacity-80 text-xs'
                               color={getChipColor(photo.status)}
                             >
                               {photo.status}
                             </Chip>
                           )}
                           <Image
-                            className="size-full aspect-[4/3] object-cover cursor-pointer"
+                            className='aspect-[4/3] size-full cursor-pointer object-cover'
                             src={photo.url}
                             alt={photo.caption || 'Lehakoe'}
                             onClick={() => {

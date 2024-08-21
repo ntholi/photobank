@@ -3,7 +3,6 @@ import { watermarked } from '@/lib/config/urls';
 import { PhotoWithData } from '@/lib/types';
 import {
   Button,
-  cn,
   Image,
   Modal,
   ModalBody,
@@ -16,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import { IoMdClose, IoMdOpen } from 'react-icons/io';
 import { SlOptions } from 'react-icons/sl';
 import { TiLocation } from 'react-icons/ti';
-import SaveButton from '../../photos/SaveButton';
+import SaveButton from '../SaveButton';
 
 type Props = {
   isOpen: boolean;
