@@ -1,22 +1,20 @@
 'use client';
-import api from '@/lib/config/api';
 import { watermarked } from '@/lib/config/urls';
 import { PhotoWithData } from '@/lib/types';
 import {
   Button,
+  cn,
   Image,
   Modal,
   ModalBody,
   ModalContent,
   User,
 } from '@nextui-org/react';
-import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React from 'react';
-import { FaBookmark } from 'react-icons/fa6';
 import { IoMdOpen } from 'react-icons/io';
+import { SlOptions } from 'react-icons/sl';
 import { TiLocation } from 'react-icons/ti';
 import SaveButton from '../../photos/SaveButton';
 
@@ -27,6 +25,7 @@ type Props = {
 };
 export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
   const { data: session } = useSession();
+  const isOwner = session?.user?.id === photo.user.id;
   const router = useRouter();
 
   return (
@@ -53,7 +52,12 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                 </div>
                 <section className="md:col-span-2 h-full flex flex-col justify-between">
                   <div className="p-3">
-                    <div className="flex items-center justify-between space-x-6">
+                    <div
+                      className={cn(
+                        'flex items-center justify-between',
+                        isOwner && 'mt-5',
+                      )}
+                    >
                       <User
                         name={photo.user.name}
                         description={
@@ -67,6 +71,16 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                           src: photo.user.image || '/images/profile.png',
                         }}
                       />
+                      {isOwner && (
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          aria-label="Options"
+                          variant="light"
+                        >
+                          <SlOptions className="text-base" />
+                        </Button>
+                      )}
                     </div>
 
                     <p className="mt-6 text-sm text-gray-700 border bg-gray-50 p-2">
