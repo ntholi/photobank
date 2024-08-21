@@ -1,8 +1,9 @@
-import { Image } from '@nextui-org/react';
+import { Image, Skeleton } from '@nextui-org/react';
 import PhotoUploadForm from './Form';
 import prisma from '@/lib/prisma';
 import { thumbnail } from '@/lib/config/urls';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 type Props = { params: { photoId: string } };
 
@@ -16,20 +17,43 @@ const getPhoto = async (photoId: string) => {
 };
 
 export default async function Page({ params: { photoId } }: Props) {
+  return (
+    <section className="md:px-16 pt-5 md:mt-8 grid lg:grid-cols-2 gap-5">
+      <Suspense fallback={<Loader />}>
+        <Display photoId={photoId} />
+      </Suspense>
+    </section>
+  );
+}
+
+async function Display({ photoId }: { photoId: string }) {
   const photo = await getPhoto(photoId);
   if (!photo) {
     return notFound();
   }
   const photoUrl = thumbnail(photo.fileName);
-
   return (
-    <section className="md:px-16 pt-5 md:mt-8 lg:grid grid-cols-11 space-y-5 gap-5">
-      <div className={'col-span-5'}>
+    <>
+      <div>
         <Image src={photoUrl} alt={'Uploaded Image'} shadow="sm" />
       </div>
-      <div className={'rounded-xl col-span-6'}>
+      <div>
         <PhotoUploadForm photoId={photoId} />
       </div>
-    </section>
+    </>
+  );
+}
+
+function Loader() {
+  return (
+    <>
+      <div>
+        <Skeleton className="h-40 w-full rounded-xl" />
+      </div>
+      <div className="space-y-3">
+        <Skeleton className="h-8 w-full rounded-lg" />
+        <Skeleton className="h-8 w-full rounded-lg" />
+      </div>
+    </>
   );
 }
