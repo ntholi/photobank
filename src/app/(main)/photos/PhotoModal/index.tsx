@@ -16,6 +16,7 @@ import { IoMdClose, IoMdOpen } from 'react-icons/io';
 import { SlOptions } from 'react-icons/sl';
 import { TiLocation } from 'react-icons/ti';
 import SaveButton from '../SaveButton';
+import PhotoOptions from './PhotoOptions';
 
 type Props = {
   isOpen: boolean;
@@ -76,14 +77,7 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                             src: photo.user.image || '/images/profile.png',
                           }}
                         />
-                        <Button
-                          isIconOnly
-                          size='sm'
-                          aria-label='Options'
-                          variant='light'
-                        >
-                          <SlOptions className='text-base' />
-                        </Button>
+                        <PhotoOptions photo={photo} />
                       </div>
 
                       <p className='mt-6 border bg-gray-50 p-2 text-sm text-gray-700'>
