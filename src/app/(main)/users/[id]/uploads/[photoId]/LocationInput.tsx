@@ -14,11 +14,11 @@ interface GooglePlace extends google.maps.places.PlaceResult {}
 
 export default function LocationInput({ location, setLocation }: Props) {
   const inputRef = useRef<google.maps.places.SearchBox | undefined>();
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>();
 
   useEffect(() => {
     if (location) {
-      setInputValue(location.name || '');
+      setInputValue(location.name);
     }
   }, [location]);
 
