@@ -107,10 +107,6 @@ const VideoTrimmer: React.FC = () => {
     setEndTime(end);
   }, []);
 
-  const handleSliderChangeStart = useCallback(() => {
-    setIsSliderChanging(true);
-  }, []);
-
   const handleSliderChangeEnd = useCallback(() => {
     setIsSliderChanging(false);
     if (videoRef.current) {
