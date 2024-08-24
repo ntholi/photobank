@@ -4,13 +4,15 @@ import { Button, Slider, Progress } from '@nextui-org/react';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 
-const VideoTrimmer = () => {
+const VideoTrimmer: React.FC = () => {
   const [video, setVideo] = useState<File | null>(null);
   const [trimmedVideo, setTrimmedVideo] = useState<string | null>(null);
-  const [startTime, setStartTime] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [startTime, setStartTime] = useState<number>(0);
+  const [endTime, setEndTime] = useState<number>(10);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
   const [ffmpeg, setFFmpeg] = useState<FFmpeg | null>(null);
+  const [videoDuration, setVideoDuration] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -40,8 +42,22 @@ const VideoTrimmer = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setVideo(event.target.files[0]);
+      const file = event.target.files[0];
+      setVideo(file);
       setTrimmedVideo(null);
+
+      // Reset times when a new video is loaded
+      setStartTime(0);
+      setEndTime(10);
+
+      // Load video metadata to get duration
+      const videoElement = document.createElement('video');
+      videoElement.preload = 'metadata';
+      videoElement.onloadedmetadata = () => {
+        setVideoDuration(videoElement.duration);
+        setEndTime(Math.min(10, videoElement.duration));
+      };
+      videoElement.src = URL.createObjectURL(file);
     }
   };
 
@@ -60,20 +76,37 @@ const VideoTrimmer = () => {
         '-ss',
         startTime.toString(),
         '-t',
-        '10',
+        (endTime - startTime).toString(),
         '-c',
         'copy',
         'output.mp4',
       ]);
 
       const data = await ffmpeg.readFile('output.mp4');
-      const url = URL.createObjectURL(new Blob([data], { type: 'video/mp4' }));
+
+      let blobData: Uint8Array;
+      if (data instanceof Uint8Array) {
+        blobData = data;
+      } else {
+        // If it's a string, convert it to Uint8Array
+        blobData = new TextEncoder().encode(data);
+      }
+
+      const url = URL.createObjectURL(
+        new Blob([blobData], { type: 'video/mp4' }),
+      );
       setTrimmedVideo(url);
     } catch (error) {
       console.error('Error during video trimming:', error);
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleSliderChange = (value: number[]) => {
+    const [start, end] = value;
+    setStartTime(start);
+    setEndTime(end);
   };
 
   return (
@@ -95,17 +128,21 @@ const VideoTrimmer = () => {
           />
 
           <div className='flex items-center space-x-2'>
-            <span>Start Time:</span>
+            <span>Trim:</span>
             <Slider
               label='Trim Video'
               step={0.1}
-              maxValue={10}
               minValue={0}
-              value={[startTime, 10]}
-              onChange={(value) => setStartTime(Number(value))}
+              maxValue={Math.max(videoDuration, 10)}
+              value={[startTime, endTime]}
+              onChange={(value) => {
+                handleSliderChange(value as number[]);
+              }}
               className='max-w-md'
             />
-            <span>{startTime.toFixed(1)}s</span>
+            <span>
+              {startTime.toFixed(1)}s - {endTime.toFixed(1)}s
+            </span>
           </div>
 
           <Button onClick={handleTrim} disabled={isProcessing || !ffmpeg}>
