@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button, Slider, Progress } from '@nextui-org/react';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
@@ -14,6 +14,7 @@ const VideoTrimmer: React.FC = () => {
   const [ffmpeg, setFFmpeg] = useState<FFmpeg | null>(null);
   const [videoDuration, setVideoDuration] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isSliderChanging, setIsSliderChanging] = useState<boolean>(false);
 
   useEffect(() => {
     const loadFFmpeg = async () => {
@@ -46,11 +47,9 @@ const VideoTrimmer: React.FC = () => {
       setVideo(file);
       setTrimmedVideo(null);
 
-      // Reset times when a new video is loaded
       setStartTime(0);
       setEndTime(10);
 
-      // Load video metadata to get duration
       const videoElement = document.createElement('video');
       videoElement.preload = 'metadata';
       videoElement.onloadedmetadata = () => {
@@ -88,7 +87,6 @@ const VideoTrimmer: React.FC = () => {
       if (data instanceof Uint8Array) {
         blobData = data;
       } else {
-        // If it's a string, convert it to Uint8Array
         blobData = new TextEncoder().encode(data);
       }
 
@@ -103,11 +101,28 @@ const VideoTrimmer: React.FC = () => {
     }
   };
 
-  const handleSliderChange = (value: number[]) => {
+  const handleSliderChange = useCallback((value: number[]) => {
     const [start, end] = value;
     setStartTime(start);
     setEndTime(end);
-  };
+  }, []);
+
+  const handleSliderChangeStart = useCallback(() => {
+    setIsSliderChanging(true);
+  }, []);
+
+  const handleSliderChangeEnd = useCallback(() => {
+    setIsSliderChanging(false);
+    if (videoRef.current) {
+      videoRef.current.currentTime = startTime;
+    }
+  }, [startTime]);
+
+  useEffect(() => {
+    if (!isSliderChanging && videoRef.current) {
+      videoRef.current.currentTime = startTime;
+    }
+  }, [startTime, isSliderChanging]);
 
   return (
     <div className='space-y-4'>
@@ -135,9 +150,9 @@ const VideoTrimmer: React.FC = () => {
               minValue={0}
               maxValue={Math.max(videoDuration, 10)}
               value={[startTime, endTime]}
-              onChange={(value) => {
-                handleSliderChange(value as number[]);
-              }}
+              onChange={(it) => handleSliderChange(it as number[])}
+              onChangeStart={handleSliderChangeStart}
+              onChangeEnd={handleSliderChangeEnd}
               className='max-w-md'
             />
             <span>
