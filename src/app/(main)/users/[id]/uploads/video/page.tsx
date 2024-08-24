@@ -151,7 +151,6 @@ const VideoTrimmer: React.FC = () => {
               maxValue={Math.max(videoDuration, 10)}
               value={[startTime, endTime]}
               onChange={(it) => handleSliderChange(it as number[])}
-              onChangeStart={handleSliderChangeStart}
               onChangeEnd={handleSliderChangeEnd}
               className='max-w-md'
             />
