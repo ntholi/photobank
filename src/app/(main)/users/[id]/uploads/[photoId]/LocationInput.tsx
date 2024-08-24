@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Input, Skeleton } from '@nextui-org/react';
+import { Input } from '@nextui-org/react';
 import { useJsApiLoader, StandaloneSearchBox } from '@react-google-maps/api';
 import LocationPing from './LocationPing';
 import { LOCATION_BOUNDS } from '@/lib/constants';
@@ -12,6 +12,9 @@ type Props = {
 
 interface GooglePlace extends google.maps.places.PlaceResult {}
 
+// Define libraries array outside of the component
+const libraries: 'places'[] = ['places'];
+
 const LocationInput: React.FC<Props> = ({ location, setLocation }) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [searchBox, setSearchBox] =
@@ -20,7 +23,7 @@ const LocationInput: React.FC<Props> = ({ location, setLocation }) => {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
-    libraries: ['places'],
+    libraries: libraries, // Use the constant libraries array
   });
 
   useEffect(() => {
@@ -57,13 +60,7 @@ const LocationInput: React.FC<Props> = ({ location, setLocation }) => {
     setSearchBox(ref);
   }, []);
 
-  if (!isLoaded)
-    return (
-      <div className='space-y-2'>
-        <Skeleton className='h-14 w-full rounded-xl' />
-        <Skeleton className='h-2 w-1/3 rounded-xl' />
-      </div>
-    );
+  if (!isLoaded) return null;
 
   return (
     <StandaloneSearchBox
