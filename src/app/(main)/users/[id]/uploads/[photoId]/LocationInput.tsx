@@ -6,14 +6,14 @@ import { LOCATION_BOUNDS } from '@/lib/constants';
 import { Location } from '@prisma/client';
 
 type Props = {
-  location: Location | null;
-  setLocation: React.Dispatch<React.SetStateAction<Location | null>>;
+  location?: Location;
+  setLocation: React.Dispatch<React.SetStateAction<Location | undefined>>;
 };
 
 interface GooglePlace extends google.maps.places.PlaceResult {}
 
 export default function LocationInput({ location, setLocation }: Props) {
-  const inputRef = useRef<google.maps.places.SearchBox | null>(null);
+  const inputRef = useRef<google.maps.places.SearchBox | undefined>();
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
@@ -54,13 +54,13 @@ export default function LocationInput({ location, setLocation }: Props) {
         onPlacesChanged={handlePlaceChanged}
         bounds={LOCATION_BOUNDS}
       >
-        <div className="flex items-start gap-1">
+        <div className='flex items-start gap-1'>
           <Input
-            label="Location"
-            type="text"
-            variant="bordered"
-            placeholder=""
-            description="Where was the photo taken?"
+            label='Location'
+            type='text'
+            variant='bordered'
+            placeholder=''
+            description='Where was the photo taken?'
             value={inputValue}
             onChange={handleInputChange}
           />

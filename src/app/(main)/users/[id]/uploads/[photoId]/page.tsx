@@ -12,6 +12,9 @@ const getPhoto = async (photoId: string) => {
     where: {
       id: photoId,
     },
+    include: {
+      location: true,
+    },
   });
   return photo;
 };
@@ -38,7 +41,7 @@ async function Display({ photoId }: { photoId: string }) {
         <Image src={photoUrl} alt={'Uploaded Image'} shadow='sm' />
       </div>
       <div>
-        <PhotoUploadForm photoId={photoId} />
+        <PhotoUploadForm photo={photo} />
       </div>
     </>
   );

@@ -1,40 +1,40 @@
 'use client';
-import { Button, Checkbox, Textarea, Tooltip } from '@nextui-org/react';
-import { IconInfoCircle } from '@tabler/icons-react';
+import { profilePath } from '@/lib/constants';
+import { Button, Textarea } from '@nextui-org/react';
+import { Location, Photo } from '@prisma/client';
+import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 import LocationInput from './LocationInput';
-import axios from 'axios';
-import { profilePath } from '@/lib/constants';
-import { Location } from '@prisma/client';
-
-type InputType = {
-  caption: string;
-  location: Location | null;
-};
 
 type Props = {
-  photoId: string;
+  photo: Photo & { location: Location | null };
   disabled?: boolean;
 };
 
-export default function PhotoUploadForm({ photoId, disabled }: Props) {
-  const { register, handleSubmit } = useForm<InputType>();
+export default function PhotoUploadForm({ photo, disabled }: Props) {
   const [loading, setLoading] = useState(false);
   const { user } = useSession().data || {};
   const router = useRouter();
-  const [location, setLocation] = useState<InputType['location'] | null>(null);
+  const [location, setLocation] = useState<Location>();
+  const [caption, setCaption] = useState<string>();
 
-  const onSubmit: SubmitHandler<InputType> = async (data) => {
+  useEffect(() => {
+    setLocation(photo.location || undefined);
+    setCaption(photo.caption || '');
+  }, []);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('submitting');
     setLoading(true);
     console.log(location);
     try {
-      if (location) {
-        data.location = location;
-      }
-      await axios.put(`/api/photos/${photoId}`, data);
+      await axios.put(`/api/photos/${photo.id}`, {
+        location,
+        caption,
+      });
       router.push(profilePath(user));
     } catch (error) {
       console.log(error);
@@ -45,14 +45,15 @@ export default function PhotoUploadForm({ photoId, disabled }: Props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} method='POST'>
+      <form onSubmit={onSubmit} method='POST'>
         <LocationInput location={location} setLocation={setLocation} />
         <Textarea
           className='mt-6'
           label='Caption'
           variant='bordered'
           placeholder='(Optional)'
-          {...register('caption')}
+          value={caption as string}
+          onChange={(e) => setCaption(e.target.value)}
         />
         <Button
           color='primary'
