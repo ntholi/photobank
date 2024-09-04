@@ -34,8 +34,8 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
         await storeFile('uploadFile', file);
         router.push('/upload/photo');
       } catch (error) {
-        console.error('Error storing video:', error);
-        alert('There was an error storing the video. Please try again.');
+        console.error('Error storing file:', error);
+        alert('There was an error storing the file. Please try again.');
       }
     }
   };

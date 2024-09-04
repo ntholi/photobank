@@ -1,5 +1,5 @@
-const DB_NAME = 'VideoStorageDB';
-const STORE_NAME = 'videos';
+const DB_NAME = 'Lehakoe';
+const STORE_NAME = 'uploadFiles';
 const DB_VERSION = 1;
 
 export const openDB = (): Promise<IDBDatabase> => {
