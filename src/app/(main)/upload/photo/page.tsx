@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getVideo } from '@/lib/utils/indexedDB';
 
-const PreviewUpload: React.FC = () => {
+export default function PreviewUpload() {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [videoName, setVideoName] = useState<string | null>(null);
   const router = useRouter();
@@ -53,6 +53,4 @@ const PreviewUpload: React.FC = () => {
       {/* You can add your upload button and logic here */}
     </div>
   );
-};
-
-export default PreviewUpload;
+}
