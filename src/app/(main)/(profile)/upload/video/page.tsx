@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button, Slider, Progress } from '@nextui-org/react';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
+import { getFile } from '@/lib/utils/indexedDB';
+import { useRouter } from 'next/navigation';
 
 const MAX_DURATION = 10;
 
@@ -17,6 +19,7 @@ const VideoTrimmer: React.FC = () => {
   const [videoDuration, setVideoDuration] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isSliderChanging, setIsSliderChanging] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     const loadFFmpeg = async () => {
@@ -39,29 +42,34 @@ const VideoTrimmer: React.FC = () => {
 
       setFFmpeg(ffmpegInstance);
     };
+    const loadFile = async () => {
+      try {
+        const file = await getFile('uploadFile');
+        if (file) {
+          setVideo(file);
+          const url = URL.createObjectURL(file);
+          setVideoUrl(url);
 
+          setStartTime(0);
+          setEndTime(MAX_DURATION);
+
+          const videoElement = document.createElement('video');
+          videoElement.preload = 'metadata';
+          videoElement.onloadedmetadata = () => {
+            setVideoDuration(videoElement.duration);
+            setEndTime(Math.min(MAX_DURATION, videoElement.duration));
+          };
+          videoElement.src = url;
+        } else {
+          router.push('/upload');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    loadFile();
     loadFFmpeg();
   }, []);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      setVideo(file);
-      const url = URL.createObjectURL(file);
-      setVideoUrl(url);
-
-      setStartTime(0);
-      setEndTime(MAX_DURATION);
-
-      const videoElement = document.createElement('video');
-      videoElement.preload = 'metadata';
-      videoElement.onloadedmetadata = () => {
-        setVideoDuration(videoElement.duration);
-        setEndTime(Math.min(MAX_DURATION, videoElement.duration));
-      };
-      videoElement.src = url;
-    }
-  };
 
   const handleTrim = async () => {
     if (!video || !ffmpeg) return;
@@ -138,13 +146,6 @@ const VideoTrimmer: React.FC = () => {
 
   return (
     <div className='space-y-4'>
-      <input
-        type='file'
-        accept='video/*'
-        onChange={handleFileChange}
-        className='mb-4'
-      />
-
       {videoUrl && (
         <>
           <video

@@ -10,7 +10,7 @@ export default async function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    const loadVideo = async () => {
+    const loadFile = async () => {
       try {
         const file = await getFile('uploadFile');
         if (file) {
@@ -22,7 +22,7 @@ export default async function Page() {
         console.error(error);
       }
     };
-    loadVideo();
+    loadFile();
   }, []);
 
   return (
