@@ -106,6 +106,17 @@ export default function VideoUploadPage() {
         new Blob([blobData], { type: 'video/mp4' }),
       );
       setVideoUrl(url);
+
+      // Get the duration of the trimmed video
+      const videoElement = document.createElement('video');
+      videoElement.preload = 'metadata';
+      videoElement.onloadedmetadata = () => {
+        const trimmedDuration = videoElement.duration;
+        setVideoDuration(trimmedDuration);
+        setStartTime(0);
+        setEndTime(Math.max(MAX_DURATION, trimmedDuration));
+      };
+      videoElement.src = url;
     } catch (error) {
       console.error('Error during video trimming:', error);
     } finally {
