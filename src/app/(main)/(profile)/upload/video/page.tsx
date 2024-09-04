@@ -185,7 +185,6 @@ const VideoTrimmer: React.FC = () => {
       </div>
     </section>
   );
-  return <div className='space-y-4'></div>;
 };
 
 export default VideoTrimmer;
