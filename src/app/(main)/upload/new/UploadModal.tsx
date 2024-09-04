@@ -32,7 +32,6 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
     if (file) {
       try {
         await storeVideo('currentVideo', file);
-        localStorage.setItem('selectedVideoName', file.name);
         router.push('/upload/photo');
       } catch (error) {
         console.error('Error storing video:', error);

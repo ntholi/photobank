@@ -5,17 +5,10 @@ import { getVideo } from '@/lib/utils/indexedDB';
 
 export default function PreviewUpload() {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
-  const [videoName, setVideoName] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const storedVideoName = localStorage.getItem('selectedVideoName');
-    if (!storedVideoName) {
-      router.push('/');
-    } else {
-      setVideoName(storedVideoName);
-      loadVideo();
-    }
+    loadVideo();
   }, []);
 
   const loadVideo = async () => {
@@ -27,7 +20,7 @@ export default function PreviewUpload() {
       } else {
         console.error('No video found in storage');
         alert('No video found. Please select a video first.');
-        router.push('/select-video');
+        router.push('/');
       }
     } catch (error) {
       console.error('Error loading video:', error);
@@ -35,14 +28,13 @@ export default function PreviewUpload() {
     }
   };
 
-  if (!videoUrl || !videoName) {
+  if (!videoUrl) {
     return <div>Loading...</div>;
   }
 
   return (
     <div>
       <h1>Preview Video</h1>
-      <p>Selected video: {videoName}</p>
       <video
         src={videoUrl}
         controls
