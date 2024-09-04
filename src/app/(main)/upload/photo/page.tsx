@@ -1,15 +1,11 @@
 'use client';
-import { Image, Skeleton } from '@nextui-org/react';
-import PhotoUploadForm from '../Form';
-import prisma from '@/lib/prisma';
-import { thumbnail } from '@/lib/config/urls';
-import { notFound, useRouter } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
 import { getFile } from '@/lib/utils/indexedDB';
+import { Image, Skeleton } from '@nextui-org/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import PhotoUploadForm from '../Form';
 
-type Props = { params: { photoId: string } };
-
-export default async function Page({ params: { photoId } }: Props) {
+export default async function Page() {
   const [file, setFile] = useState<File>();
   const router = useRouter();
 
@@ -18,7 +14,6 @@ export default async function Page({ params: { photoId } }: Props) {
       try {
         const file = await getFile('uploadFile');
         if (file) {
-          const url = URL.createObjectURL(file);
           setFile(file);
         } else {
           router.push('/upload');
