@@ -56,7 +56,7 @@ const VideoTrimmer: React.FC = () => {
       videoElement.preload = 'metadata';
       videoElement.onloadedmetadata = () => {
         setVideoDuration(videoElement.duration);
-        setEndTime(MAX_DURATION);
+        setEndTime(Math.min(MAX_DURATION, videoElement.duration));
       };
       videoElement.src = URL.createObjectURL(file);
     }
@@ -103,11 +103,24 @@ const VideoTrimmer: React.FC = () => {
     }
   };
 
-  const handleSliderChange = useCallback((value: number[]) => {
-    const [start, end] = value;
-    setStartTime(start);
-    setEndTime(end);
-  }, []);
+  const handleSliderChange = useCallback(
+    (value: number[]) => {
+      let [start, end] = value;
+
+      // Ensure the range never exceeds 10 seconds
+      if (end - start > MAX_DURATION) {
+        if (start === startTime) {
+          end = start + MAX_DURATION;
+        } else {
+          start = end - MAX_DURATION;
+        }
+      }
+
+      setStartTime(start);
+      setEndTime(end);
+    },
+    [startTime],
+  );
 
   const handleSliderChangeEnd = useCallback(() => {
     setIsSliderChanging(false);
@@ -143,9 +156,10 @@ const VideoTrimmer: React.FC = () => {
           <div className='flex items-center space-x-2'>
             <Slider
               label='Trim Video'
-              step={1}
+              step={0.1}
+              size='sm'
               minValue={0}
-              maxValue={Math.max(videoDuration, 10)}
+              maxValue={videoDuration}
               value={[startTime, endTime]}
               onChange={(it) => handleSliderChange(it as number[])}
               onChangeEnd={handleSliderChangeEnd}
