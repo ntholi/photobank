@@ -135,11 +135,10 @@ const VideoTrimmer: React.FC = () => {
             ref={videoRef}
             src={URL.createObjectURL(video)}
             controls
-            className='w-full max-w-md'
+            className='w-full max-w-md md:h-[35vh]'
           />
 
           <div className='flex items-center space-x-2'>
-            <span>Trim:</span>
             <Slider
               label='Trim Video'
               step={0.1}
@@ -150,9 +149,6 @@ const VideoTrimmer: React.FC = () => {
               onChangeEnd={handleSliderChangeEnd}
               className='max-w-md'
             />
-            <span>
-              {startTime.toFixed(1)}s - {endTime.toFixed(1)}s
-            </span>
           </div>
 
           <Button onClick={handleTrim} disabled={isProcessing || !ffmpeg}>
