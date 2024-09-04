@@ -8,7 +8,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Progress,
 } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -21,10 +20,7 @@ type Props = {
 
 export default function UploadModal({ isOpen, onOpenChange }: Props) {
   const [file, setFile] = useState<File | null>(null);
-  const [progress, setProgress] = useState<number>();
-  const [message, setMessage] = useState<'' | 'Uploading' | 'Processing Image'>(
-    '',
-  );
+
   const isMobile = useIsMobile();
   const router = useRouter();
 
@@ -32,7 +28,11 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
     if (file) {
       try {
         await storeFile('uploadFile', file);
-        router.push('/upload/photo');
+        if (file.type.startsWith('image/')) {
+          router.push('/upload/photo');
+        } else if (file.type.startsWith('video/')) {
+          router.push('/upload/video');
+        }
       } catch (error) {
         console.error('Error storing file:', error);
         alert('There was an error storing the file. Please try again.');
@@ -63,15 +63,6 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
               <div className='h-72 overflow-clip rounded-xl border border-gray-300'>
                 {imageInput}
               </div>
-              {progress != undefined && (
-                <Progress
-                  size='sm'
-                  label={message}
-                  color={message === 'Processing Image' ? 'success' : 'primary'}
-                  isIndeterminate={progress === 0}
-                  value={progress}
-                />
-              )}
             </ModalBody>
             <ModalFooter className='flex justify-between border-t border-gray-300'>
               <Button
@@ -85,7 +76,6 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
               <Button
                 color='primary'
                 isDisabled={!file}
-                isLoading={progress != undefined}
                 onPress={async () => {
                   await handleSubmit();
                   onClose();
