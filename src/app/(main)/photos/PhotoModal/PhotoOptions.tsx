@@ -8,9 +8,6 @@ import {
 import { Photo } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { e } from 'nuqs/dist/serializer-C_l8WgvO';
-import React from 'react';
 import { SlOptions } from 'react-icons/sl';
 
 type Props = {
@@ -36,7 +33,7 @@ export default function PhotoOptions({ photo }: Props) {
   if (isOwner) {
     MenuItems.push({
       label: 'Edit Photo',
-      href: `${photo.userId}/uploads/${photo.id}`,
+      href: `/upload/${photo.id}`,
     });
     MenuItems.push({
       label: 'Delete Photo',

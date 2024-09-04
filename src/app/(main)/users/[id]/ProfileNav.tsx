@@ -31,7 +31,7 @@ export default function ProfileNav() {
       icon: (
         <Avatar
           isBordered
-          className="w-5 h-5 ms-1 me-0.5"
+          className='me-0.5 ms-1 h-5 w-5'
           src={user?.image || undefined}
         />
       ),
@@ -39,24 +39,24 @@ export default function ProfileNav() {
     },
   ];
   return (
-    <nav className="z-50 bg-background fixed bottom-0 w-full sm:w-[20vw] sm:h-screen border-t border-t-zinc-100 sm:border-e sm:border-t-0 border-zinc-300">
-      <Link href={'/'} className="inline-block p-8 max-sm:hidden">
+    <nav className='fixed bottom-0 z-50 w-full border-t border-zinc-300 border-t-zinc-100 bg-background sm:h-screen sm:w-[20vw] sm:border-e sm:border-t-0'>
+      <Link href={'/'} className='inline-block p-8 max-sm:hidden'>
         <Image
-          alt="logo"
-          src="/images/logo/black.png"
+          alt='logo'
+          src='/images/logo/black.png'
           width={100}
           height={100}
         />
       </Link>
-      <ul className="flex justify-evenly sm:block">
-        <NevItem name="Home" link="/" icon={<GoHome />} />
+      <ul className='flex justify-evenly sm:block'>
+        <NevItem name='Home' link='/' icon={<GoHome />} />
         {!session?.user ? (
-          <li className="p-2 md:ps-6 md:pe-10 max-md:text-center">
+          <li className='p-2 max-md:text-center md:pe-10 md:ps-6'>
             <Button
-              variant="ghost"
+              variant='ghost'
               href={`/signup`}
               as={NextLink}
-              className="md:px-8 border-1.5 rounded-full md:rounded-md"
+              className='rounded-full border-1.5 md:rounded-md md:px-8'
             >
               <GoSignIn /> Sign In
             </Button>
@@ -67,32 +67,32 @@ export default function ProfileNav() {
               <NevItem key={item.name} {...item} />
             ))}
 
-            <div className="p-5 max-md:hidden">
+            <div className='p-5 max-md:hidden'>
               <Divider />
             </div>
 
-            <li className="p-2 md:ps-6 md:pe-10 max-md:text-center">
+            <li className='p-2 max-md:text-center md:pe-10 md:ps-6'>
               <Button
                 startContent={!isMobile && <GoUpload />}
-                variant="ghost"
+                variant='ghost'
                 isIconOnly={isMobile}
-                href={`${profilePath(user)}/uploads/new`}
+                href={`/upload/new`}
                 as={NextLink}
-                className="md:px-8 border-1.5 rounded-full md:rounded-md"
+                className='rounded-full border-1.5 md:rounded-md md:px-8'
               >
                 {isMobile ? <GoUpload /> : 'Upload'}
               </Button>
             </li>
 
-            <li className="p-2 max-sm:hidden absolute bottom-2">
+            <li className='absolute bottom-2 p-2 max-sm:hidden'>
               <button
                 onClick={() => signOut()}
-                className={`p-2 w-full flex items-center justify-center md:justify-start text-gray-600 hover:text-black`}
+                className={`flex w-full items-center justify-center p-2 text-gray-600 hover:text-black md:justify-start`}
               >
-                <span className="mx-3">
+                <span className='mx-3'>
                   <GoSignOut />
                 </span>
-                <span className="hidden lg:inline font-semibold">Sign Out</span>
+                <span className='hidden font-semibold lg:inline'>Sign Out</span>
               </button>
             </li>
           </>
@@ -112,15 +112,15 @@ type NavItemProps = {
 const NevItem = ({ name, icon, link, active }: NavItemProps) => {
   const activeClass = active ? 'text-black' : 'text-zinc-600';
   return (
-    <li key={name} className="group p-2">
+    <li key={name} className='group p-2'>
       <NextLink
         href={link}
-        className={`p-2 w-full relative rounded-sm flex lg:justify-start justify-center items-center ${activeClass} sm:hover:border-zinc-800 hover:text-zinc-800 hover:bg-zinc-50`}
+        className={`relative flex w-full items-center justify-center rounded-sm p-2 lg:justify-start ${activeClass} hover:bg-zinc-50 hover:text-zinc-800 sm:hover:border-zinc-800`}
       >
-        <span className="mx-3 text-2xl transition-transform duration-500 ease-in-out group-hover:scale-110 group-hover:font-bold">
+        <span className='mx-3 text-2xl transition-transform duration-500 ease-in-out group-hover:scale-110 group-hover:font-bold'>
           {icon}
         </span>
-        <span className="hidden lg:inline text-lg font-semibold">{name}</span>
+        <span className='hidden text-lg font-semibold lg:inline'>{name}</span>
       </NextLink>
     </li>
   );

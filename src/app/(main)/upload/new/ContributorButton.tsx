@@ -18,11 +18,10 @@ import {
 } from '@nextui-org/react';
 
 type Props = {
-  userId: string;
   onOpen: () => void;
 };
 
-export default function ContributorButton({ userId, onOpen }: Props) {
+export default function ContributorButton({ onOpen }: Props) {
   const [loading, setLoading] = useState(false);
   const [application, setApplication] = useState<ContributorApplication | null>(
     null,
@@ -35,14 +34,14 @@ export default function ContributorButton({ userId, onOpen }: Props) {
   useEffect(() => {
     async function fetchUser() {
       const { data } = await axios.get(
-        `/api/users/contributors/applications?id=${userId}`,
+        `/api/users/contributors/applications?id=${session?.user?.id}`,
       );
       if (data.application) {
         setApplication(data.application);
       }
     }
     fetchUser();
-  }, [userId]);
+  }, [session]);
 
   const becomeContributor = async () => {
     setLoading(true);
@@ -65,8 +64,8 @@ export default function ContributorButton({ userId, onOpen }: Props) {
     <Button
       onPress={onOpen}
       startContent={<GoUpload />}
-      color="primary"
-      className="mt-5"
+      color='primary'
+      className='mt-5'
     >
       Upload
     </Button>
@@ -76,12 +75,12 @@ export default function ContributorButton({ userId, onOpen }: Props) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
+              <ModalHeader className='flex flex-col gap-1'>
                 Become a Contributor
               </ModalHeader>
               <ModalBody>
                 <Textarea
-                  placeholder="Why do you want to become a contributor?"
+                  placeholder='Why do you want to become a contributor?'
                   cols={10}
                   height={100}
                   value={motivation}
@@ -89,11 +88,11 @@ export default function ContributorButton({ userId, onOpen }: Props) {
                 />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button color='danger' variant='light' onPress={onClose}>
                   Close
                 </Button>
                 <Button
-                  color="primary"
+                  color='primary'
                   isDisabled={!motivation}
                   isLoading={loading}
                   onPress={async () => {
@@ -110,7 +109,7 @@ export default function ContributorButton({ userId, onOpen }: Props) {
       </Modal>
       <Button
         color={getStatusColor(application?.status)}
-        variant="light"
+        variant='light'
         onClick={openModel}
         isDisabled={!!application}
         startContent={<StatusIcon status={application?.status} />}

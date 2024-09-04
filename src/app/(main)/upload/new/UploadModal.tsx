@@ -55,7 +55,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
             fileName,
           });
 
-          router.push(`${profilePath(user)}/uploads/${data.photo.id}`);
+          router.push(`/upload/${data.photo.id}`);
         }
       } finally {
         setFile(null);
@@ -73,7 +73,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
   return (
     <Modal
       size={isMobile ? 'full' : 'lg'}
-      backdrop="blur"
+      backdrop='blur'
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       closeButton={<></>}
@@ -81,16 +81,16 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">
+            <ModalHeader className='flex flex-col gap-1'>
               Upload Photo
             </ModalHeader>
             <ModalBody className={'md:px-10 md:py-5'}>
-              <div className="h-72 border border-gray-300 rounded-xl overflow-clip">
+              <div className='h-72 overflow-clip rounded-xl border border-gray-300'>
                 {imageInput}
               </div>
               {progress != undefined && (
                 <Progress
-                  size="sm"
+                  size='sm'
                   label={message}
                   color={message === 'Processing Image' ? 'success' : 'primary'}
                   isIndeterminate={progress === 0}
@@ -98,17 +98,17 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
                 />
               )}
             </ModalBody>
-            <ModalFooter className="border-t border-gray-300 flex justify-between">
+            <ModalFooter className='flex justify-between border-t border-gray-300'>
               <Button
-                className="border-1"
-                color="danger"
-                variant="bordered"
+                className='border-1'
+                color='danger'
+                variant='bordered'
                 onClick={onClose}
               >
                 Close
               </Button>
               <Button
-                color="primary"
+                color='primary'
                 isDisabled={!file}
                 isLoading={progress != undefined}
                 onPress={async () => {
