@@ -8,7 +8,7 @@ const MAX_DURATION = 10;
 
 const VideoTrimmer: React.FC = () => {
   const [video, setVideo] = useState<File | null>(null);
-  const [trimmedVideo, setTrimmedVideo] = useState<string | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [startTime, setStartTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(MAX_DURATION);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -47,7 +47,8 @@ const VideoTrimmer: React.FC = () => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       setVideo(file);
-      setTrimmedVideo(null);
+      const url = URL.createObjectURL(file);
+      setVideoUrl(url);
 
       setStartTime(0);
       setEndTime(MAX_DURATION);
@@ -58,7 +59,7 @@ const VideoTrimmer: React.FC = () => {
         setVideoDuration(videoElement.duration);
         setEndTime(Math.min(MAX_DURATION, videoElement.duration));
       };
-      videoElement.src = URL.createObjectURL(file);
+      videoElement.src = url;
     }
   };
 
@@ -95,7 +96,7 @@ const VideoTrimmer: React.FC = () => {
       const url = URL.createObjectURL(
         new Blob([blobData], { type: 'video/mp4' }),
       );
-      setTrimmedVideo(url);
+      setVideoUrl(url);
     } catch (error) {
       console.error('Error during video trimming:', error);
     } finally {
@@ -144,11 +145,11 @@ const VideoTrimmer: React.FC = () => {
         className='mb-4'
       />
 
-      {video && (
+      {videoUrl && (
         <>
           <video
             ref={videoRef}
-            src={URL.createObjectURL(video)}
+            src={videoUrl}
             controls
             className='w-full max-w-md md:h-[35vh]'
           />
@@ -156,7 +157,8 @@ const VideoTrimmer: React.FC = () => {
           <div className='flex items-center space-x-2'>
             <Slider
               label='Trim Video'
-              step={0.1}
+              step={1}
+              showSteps
               size='sm'
               minValue={0}
               maxValue={videoDuration}
@@ -173,13 +175,6 @@ const VideoTrimmer: React.FC = () => {
 
           {isProcessing && <Progress value={progress} className='max-w-md' />}
         </>
-      )}
-
-      {trimmedVideo && (
-        <div className='mt-4'>
-          <h3 className='text-lg font-semibold'>Trimmed Video:</h3>
-          <video src={trimmedVideo} controls className='w-full max-w-md' />
-        </div>
       )}
     </div>
   );
