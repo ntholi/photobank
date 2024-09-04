@@ -9,21 +9,15 @@ import { useEffect, useState } from 'react';
 import LocationInput from './LocationInput';
 
 type Props = {
-  photo: Photo & { location: Location | null };
   disabled?: boolean;
 };
 
-export default function PhotoUploadForm({ photo, disabled }: Props) {
+export default function PhotoUploadForm({ disabled }: Props) {
   const [loading, setLoading] = useState(false);
   const { user } = useSession().data || {};
   const router = useRouter();
   const [location, setLocation] = useState<Location>();
   const [caption, setCaption] = useState<string>();
-
-  useEffect(() => {
-    setLocation(photo.location || undefined);
-    setCaption(photo.caption || '');
-  }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,10 +25,10 @@ export default function PhotoUploadForm({ photo, disabled }: Props) {
     setLoading(true);
     console.log(location);
     try {
-      await axios.put(`/api/photos/${photo.id}`, {
-        location,
-        caption,
-      });
+      // await axios.put(`/api/photos/${photo.id}`, {
+      //   location,
+      //   caption,
+      // });
       router.push(profilePath(user));
     } catch (error) {
       console.log(error);

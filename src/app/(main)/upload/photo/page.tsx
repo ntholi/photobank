@@ -1,48 +1,51 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { Image, Skeleton } from '@nextui-org/react';
+import PhotoUploadForm from '../Form';
+import prisma from '@/lib/prisma';
+import { thumbnail } from '@/lib/config/urls';
+import { notFound, useRouter } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 import { getFile } from '@/lib/utils/indexedDB';
 
-export default function PreviewUpload() {
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+type Props = { params: { photoId: string } };
+
+export default async function Page({ params: { photoId } }: Props) {
+  const [file, setFile] = useState<File>();
   const router = useRouter();
 
   useEffect(() => {
+    const loadVideo = async () => {
+      try {
+        const file = await getFile('uploadFile');
+        if (file) {
+          const url = URL.createObjectURL(file);
+          setFile(file);
+        } else {
+          router.push('/upload');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
     loadVideo();
   }, []);
 
-  const loadVideo = async () => {
-    try {
-      const video = await getFile('uploadFile');
-      if (video) {
-        const url = URL.createObjectURL(video);
-        setVideoUrl(url);
-      } else {
-        console.error('No video found in storage');
-        alert('No video found. Please select a video first.');
-        router.push('/');
-      }
-    } catch (error) {
-      console.error('Error loading video:', error);
-      alert('There was an error loading the video. Please try again.');
-    }
-  };
-
-  if (!videoUrl) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div>
-      <h1>Preview Video</h1>
-      <video
-        src={videoUrl}
-        controls
-        style={{ maxWidth: '100%', maxHeight: '500px' }}
-      >
-        Your browser does not support the video tag.
-      </video>
-      {/* You can add your upload button and logic here */}
-    </div>
+    <section className='grid gap-5 pt-5 md:mt-8 md:px-16 lg:grid-cols-2'>
+      <div>
+        {file ? (
+          <Image
+            src={URL.createObjectURL(file)}
+            alt={'Uploaded Image'}
+            shadow='sm'
+          />
+        ) : (
+          <Skeleton />
+        )}
+      </div>
+      <div>
+        <PhotoUploadForm />
+      </div>
+    </section>
   );
 }
