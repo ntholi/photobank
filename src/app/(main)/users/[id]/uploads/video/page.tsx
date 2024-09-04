@@ -4,11 +4,13 @@ import { Button, Slider, Progress } from '@nextui-org/react';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 
+const MAX_DURATION = 10;
+
 const VideoTrimmer: React.FC = () => {
   const [video, setVideo] = useState<File | null>(null);
   const [trimmedVideo, setTrimmedVideo] = useState<string | null>(null);
   const [startTime, setStartTime] = useState<number>(0);
-  const [endTime, setEndTime] = useState<number>(10);
+  const [endTime, setEndTime] = useState<number>(MAX_DURATION);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [ffmpeg, setFFmpeg] = useState<FFmpeg | null>(null);
@@ -48,13 +50,13 @@ const VideoTrimmer: React.FC = () => {
       setTrimmedVideo(null);
 
       setStartTime(0);
-      setEndTime(10);
+      setEndTime(MAX_DURATION);
 
       const videoElement = document.createElement('video');
       videoElement.preload = 'metadata';
       videoElement.onloadedmetadata = () => {
         setVideoDuration(videoElement.duration);
-        setEndTime(Math.min(10, videoElement.duration));
+        setEndTime(MAX_DURATION);
       };
       videoElement.src = URL.createObjectURL(file);
     }
@@ -141,7 +143,7 @@ const VideoTrimmer: React.FC = () => {
           <div className='flex items-center space-x-2'>
             <Slider
               label='Trim Video'
-              step={0.1}
+              step={1}
               minValue={0}
               maxValue={Math.max(videoDuration, 10)}
               value={[startTime, endTime]}
