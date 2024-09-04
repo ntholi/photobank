@@ -5,6 +5,7 @@ import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import { getFile } from '@/lib/utils/indexedDB';
 import { useRouter } from 'next/navigation';
+import PhotoUploadForm from '../Form';
 
 const MAX_DURATION = 10;
 
@@ -145,40 +146,46 @@ const VideoTrimmer: React.FC = () => {
   }, [startTime, isSliderChanging]);
 
   return (
-    <div className='space-y-4'>
-      {videoUrl && (
-        <>
-          <video
-            ref={videoRef}
-            src={videoUrl}
-            controls
-            className='w-full max-w-md md:h-[35vh]'
-          />
-
-          <div className='flex items-center space-x-2'>
-            <Slider
-              label='Trim Video'
-              step={1}
-              showSteps
-              size='sm'
-              minValue={0}
-              maxValue={videoDuration}
-              value={[startTime, endTime]}
-              onChange={(it) => handleSliderChange(it as number[])}
-              onChangeEnd={handleSliderChangeEnd}
-              className='max-w-md'
+    <section className='grid gap-5 pt-5 md:mt-8 md:px-16 lg:grid-cols-2'>
+      <div>
+        {videoUrl && (
+          <>
+            <video
+              ref={videoRef}
+              src={videoUrl}
+              controls
+              className='w-full max-w-md md:h-[35vh]'
             />
-          </div>
 
-          <Button onClick={handleTrim} disabled={isProcessing || !ffmpeg}>
-            {isProcessing ? 'Processing...' : 'Trim Video'}
-          </Button>
+            <div className='flex items-center space-x-2'>
+              <Slider
+                label='Trim Video'
+                step={1}
+                showSteps
+                size='sm'
+                minValue={0}
+                maxValue={videoDuration}
+                value={[startTime, endTime]}
+                onChange={(it) => handleSliderChange(it as number[])}
+                onChangeEnd={handleSliderChangeEnd}
+                className='max-w-md'
+              />
+            </div>
 
-          {isProcessing && <Progress value={progress} className='max-w-md' />}
-        </>
-      )}
-    </div>
+            <Button onClick={handleTrim} disabled={isProcessing || !ffmpeg}>
+              {isProcessing ? 'Processing...' : 'Trim Video'}
+            </Button>
+
+            {isProcessing && <Progress value={progress} className='max-w-md' />}
+          </>
+        )}
+      </div>
+      <div>
+        <PhotoUploadForm />
+      </div>
+    </section>
   );
+  return <div className='space-y-4'></div>;
 };
 
 export default VideoTrimmer;
