@@ -6,6 +6,7 @@ import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import { getFile } from '@/lib/utils/indexedDB';
 import { useRouter } from 'next/navigation';
 import PhotoUploadForm from '../Form';
+import { Location } from '@prisma/client';
 
 const MAX_DURATION = 10;
 
@@ -156,6 +157,10 @@ export default function VideoUploadPage() {
     }
   }, [startTime, isSliderChanging]);
 
+  async function handleSubmit(location?: Location, caption?: string) {
+    console.log({ location, caption });
+  }
+
   return (
     <section className='grid gap-5 pt-5 md:mt-8 md:px-16 lg:grid-cols-2'>
       <div>
@@ -192,7 +197,7 @@ export default function VideoUploadPage() {
         )}
       </div>
       <div>
-        <PhotoUploadForm />
+        <PhotoUploadForm onSubmit={handleSubmit} />
       </div>
     </section>
   );

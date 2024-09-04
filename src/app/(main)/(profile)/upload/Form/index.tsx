@@ -1,45 +1,31 @@
 'use client';
-import { profilePath } from '@/lib/constants';
 import { Button, Textarea } from '@nextui-org/react';
-import { Location, Photo } from '@prisma/client';
-import axios from 'axios';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Location } from '@prisma/client';
+import { useState } from 'react';
 import LocationInput from './LocationInput';
 
 type Props = {
+  loading?: boolean;
   disabled?: boolean;
+  onSubmit: (location?: Location, caption?: string) => Promise<void>;
 };
 
-export default function PhotoUploadForm({ disabled }: Props) {
-  const [loading, setLoading] = useState(false);
-  const { user } = useSession().data || {};
-  const router = useRouter();
+export default function PhotoUploadForm({
+  loading,
+  disabled,
+  onSubmit,
+}: Props) {
   const [location, setLocation] = useState<Location>();
   const [caption, setCaption] = useState<string>();
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('submitting');
-    setLoading(true);
-    console.log(location);
-    try {
-      // await axios.put(`/api/photos/${photo.id}`, {
-      //   location,
-      //   caption,
-      // });
-      router.push(profilePath(user));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await onSubmit(location, caption);
+  }
 
   return (
     <div>
-      <form onSubmit={onSubmit} method='POST'>
+      <form onSubmit={handleSubmit} method='POST'>
         <LocationInput location={location} setLocation={setLocation} />
         <Textarea
           className='mt-6'
