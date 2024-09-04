@@ -13,7 +13,7 @@ import {
 import { PhotoStatus } from '@prisma/client';
 import axios from 'axios';
 import { MdOutlineNoPhotography } from 'react-icons/md';
-import PhotoModal from '../../photos/PhotoModal';
+import PhotoModal from '@/app/(main)/photos/PhotoModal';
 
 type Props = {
   userId: string;

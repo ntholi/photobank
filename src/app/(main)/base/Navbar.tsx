@@ -23,9 +23,9 @@ import NextLink from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { BiLogOut, BiUser } from 'react-icons/bi';
-import { nameToInitials } from '../users/[id]/UserBio';
 import Logo from './Logo';
 import { isExcludePath } from './excludePaths';
+import { nameToInitials } from '../(profile)/users/[id]/UserBio';
 
 const navItems = [
   {
@@ -81,27 +81,27 @@ export default function Navbar() {
 
   return (
     <NextUINavbar
-      maxWidth="xl"
+      maxWidth='xl'
       shouldHideOnScroll
       isBordered
       className={homeStyle}
     >
       <NavbarContent>
-        <NavbarMenuToggle className="sm:hidden" />
-        <NavbarBrand as="li" className="gap-3 max-w-fit">
+        <NavbarMenuToggle className='sm:hidden' />
+        <NavbarBrand as='li' className='max-w-fit gap-3'>
           <NextLink
-            className="hidden sm:flex justify-start items-center gap-1"
-            href="/"
+            className='hidden items-center justify-start gap-1 sm:flex'
+            href='/'
           >
             <Logo />
           </NextLink>
         </NavbarBrand>
-        <ul className="hidden sm:flex gap-4 justify-start ml-2">
+        <ul className='ml-2 hidden justify-start gap-4 sm:flex'>
           {navItems.map((item) => {
             if (item.label == 'Browse') {
               return (
                 <NavbarItem key={item.href}>
-                  <button color="foreground" onClick={scrollToGallery}>
+                  <button color='foreground' onClick={scrollToGallery}>
                     {item.label}
                   </button>
                 </NavbarItem>
@@ -109,32 +109,32 @@ export default function Navbar() {
             }
             return (
               <NavbarItem key={item.href}>
-                <NextLink color="foreground" href={item.href}>
+                <NextLink color='foreground' href={item.href}>
                   {item.label}
                 </NextLink>
               </NavbarItem>
             );
           })}
         </ul>
-        <NavbarItem className="ml-auto">
+        <NavbarItem className='ml-auto'>
           {user ? (
-            <Dropdown placement="bottom-end">
+            <Dropdown placement='bottom-end'>
               <DropdownTrigger>
                 <Avatar
                   isBordered
-                  size="sm"
-                  as="button"
-                  className="transition-transform"
+                  size='sm'
+                  as='button'
+                  className='transition-transform'
                   src={user.image || undefined}
                   name={nameToInitials(user.name)}
                 />
               </DropdownTrigger>
-              <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownMenu aria-label='Profile Actions' variant='flat'>
                 <DropdownSection title={user.name || ''} showDivider>
                   <DropdownItem
                     startContent={<BiUser />}
                     onClick={() => router.push(profilePath(user))}
-                    key="profile"
+                    key='profile'
                   >
                     My Profile
                   </DropdownItem>
@@ -143,7 +143,7 @@ export default function Navbar() {
                   <DropdownItem
                     startContent={<BiLogOut />}
                     onClick={() => signOut()}
-                    key="signOut"
+                    key='signOut'
                   >
                     Sign Out
                   </DropdownItem>
@@ -151,7 +151,7 @@ export default function Navbar() {
               </DropdownMenu>
             </Dropdown>
           ) : (
-            <NextLink color="foreground" href={'/signup'}>
+            <NextLink color='foreground' href={'/signup'}>
               Sign In
             </NextLink>
           )}
@@ -159,13 +159,13 @@ export default function Navbar() {
       </NavbarContent>
 
       <NavbarMenu>
-        <div className="mx-4 mt-2 flex flex-col gap-2">
+        <div className='mx-4 mt-2 flex flex-col gap-2'>
           {navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
                 color={index === 2 ? 'primary' : 'foreground'}
-                href="#"
-                size="lg"
+                href='#'
+                size='lg'
               >
                 {item.label}
               </Link>
