@@ -1,6 +1,6 @@
 'use client';
-import { profilePath } from '@/lib/constants';
 import useIsMobile from '@/lib/hooks/useIsMobile';
+import { storeVideo } from '@/lib/utils/indexedDB';
 import {
   Button,
   Modal,
@@ -10,8 +10,6 @@ import {
   ModalHeader,
   Progress,
 } from '@nextui-org/react';
-import axios, { AxiosProgressEvent } from 'axios';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import ImageInput from './ImageInput';
@@ -22,7 +20,6 @@ type Props = {
 };
 
 export default function UploadModal({ isOpen, onOpenChange }: Props) {
-  const { user } = useSession().data || {};
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number>();
   const [message, setMessage] = useState<'' | 'Uploading' | 'Processing Image'>(
@@ -31,36 +28,15 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
   const isMobile = useIsMobile();
   const router = useRouter();
 
-  const handleFileUpload = async () => {
+  const handleSubmit = async () => {
     if (file) {
-      setProgress(0);
-      setMessage('Uploading');
-      const ext = file.name.split('.').pop();
       try {
-        const { url, fileName } = (
-          await axios.get(`/api/photos/upload-url?ext=${ext}`)
-        ).data;
-
-        await axios.put(url, file, {
-          onUploadProgress: (e: AxiosProgressEvent) => {
-            if (e.total) {
-              setProgress((e.loaded / e.total) * 100);
-            }
-          },
-        });
-        if (fileName) {
-          setMessage('Processing Image');
-          setProgress(0);
-          const { data } = await axios.post('/api/photos', {
-            fileName,
-          });
-
-          router.push(`/upload/${data.photo.id}`);
-        }
-      } finally {
-        setFile(null);
-        setMessage('');
-        setProgress(undefined);
+        await storeVideo('currentVideo', file);
+        localStorage.setItem('selectedVideoName', file.name);
+        router.push('/upload/photo');
+      } catch (error) {
+        console.error('Error storing video:', error);
+        alert('There was an error storing the video. Please try again.');
       }
     }
   };
@@ -112,7 +88,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
                 isDisabled={!file}
                 isLoading={progress != undefined}
                 onPress={async () => {
-                  await handleFileUpload();
+                  await handleSubmit();
                   onClose();
                 }}
               >
