@@ -9,7 +9,7 @@ import PhotoUploadForm from '../Form';
 
 const MAX_DURATION = 10;
 
-const VideoTrimmer: React.FC = () => {
+export default function VideoUploadPage() {
   const [video, setVideo] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [startTime, setStartTime] = useState<number>(0);
@@ -185,6 +185,4 @@ const VideoTrimmer: React.FC = () => {
       </div>
     </section>
   );
-};
-
-export default VideoTrimmer;
+}
