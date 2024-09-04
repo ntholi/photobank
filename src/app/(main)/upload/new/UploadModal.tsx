@@ -1,6 +1,6 @@
 'use client';
 import useIsMobile from '@/lib/hooks/useIsMobile';
-import { storeVideo } from '@/lib/utils/indexedDB';
+import { storeFile } from '@/lib/utils/indexedDB';
 import {
   Button,
   Modal,
@@ -31,7 +31,7 @@ export default function UploadModal({ isOpen, onOpenChange }: Props) {
   const handleSubmit = async () => {
     if (file) {
       try {
-        await storeVideo('currentVideo', file);
+        await storeFile('uploadFile', file);
         router.push('/upload/photo');
       } catch (error) {
         console.error('Error storing video:', error);

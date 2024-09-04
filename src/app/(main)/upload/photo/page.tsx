@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getVideo } from '@/lib/utils/indexedDB';
+import { getFile } from '@/lib/utils/indexedDB';
 
 export default function PreviewUpload() {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -13,7 +13,7 @@ export default function PreviewUpload() {
 
   const loadVideo = async () => {
     try {
-      const video = await getVideo('currentVideo');
+      const video = await getFile('uploadFile');
       if (video) {
         const url = URL.createObjectURL(video);
         setVideoUrl(url);

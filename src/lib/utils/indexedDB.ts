@@ -16,7 +16,7 @@ export const openDB = (): Promise<IDBDatabase> => {
   });
 };
 
-export const storeVideo = async (key: string, file: File): Promise<void> => {
+export const storeFile = async (key: string, file: File): Promise<void> => {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
@@ -28,7 +28,7 @@ export const storeVideo = async (key: string, file: File): Promise<void> => {
   });
 };
 
-export const getVideo = async (key: string): Promise<File | undefined> => {
+export const getFile = async (key: string): Promise<File | undefined> => {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readonly');
