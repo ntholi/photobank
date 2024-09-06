@@ -76,7 +76,7 @@ export default function ProfileNav() {
                 startContent={!isMobile && <GoUpload />}
                 variant='ghost'
                 isIconOnly={isMobile}
-                href={`/upload/new`}
+                href={`/upload`}
                 as={NextLink}
                 className='rounded-full border-1.5 md:rounded-md md:px-8'
               >

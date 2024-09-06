@@ -89,7 +89,6 @@ export default function Page() {
         }
       });
     } catch (error) {
-      // File upload error is already handled in handleFileUpload
       console.error('File upload failed:', error);
     }
   }
