@@ -61,7 +61,11 @@ export async function POST(request: Request) {
 
   const photo = await prisma.photo.create({
     data: {
-      userId: session.user.id,
+      user: {
+        connect: {
+          id: session.user.id,
+        },
+      },
       fileName: fileName,
       labels: {
         create: labels.map((it) => ({
@@ -69,6 +73,23 @@ export async function POST(request: Request) {
           label: it.name,
         })),
       },
+      caption: caption,
+      status: 'published',
+      location: location
+        ? {
+            connectOrCreate: {
+              where: {
+                id: location.id,
+              },
+              create: {
+                id: location.id,
+                name: location.name,
+                latitude: location.latitude,
+                longitude: location.longitude,
+              },
+            },
+          }
+        : undefined,
     },
   });
 
