@@ -1,14 +1,28 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import axios from 'axios';
-import { imageProcessor } from '@/lib/config/urls';
+import { imageProcessorUrl } from '@/lib/config/urls';
 import { auth } from '@/auth';
+import { z } from 'zod';
 
 type Label = {
   Name: string;
   Confidence: number;
   Categories: string[];
 };
+
+const PhotoData = z.object({
+  fileName: z.string(),
+  caption: z.string().optional(),
+  location: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      latitude: z.number(),
+      longitude: z.number(),
+    })
+    .optional(),
+});
 
 export async function GET(req: Request) {
   const session = await auth();
@@ -26,7 +40,7 @@ export async function GET(req: Request) {
 
 export async function POST(request: Request) {
   const session = await auth();
-  const { fileName } = await request.json();
+  const { location, caption, fileName } = PhotoData.parse(await request.json());
   if (!session?.user?.id) {
     return NextResponse.json(
       { error: 'You must be logged in to upload a photo' },
@@ -34,7 +48,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const res = await axios.get(imageProcessor(fileName));
+  const res = await axios.get(imageProcessorUrl(fileName));
   const { labels: awsLabels } = res.data as { labels: Label[] };
   const labels: { name: string; confidence: number }[] = [];
   awsLabels.forEach((label) => {

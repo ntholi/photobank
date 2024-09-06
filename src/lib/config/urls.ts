@@ -1,4 +1,4 @@
-export const imageProcessor = (
+export const imageProcessorUrl = (
   fileName: string,
   watermarked: boolean = true,
 ) => {

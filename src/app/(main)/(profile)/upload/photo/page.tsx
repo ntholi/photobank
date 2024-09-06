@@ -11,6 +11,7 @@ import { useSession } from 'next-auth/react';
 export default function Page() {
   const [file, setFile] = useState<File>();
   const [progress, setProgress] = useState<number>();
+  const [saving, setSaving] = useState(false);
   const session = useSession();
   const router = useRouter();
 
@@ -56,7 +57,8 @@ export default function Page() {
 
   async function handleSubmit(location?: Location, caption?: string) {
     const fileName = await handleFileUpload();
-    await axios.post('/api/photos', {
+    console.log({ caption });
+    axios.post('/api/photos', {
       fileName,
       location,
       caption,
