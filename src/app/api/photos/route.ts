@@ -39,6 +39,8 @@ export async function GET(req: Request) {
 }
 
 export async function POST(request: Request) {
+  await new Promise((r) => setTimeout(r, 3000)); //TODO: Remove this line
+
   const session = await auth();
   const { location, description, fileName } = PhotoData.parse(
     await request.json(),

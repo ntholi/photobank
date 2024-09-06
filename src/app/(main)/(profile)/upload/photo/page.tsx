@@ -2,7 +2,7 @@
 import { getFile } from '@/lib/utils/indexedDB';
 import { Image, Skeleton } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import PhotoUploadForm from '../Form';
 import axios, { AxiosProgressEvent } from 'axios';
 import { Location } from '@prisma/client';
@@ -11,7 +11,7 @@ import { useSession } from 'next-auth/react';
 export default function Page() {
   const [file, setFile] = useState<File>();
   const [progress, setProgress] = useState<number>();
-  const [saving, setSaving] = useState(false);
+  const [isSaving, startSaving] = useTransition();
   const session = useSession();
   const router = useRouter();
 
@@ -57,11 +57,12 @@ export default function Page() {
 
   async function handleSubmit(location?: Location, description?: string) {
     const fileName = await handleFileUpload();
-    console.log({ description });
-    axios.post('/api/photos', {
-      fileName,
-      location,
-      description,
+    startSaving(async () => {
+      await axios.post('/api/photos', {
+        fileName,
+        location,
+        description,
+      });
     });
     // router.push(`/users/${session.data?.user?.id}`);
   }
@@ -80,7 +81,11 @@ export default function Page() {
         )}
       </div>
       <div>
-        <PhotoUploadForm onSubmit={handleSubmit} progress={progress} />
+        <PhotoUploadForm
+          onSubmit={handleSubmit}
+          progress={progress}
+          isSaving={isSaving}
+        />
       </div>
     </section>
   );

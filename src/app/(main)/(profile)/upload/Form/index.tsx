@@ -6,13 +6,13 @@ import LocationInput from './LocationInput';
 
 type Props = {
   progress: number | undefined;
-  loading?: boolean;
+  isSaving?: boolean;
   onSubmit: (location?: Location, description?: string) => Promise<void>;
 };
 
 export default function PhotoUploadForm({
   progress,
-  loading,
+  isSaving,
   onSubmit,
 }: Props) {
   const [location, setLocation] = useState<Location>();
@@ -50,7 +50,7 @@ export default function PhotoUploadForm({
           color='primary'
           type='submit'
           className='w-full'
-          isLoading={loading}
+          isLoading={isSaving}
           isDisabled={progress !== undefined}
         >
           Save
