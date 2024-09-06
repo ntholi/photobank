@@ -97,7 +97,7 @@ export const ProfileBody = ({ userId }: Props) => {
                           <Image
                             className='aspect-[4/3] size-full cursor-pointer object-cover'
                             src={photo.url}
-                            alt={photo.caption || 'Lehakoe'}
+                            alt={photo.description || 'Lehakoe'}
                             onClick={() => {
                               setSelectedPhoto(photo);
                               onOpen();

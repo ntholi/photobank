@@ -10,7 +10,7 @@ export async function GET(req: Request) {
           select: {
             location: true,
             fileName: true,
-            caption: true,
+            description: true,
           },
         },
       },

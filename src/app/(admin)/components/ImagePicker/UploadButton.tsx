@@ -58,12 +58,12 @@ export default function UploadButton({ handleImageChange, location }: Props) {
       <Modal
         opened={opened}
         onClose={close}
-        title="Landing Page Photo"
+        title='Landing Page Photo'
         size={'xl'}
       >
         <Stack>
           <TextInput
-            placeholder="Filter"
+            placeholder='Filter'
             onChange={(e) => setFilter(e.target.value)}
             value={filter}
           />
@@ -75,7 +75,7 @@ export default function UploadButton({ handleImageChange, location }: Props) {
             ) : (
               <Stack mt={'lg'}>
                 <Box>
-                  <Text size="0.9rem">Pick a Photo</Text>
+                  <Text size='0.9rem'>Pick a Photo</Text>
                   <Divider mt={'xs'} />
                 </Box>
                 <SimpleGrid cols={3}>
@@ -84,7 +84,7 @@ export default function UploadButton({ handleImageChange, location }: Props) {
                       key={it.id}
                       h={200}
                       w={'100%'}
-                      variant="default"
+                      variant='default'
                       p={'sm'}
                       onClick={() => {
                         handleImageChange(it);
@@ -94,7 +94,7 @@ export default function UploadButton({ handleImageChange, location }: Props) {
                       <Image
                         key={it.id}
                         src={it.url}
-                        alt={it.caption || 'Lehakoe'}
+                        alt={it.description || 'Lehakoe'}
                         h={'100%'}
                       />
                     </ActionIcon>
@@ -105,8 +105,8 @@ export default function UploadButton({ handleImageChange, location }: Props) {
           </ScrollArea>
         </Stack>
       </Modal>
-      <Flex justify="center" align="center" h={'100%'} w={'100%'}>
-        <ActionIcon variant="default" size="xl" onClick={open}>
+      <Flex justify='center' align='center' h={'100%'} w={'100%'}>
+        <ActionIcon variant='default' size='xl' onClick={open}>
           <IconPhoto />
         </ActionIcon>
       </Flex>

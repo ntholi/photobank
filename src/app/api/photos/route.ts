@@ -13,7 +13,7 @@ type Label = {
 
 const PhotoData = z.object({
   fileName: z.string(),
-  caption: z.string().optional(),
+  description: z.string().optional(),
   location: z
     .object({
       id: z.string(),
@@ -40,7 +40,9 @@ export async function GET(req: Request) {
 
 export async function POST(request: Request) {
   const session = await auth();
-  const { location, caption, fileName } = PhotoData.parse(await request.json());
+  const { location, description, fileName } = PhotoData.parse(
+    await request.json(),
+  );
   if (!session?.user?.id) {
     return NextResponse.json(
       { error: 'You must be logged in to upload a photo' },
@@ -73,7 +75,7 @@ export async function POST(request: Request) {
           label: it.name,
         })),
       },
-      caption: caption,
+      description: description,
       status: 'published',
       location: location
         ? {

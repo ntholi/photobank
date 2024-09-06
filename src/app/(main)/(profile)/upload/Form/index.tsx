@@ -7,7 +7,7 @@ import LocationInput from './LocationInput';
 type Props = {
   progress: number | undefined;
   loading?: boolean;
-  onSubmit: (location?: Location, caption?: string) => Promise<void>;
+  onSubmit: (location?: Location, description?: string) => Promise<void>;
 };
 
 export default function PhotoUploadForm({
@@ -16,11 +16,11 @@ export default function PhotoUploadForm({
   onSubmit,
 }: Props) {
   const [location, setLocation] = useState<Location>();
-  const [caption, setCaption] = useState<string>();
+  const [description, setCaption] = useState<string>();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await onSubmit(location, caption);
+    await onSubmit(location, description);
   }
 
   return (
@@ -32,10 +32,10 @@ export default function PhotoUploadForm({
       >
         <LocationInput location={location} setLocation={setLocation} />
         <Textarea
-          label='Caption'
+          label='Description'
           variant='bordered'
           placeholder='(Optional)'
-          value={caption as string}
+          value={description as string}
           onChange={(e) => setCaption(e.target.value)}
         />
         <Progress

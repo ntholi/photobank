@@ -31,7 +31,7 @@ export async function GET(request: Request, { params }: Props) {
 }
 
 const PhotoData = z.object({
-  caption: z.string().optional(),
+  description: z.string().optional(),
   location: z
     .object({
       id: z.string(),
@@ -44,7 +44,7 @@ const PhotoData = z.object({
 
 export async function PUT(request: Request, { params }: Props) {
   try {
-    const { location, caption } = PhotoData.parse(await request.json());
+    const { location, description } = PhotoData.parse(await request.json());
 
     const { fileName } = (await prisma.photo.findUnique({
       where: {
@@ -57,7 +57,7 @@ export async function PUT(request: Request, { params }: Props) {
         id: params.id,
       },
       data: {
-        caption: caption,
+        description: description,
         status: 'published',
         location: location && {
           connectOrCreate: {

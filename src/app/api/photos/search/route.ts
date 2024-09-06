@@ -56,7 +56,7 @@ export async function POST(req: Request) {
   const data = await prisma.photo.findMany({
     where: {
       status: 'published',
-      caption: searchKey
+      description: searchKey
         ? {
             contains: searchKey,
             mode: 'insensitive',

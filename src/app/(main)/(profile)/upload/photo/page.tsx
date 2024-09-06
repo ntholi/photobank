@@ -55,13 +55,13 @@ export default function Page() {
     }
   };
 
-  async function handleSubmit(location?: Location, caption?: string) {
+  async function handleSubmit(location?: Location, description?: string) {
     const fileName = await handleFileUpload();
-    console.log({ caption });
+    console.log({ description });
     axios.post('/api/photos', {
       fileName,
       location,
-      caption,
+      description,
     });
     // router.push(`/users/${session.data?.user?.id}`);
   }

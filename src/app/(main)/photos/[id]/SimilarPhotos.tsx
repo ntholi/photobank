@@ -48,17 +48,17 @@ export default async function SimilarPhotos({ photo }: Props) {
   const photos = await getSimilarPhotos(photo.id);
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className='grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4'>
         {photos.map((photo: PhotoWithData) => (
           <Link
-            className="relative flex flex-1"
+            className='relative flex flex-1'
             key={photo.id}
             href={`/photos/${photo.id}`}
           >
             <Image
-              className={'min-w-full h-60 sm:h-72 object-cover cursor-pointer'}
+              className={'h-60 min-w-full cursor-pointer object-cover sm:h-72'}
               src={photo.url}
-              alt={photo.caption || 'Lehakoe'}
+              alt={photo.description || 'Lehakoe'}
             />
           </Link>
         ))}

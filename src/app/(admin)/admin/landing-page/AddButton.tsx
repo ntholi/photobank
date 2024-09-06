@@ -59,16 +59,16 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
       <Modal
         opened={opened}
         onClose={close}
-        title="Landing Page Photo"
+        title='Landing Page Photo'
         size={'xl'}
       >
         <Stack>
           <TextInput
-            placeholder="Filter"
+            placeholder='Filter'
             onChange={(e) => setFilter(e.target.value)}
             value={filter}
           />
-          <ScrollArea scrollbars="y">
+          <ScrollArea scrollbars='y'>
             <TagSelect setTag={setTag} />
           </ScrollArea>
           <ScrollArea h={'60vh'}>
@@ -79,7 +79,7 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
             ) : (
               <Stack mt={'lg'}>
                 <Box>
-                  <Text size="0.9rem">Pick a Photo</Text>
+                  <Text size='0.9rem'>Pick a Photo</Text>
                   <Divider mt={'xs'} />
                 </Box>
                 <SimpleGrid cols={3}>
@@ -88,7 +88,7 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
                       key={it.id}
                       h={200}
                       w={'100%'}
-                      variant="default"
+                      variant='default'
                       p={'sm'}
                       onClick={() => {
                         handleAdd(it.id);
@@ -98,7 +98,7 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
                       <Image
                         key={it.id}
                         src={it.url}
-                        alt={it.caption || 'Lehakoe'}
+                        alt={it.description || 'Lehakoe'}
                         h={'100%'}
                       />
                     </ActionIcon>
@@ -111,7 +111,7 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
       </Modal>
       <Button
         leftSection={<IconPlus size={'1rem'} />}
-        variant="default"
+        variant='default'
         onClick={open}
       >
         Add Photo

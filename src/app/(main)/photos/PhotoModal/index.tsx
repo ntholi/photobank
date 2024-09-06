@@ -55,7 +55,7 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                     <Image
                       src={watermarked(photo.fileName)}
                       className='h-[85vh] w-full object-cover md:w-[600px]'
-                      alt={photo.caption || ''}
+                      alt={photo.description || ''}
                       radius='none'
                     />
                   </div>
@@ -80,10 +80,10 @@ export default function PhotoModal({ photo, isOpen, onOpenChange }: Props) {
                       </div>
 
                       <p className='mt-6 border bg-gray-50 p-2 text-sm text-gray-700'>
-                        {photo.caption ? (
-                          photo.caption
+                        {photo.description ? (
+                          photo.description
                         ) : (
-                          <span className='italic'>(No Caption)</span>
+                          <span className='italic'>(No Description)</span>
                         )}
                       </p>
                     </div>

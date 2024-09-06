@@ -38,16 +38,16 @@ export default function Gallery({ searchKey, tag }: Props) {
 
   return (
     <section
-      className="container mx-auto px-4"
+      className='container mx-auto px-4'
       onContextMenu={(event) => {
         event.preventDefault();
       }}
     >
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className='grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3'>
           {Array.from(Array(3).keys()).map((i) => (
-            <Skeleton key={i} className="rounded-lg">
-              <div className="h-60 sm:h-72 rounded-lg bg-default-300"></div>
+            <Skeleton key={i} className='rounded-lg'>
+              <div className='h-60 rounded-lg bg-default-300 sm:h-72'></div>
             </Skeleton>
           ))}
         </div>
@@ -60,8 +60,8 @@ export default function Gallery({ searchKey, tag }: Props) {
               <Image
                 key={it.id}
                 src={it.url}
-                alt={it.caption || 'Lehakoe'}
-                className="cursor-pointer"
+                alt={it.description || 'Lehakoe'}
+                className='cursor-pointer'
                 onClick={() => router.push(`/photos/${it.id}`)}
               />
             ))}

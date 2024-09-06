@@ -44,40 +44,40 @@ export default async function Page({ params: { id } }: Props) {
         actionButtons={[<DeleteIconButton action={deletePhoto} id={id} />]}
       />
 
-      <Grid p="lg">
+      <Grid p='lg'>
         <GridCol span={{ base: 12, md: 6 }}>
-          <Card shadow="sm" padding="lg" radius="md" withBorder>
+          <Card shadow='sm' padding='lg' radius='md' withBorder>
             <Image
-              radius="md"
+              radius='md'
               h={200}
-              w="auto"
-              fit="contain"
+              w='auto'
+              fit='contain'
               src={thumbnail(item.fileName)}
-              alt={item.caption || 'Lehakoe'}
+              alt={item.description || 'Lehakoe'}
             />
-            <Group justify="space-between" mt={'md'}>
+            <Group justify='space-between' mt={'md'}>
               <Text>ID</Text>
-              <Text size={'xs'} c="dimmed">
+              <Text size={'xs'} c='dimmed'>
                 <Anchor
                   component={Link}
-                  target="_blank"
+                  target='_blank'
                   href={`/photos/${item.id}`}
                 >
                   {item.id}
                 </Anchor>
               </Text>
             </Group>
-            <Stack mt="xl" gap="sm">
-              <FieldView label="File Name">{item.fileName}</FieldView>
+            <Stack mt='xl' gap='sm'>
+              <FieldView label='File Name'>{item.fileName}</FieldView>
               <Divider my={5} />
-              <FieldView label="Status">
+              <FieldView label='Status'>
                 <Status value={item.status} />
               </FieldView>
               <Divider />
-              <FieldView label="Owner">
+              <FieldView label='Owner'>
                 <Anchor
-                  size="0.9rem"
-                  target="_blank"
+                  size='0.9rem'
+                  target='_blank'
                   component={Link}
                   href={profilePath(item.user)}
                 >
@@ -85,17 +85,17 @@ export default async function Page({ params: { id } }: Props) {
                 </Anchor>
               </FieldView>
               <Divider />
-              <FieldView label="Location">{item.location?.name}</FieldView>
+              <FieldView label='Location'>{item.location?.name}</FieldView>
               <Divider />
-              <FieldView label="Date Uploaded">
+              <FieldView label='Date Uploaded'>
                 {dateTime(item.createdAt)}
               </FieldView>
             </Stack>
           </Card>
         </GridCol>
         <GridCol span={{ base: 12, md: 6 }}>
-          <Card shadow="sm" padding="lg" radius="md" withBorder>
-            <Text size="0.9rem">{item.caption}</Text>
+          <Card shadow='sm' padding='lg' radius='md' withBorder>
+            <Text size='0.9rem'>{item.description}</Text>
           </Card>
         </GridCol>
       </Grid>
@@ -107,7 +107,7 @@ export default async function Page({ params: { id } }: Props) {
         <List>
           {item.labels.map((it) => (
             <ListItem>
-              <Text size="0.8rem">{it.label}</Text>
+              <Text size='0.8rem'>{it.label}</Text>
             </ListItem>
           ))}
         </List>
@@ -123,12 +123,12 @@ type FieldViewProps = {
 
 function FieldView({ label, children }: FieldViewProps) {
   return (
-    <Group justify="space-between">
-      <Text size="0.9rem">{label}</Text>
+    <Group justify='space-between'>
+      <Text size='0.9rem'>{label}</Text>
       {React.isValidElement(children) ? (
         children
       ) : (
-        <Text size="0.85rem" fw={500}>
+        <Text size='0.85rem' fw={500}>
           {children}
         </Text>
       )}
@@ -147,7 +147,7 @@ function Status({ value }: { value: PhotoStatus }) {
       break;
   }
   return (
-    <Badge size="sm" color={color}>
+    <Badge size='sm' color={color}>
       {value}
     </Badge>
   );

@@ -43,14 +43,16 @@ export default function DetailsCard({ photo }: Props) {
 
   return (
     <Card>
-      <CardHeader className="flex gap-3">
+      <CardHeader className='flex gap-3'>
         <Avatar src={photo.user.image || ''} />
-        <div className="flex flex-col">
-          <p className="text-md">{photo.caption || <span>No Caption</span>}</p>
+        <div className='flex flex-col'>
+          <p className='text-md'>
+            {photo.description || <span>No Description</span>}
+          </p>
           <Link
             href={profilePath(photo.user)}
-            target="_blank"
-            className="text-tiny text-default-500"
+            target='_blank'
+            className='text-tiny text-default-500'
           >
             {photo.user.name}
           </Link>
@@ -61,12 +63,12 @@ export default function DetailsCard({ photo }: Props) {
         <PricingPlans setPrice={setPrice} />
       </CardBody>
       <Divider />
-      <CardFooter className="justify-between">
+      <CardFooter className='justify-between'>
         <Button
           startContent={<FaCartArrowDown />}
           isLoading={purchasing}
           isDisabled={price !== 'free'}
-          color="primary"
+          color='primary'
           as={Link}
           href={photo.url}
         >

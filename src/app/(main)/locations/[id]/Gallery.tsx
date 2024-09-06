@@ -33,25 +33,25 @@ export default function Gallery({ location }: Props) {
   }, [tag]);
 
   return (
-    <Container width="xl">
-      <div className="p-4 flex">
+    <Container width='xl'>
+      <div className='flex p-4'>
         <FilterBar setSelected={setTag} selected={tag} />
       </div>
       {loading ? (
-        <div className="flex justify-center pt-10">
-          <Spinner size="lg" />
+        <div className='flex justify-center pt-10'>
+          <Spinner size='lg' />
         </div>
       ) : (
-        <section className="grid cursor-pointer grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+        <section className='grid cursor-pointer grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3'>
           {photos?.map((it) => (
-            <article key={it.id} className="hover:shadow-sm rounded-xl pb-2">
+            <article key={it.id} className='rounded-xl pb-2 hover:shadow-sm'>
               <Image
                 src={thumbnail(it.fileName)}
-                alt={it.caption || 'Lehakoe'}
+                alt={it.description || 'Lehakoe'}
                 onClick={() => router.push(`/photos/${it.id}`)}
               />
-              <p className="text-gray-800 mt-3 px-2 font-light">
-                {shorten(it.caption, 80)}
+              <p className='mt-3 px-2 font-light text-gray-800'>
+                {shorten(it.description, 80)}
               </p>
             </article>
           ))}

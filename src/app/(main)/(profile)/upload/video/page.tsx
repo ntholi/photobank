@@ -169,8 +169,8 @@ export default function VideoUploadPage() {
     }
   };
 
-  async function handleSubmit(location?: Location, caption?: string) {
-    console.log({ location, caption });
+  async function handleSubmit(location?: Location, description?: string) {
+    console.log({ location, description });
   }
 
   return (
