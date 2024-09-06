@@ -41,6 +41,7 @@ export default function PhotoUploadForm({
         <Progress
           className={cn(progress === undefined ? 'invisible' : 'visible')}
           color='success'
+          label='Uploading...'
           isIndeterminate={progress === 0}
           showValueLabel
           value={progress}
@@ -53,7 +54,7 @@ export default function PhotoUploadForm({
           isLoading={isSaving}
           isDisabled={progress !== undefined}
         >
-          Save
+          {isSaving ? 'Saving...' : 'Save'}
         </Button>
       </form>
     </div>
