@@ -6,15 +6,13 @@ import LocationInput from './LocationInput';
 
 type Props = {
   progress: number | undefined;
-  progressMessage?: string;
-  disabled?: boolean;
+  loading?: boolean;
   onSubmit: (location?: Location, caption?: string) => Promise<void>;
 };
 
 export default function PhotoUploadForm({
   progress,
-  progressMessage,
-  disabled,
+  loading,
   onSubmit,
 }: Props) {
   const [location, setLocation] = useState<Location>();
@@ -42,7 +40,9 @@ export default function PhotoUploadForm({
         />
         <Progress
           className={cn(progress === undefined ? 'invisible' : 'visible')}
+          color='success'
           isIndeterminate={progress === 0}
+          showValueLabel
           value={progress}
           size='sm'
         />
@@ -50,7 +50,8 @@ export default function PhotoUploadForm({
           color='primary'
           type='submit'
           className='w-full'
-          disabled={disabled}
+          isLoading={loading}
+          isDisabled={progress !== undefined}
         >
           Save
         </Button>

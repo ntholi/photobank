@@ -9,12 +9,9 @@ import { Location } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 
 export default function Page() {
-  const session = useSession();
   const [file, setFile] = useState<File>();
   const [progress, setProgress] = useState<number>();
-  const [message, setMessage] = useState<'' | 'Uploading' | 'Processing Image'>(
-    '',
-  );
+  const session = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -36,7 +33,6 @@ export default function Page() {
   const handleFileUpload = async () => {
     if (file) {
       setProgress(0);
-      setMessage('Uploading');
       const ext = file.name.split('.').pop();
       try {
         const { url, fileName } = (
@@ -50,11 +46,9 @@ export default function Page() {
             }
           },
         });
-        setMessage('Processing Image');
         setProgress(0);
         return fileName;
       } finally {
-        setMessage('');
         setProgress(undefined);
       }
     }
@@ -67,7 +61,7 @@ export default function Page() {
       location,
       caption,
     });
-    router.push(`/users/${session.data?.user?.id}`);
+    // router.push(`/users/${session.data?.user?.id}`);
   }
 
   return (
