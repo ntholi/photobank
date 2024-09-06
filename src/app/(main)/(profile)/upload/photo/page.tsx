@@ -6,8 +6,10 @@ import { useEffect, useState } from 'react';
 import PhotoUploadForm from '../Form';
 import axios, { AxiosProgressEvent } from 'axios';
 import { Location } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 
-export default async function Page() {
+export default function Page() {
+  const session = useSession();
   const [file, setFile] = useState<File>();
   const [progress, setProgress] = useState<number>();
   const [message, setMessage] = useState<'' | 'Uploading' | 'Processing Image'>(
@@ -48,15 +50,9 @@ export default async function Page() {
             }
           },
         });
-        if (fileName) {
-          setMessage('Processing Image');
-          setProgress(0);
-          const { data } = await axios.post('/api/photos', {
-            fileName,
-          });
-
-          router.push(`/upload/${data.photo.id}`);
-        }
+        setMessage('Processing Image');
+        setProgress(0);
+        return fileName;
       } finally {
         setMessage('');
         setProgress(undefined);
@@ -65,7 +61,13 @@ export default async function Page() {
   };
 
   async function handleSubmit(location?: Location, caption?: string) {
-    await handleFileUpload();
+    const fileName = await handleFileUpload();
+    await axios.post('/api/photos', {
+      fileName,
+      location,
+      caption,
+    });
+    router.push(`/users/${session.data?.user?.id}`);
   }
 
   return (
@@ -82,7 +84,7 @@ export default async function Page() {
         )}
       </div>
       <div>
-        <PhotoUploadForm onSubmit={handleSubmit} />
+        <PhotoUploadForm onSubmit={handleSubmit} progress={progress} />
       </div>
     </section>
   );
