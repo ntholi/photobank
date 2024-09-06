@@ -115,7 +115,7 @@ export default function VideoUploadPage() {
         const trimmedDuration = videoElement.duration;
         setVideoDuration(trimmedDuration);
         setStartTime(0);
-        setEndTime(Math.max(MAX_DURATION, trimmedDuration));
+        setEndTime(Math.min(MAX_DURATION, trimmedDuration));
       };
       videoElement.src = url;
     } catch (error) {
@@ -157,6 +157,18 @@ export default function VideoUploadPage() {
     }
   }, [startTime, isSliderChanging]);
 
+  const handleTimeUpdate = () => {
+    if (videoRef.current && videoRef.current.currentTime >= endTime) {
+      videoRef.current.currentTime = startTime;
+    }
+  };
+
+  const handlePlay = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = startTime;
+    }
+  };
+
   async function handleSubmit(location?: Location, caption?: string) {
     console.log({ location, caption });
   }
@@ -171,13 +183,14 @@ export default function VideoUploadPage() {
               src={videoUrl}
               controls
               className='w-full max-w-md md:h-[35vh]'
+              onTimeUpdate={handleTimeUpdate}
+              onPlay={handlePlay}
             />
 
             <div className='flex items-center space-x-2'>
               <Slider
                 label='Trim Video'
                 step={1}
-                showSteps
                 size='sm'
                 minValue={0}
                 maxValue={videoDuration}
