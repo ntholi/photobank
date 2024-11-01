@@ -7,10 +7,12 @@ import { getFile } from '@/lib/utils/indexedDB';
 import { useRouter } from 'next/navigation';
 import UploadForm from '../Form';
 import { Location } from '@prisma/client';
+import { IconArrowLeft } from '@tabler/icons-react';
 
 const MAX_DURATION = 30;
 
 export default function VideoUploadPage() {
+  const [currentStep, setCurrentStep] = useState<1 | 2>(1);
   const [video, setVideo] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [startTime, setStartTime] = useState<number>(0);
@@ -173,45 +175,90 @@ export default function VideoUploadPage() {
     console.log({ location, description });
   }
 
+  const goBack = () => {
+    if (currentStep === 2) {
+      setCurrentStep(1);
+    } else {
+      router.push('/upload');
+    }
+  };
+
+  const goToNextStep = () => {
+    setCurrentStep(2);
+  };
+
   return (
-    <section className='grid gap-5 pt-5 md:mt-8 md:px-16 lg:grid-cols-2'>
-      <div>
-        {videoUrl && (
-          <>
-            <video
-              ref={videoRef}
-              src={videoUrl}
-              controls
-              className='w-full max-w-md md:h-[35vh]'
-              onTimeUpdate={handleTimeUpdate}
-              onPlay={handlePlay}
-            />
+    <section className='mx-auto w-[500px] px-4 md:mt-16'>
+      <div className='my-8 flex items-center gap-4'>
+        <Button
+          isIconOnly
+          variant='light'
+          onClick={goBack}
+          className='text-gray-500'
+        >
+          <IconArrowLeft />
+        </Button>
+        <div>
+          <h1 className='text-xl font-semibold'>Upload Video</h1>
+          <p className='text-sm text-gray-500'>
+            Step {currentStep} of 2:{' '}
+            {currentStep === 1 ? 'Edit Video' : 'Details'}
+          </p>
+        </div>
+      </div>
 
-            <div className='flex items-center space-x-2'>
-              <Slider
-                label='Trim Video'
-                step={1}
-                size='sm'
-                minValue={0}
-                maxValue={videoDuration}
-                value={[startTime, endTime]}
-                onChange={(it) => handleSliderChange(it as number[])}
-                onChangeEnd={handleSliderChangeEnd}
-                className='max-w-md'
+      {currentStep === 1 ? (
+        <div className='grid gap-5'>
+          {videoUrl && (
+            <>
+              <video
+                ref={videoRef}
+                src={videoUrl}
+                controls
+                className='w-full max-w-md md:h-[35vh]'
+                onTimeUpdate={handleTimeUpdate}
+                onPlay={handlePlay}
               />
-            </div>
 
-            <Button onClick={handleTrim} disabled={isProcessing || !ffmpeg}>
-              {isProcessing ? 'Processing...' : 'Trim Video'}
-            </Button>
+              <div className='flex items-center space-x-2'>
+                <Slider
+                  label='Trim Video'
+                  step={1}
+                  size='sm'
+                  minValue={0}
+                  maxValue={videoDuration}
+                  value={[startTime, endTime]}
+                  onChange={(it) => handleSliderChange(it as number[])}
+                  onChangeEnd={handleSliderChangeEnd}
+                  className='max-w-md'
+                />
+              </div>
 
-            {isProcessing && <Progress value={progress} className='max-w-md' />}
-          </>
-        )}
-      </div>
-      <div>
-        <UploadForm onSubmit={handleSubmit} progress={progress} />
-      </div>
+              <div className='flex gap-4'>
+                <Button
+                  onClick={handleTrim}
+                  disabled={isProcessing || !ffmpeg}
+                  color='primary'
+                  variant='bordered'
+                >
+                  {isProcessing ? 'Processing...' : 'Trim Video'}
+                </Button>
+                <Button color='primary' onClick={goToNextStep}>
+                  Next
+                </Button>
+              </div>
+
+              {isProcessing && (
+                <Progress value={progress} className='max-w-md' />
+              )}
+            </>
+          )}
+        </div>
+      ) : (
+        <div className='max-w-xl'>
+          <UploadForm onSubmit={handleSubmit} progress={progress} />
+        </div>
+      )}
     </section>
   );
 }
