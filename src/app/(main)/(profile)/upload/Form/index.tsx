@@ -10,11 +10,7 @@ type Props = {
   onSubmit: (location?: Location, description?: string) => Promise<void>;
 };
 
-export default function PhotoUploadForm({
-  progress,
-  isSaving,
-  onSubmit,
-}: Props) {
+export default function UploadForm({ progress, isSaving, onSubmit }: Props) {
   const [location, setLocation] = useState<Location>();
   const [description, setCaption] = useState<string>();
 

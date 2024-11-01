@@ -3,7 +3,7 @@ import { getFile } from '@/lib/utils/indexedDB';
 import { Image, Skeleton, Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
-import PhotoUploadForm from '../Form';
+import UploadForm from '../Form';
 import axios, { AxiosProgressEvent } from 'axios';
 import { Location } from '@prisma/client';
 import { useSession } from 'next-auth/react';
@@ -107,7 +107,7 @@ export default function Page() {
         )}
       </div>
       <div>
-        <PhotoUploadForm
+        <UploadForm
           onSubmit={handleSubmit}
           progress={progress}
           isSaving={isSaving}

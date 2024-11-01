@@ -5,10 +5,10 @@ import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import { getFile } from '@/lib/utils/indexedDB';
 import { useRouter } from 'next/navigation';
-import PhotoUploadForm from '../Form';
+import UploadForm from '../Form';
 import { Location } from '@prisma/client';
 
-const MAX_DURATION = 10;
+const MAX_DURATION = 30;
 
 export default function VideoUploadPage() {
   const [video, setVideo] = useState<File | null>(null);
@@ -210,7 +210,7 @@ export default function VideoUploadPage() {
         )}
       </div>
       <div>
-        <PhotoUploadForm onSubmit={handleSubmit} />
+        <UploadForm onSubmit={handleSubmit} progress={progress} />
       </div>
     </section>
   );
