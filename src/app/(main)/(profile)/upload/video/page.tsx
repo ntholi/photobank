@@ -188,7 +188,7 @@ export default function VideoUploadPage() {
   };
 
   return (
-    <section className='mx-auto w-[500px] px-4 md:mt-16'>
+    <section className='mx-auto w-[700px] px-4 md:mt-16'>
       <div className='my-8 flex items-center gap-4'>
         <Button
           isIconOnly
@@ -215,7 +215,7 @@ export default function VideoUploadPage() {
                 ref={videoRef}
                 src={videoUrl}
                 controls
-                className='w-full max-w-md md:h-[35vh]'
+                className='w-full md:h-[35vh]'
                 onTimeUpdate={handleTimeUpdate}
                 onPlay={handlePlay}
               />
@@ -230,11 +230,11 @@ export default function VideoUploadPage() {
                   value={[startTime, endTime]}
                   onChange={(it) => handleSliderChange(it as number[])}
                   onChangeEnd={handleSliderChangeEnd}
-                  className='max-w-md'
+                  className='w-full'
                 />
               </div>
 
-              <div className='flex gap-4'>
+              <div className='flex justify-end gap-4'>
                 <Button
                   onClick={handleTrim}
                   disabled={isProcessing || !ffmpeg}
