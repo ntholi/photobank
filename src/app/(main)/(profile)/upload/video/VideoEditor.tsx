@@ -9,6 +9,11 @@ interface VideoEditorProps {
   onNext: (trimmedUrl: string) => void;
 }
 
+interface Thumbnail {
+  url: string;
+  time: number;
+}
+
 const MAX_DURATION = 30;
 
 export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
@@ -16,11 +21,13 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
   const [endTime, setEndTime] = useState<number>(MAX_DURATION);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [videoDuration, setVideoDuration] = useState<number>(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [isSliderChanging, setIsSliderChanging] = useState<boolean>(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null);
   const [ffmpeg, setFFmpeg] = useState<FFmpeg | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const lastDraggedHandle = useRef<'start' | 'end' | null>(null);
+  const [thumbnails, setThumbnails] = useState<Thumbnail[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const loadFFmpeg = async () => {
@@ -62,6 +69,44 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
       videoElement.src = currentVideoUrl;
     }
   }, [currentVideoUrl]);
+
+  const generateThumbnails = useCallback(async () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    if (!context) return;
+
+    const videoAspectRatio = video.videoWidth / video.videoHeight;
+    canvas.width = 100;
+    canvas.height = canvas.width / videoAspectRatio;
+
+    const numberOfThumbnails = 10;
+    const newThumbnails: Thumbnail[] = [];
+
+    for (let i = 0; i < numberOfThumbnails; i++) {
+      const time = (videoDuration * i) / numberOfThumbnails;
+      video.currentTime = time;
+
+      await new Promise((resolve) => {
+        video.onseeked = resolve;
+      });
+
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const thumbnailUrl = canvas.toDataURL('image/jpeg');
+      newThumbnails.push({ url: thumbnailUrl, time });
+    }
+
+    setThumbnails(newThumbnails);
+    video.currentTime = startTime;
+  }, [videoDuration, startTime]);
+
+  useEffect(() => {
+    if (videoDuration > 0 && videoRef.current) {
+      generateThumbnails();
+    }
+  }, [videoDuration, generateThumbnails]);
 
   const handleTrim = async () => {
     if (!currentVideoUrl || !ffmpeg) return;
@@ -179,7 +224,7 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
             onPlay={handlePlay}
           />
 
-          <div className='flex items-center space-x-2'>
+          <div className='space-y-2'>
             <Slider
               label='Trim Video'
               step={1}
@@ -191,7 +236,25 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
               onChangeEnd={handleSliderChangeEnd}
               className='w-full'
             />
+
+            <div className='relative h-[50px] w-full overflow-hidden rounded-lg bg-gray-100'>
+              <div className='absolute inset-0 flex'>
+                {thumbnails.map((thumbnail, index) => (
+                  <div
+                    key={index}
+                    className='h-full flex-1'
+                    style={{
+                      backgroundImage: `url(${thumbnail.url})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
+
+          <canvas ref={canvasRef} className='hidden' />
 
           <div className='flex justify-end gap-4'>
             <Button
