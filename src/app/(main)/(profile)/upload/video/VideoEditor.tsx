@@ -211,6 +211,11 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
     }
   };
 
+  const handleNext = async () => {
+    await handleTrim();
+    onNext(currentVideoUrl || '');
+  };
+
   return (
     <div className='grid gap-5'>
       {currentVideoUrl && (
@@ -268,7 +273,7 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
             </Button>
             <Button
               color='primary'
-              onClick={() => onNext(currentVideoUrl || '')}
+              onClick={handleNext}
               isDisabled={isProcessing || !ffmpeg}
             >
               Next
