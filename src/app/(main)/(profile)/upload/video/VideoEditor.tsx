@@ -20,6 +20,7 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
   const [isSliderChanging, setIsSliderChanging] = useState<boolean>(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null);
   const [ffmpeg, setFFmpeg] = useState<FFmpeg | null>(null);
+  const lastDraggedHandle = useRef<'start' | 'end' | null>(null);
 
   useEffect(() => {
     const loadFFmpeg = async () => {
@@ -115,21 +116,33 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
   const handleSliderChange = useCallback(
     (value: number[]) => {
       let [start, end] = value;
+      const currentDuration = endTime - startTime;
+
       if (end - start > MAX_DURATION) {
-        if (start === startTime) {
-          end = start + MAX_DURATION;
-        } else {
-          start = end - MAX_DURATION;
+        if (!lastDraggedHandle.current) {
+          const startDelta = Math.abs(start - startTime);
+          const endDelta = Math.abs(end - endTime);
+          lastDraggedHandle.current = endDelta > startDelta ? 'end' : 'start';
         }
+
+        if (lastDraggedHandle.current === 'end') {
+          start = end - MAX_DURATION;
+        } else {
+          end = start + MAX_DURATION;
+        }
+      } else {
+        lastDraggedHandle.current = null;
       }
+
       setStartTime(start);
       setEndTime(end);
     },
-    [startTime],
+    [startTime, endTime],
   );
 
   const handleSliderChangeEnd = useCallback(() => {
     setIsSliderChanging(false);
+    lastDraggedHandle.current = null;
     if (videoRef.current) {
       videoRef.current.currentTime = startTime;
     }
