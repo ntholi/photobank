@@ -45,7 +45,7 @@ export default function VideoUploadPage() {
   };
 
   return (
-    <section className='mx-auto max-w-7xl px-4 md:mt-16'>
+    <section className='mx-auto max-w-4xl px-4 md:mt-16'>
       <div className='my-8 flex items-center gap-4'>
         <Button
           isIconOnly

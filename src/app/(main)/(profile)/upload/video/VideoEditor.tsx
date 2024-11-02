@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Button, Slider, Progress } from '@nextui-org/react';
+import { Button, Slider } from '@nextui-org/react';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 
@@ -15,20 +15,15 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
   const [startTime, setStartTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(MAX_DURATION);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(0);
   const [videoDuration, setVideoDuration] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isSliderChanging, setIsSliderChanging] = useState<boolean>(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null);
   const [ffmpeg, setFFmpeg] = useState<FFmpeg | null>(null);
 
-  // Initialize FFmpeg
   useEffect(() => {
     const loadFFmpeg = async () => {
       const ffmpegInstance = new FFmpeg();
-      ffmpegInstance.on('progress', ({ progress }) => {
-        setProgress(Math.round(progress * 100));
-      });
 
       const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/umd';
       await ffmpegInstance.load({
@@ -48,7 +43,6 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
     loadFFmpeg();
   }, []);
 
-  // Initialize video URL from file
   useEffect(() => {
     if (videoFile) {
       const url = URL.createObjectURL(videoFile);
@@ -56,7 +50,6 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
     }
   }, [videoFile]);
 
-  // Initialize video duration
   useEffect(() => {
     if (currentVideoUrl) {
       const videoElement = document.createElement('video');
@@ -73,7 +66,6 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
     if (!currentVideoUrl || !ffmpeg) return;
 
     setIsProcessing(true);
-    setProgress(0);
 
     try {
       await ffmpeg.writeFile('input.mp4', await fetchFile(currentVideoUrl));
@@ -102,7 +94,6 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
         new Blob([blobData], { type: 'video/mp4' }),
       );
 
-      // Get the duration of the trimmed video
       const videoElement = document.createElement('video');
       videoElement.preload = 'metadata';
       videoElement.onloadedmetadata = () => {
@@ -192,7 +183,8 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
           <div className='flex justify-end gap-4'>
             <Button
               onClick={handleTrim}
-              disabled={isProcessing || !ffmpeg}
+              isLoading={isProcessing}
+              isDisabled={isProcessing || !ffmpeg}
               color='primary'
               variant='bordered'
             >
@@ -201,12 +193,11 @@ export default function VideoEditor({ videoFile, onNext }: VideoEditorProps) {
             <Button
               color='primary'
               onClick={() => onNext(currentVideoUrl || '')}
+              isDisabled={isProcessing || !ffmpeg}
             >
               Next
             </Button>
           </div>
-
-          {isProcessing && <Progress value={progress} className='max-w-md' />}
         </>
       )}
     </div>

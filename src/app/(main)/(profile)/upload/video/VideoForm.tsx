@@ -12,7 +12,7 @@ interface VideoFormProps {
 }
 
 export default function VideoForm({ videoUrl, isSaving }: VideoFormProps) {
-  const [progress, setProgress] = useState<number>(0);
+  const [progress, setProgress] = useState<number>();
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const session = useSession();
