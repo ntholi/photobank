@@ -116,6 +116,7 @@ enum PhotoType {
 model Photo {
   id               String            @id @default(cuid())
   fileName         String
+  photoType        PhotoType         @default(image)
   status           PhotoStatus       @default(draft)
   description      String?
   user             User              @relation(fields: [userId], references: [id])
