@@ -4,6 +4,7 @@ import axios from 'axios';
 import { imageProcessorUrl } from '@/lib/config/urls';
 import { auth } from '@/auth';
 import { z } from 'zod';
+import { processImage } from './process/imageService';
 
 type Label = {
   Name: string;
@@ -50,16 +51,19 @@ export async function POST(request: Request) {
     );
   }
 
-  const res = await axios.get(imageProcessorUrl(fileName));
-  const { labels: awsLabels } = res.data as { labels: Label[] };
-  const labels: { name: string; confidence: number }[] = [];
-  awsLabels.forEach((label) => {
-    label.Categories.forEach((category) => {
-      if (!labels.find((it) => it.name === category)) {
-        labels.push({ name: category, confidence: label.Confidence });
-      }
-    });
-  });
+  const res = await processImage(fileName);
+  console.log(res);
+
+  // const res = await axios.get(imageProcessorUrl(fileName));
+  // const { labels: awsLabels } = res.data as { labels: Label[] };
+  // const labels: { name: string; confidence: number }[] = [];
+  // awsLabels.forEach((label) => {
+  //   label.Categories.forEach((category) => {
+  //     if (!labels.find((it) => it.name === category)) {
+  //       labels.push({ name: category, confidence: label.Confidence });
+  //     }
+  //   });
+  // });
 
   const photo = await prisma.photo.create({
     data: {
@@ -69,12 +73,12 @@ export async function POST(request: Request) {
         },
       },
       fileName: fileName,
-      labels: {
-        create: labels.map((it) => ({
-          confidence: it.confidence,
-          label: it.name,
-        })),
-      },
+      // labels: {
+      //   create: labels.map((it) => ({
+      //     confidence: it.confidence,
+      //     label: it.name,
+      //   })),
+      // },
       description: description,
       status: 'published',
       location: location
