@@ -4,7 +4,7 @@ import axios from 'axios';
 import { imageProcessorUrl } from '@/lib/config/urls';
 import { auth } from '@/auth';
 import { z } from 'zod';
-import { processImage } from './process/imageService';
+import { processImage } from '../../../server/photos/imageService';
 
 type Label = {
   Name: string;
