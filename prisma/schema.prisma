@@ -108,6 +108,11 @@ enum PhotoStatus {
   rejected
 }
 
+enum PhotoType {
+  image
+  video
+}
+
 model Photo {
   id               String            @id @default(cuid())
   fileName         String

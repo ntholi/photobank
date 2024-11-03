@@ -7,6 +7,9 @@ CREATE TYPE "ApplicationStatus" AS ENUM ('pending', 'approved', 'rejected');
 -- CreateEnum
 CREATE TYPE "PhotoStatus" AS ENUM ('draft', 'published', 'pending', 'rejected');
 
+-- CreateEnum
+CREATE TYPE "PhotoType" AS ENUM ('image', 'video');
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
@@ -77,10 +80,9 @@ CREATE TABLE "photos" (
     "id" TEXT NOT NULL,
     "fileName" TEXT NOT NULL,
     "status" "PhotoStatus" NOT NULL DEFAULT 'draft',
-    "caption" TEXT,
+    "description" TEXT,
     "user_id" TEXT NOT NULL,
     "locationId" TEXT,
-    "use_without_watermark" BOOLEAN,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -167,7 +169,7 @@ CREATE TABLE "saved_photos" (
 CREATE TABLE "updates" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "features" TEXT[],
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "updates_pkey" PRIMARY KEY ("id")
