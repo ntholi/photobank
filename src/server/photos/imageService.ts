@@ -18,12 +18,12 @@ const rekognitionClient = new RekognitionClient({
 interface ProcessedImages {
   thumbnail: string;
   watermarked: string;
-  labels: (Label | undefined)[];
+  labels: Label[];
 }
 
 interface Label {
-  name: string | undefined;
-  confidence: number | undefined;
+  name: string;
+  confidence: number;
 }
 
 export async function processImage(fileName: string): Promise<ProcessedImages> {
@@ -79,9 +79,6 @@ export async function processImage(fileName: string): Promise<ProcessedImages> {
       ),
     ]);
 
-    // Wait a short time to ensure S3 consistency
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
-
     const labels = await detectLabels(thumbnailKey);
     return {
       thumbnail: thumbnailKey,
@@ -94,7 +91,7 @@ export async function processImage(fileName: string): Promise<ProcessedImages> {
   }
 }
 
-async function detectLabels(key: string): Promise<(Label | undefined)[]> {
+async function detectLabels(key: string): Promise<Label[]> {
   try {
     const command = new DetectLabelsCommand({
       Image: {
@@ -108,20 +105,26 @@ async function detectLabels(key: string): Promise<(Label | undefined)[]> {
     });
 
     const labelResponse = await rekognitionClient.send(command);
-    const labels = labelResponse?.Labels?.map((label) => {
-      return {
-        name: label.Name,
-        confidence: label.Confidence,
-        categories: label.Categories?.map((category) => category.Name),
-      };
-    }).flatMap((it) =>
-      it.categories?.map((category) => ({
-        name: category,
-        confidence: it.confidence,
-      })),
-    );
+    const labels =
+      labelResponse.Labels?.reduce<Label[]>((acc, label) => {
+        if (label.Name && label.Confidence && label.Categories) {
+          const categoryLabels = label.Categories.map((category) => ({
+            name: category.Name || '',
+            confidence: label.Confidence,
+          }));
 
-    return labels ?? [];
+          // Only add labels that have both name and confidence
+          return acc.concat(
+            categoryLabels.filter(
+              (l): l is Label =>
+                typeof l.name === 'string' && typeof l.confidence === 'number',
+            ),
+          );
+        }
+        return acc;
+      }, []) ?? [];
+
+    return labels;
   } catch (error) {
     console.error('Error in detectLabels:', {
       error,

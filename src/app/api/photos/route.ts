@@ -51,8 +51,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const res = await processImage(fileName);
-  console.log(res);
+  const { labels } = await processImage(fileName);
+  console.log(labels);
 
   // const res = await axios.get(imageProcessorUrl(fileName));
   // const { labels: awsLabels } = res.data as { labels: Label[] };
@@ -73,12 +73,12 @@ export async function POST(request: Request) {
         },
       },
       fileName: fileName,
-      // labels: {
-      //   create: labels.map((it) => ({
-      //     confidence: it.confidence,
-      //     label: it.name,
-      //   })),
-      // },
+      labels: {
+        create: labels.map((it) => ({
+          confidence: it.confidence,
+          label: it.name,
+        })),
+      },
       description: description,
       status: 'published',
       location: location
