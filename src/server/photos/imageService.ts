@@ -55,7 +55,7 @@ export async function processImage(fileName: string): Promise<ProcessedImages> {
     );
 
     const fileNameWithoutExt = fileName.split('.')[0];
-    const extension = fileName.split('.')[1];
+    const extension = fileName.split('.')[1].toLowerCase();
 
     const thumbnailKey = `${fileNameWithoutExt}_thumb.${extension}`;
     const watermarkedKey = `${fileNameWithoutExt}_watermarked.${extension}`;
