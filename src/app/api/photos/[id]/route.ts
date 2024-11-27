@@ -1,16 +1,16 @@
-import { NextResponse } from 'next/server';
+import { thumbnail } from '@/lib/config/urls';
 import prisma from '@/lib/prisma';
-import { imageProcessorUrl, thumbnail } from '@/lib/config/urls';
+import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import axios from 'axios';
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export async function GET(request: Request, { params }: Props) {
+export async function GET(request: Request, props: Props) {
+  const params = await props.params;
   const photo = await prisma.photo.findUnique({
     where: {
       id: params.id,
@@ -42,7 +42,8 @@ const PhotoData = z.object({
     .optional(),
 });
 
-export async function PUT(request: Request, { params }: Props) {
+export async function PUT(request: Request, props: Props) {
+  const params = await props.params;
   try {
     const { location, description } = PhotoData.parse(await request.json());
 

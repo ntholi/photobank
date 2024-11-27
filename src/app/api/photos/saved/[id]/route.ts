@@ -3,12 +3,13 @@ import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export async function GET(_: Request, { params }: Props) {
+export async function GET(_: Request, props: Props) {
+  const params = await props.params;
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

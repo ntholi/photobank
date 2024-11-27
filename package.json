@@ -41,8 +41,8 @@
     "@tiptap/react": "^2.10.3",
     "@tiptap/starter-kit": "^2.10.3",
     "@types/node": "22.10.0",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "@types/sharp": "^0.32.0",
     "autoprefixer": "10.4.20",
     "axios": "^1.7.8",
@@ -52,16 +52,16 @@
     "encoding": "^0.1.13",
     "eslint": "9.15.0",
     "eslint-config-next": "15.0.3",
-    "framer-motion": "^11.11.17",
+    "framer-motion": "^11.12.0",
     "leaflet": "^1.9.4",
     "nanoid": "^5.0.9",
     "next": "15.0.3",
-    "next-auth": "5.0.0-beta.20",
+    "next-auth": "5.0.0-beta.25",
     "next-nprogress-bar": "^2.3.15",
     "nuqs": "^2.2.3",
     "prisma-extension-random": "^0.2.2",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-easy-crop": "^5.1.0",
     "react-hook-form": "^7.53.2",
     "react-icons": "^5.3.0",
@@ -84,5 +84,11 @@
     "prettier": "^3.4.1",
     "prettier-plugin-tailwindcss": "^0.6.9",
     "prisma": "^5.22.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "npm:types-react@19.0.0-rc.1",
+      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+    }
   }
 }

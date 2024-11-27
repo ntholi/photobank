@@ -7,11 +7,14 @@ import { deleteLocation, getLocation } from '../actions';
 import { thumbnail } from '@/lib/config/urls';
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
-export default async function Page({ params: { id } }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
+  const { id } = params;
+
   const item = await getLocation(id);
   if (!item) {
     return notFound();
@@ -25,10 +28,10 @@ export default async function Page({ params: { id } }: Props) {
       />
 
       <Stack p={'xl'}>
-        <FieldView label="Name">{item.location.name}</FieldView>
-        <FieldView label="Virtual Tour">
+        <FieldView label='Name'>{item.location.name}</FieldView>
+        <FieldView label='Virtual Tour'>
           {item.tourUrl && (
-            <Anchor target="_blank" href={`${item.tourUrl}/index.htm`}>
+            <Anchor target='_blank' href={`${item.tourUrl}/index.htm`}>
               {item.tourUrl?.split('/').at(-1)}
             </Anchor>
           )}

@@ -5,12 +5,15 @@ import Form from '../../Form';
 import { getTag, updateTag } from '../../actions';
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export default async function EditPage({ params: { id } }: Props) {
+export default async function EditPage(props: Props) {
+  const params = await props.params;
+  const { id } = params;
+
   const item = await getTag(Number(id));
   if (!item) return notFound();
 

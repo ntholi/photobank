@@ -6,11 +6,14 @@ import { notFound } from 'next/navigation';
 import { deleteUpdate, getUpdate } from '../actions';
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
-export default async function Page({ params: { id } }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
+  const { id } = params;
+
   const item = await getUpdate(Number(id));
   if (!item) {
     return notFound();
@@ -24,8 +27,8 @@ export default async function Page({ params: { id } }: Props) {
       />
 
       <Stack p={'xl'}>
-        <FieldView label="Name">{item.name}</FieldView>
-        <Fieldset legend="Features">
+        <FieldView label='Name'>{item.name}</FieldView>
+        <Fieldset legend='Features'>
           <List mt={'sm'}>
             {item.features.map((it) => (
               <ListItem>{it}</ListItem>

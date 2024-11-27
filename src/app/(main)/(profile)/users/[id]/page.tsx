@@ -6,9 +6,10 @@ import { User } from '@prisma/client';
 import type { Metadata } from 'next';
 import { APP_NAME } from '@/lib/constants';
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata(props: Props) {
+  const params = await props.params;
   const user = await getUser(params.id);
   return {
     title: `${user.name} • ${APP_NAME}`,
@@ -27,7 +28,8 @@ const getUser = async (id: string): Promise<User> => {
   return user;
 };
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
   const user = await getUser(params.id);
 
   if (!user) {

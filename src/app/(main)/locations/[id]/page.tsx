@@ -1,23 +1,18 @@
 import { thumbnail } from '@/lib/config/urls';
 import prisma from '@/lib/prisma';
 import { PhotoWithData } from '@/lib/types';
-import { Button, cn, Tab, Tabs } from '@nextui-org/react';
+import { cn } from '@nextui-org/react';
 import { Photo } from '@prisma/client';
 import { Dosis } from 'next/font/google';
 import { notFound } from 'next/navigation';
-import ClientOnly from '../../base/ClientOnly';
 import Container from '../../base/Container';
-import Gallery from './Gallery';
-import MapDisplay from './MapDisplay';
-import { FaImage } from 'react-icons/fa6';
-import { GrThreeD } from 'react-icons/gr';
-import VirtualTour from './VirtualTour';
 import LocationBody from './LocationBody';
+import MapDisplay from './MapDisplay';
 import NavButtons from './NavButtons';
 
 const titleFont = Dosis({ weight: '700', subsets: ['latin'] });
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
 const getLocation = async (id: string) => {
   const location = await prisma.location.findUnique({
@@ -52,7 +47,11 @@ async function getLocationDetails(locationId: string) {
   return details;
 }
 
-export default async function LocationPage({ params: { id } }: Props) {
+export default async function LocationPage(props: Props) {
+  const params = await props.params;
+
+  const { id } = params;
+
   const { location, photos } = await getLocation(id);
   const locationDetails = await getLocationDetails(id);
   const cover = getCoverPhoto(photos, locationDetails?.coverPhoto);
@@ -64,7 +63,7 @@ export default async function LocationPage({ params: { id } }: Props) {
   return (
     <div>
       <header
-        className="h-[65vh] flex justify-center items-center relative"
+        className='relative flex h-[65vh] items-center justify-center'
         style={{
           backgroundImage: `url(${cover})`,
           backgroundSize: 'cover',
@@ -72,12 +71,12 @@ export default async function LocationPage({ params: { id } }: Props) {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative z-10 flex flex-col items-center">
+        <div className='absolute inset-0 bg-black opacity-20'></div>
+        <div className='relative z-10 flex flex-col items-center'>
           <h1
             className={cn(
               titleFont.className,
-              'text-5xl text-white font-bold uppercase border border-gray-100 px-10 py-4',
+              'border border-gray-100 px-10 py-4 text-5xl font-bold uppercase text-white',
             )}
           >
             {location.name}
@@ -87,14 +86,14 @@ export default async function LocationPage({ params: { id } }: Props) {
       </header>
       {locationDetails?.about && (
         <Container
-          width="lg"
-          className="grid grid-cols-1 md:grid-cols-3 mt-10 gap-10"
+          width='lg'
+          className='mt-10 grid grid-cols-1 gap-10 md:grid-cols-3'
         >
-          <section className="md:col-span-2">
-            <h2 className="text-4xl font-semibold">About {location.name}</h2>
+          <section className='md:col-span-2'>
+            <h2 className='text-4xl font-semibold'>About {location.name}</h2>
             <article
               dangerouslySetInnerHTML={{ __html: locationDetails.about || '' }}
-              className="prose text-lg mt-5"
+              className='prose mt-5 text-lg'
             />
           </section>
           <section>
@@ -102,7 +101,7 @@ export default async function LocationPage({ params: { id } }: Props) {
           </section>
         </Container>
       )}
-      <section className="container mx-auto px-4 py-10" id="body">
+      <section className='container mx-auto px-4 py-10' id='body'>
         <LocationBody location={location} tourUrl={locationDetails?.tourUrl} />
       </section>
     </div>

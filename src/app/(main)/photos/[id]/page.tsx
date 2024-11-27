@@ -6,7 +6,7 @@ import { PhotoWithData } from '@/lib/types';
 import SimilarPhotos from './SimilarPhotos';
 import { watermarked } from '@/lib/config/urls';
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
 const getPhoto = async (id: string) => {
   const photo = await prisma.photo.findUnique({
@@ -26,7 +26,8 @@ const getPhoto = async (id: string) => {
   }
 };
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
   const photo = (await getPhoto(params.id)) as PhotoWithData;
 
   if (!photo) {

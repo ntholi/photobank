@@ -21,7 +21,7 @@ import UserFilter from './UserFilter';
 import { profilePath } from '@/lib/constants';
 
 type Props = {
-  searchParams: { role?: Role };
+  searchParams: Promise<{ role?: Role }>;
 };
 
 async function getUsers(role?: Role) {
@@ -31,7 +31,8 @@ async function getUsers(role?: Role) {
   return await prisma.user.findMany();
 }
 
-export default async function UserPage({ searchParams }: Props) {
+export default async function UserPage(props: Props) {
+  const searchParams = await props.searchParams;
   const data = await getUsers(searchParams.role);
 
   const rows = data.map((user) => (

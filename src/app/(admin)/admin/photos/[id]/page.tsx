@@ -1,13 +1,14 @@
 import DeleteIconButton from '@/app/(admin)/components/DeleteIconButton';
 import HeaderDisplay from '@/app/(admin)/components/HeaderDisplay';
 import { thumbnail } from '@/lib/config/urls';
+import { profilePath } from '@/lib/constants';
+import { dateTime } from '@/lib/format';
 import {
   Anchor,
   Badge,
   Box,
   Card,
   Divider,
-  Fieldset,
   Grid,
   GridCol,
   Group,
@@ -23,15 +24,16 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import React from 'react';
 import { deletePhoto, getPhoto } from '../actions';
-import { dateTime } from '@/lib/format';
-import { profilePath } from '@/lib/constants';
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
-export default async function Page({ params: { id } }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
+  const { id } = params;
+
   const item = await getPhoto(id);
   if (!item) {
     return notFound();
