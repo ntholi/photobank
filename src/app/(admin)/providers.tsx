@@ -1,5 +1,10 @@
 'use client';
-import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
+import {
+  ColorSchemeScript,
+  MantineProvider,
+  createTheme,
+  localStorageColorSchemeManager,
+} from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { SessionProvider } from 'next-auth/react';
@@ -13,13 +18,17 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     },
   });
 
+  const colorSchemeManager = localStorageColorSchemeManager({
+    key: 'lehakoe-photobank-color-scheme',
+  });
+
   return (
     <>
-      <ColorSchemeScript
-        nonce='Qj3s8hRLFbRry5ETX79vvwiAvZJjHdTqYGwF+OUINGo='
+      <MantineProvider
+        theme={theme}
         defaultColorScheme='auto'
-      />
-      <MantineProvider theme={theme}>
+        colorSchemeManager={colorSchemeManager}
+      >
         <Notifications />
         <ModalsProvider>
           <SessionProvider>

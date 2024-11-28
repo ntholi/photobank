@@ -18,6 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
+      <head>
+        <ColorSchemeScript
+          nonce='Qj3s8hRLFbRry5ETX79vvwiAvZJjHdTqYGwF+OUINGo='
+          defaultColorScheme='auto'
+        />
+      </head>
       <body>
         <Providers>{children}</Providers>
       </body>
