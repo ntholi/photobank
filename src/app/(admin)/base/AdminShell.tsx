@@ -1,11 +1,13 @@
 'use client';
 import {
+  ActionIcon,
   AppShell,
   Burger,
   Flex,
   Group,
   LoadingOverlay,
   useComputedColorScheme,
+  useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
@@ -14,11 +16,13 @@ import { PropsWithChildren } from 'react';
 import AccessDenied from './AccessDenied';
 import Logo from './Logo';
 import Navigation from './Navigation';
+import { IconMoon, IconSun } from '@tabler/icons-react';
 
 export default function AdminShell({ children }: PropsWithChildren) {
   const [opened, { toggle }] = useDisclosure();
   const { status } = useSession();
   const colorScheme = useComputedColorScheme('dark');
+  const { setColorScheme } = useMantineColorScheme();
 
   if (status == 'loading') {
     return (
@@ -51,6 +55,13 @@ export default function AdminShell({ children }: PropsWithChildren) {
             />
             <Logo />
           </Group>
+          <ActionIcon variant='default' size='lg'>
+            {colorScheme === 'dark' ? (
+              <IconSun onClick={() => setColorScheme('light')} />
+            ) : (
+              <IconMoon onClick={() => setColorScheme('dark')} />
+            )}
+          </ActionIcon>
         </Group>
       </AppShell.Header>
       {hasAccess && <Navigation />}
