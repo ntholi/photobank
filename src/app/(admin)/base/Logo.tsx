@@ -1,13 +1,15 @@
-import NextLink from 'next/link';
+'use client';
+import { Image, useMantineColorScheme } from '@mantine/core';
 import NextImage from 'next/image';
-import { Image } from '@mantine/core';
+import NextLink from 'next/link';
 
 export default function Logo() {
+  const { colorScheme } = useMantineColorScheme();
   return (
-    <NextLink href="/admin">
+    <NextLink href='/admin'>
       <Image
-        alt=""
-        src="/images/logo/white.png"
+        alt=''
+        src={`/images/logo/${colorScheme === 'dark' ? 'white.png' : 'black.png'}`}
         h={50}
         component={NextImage}
         width={100}
