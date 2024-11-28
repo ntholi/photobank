@@ -17,10 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <ColorSchemeScript />
-      </head>
+    <html lang='en'>
       <body>
         <Providers>{children}</Providers>
       </body>

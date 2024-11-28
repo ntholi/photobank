@@ -1,5 +1,5 @@
 'use client';
-import { MantineProvider, createTheme } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { SessionProvider } from 'next-auth/react';
@@ -14,8 +14,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   });
 
   return (
-    <Suspense>
-      <MantineProvider forceColorScheme='dark' theme={theme}>
+    <>
+      <ColorSchemeScript
+        nonce='Qj3s8hRLFbRry5ETX79vvwiAvZJjHdTqYGwF+OUINGo='
+        defaultColorScheme='auto'
+      />
+      <MantineProvider theme={theme}>
         <Notifications />
         <ModalsProvider>
           <SessionProvider>
@@ -29,6 +33,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           </SessionProvider>
         </ModalsProvider>
       </MantineProvider>
-    </Suspense>
+    </>
   );
 }
