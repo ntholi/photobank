@@ -52,19 +52,6 @@ export async function POST(request: Request) {
   }
 
   const { labels } = await processImage(fileName);
-  console.log(labels);
-
-  // const res = await axios.get(imageProcessorUrl(fileName));
-  // const { labels: awsLabels } = res.data as { labels: Label[] };
-  // const labels: { name: string; confidence: number }[] = [];
-  // awsLabels.forEach((label) => {
-  //   label.Categories.forEach((category) => {
-  //     if (!labels.find((it) => it.name === category)) {
-  //       labels.push({ name: category, confidence: label.Confidence });
-  //     }
-  //   });
-  // });
-
   const photo = await prisma.photo.create({
     data: {
       user: {
