@@ -9,7 +9,7 @@ import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { SessionProvider } from 'next-auth/react';
 import { AppProgressBar } from 'next-nprogress-bar';
-import React, { Suspense } from 'react';
+import React from 'react';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const theme = createTheme({
@@ -24,6 +24,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      <ColorSchemeScript
+        nonce='Qj3s8hRLFbRry5ETX79vvwiAvZJjHdTqYGwF+OUINGo='
+        defaultColorScheme='auto'
+      />
       <MantineProvider
         theme={theme}
         defaultColorScheme='auto'
