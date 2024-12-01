@@ -23,9 +23,11 @@ import NextLink from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { BiLogOut, BiUser } from 'react-icons/bi';
+import { RiDashboardLine } from 'react-icons/ri';
 import Logo from './Logo';
 import { isExcludePath } from './excludePaths';
 import { nameToInitials } from '../(profile)/users/[id]/UserBio';
+import { ADMIN_ROLES } from '@/app/(admin)/base/AdminShell';
 
 const navItems = [
   {
@@ -138,6 +140,17 @@ export default function Navbar() {
                   >
                     My Profile
                   </DropdownItem>
+                  {ADMIN_ROLES.includes(session.user?.role) ? (
+                    <DropdownItem
+                      startContent={<RiDashboardLine />}
+                      onClick={() => router.push('/admin')}
+                      key='dashboard'
+                    >
+                      Dashboard
+                    </DropdownItem>
+                  ) : (
+                    <></>
+                  )}
                 </DropdownSection>
                 <DropdownSection>
                   <DropdownItem

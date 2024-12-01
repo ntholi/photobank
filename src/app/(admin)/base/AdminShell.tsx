@@ -20,6 +20,8 @@ import { IconMoon, IconSun } from '@tabler/icons-react';
 import { Role } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 
+export const ADMIN_ROLES: (Role | undefined)[] = ['admin', 'moderator'];
+
 export default function AdminShell({ children }: PropsWithChildren) {
   const [opened, { toggle }] = useDisclosure();
   const { status, data: session } = useSession();
@@ -39,8 +41,7 @@ export default function AdminShell({ children }: PropsWithChildren) {
     router.push('api/auth/signin');
   }
 
-  const roles: (Role | undefined)[] = ['admin', 'moderator'];
-  const hasAccess = roles.includes(session?.user?.role);
+  const hasAccess = ADMIN_ROLES.includes(session?.user?.role);
 
   return (
     <AppShell
