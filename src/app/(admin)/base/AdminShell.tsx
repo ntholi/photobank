@@ -17,12 +17,15 @@ import AccessDenied from './AccessDenied';
 import Logo from './Logo';
 import Navigation from './Navigation';
 import { IconMoon, IconSun } from '@tabler/icons-react';
+import { Role } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 
 export default function AdminShell({ children }: PropsWithChildren) {
   const [opened, { toggle }] = useDisclosure();
-  const { status } = useSession();
+  const { status, data: session } = useSession();
   const colorScheme = useComputedColorScheme('dark');
   const { setColorScheme } = useMantineColorScheme();
+  const router = useRouter();
 
   if (status == 'loading') {
     return (
@@ -32,7 +35,12 @@ export default function AdminShell({ children }: PropsWithChildren) {
     );
   }
 
-  const hasAccess = true; //user?.role === 'admin';
+  if (!session?.user) {
+    router.push('api/auth/signin');
+  }
+
+  const roles: (Role | undefined)[] = ['admin', 'moderator'];
+  const hasAccess = roles.includes(session?.user?.role);
 
   return (
     <AppShell

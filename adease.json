@@ -1,0 +1,5 @@
+{
+  "baseDir": "src",
+  "adminDir": "(admin)/admin",
+  "database": "prisma"
+}

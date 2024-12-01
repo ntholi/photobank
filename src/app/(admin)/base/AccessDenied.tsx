@@ -1,10 +1,12 @@
-import { Image, Stack, Title, Text, Button, Anchor } from '@mantine/core';
+'use client';
+import { Button, Image, Stack, Text, Title } from '@mantine/core';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import React from 'react';
 
 export default function AccessDenied() {
+  const { data: session } = useSession();
   return (
-    <Stack align='center' justify='center' h={'100vh'}>
+    <Stack align='center' justify='center' h={'80vh'}>
       <div>
         <Image
           src='/images/access-denied.png'
@@ -15,14 +17,9 @@ export default function AccessDenied() {
         />
       </div>
       <Title>Access Denied</Title>
-      <Text>
-        {/* You are logged in as {user?.displayName},{' '} */}
-        <Anchor component='button' onClick={() => {}}>
-          Sign Out
-        </Anchor>
-      </Text>
-      <Button component={Link} href={'/'}>
-        Home Page
+      <Text>You are logged in as {session?.user?.name}</Text>
+      <Button component={Link} href={'/'} variant='light'>
+        Take Me Home
       </Button>
     </Stack>
   );
