@@ -1,4 +1,4 @@
-import '../globals.css';
+import './globals.css';
 import { Jost } from 'next/font/google';
 import { Providers } from './providers';
 import Navbar from './base/Navbar';
@@ -14,14 +14,12 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: any }) {
   return (
-    <html lang="en">
-      <body className={font.className}>
-        <Providers>
-          <Navbar />
-          <div className="min-h-dvh">{children}</div>
-          <Footer className="mt-10" />
-        </Providers>
-      </body>
-    </html>
+    <Providers>
+      <div className={font.className}>
+        <Navbar />
+        <div className='min-h-dvh'>{children}</div>
+        <Footer className='mt-10' />
+      </div>
+    </Providers>
   );
 }

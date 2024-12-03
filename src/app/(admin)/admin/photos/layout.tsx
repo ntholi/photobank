@@ -1,27 +1,29 @@
-import prisma from '@/lib/prisma';
+'use client';
+
 import { PropsWithChildren } from 'react';
-import ListPage from '../../components/ListPage';
+import { ListItem, ListLayout, NewLink } from '@/components/adease';
+import { getAllPhotos } from './actions';
 import { Image } from '@mantine/core';
 import { thumbnail } from '@/lib/config/urls';
 
-export default async function Layout({ children }: PropsWithChildren) {
-  const list = await prisma.photo.findMany({
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+export default function Layout({ children }: PropsWithChildren) {
   return (
-    <ListPage
-      path="admin/photos"
-      nav={list.map((item) => ({
-        label: item.id,
-        href: `/admin/photos/${item.id}`,
-        leftSection: (
-          <Image w={50} h={50} radius={'md'} src={thumbnail(item.fileName)} />
-        ),
-      }))}
+    <ListLayout
+      path={'/admin/photos'}
+      queryKey={['photos']}
+      getItems={getAllPhotos}
+      actionIcons={[<NewLink key={'new-link'} href='/admin/photos/new' />]}
+      renderItem={(it) => (
+        <ListItem
+          id={it.id}
+          label={it.id}
+          leftSection={
+            <Image w={40} h={40} radius={'md'} src={thumbnail(it.fileName)} />
+          }
+        />
+      )}
     >
       {children}
-    </ListPage>
+    </ListLayout>
   );
 }

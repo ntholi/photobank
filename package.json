@@ -32,6 +32,7 @@
     "@react-google-maps/api": "^2.20.3",
     "@tabler/icons-react": "^3.23.0",
     "@tailwindcss/forms": "^0.5.9",
+    "@tanstack/react-query": "^5.62.2",
     "@tiptap/extension-highlight": "^2.10.3",
     "@tiptap/extension-link": "^2.10.3",
     "@tiptap/extension-subscript": "^2.10.3",
@@ -74,6 +75,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.62.1",
     "@types/bcrypt": "^5.0.2",
     "@types/ffmpeg": "^1.0.7",
     "@types/leaflet": "^1.9.14",

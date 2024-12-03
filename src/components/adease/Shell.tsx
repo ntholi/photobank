@@ -1,14 +1,17 @@
 'use client';
 import {
   AppShell,
+  ActionIcon,
   Burger,
   Divider,
   Group,
   ScrollArea,
   useComputedColorScheme,
+  useMantineColorScheme
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import React, { PropsWithChildren } from 'react';
+import { IconMoon, IconSun } from '@tabler/icons-react';
 
 type ShellComposition = {
   Header: React.FC<PropsWithChildren>;
@@ -22,6 +25,7 @@ const Shell: React.FC<PropsWithChildren> & ShellComposition = ({
 }) => {
   const [opened, { toggle }] = useDisclosure();
   const colorScheme = useComputedColorScheme('dark');
+  const { setColorScheme } = useMantineColorScheme();
 
   const Header = React.Children.toArray(children).find(
     (child) => React.isValidElement(child) && child.type === Shell.Header
@@ -58,6 +62,13 @@ const Shell: React.FC<PropsWithChildren> & ShellComposition = ({
             />
             {Header}
           </Group>
+          <ActionIcon variant='default' size='lg'>
+            {colorScheme === 'dark' ? (
+              <IconSun onClick={() => setColorScheme('light')} />
+            ) : (
+              <IconMoon onClick={() => setColorScheme('dark')} />
+            )}
+          </ActionIcon>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p='xs'>

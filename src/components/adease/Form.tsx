@@ -4,25 +4,28 @@ import { ZodObject, ZodTypeAny } from 'zod';
 import { useForm, zodResolver } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { Stack, StackProps } from '@mantine/core';
-import React from 'react';
+import React, { JSX } from 'react';
 import FormHeader from './FormHeader';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type ZodSchema = ZodObject<Record<string, ZodTypeAny>>;
 
-export type FormProps<T extends Record<string, unknown>> = {
-  children: React.ReactNode;
+export type FormProps<T extends Record<string, unknown>, V> = Omit<
+  StackProps,
+  'children'
+> & {
+  children: (form: ReturnType<typeof useForm<T>>) => JSX.Element;
   action: (values: T) => Promise<T>;
   schema?: ZodSchema;
-  defaultValues?: T;
+  defaultValues?: V;
   title?: string;
   onSuccess?: (values: T) => void;
   onError?: (error: Error) => void;
   queryKey: string[];
-} & StackProps;
+};
 
-export function Form<T extends Record<string, unknown>>({
+export function Form<T extends Record<string, unknown>, V>({
   schema,
   defaultValues,
   action,
@@ -32,13 +35,13 @@ export function Form<T extends Record<string, unknown>>({
   onError,
   queryKey,
   ...props
-}: FormProps<T>) {
+}: FormProps<T, V>) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
   const form = useForm<T>({
     validate: schema && zodResolver(schema),
-    initialValues: defaultValues,
+    initialValues: defaultValues as T,
   });
 
   const mutation = useMutation({
@@ -80,29 +83,8 @@ export function Form<T extends Record<string, unknown>>({
         }}
       />
       <Stack p='xl' {...props}>
-        {React.Children.map(children, (child) => addFormProps(child, form))}
+        {children(form)}
       </Stack>
     </form>
   );
-}
-
-function addFormProps<T extends Record<string, unknown>>(
-  child: React.ReactNode,
-  form: ReturnType<typeof useForm<T>>
-): React.ReactNode {
-  if (!React.isValidElement(child)) return child;
-
-  const props = { ...child.props };
-
-  if (props.name) {
-    Object.assign(props, form.getInputProps(props.name));
-  }
-
-  if (props.children) {
-    props.children = React.Children.map(props.children, (grandChild) =>
-      addFormProps(grandChild, form)
-    );
-  }
-
-  return React.cloneElement(child, props);
 }

@@ -78,6 +78,9 @@ importers:
       '@tailwindcss/forms':
         specifier: ^0.5.9
         version: 0.5.9(tailwindcss@3.4.15)
+      '@tanstack/react-query':
+        specifier: ^5.62.2
+        version: 5.62.2(react@19.0.0-rc-66855b96-20241106)
       '@tiptap/extension-highlight':
         specifier: ^2.10.3
         version: 2.10.3(@tiptap/core@2.10.3(@tiptap/pm@2.10.3))
@@ -199,6 +202,9 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      '@tanstack/eslint-plugin-query':
+        specifier: ^5.62.1
+        version: 5.62.1(eslint@9.15.0(jiti@1.21.6))(typescript@5.7.2)
       '@types/bcrypt':
         specifier: ^5.0.2
         version: 5.0.2
@@ -2226,6 +2232,19 @@ packages:
     resolution: {integrity: sha512-tM4XVr2+UVTxXJzey9Twx48c1gcxFStqn1pQz0tRsX8o3DvxhN5oY5pvyAbUx7VTaZxpej4Zzvc6h+1RJBzpIg==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1 || >= 4.0.0-alpha.20'
+
+  '@tanstack/eslint-plugin-query@5.62.1':
+    resolution: {integrity: sha512-1886D5U+re1TW0wSH4/kUGG36yIoW5Wkz4twVEzlk3ZWmjF3XkRSWgB+Sc7n+Lyzt8usNV8ZqkZE6DA7IC47fQ==}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+
+  '@tanstack/query-core@5.62.2':
+    resolution: {integrity: sha512-LcwVcC5qpsDpHcqlXUUL5o9SaOBwhNkGeV+B06s0GBoyBr8FqXPuXT29XzYXR36lchhnerp6XO+CWc84/vh7Zg==}
+
+  '@tanstack/react-query@5.62.2':
+    resolution: {integrity: sha512-fkTpKKfwTJtVPKVR+ag7YqFgG/7TRVVPzduPAUF9zRCiiA8Wu305u+KJl8rCrh98Qce77vzIakvtUyzWLtaPGA==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@tiptap/core@2.10.3':
     resolution: {integrity: sha512-wAG/0/UsLeZLmshWb6rtWNXKJftcmnned91/HLccHVQAuQZ1UWH+wXeQKu/mtodxEO7JcU2mVPR9mLGQkK0McQ==}
@@ -8032,6 +8051,21 @@ snapshots:
     dependencies:
       mini-svg-data-uri: 1.4.4
       tailwindcss: 3.4.15
+
+  '@tanstack/eslint-plugin-query@5.62.1(eslint@9.15.0(jiti@1.21.6))(typescript@5.7.2)':
+    dependencies:
+      '@typescript-eslint/utils': 8.16.0(eslint@9.15.0(jiti@1.21.6))(typescript@5.7.2)
+      eslint: 9.15.0(jiti@1.21.6)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
+  '@tanstack/query-core@5.62.2': {}
+
+  '@tanstack/react-query@5.62.2(react@19.0.0-rc-66855b96-20241106)':
+    dependencies:
+      '@tanstack/query-core': 5.62.2
+      react: 19.0.0-rc-66855b96-20241106
 
   '@tiptap/core@2.10.3(@tiptap/pm@2.10.3)':
     dependencies:

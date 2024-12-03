@@ -17,11 +17,9 @@ import { Pagination } from './Pagination';
 import { SearchField } from './SearchField';
 
 export type ListLayoutProps<T> = {
-  searchProperties?: (keyof T)[];
   getItems: (
     page: number,
-    search: string,
-    searchProperties: (keyof T)[]
+    search: string
   ) => Promise<{ items: T[]; pages: number }>;
   renderItem: (item: T) => React.ReactNode;
   path: string;
@@ -36,7 +34,6 @@ export function ListLayout<T>({
   actionIcons,
   children,
   queryKey,
-  searchProperties = [],
   path,
 }: ListLayoutProps<T>) {
   const searchParams = useSearchParams();
@@ -45,7 +42,7 @@ export function ListLayout<T>({
 
   const { data = { items: [], pages: 0 } } = useQuery({
     queryKey: [...queryKey, page, search],
-    queryFn: () => getItems(page, search, searchProperties),
+    queryFn: () => getItems(page, search),
     staleTime: 0,
   });
 

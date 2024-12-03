@@ -1,5 +1,5 @@
-import HomeComponent from '../../components/HomeComponent';
+import { NothingSelected } from '@/components/adease'; 
 
-export default async function RequisitionPage() {
-  return <HomeComponent title="Photos" />;
+export default function Page() {
+  return <NothingSelected title="Photos" />;
 }
