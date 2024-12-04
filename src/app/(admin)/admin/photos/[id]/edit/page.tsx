@@ -18,6 +18,7 @@ export default async function PhotoEdit({ params }: Props) {
   }
 
   const handleSubmit = async (values: Photo): Promise<Photo> => {
+    'use server';
     await updatePhoto(id, values);
     return values;
   };
