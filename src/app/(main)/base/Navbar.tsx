@@ -27,7 +27,7 @@ import { RiDashboardLine } from 'react-icons/ri';
 import Logo from './Logo';
 import { isExcludePath } from './excludePaths';
 import { nameToInitials } from '../(profile)/users/[id]/UserBio';
-import { ADMIN_ROLES } from '@/app/(admin)/base/AdminShell';
+import { ADMIN_ROLES } from '@/app/old/base/AdminShell';
 
 const navItems = [
   {

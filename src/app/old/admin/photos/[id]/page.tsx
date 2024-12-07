@@ -1,5 +1,5 @@
-import DeleteIconButton from '@/app/(admin)/components/DeleteIconButton';
-import HeaderDisplay from '@/app/(admin)/components/HeaderDisplay';
+import DeleteIconButton from '@/app/old/components/DeleteIconButton';
+import HeaderDisplay from '@/app/old/components/HeaderDisplay';
 import { thumbnail } from '@/lib/config/urls';
 import { profilePath } from '@/lib/constants';
 import { dateTime } from '@/lib/format';

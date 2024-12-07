@@ -1,6 +1,6 @@
-import DeleteIconButton from '@/app/(admin)/components/DeleteIconButton';
-import FieldView from '@/app/(admin)/components/FieldView';
-import HeaderDisplay from '@/app/(admin)/components/HeaderDisplay';
+import DeleteIconButton from '@/app/old/components/DeleteIconButton';
+import FieldView from '@/app/old/components/FieldView';
+import HeaderDisplay from '@/app/old/components/HeaderDisplay';
 import { Box, Fieldset, Group, Stack, Text } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import { deleteApplication, getApplication } from '../actions';

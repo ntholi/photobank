@@ -1,5 +1,5 @@
 'use client';
-import FormHeader from '@/app/(admin)/components/FormHeader';
+import FormHeader from '@/app/old/components/FormHeader';
 import { Paper, Stack, Tabs, useComputedColorScheme } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Location, LocationDetails, Photo } from '@prisma/client';
