@@ -1,5 +1,7 @@
 {
   "baseDir": "src",
-  "adminDir": "(admin)/admin",
-  "database": "prisma"
+  "adminDir": "admin",
+  "database": {
+    "type": "prisma"
+  }
 }
