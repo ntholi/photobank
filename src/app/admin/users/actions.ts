@@ -1,9 +1,7 @@
 'use server';
 
 import { Prisma } from '@prisma/client';
-
 import { usersService } from '@/repositories/users/service';
-
 
 type User = Prisma.UserCreateInput;
 

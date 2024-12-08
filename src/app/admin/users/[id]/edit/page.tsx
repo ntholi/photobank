@@ -12,23 +12,20 @@ type Props = {
 
 export default async function UserEdit({ params }: Props) {
   const { id } = await params;
-  const users = await getUser(Number(id));
+  const users = await getUser(id);
   if (!users) {
     return notFound();
   }
 
   const handleSubmit = async (values: User): Promise<User> => {
-    'use server'
+    'use server';
     await updateUser(id, values);
     return values;
   };
 
   return (
     <Box p={'lg'}>
-      <Form
-        defaultValues={users}
-        onSubmit={handleSubmit}
-      />
+      <Form defaultValues={users} onSubmit={handleSubmit} />
     </Box>
   );
 }

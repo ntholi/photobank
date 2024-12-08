@@ -18,7 +18,7 @@ class UserService {
   async search(
     page: number = 1,
     search = '',
-    searchProperties: (keyof User)[] = [],
+    searchProperties: (keyof User)[]
   ) {
     return withAuth(
       async () => this.repository.search(page, search, searchProperties),
