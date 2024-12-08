@@ -20,13 +20,6 @@ type Props = {
 
 export default function TagForm({ onSubmit, defaultValues, title }: Props) {
   const router = useRouter();
-  const [labels, setLabels] = useState<String[]>([]);
-
-  useEffect(() => {
-    if (defaultValues) {
-      setLabels(defaultValues?.labels);
-    }
-  }, [defaultValues]);
 
   return (
     <Form
@@ -41,7 +34,7 @@ export default function TagForm({ onSubmit, defaultValues, title }: Props) {
       {(form) => (
         <>
           <TextInput label='Name' {...form.getInputProps('name')} />
-          <LabelsInput labels={labels} setLabels={setLabels} />
+          <LabelsInput {...form.getInputProps('labels')} />
         </>
       )}
     </Form>
@@ -49,22 +42,23 @@ export default function TagForm({ onSubmit, defaultValues, title }: Props) {
 }
 
 type LabelsInputProps = {
-  labels: String[];
-  setLabels: React.Dispatch<React.SetStateAction<String[]>>;
+  value?: String[];
+  onChange?: (value: String[]) => void;
 };
 
-function LabelsInput({ labels, setLabels }: LabelsInputProps) {
-  const [value, setValue] = useState<String>('');
+function LabelsInput({ value = [], onChange }: LabelsInputProps) {
+  const [inputValue, setInputValue] = useState<String>('');
+  const labels = value;
 
   function handleSubmit() {
-    if (value) {
-      setLabels((prev) => [...prev, value]);
-      setValue('');
+    if (inputValue) {
+      onChange?.([...labels, inputValue]);
+      setInputValue('');
     }
   }
 
   function handleDelete(index: number) {
-    setLabels((prev) => prev.filter((_, i) => i !== index));
+    onChange?.(labels.filter((_, i) => i !== index));
   }
 
   return (
@@ -78,8 +72,8 @@ function LabelsInput({ labels, setLabels }: LabelsInputProps) {
         <TextInput
           placeholder='Label'
           w={300}
-          value={value as string}
-          onChange={(e) => setValue(e.target.value)}
+          value={inputValue as string}
+          onChange={(e) => setInputValue(e.target.value)}
         />
         <Button onClick={handleSubmit} variant='default'>
           Add
