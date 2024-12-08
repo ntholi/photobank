@@ -23,6 +23,7 @@ import {
   IconMapPin,
   IconPhoto,
   IconUsers,
+  IconVideo,
 } from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
 import { Indicator, NavLink } from '@mantine/core';
@@ -44,6 +45,11 @@ const navigation: NavItem[] = [
     label: 'Locations',
     href: '/admin/location-details',
     icon: IconMap,
+  },
+  {
+    label: 'Virtual Tours',
+    href: '/admin/virtual-tours',
+    icon: IconVideo,
   },
 ];
 
