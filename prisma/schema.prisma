@@ -18,6 +18,11 @@ enum Role {
   admin
 }
 
+enum UserStatus {
+  active
+  blocked
+}
+
 model User {
   id                     String                  @id @default(cuid())
   name                   String?
@@ -25,7 +30,7 @@ model User {
   emailVerified          DateTime?               @map("email_verified")
   image                  String?
   role                   Role                    @default(user)
-  blocked                Boolean                 @default(false)
+  status                 UserStatus              @default(active)
   website                String?
   bio                    String?
   contributorApplication ContributorApplication?

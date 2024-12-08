@@ -9,9 +9,13 @@ import {
   Fieldset,
   SegmentedControl,
   Stack,
+  Box,
+  Text,
+  Center,
 } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import { sanitize } from '@/utils';
+import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 
 type User = Prisma.UserCreateInput;
 
@@ -53,24 +57,49 @@ export default function UserForm({ onSubmit, defaultValues }: Props) {
           <Grid.Col span={{ base: 12, md: 6 }}>
             <Fieldset legend='Settings'>
               <Stack gap={'xs'}>
-                <SegmentedControl
-                  color='blue'
-                  data={[
-                    { label: 'Active', value: 'false' },
-                    { label: 'Blocked', value: 'true' },
-                  ]}
-                  {...form.getInputProps('blocked')}
-                />
-                <SegmentedControl
-                  color='blue'
-                  data={[
-                    { label: 'User', value: 'user' },
-                    { label: 'Contributor', value: 'contributor' },
-                    { label: 'Moderator', value: 'moderator' },
-                    { label: 'Admin', value: 'admin' },
-                  ]}
-                  {...form.getInputProps('role')}
-                />
+                <Box>
+                  <Text fw={500} size={'sm'} mb={3}>
+                    Role
+                  </Text>
+                  <SegmentedControl
+                    color='blue'
+                    data={[
+                      { label: 'User', value: 'user' },
+                      { label: 'Contributor', value: 'contributor' },
+                      { label: 'Moderator', value: 'moderator' },
+                      { label: 'Admin', value: 'admin' },
+                    ]}
+                    {...form.getInputProps('role')}
+                  />
+                </Box>
+                <Box>
+                  <Text fw={500} size={'sm'} mb={3}>
+                    Status
+                  </Text>
+                  <SegmentedControl
+                    data={[
+                      {
+                        value: 'active',
+                        label: (
+                          <Center style={{ gap: 10 }}>
+                            <IconCircleCheck size={16} />
+                            <Text size={'sm'}>Active</Text>
+                          </Center>
+                        ),
+                      },
+                      {
+                        value: 'blocked',
+                        label: (
+                          <Center style={{ gap: 10 }}>
+                            <IconCircleX size={16} />
+                            <Text size={'sm'}>Blocked</Text>
+                          </Center>
+                        ),
+                      },
+                    ]}
+                    {...form.getInputProps('status')}
+                  />
+                </Box>
               </Stack>
             </Fieldset>
           </Grid.Col>
