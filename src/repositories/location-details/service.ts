@@ -30,7 +30,7 @@ class LocationDetailService {
     return withAuth(async () => this.repository.create(data), []);
   }
 
-  async update(id: string, data: Prisma.LocationDetailsUpdateInput) {
+  async update(id: string, data: LocationDetails) {
     return withAuth(async () => this.repository.update(id, data), []);
   }
 

@@ -1,6 +1,6 @@
 'use server';
 
-import { Prisma } from '@prisma/client';
+import { LocationDetails, Prisma } from '@prisma/client';
 
 import { locationDetailsService } from '@/repositories/location-details/service';
 import { LocationDetailsCreate } from '@/repositories/location-details/repository';
@@ -19,7 +19,7 @@ export async function createLocationDetail(data: LocationDetailsCreate) {
   return locationDetailsService.create(data);
 }
 
-export async function updateLocationDetail(id: string, data: LocationDetail) {
+export async function updateLocationDetail(id: string, data: LocationDetails) {
   return locationDetailsService.update(id, data);
 }
 

@@ -30,8 +30,10 @@ export default async function LocationDetailDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <FieldView label='Location'>{locationDetails.location}</FieldView>
-        <FieldView label='Cover Photo'>{locationDetails.coverPhoto}</FieldView>
+        <FieldView label='Location'>{locationDetails.location.name}</FieldView>
+        <FieldView label='Cover Photo'>
+          {locationDetails.coverPhoto?.fileName}
+        </FieldView>
         <FieldView label='About'>{locationDetails.about}</FieldView>
         <FieldView label='Tour Url'>{locationDetails.tourUrl}</FieldView>
       </DetailsViewBody>

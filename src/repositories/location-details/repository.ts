@@ -101,10 +101,16 @@ export default class LocationDetailRepository {
     return result;
   }
 
-  async update(id: string, data: Prisma.LocationDetailsUpdateInput) {
+  async update(id: string, data: LocationDetails) {
+    const { locationId, coverPhotoId, ...rest } = data;
     return await prisma.locationDetails.update({
       where: { id },
-      data,
+      data: {
+        about: rest.about,
+        coverPhoto: coverPhotoId
+          ? { connect: { id: coverPhotoId } }
+          : { disconnect: true },
+      },
     });
   }
 
