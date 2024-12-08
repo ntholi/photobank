@@ -49,9 +49,9 @@ export default async function HomePage() {
 
   return (
     <Stack>
-      <Paper p="lg" withBorder>
+      <Paper p='lg' withBorder>
         <Flex justify={'space-between'} align={'center'}>
-          <Title fw={'lighter'} size={18} c="gray">
+          <Title fw={'lighter'} size={18} c='gray'>
             Landing Page
           </Title>
           <AddButton handleAdd={handleAdd} />
@@ -59,7 +59,7 @@ export default async function HomePage() {
       </Paper>
       <Paper withBorder p={50}>
         <Stack gap={'xs'}>
-          <Text size="0.9rem">
+          <Text size='0.9rem'>
             Image that will be shown on the landing page
           </Text>
           <Divider />
@@ -67,7 +67,7 @@ export default async function HomePage() {
         <SimpleGrid cols={4} mt={'xl'}>
           {photos.map((it) => (
             <Box key={it.photo.id} pos={'relative'}>
-              <Image src={thumbnail(it.photo.fileName)} />
+              <Image src={thumbnail(it.photo.fileName)} h={200} />
               <DeleteButton
                 pos={'absolute'}
                 top={5}
