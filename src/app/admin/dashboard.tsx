@@ -18,10 +18,12 @@ import React from 'react';
 import {
   Icon,
   IconChevronRight,
+  IconHome,
   IconLogout2,
   IconMap,
   IconMapPin,
   IconPhoto,
+  IconStereoGlasses,
   IconUsers,
   IconVideo,
 } from '@tabler/icons-react';
@@ -31,6 +33,11 @@ import Link from 'next/link';
 import NextImage from 'next/image';
 
 const navigation: NavItem[] = [
+  {
+    label: 'Landing Page',
+    href: '/admin/landing-page',
+    icon: IconHome,
+  },
   {
     label: 'Users',
     href: '/admin/users',
@@ -49,7 +56,7 @@ const navigation: NavItem[] = [
   {
     label: 'Virtual Tours',
     href: '/admin/virtual-tours',
-    icon: IconVideo,
+    icon: IconStereoGlasses,
   },
 ];
 

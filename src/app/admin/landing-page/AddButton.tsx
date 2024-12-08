@@ -1,22 +1,20 @@
 'use client';
 import { PhotoWithData } from '@/lib/types';
 import {
-  Button,
+  ActionIcon,
+  Box,
+  Center,
+  Chip,
+  Divider,
+  Group,
+  Image,
+  Loader,
   Modal,
   ScrollArea,
   SimpleGrid,
-  TextInput,
-  Text,
-  Image,
-  Center,
-  Loader,
   Stack,
-  ActionIcon,
-  Box,
-  Divider,
-  Chip,
-  Group,
-  Flex,
+  Text,
+  TextInput,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Tag } from '@prisma/client';
@@ -109,13 +107,9 @@ export default function AddButton({ handleAdd }: AddButtonProps) {
           </ScrollArea>
         </Stack>
       </Modal>
-      <Button
-        leftSection={<IconPlus size={'1rem'} />}
-        variant='default'
-        onClick={open}
-      >
-        Add Photo
-      </Button>
+      <ActionIcon size={'lg'} onClick={open}>
+        <IconPlus size={'1rem'} stroke={3} />
+      </ActionIcon>
     </>
   );
 }
