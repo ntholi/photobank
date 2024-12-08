@@ -57,6 +57,7 @@ export default function TourInput({ value, onChange }: Props) {
       accept={[MIME_TYPES.zip]}
       onDrop={(files) => setFile(files[0])}
       onReject={(files) => console.log('rejected files', files)}
+      disabled={progress !== undefined}
     >
       <Group
         justify='center'
