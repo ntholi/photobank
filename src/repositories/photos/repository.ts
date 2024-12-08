@@ -1,6 +1,7 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
-const prisma = new PrismaClient();
+type Photo = Prisma.PhotoCreateInput;
 
 export default class PhotoRepository {
   async findFirst() {
@@ -8,15 +9,8 @@ export default class PhotoRepository {
   }
 
   async findById(id: string) {
-    return await prisma.photo.findFirst({
-      where: {
-        id: id,
-      },
-      include: {
-        labels: true,
-        user: true,
-        location: true,
-      },
+    return await prisma.photo.findUnique({
+      where: { id },
     });
   }
 
@@ -27,10 +21,14 @@ export default class PhotoRepository {
     });
   }
 
-  async search(page: number = 1, search: string, pageSize: number = 15) {
+  async search(
+    page: number = 1,
+    search: string,
+    searchProperties: (keyof Photo)[] = [],
+    pageSize: number = 15
+  ) {
     try {
       const offset = (page - 1) * pageSize;
-      const searchProperties: string[] = [];
       let where = {};
 
       if (search && search.trim() !== '') {

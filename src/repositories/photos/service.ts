@@ -1,14 +1,11 @@
 import { Prisma } from '@prisma/client';
-
 import PhotoRepository from './repository';
 import withAuth from '@/utils/withAuth';
 
 type Photo = Prisma.PhotoCreateInput;
 
 class PhotoService {
-  constructor(
-    private readonly repository: PhotoRepository = new PhotoRepository(),
-  ) {}
+  constructor(private readonly repository: PhotoRepository = new PhotoRepository()) {}
 
   async first() {
     return withAuth(async () => this.repository.findFirst(), []);
@@ -18,10 +15,14 @@ class PhotoService {
     return withAuth(async () => this.repository.findById(id), []);
   }
 
-  async search(page: number = 1, search = '', pageSize: number = 15) {
+  async search(
+    page: number = 1,
+    search = '',
+    searchProperties: (keyof Photo)[]
+  ) {
     return withAuth(
-      async () => this.repository.search(page, search, pageSize),
-      [],
+      async () => this.repository.search(page, search, searchProperties),
+      []
     );
   }
 
