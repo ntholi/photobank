@@ -14,7 +14,7 @@ type Props = {
 const toursUrl = //TODO: This should be an environment variable
   'http://lehakoe-virtual-tours.s3-website.eu-central-1.amazonaws.com/';
 
-export default function TourInput({ value, onChange }: Props) {
+export default function TourInput({ value, onChange, onBlur }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number>();
 
@@ -53,74 +53,82 @@ export default function TourInput({ value, onChange }: Props) {
   }, [file]);
 
   return (
-    <Dropzone
-      accept={[MIME_TYPES.zip]}
-      onDrop={(files) => setFile(files[0])}
-      onReject={(files) => console.log('rejected files', files)}
-      disabled={progress !== undefined}
-    >
-      <Group
-        justify='center'
-        gap='xl'
-        mih={220}
-        style={{ pointerEvents: 'none' }}
+    <>
+      {value && (
+        <Text size='sm' mb='xs'>
+          Current tour URL: {value}
+        </Text>
+      )}
+      <Dropzone
+        accept={[MIME_TYPES.zip]}
+        onDrop={(files) => setFile(files[0])}
+        onReject={(files) => console.log('rejected files', files)}
+        disabled={progress !== undefined}
       >
-        <Dropzone.Accept>
-          <IconUpload
-            style={{
-              width: rem(52),
-              height: rem(52),
-              color: 'var(--mantine-color-blue-6)',
-            }}
-            stroke={1.5}
-          />
-        </Dropzone.Accept>
-        <Dropzone.Reject>
-          <IconX
-            style={{
-              width: rem(52),
-              height: rem(52),
-              color: 'var(--mantine-color-red-6)',
-            }}
-            stroke={1.5}
-          />
-        </Dropzone.Reject>
-        {progress ? (
-          <Stack align='center' justify='center'>
-            <RingProgress
-              sections={[{ value: progress, color: 'blue' }]}
-              thickness={2}
-              label={
-                <Text c='blue' ta='center' size='xl'>
-                  {progress ? `${progress.toFixed(0)}%` : '0%'}
-                </Text>
-              }
+        <Group
+          justify='center'
+          gap='xl'
+          mih={220}
+          style={{ pointerEvents: 'none' }}
+        >
+          <Dropzone.Accept>
+            <IconUpload
+              style={{
+                width: rem(52),
+                height: rem(52),
+                color: 'var(--mantine-color-blue-6)',
+              }}
+              stroke={1.5}
             />
-            <Text c='dimmed'>Uploading...</Text>
-          </Stack>
-        ) : (
-          <>
-            <Dropzone.Idle>
-              <IconPhoto
-                style={{
-                  width: rem(52),
-                  height: rem(52),
-                  color: 'var(--mantine-color-dimmed)',
-                }}
-                stroke={1.5}
+          </Dropzone.Accept>
+          <Dropzone.Reject>
+            <IconX
+              style={{
+                width: rem(52),
+                height: rem(52),
+                color: 'var(--mantine-color-red-6)',
+              }}
+              stroke={1.5}
+            />
+          </Dropzone.Reject>
+          {progress ? (
+            <Stack align='center' justify='center'>
+              <RingProgress
+                sections={[{ value: progress, color: 'blue' }]}
+                thickness={2}
+                label={
+                  <Text c='blue' ta='center' size='xl'>
+                    {progress ? `${progress.toFixed(0)}%` : '0%'}
+                  </Text>
+                }
               />
-            </Dropzone.Idle>
-            <div>
-              <Text size='xl' inline>
-                Drag or click to select tour file
-              </Text>
-              <Text size='sm' c='dimmed' inline mt={7}>
-                Inside the zipped file the tour should be contained in a folder
-              </Text>
-            </div>
-          </>
-        )}
-      </Group>
-    </Dropzone>
+              <Text c='dimmed'>Uploading...</Text>
+            </Stack>
+          ) : (
+            <>
+              <Dropzone.Idle>
+                <IconPhoto
+                  style={{
+                    width: rem(52),
+                    height: rem(52),
+                    color: 'var(--mantine-color-dimmed)',
+                  }}
+                  stroke={1.5}
+                />
+              </Dropzone.Idle>
+              <div>
+                <Text size='xl' inline>
+                  Drag or click to select tour file
+                </Text>
+                <Text size='sm' c='dimmed' inline mt={7}>
+                  Inside the zipped file the tour should be contained in a
+                  folder
+                </Text>
+              </div>
+            </>
+          )}
+        </Group>
+      </Dropzone>
+    </>
   );
 }

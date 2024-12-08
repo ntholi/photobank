@@ -1,10 +1,8 @@
 import { Box } from '@mantine/core';
+import { LocationDetails } from '@prisma/client';
 import { notFound } from 'next/navigation';
-import Form from '../../Form';
-import { Prisma } from '@prisma/client';
 import { getLocationDetail, updateLocationDetail } from '../../actions';
-
-type LocationDetail = Prisma.LocationDetailsCreateInput;
+import Form from '../../Form';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -18,8 +16,8 @@ export default async function LocationDetailEdit({ params }: Props) {
   }
 
   const handleSubmit = async (
-    values: LocationDetail,
-  ): Promise<LocationDetail> => {
+    values: LocationDetails,
+  ): Promise<LocationDetails> => {
     'use server';
     await updateLocationDetail(id, values);
     return values;
@@ -30,7 +28,7 @@ export default async function LocationDetailEdit({ params }: Props) {
       <Form
         title={'Edit Location'}
         defaultValues={locationDetails}
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit as any}
       />
     </Box>
   );

@@ -110,7 +110,9 @@ export default class LocationDetailRepository {
     return await prisma.locationDetails.update({
       where: { id },
       data: {
+        //TODO: Use ...rest so we don't miss any other fields by mistake
         about: rest.about,
+        tourUrl: rest.tourUrl,
         coverPhoto: coverPhotoId
           ? { connect: { id: coverPhotoId } }
           : { disconnect: true },
