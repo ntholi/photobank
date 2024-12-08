@@ -5,32 +5,31 @@ import {
   Avatar,
   Flex,
   Group,
+  Image,
+  Indicator,
+  LoadingOverlay,
+  NavLink,
   Stack,
   Text,
-  LoadingOverlay,
-  Image,
   useMantineColorScheme,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { signOut, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import React from 'react';
 import {
   Icon,
   IconChevronRight,
   IconHome,
   IconLogout2,
   IconMap,
-  IconMapPin,
   IconPhoto,
   IconStereoGlasses,
+  IconTags,
   IconUsers,
-  IconVideo,
 } from '@tabler/icons-react';
-import { usePathname } from 'next/navigation';
-import { Indicator, NavLink } from '@mantine/core';
-import Link from 'next/link';
+import { signOut, useSession } from 'next-auth/react';
 import NextImage from 'next/image';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import React from 'react';
 
 const navigation: NavItem[] = [
   {
@@ -57,6 +56,11 @@ const navigation: NavItem[] = [
     label: 'Virtual Tours',
     href: '/admin/virtual-tours',
     icon: IconStereoGlasses,
+  },
+  {
+    label: 'Tags',
+    href: '/admin/tags',
+    icon: IconTags,
   },
 ];
 
