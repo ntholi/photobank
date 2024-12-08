@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import ImagePicker from '../../components/ImagePicker';
 import RichTextField from '../../components/RichTextField';
-import LocationInput from './LocationInput';
+import LocationInput from '../../../../components/LocationInput';
 import TourInput from './TourInput';
 
 export type LocationDetailsFormData = LocationDetails & {
@@ -48,14 +48,14 @@ export default function Form({ onSubmit, value }: Props) {
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <FormHeader title="Locations" isLoading={pending} />
-      <Tabs defaultValue="details">
+      <FormHeader title='Locations' isLoading={pending} />
+      <Tabs defaultValue='details'>
         <Tabs.List>
-          <Tabs.Tab value="details">Details</Tabs.Tab>
-          <Tabs.Tab value="tour">Virtual Tour</Tabs.Tab>
+          <Tabs.Tab value='details'>Details</Tabs.Tab>
+          <Tabs.Tab value='tour'>Virtual Tour</Tabs.Tab>
         </Tabs.List>
 
-        <Tabs.Panel value="details">
+        <Tabs.Panel value='details'>
           <Stack px={'lg'}>
             <LocationInput
               disabled={!!value}
@@ -74,14 +74,14 @@ export default function Form({ onSubmit, value }: Props) {
               <Paper
                 withBorder
                 h={265}
-                w="100%"
+                w='100%'
                 bg={colorScheme == 'dark' ? 'dark.7' : 'gray.1'}
               ></Paper>
             )}
-            <RichTextField label="About" {...form.getInputProps('about')} />
+            <RichTextField label='About' {...form.getInputProps('about')} />
           </Stack>
         </Tabs.Panel>
-        <Tabs.Panel value="tour">
+        <Tabs.Panel value='tour'>
           <Stack p={'lg'}>
             <TourInput form={form} />
           </Stack>

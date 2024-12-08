@@ -1,7 +1,7 @@
 'use client';
 
-import LocationInput from '@/app/old/admin/locations/LocationInput';
 import { Form } from '@/components/adease';
+import LocationInput from '@/components/LocationInput';
 import { sanitize } from '@/utils';
 import { TextInput } from '@mantine/core';
 import { Location, Prisma } from '@prisma/client';
