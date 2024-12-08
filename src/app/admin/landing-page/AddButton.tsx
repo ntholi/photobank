@@ -129,10 +129,13 @@ function TagSelect({ setTag }: TagSelectProps) {
     });
   }, []);
 
+  if (data.length === 0) return null;
+
   return (
     <Chip.Group
-      onChange={(it) => {
-        setTag(data.find((i) => i.name === it) || null);
+      onChange={(value) => {
+        const selectedTag = data.find((i) => i.name === value) || null;
+        setTag(selectedTag);
       }}
       defaultValue={'All'}
     >
