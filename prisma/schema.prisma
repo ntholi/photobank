@@ -155,6 +155,7 @@ model HomePhoto {
   id        Int      @id @default(autoincrement())
   photo     Photo    @relation(fields: [photoId], references: [id])
   photoId   String   @unique @map("photo_id")
+  order     Int      @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

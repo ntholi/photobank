@@ -1,41 +1,34 @@
 'use client';
-import { ActionIcon, Box, BoxProps, Text } from '@mantine/core';
-import { modals } from '@mantine/modals';
-import { IconTrashFilled } from '@tabler/icons-react';
+import { ActionIcon, ActionIconProps } from '@mantine/core';
+import { IconTrash } from '@tabler/icons-react';
 
-type Props = {
+interface DeleteButtonProps extends ActionIconProps {
   photo: {
     id: string;
-    fileName: string;
   };
-  handleDelete: (photoId: string) => Promise<void>;
-} & BoxProps;
+  handleDelete: () => Promise<void>;
+}
 
-export default function DeleteButton({ photo, handleDelete, ...rest }: Props) {
-  const openModal = () =>
-    modals.openConfirmModal({
-      title: 'Confirm Delete',
-      children: (
-        <Text size="sm">Are you sure you want to delete this photo?</Text>
-      ),
-      labels: { confirm: 'Delete', cancel: 'Cancel' },
-      confirmProps: { color: 'red' },
-      onCancel: () => console.log('Cancel'),
-      onConfirm: () => handleDelete(photo.id),
-    });
+export default function DeleteButton({
+  photo,
+  handleDelete,
+  ...props
+}: DeleteButtonProps) {
+  const onDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await handleDelete();
+  };
 
   return (
-    <Box {...rest}>
-      <ActionIcon
-        color="red"
-        pos={'absolute'}
-        top={5}
-        right={5}
-        variant="default"
-        onClick={openModal}
-      >
-        <IconTrashFilled size={'1rem'} />
-      </ActionIcon>
-    </Box>
+    <ActionIcon
+      variant='filled'
+      color='red'
+      onClick={onDelete}
+      {...props}
+      style={{ touchAction: 'none' }}
+    >
+      <IconTrash size={16} />
+    </ActionIcon>
   );
 }

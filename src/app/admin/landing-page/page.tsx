@@ -1,50 +1,61 @@
-import { thumbnail } from '@/lib/config/urls';
+'use client';
+
 import prisma from '@/lib/prisma';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import {
-  Box,
+  Divider,
   Flex,
-  Image,
   Paper,
   SimpleGrid,
   Stack,
-  Title,
   Text,
-  Divider,
+  Title,
 } from '@mantine/core';
 import { revalidatePath } from 'next/cache';
 import AddButton from './AddButton';
-import DeleteButton from './DeleteButton';
+import { SortablePhoto } from './SortablePhoto';
+import { useState, useEffect } from 'react';
+import { handleAdd, handleDelete, handleReorder } from './actions';
 
-export default async function HomePage() {
-  const photos = await prisma.homePhoto.findMany({
-    select: { photo: true },
-    orderBy: { createdAt: 'desc' },
-  });
+interface HomePhoto {
+  id: number;
+  photo: {
+    id: string;
+    fileName: string;
+  };
+  order: number;
+}
 
-  async function handleAdd(photoId: string) {
-    'use server';
-    try {
-      await prisma.homePhoto.create({
-        data: {
-          photoId,
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
-    revalidatePath('/admin/landing-page');
-    revalidatePath('/');
+export default function HomePage() {
+  const [photos, setPhotos] = useState<HomePhoto[]>([]);
+
+  useEffect(() => {
+    fetch('/api/home-photos')
+      .then((res) => res.json())
+      .then((data) => setPhotos(data));
+  }, []);
+
+  async function handlePhotoAdd(photoId: string) {
+    await handleAdd(photoId);
+    const res = await fetch('/api/home-photos');
+    const data = await res.json();
+    setPhotos(data);
   }
 
-  async function handleDelete(photoId: string) {
-    'use server';
-    await prisma.homePhoto.delete({
-      where: {
-        photoId,
-      },
-    });
-    revalidatePath('/admin/landing-page');
-    revalidatePath('/');
+  async function handlePhotoDelete(id: number) {
+    await handleDelete(id);
+    setPhotos(photos.filter((photo) => photo.id !== id));
+  }
+
+  async function handleDragEnd(event: any) {
+    const { active, over } = event;
+    if (active.id !== over.id) {
+      await handleReorder(active.id, over.id);
+      const res = await fetch('/api/home-photos');
+      const data = await res.json();
+      setPhotos(data);
+    }
   }
 
   return (
@@ -54,30 +65,37 @@ export default async function HomePage() {
           <Title fw={'lighter'} size={18} c='gray'>
             Landing Page
           </Title>
-          <AddButton handleAdd={handleAdd} />
+          <AddButton handleAdd={handlePhotoAdd} />
         </Flex>
       </Paper>
       <Paper withBorder p={50}>
         <Stack gap={'xs'}>
           <Text size='0.9rem'>
-            Image that will be shown on the landing page
+            Image that will be shown on the landing page. Drag and drop to
+            reorder.
           </Text>
           <Divider />
         </Stack>
-        <SimpleGrid cols={4} mt={'xl'}>
-          {photos.map((it) => (
-            <Box key={it.photo.id} pos={'relative'}>
-              <Image src={thumbnail(it.photo.fileName)} h={200} />
-              <DeleteButton
-                pos={'absolute'}
-                top={5}
-                right={5}
-                photo={it.photo}
-                handleDelete={handleDelete}
-              />
-            </Box>
-          ))}
-        </SimpleGrid>
+        <DndContext
+          onDragEnd={handleDragEnd}
+          collisionDetection={closestCenter}
+        >
+          <SortableContext
+            items={photos.map((p) => p.id)}
+            strategy={rectSortingStrategy}
+          >
+            <SimpleGrid cols={4} mt={'xl'}>
+              {photos.map((item) => (
+                <SortablePhoto
+                  key={item.id}
+                  id={item.id}
+                  photo={item.photo}
+                  handleDelete={handlePhotoDelete}
+                />
+              ))}
+            </SimpleGrid>
+          </SortableContext>
+        </DndContext>
       </Paper>
     </Stack>
   );
