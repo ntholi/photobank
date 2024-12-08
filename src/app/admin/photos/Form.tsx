@@ -1,14 +1,12 @@
 'use client';
 
-import { Prisma } from '@prisma/client';
-import { Form } from '@/components/adease';
-import { TextInput } from '@mantine/core';
-import { useRouter } from 'next/navigation';
 import LocationInput from '@/app/old/admin/locations/LocationInput';
-import { useState } from 'react';
-import { Location } from '@prisma/client';
+import { Form } from '@/components/adease';
 import { sanitize } from '@/utils';
-import UserInput from '@/components/UserInput';
+import { TextInput } from '@mantine/core';
+import { Location, Prisma } from '@prisma/client';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type Photo = Omit<Prisma.PhotoUpdateInput, 'location'> & {
   location?:
@@ -41,14 +39,16 @@ export default function PhotoForm({ onSubmit, defaultValues, title }: Props) {
   return (
     <Form
       title={title}
-      action={(values) =>
-        onSubmit({
-          ...values,
+      action={(values: Photo) => {
+        const updateData: Photo = {
+          status: values.status,
+          description: values.description,
           location: location
             ? { connect: { id: location.id } }
             : { disconnect: true },
-        })
-      }
+        };
+        return onSubmit(updateData);
+      }}
       queryKey={['photos']}
       defaultValues={sanitize(defaultValues)}
       onSuccess={({ id }) => {
@@ -57,14 +57,12 @@ export default function PhotoForm({ onSubmit, defaultValues, title }: Props) {
     >
       {(form) => (
         <>
-          <TextInput label='File Name' {...form.getInputProps('fileName')} />
           <TextInput label='Status' {...form.getInputProps('status')} />
           <TextInput
             label='Description'
             {...form.getInputProps('description')}
           />
           <LocationInput location={location} setLocation={setLocation} />
-          <UserInput label='User' {...form.getInputProps('userId')} />
         </>
       )}
     </Form>
