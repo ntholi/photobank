@@ -1,5 +1,5 @@
 import '@mantine/dropzone/styles.css';
-import { Group, RingProgress, Text, rem } from '@mantine/core';
+import { Group, RingProgress, Stack, Text, rem } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import axios, { AxiosProgressEvent } from 'axios';
@@ -84,35 +84,40 @@ export default function TourInput({ value, onChange }: Props) {
             stroke={1.5}
           />
         </Dropzone.Reject>
-        <Dropzone.Idle>
-          <IconPhoto
-            style={{
-              width: rem(52),
-              height: rem(52),
-              color: 'var(--mantine-color-dimmed)',
-            }}
-            stroke={1.5}
-          />
-        </Dropzone.Idle>
         {progress ? (
-          <RingProgress
-            sections={[{ value: progress, color: 'blue' }]}
-            thickness={2}
-            label={
-              <Text c='blue' ta='center' size='xl'>
-                {progress ? `${progress.toFixed(0)}%` : '0%'}
-              </Text>
-            }
-          />
+          <Stack align='center' justify='center'>
+            <RingProgress
+              sections={[{ value: progress, color: 'blue' }]}
+              thickness={2}
+              label={
+                <Text c='blue' ta='center' size='xl'>
+                  {progress ? `${progress.toFixed(0)}%` : '0%'}
+                </Text>
+              }
+            />
+            <Text c='dimmed'>Uploading...</Text>
+          </Stack>
         ) : (
-          <div>
-            <Text size='xl' inline>
-              Drag or click to select tour file
-            </Text>
-            <Text size='sm' c='dimmed' inline mt={7}>
-              Inside the zipped file the tour should be contained in a folder
-            </Text>
-          </div>
+          <>
+            <Dropzone.Idle>
+              <IconPhoto
+                style={{
+                  width: rem(52),
+                  height: rem(52),
+                  color: 'var(--mantine-color-dimmed)',
+                }}
+                stroke={1.5}
+              />
+            </Dropzone.Idle>
+            <div>
+              <Text size='xl' inline>
+                Drag or click to select tour file
+              </Text>
+              <Text size='sm' c='dimmed' inline mt={7}>
+                Inside the zipped file the tour should be contained in a folder
+              </Text>
+            </div>
+          </>
         )}
       </Group>
     </Dropzone>
