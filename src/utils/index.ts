@@ -22,17 +22,24 @@ export function variableNameToLabel(str: string) {
 }
 
 /**
- * Sanitizes an object by replacing string values that are null with an empty string.
+ * Sanitizes an object by replacing null values with empty strings for string fields.
  * @param values The object to sanitize.
  * @returns The sanitized object.
  */
-export function sanitize<T>(values: T) {
+export function sanitize<T extends {}>(values: T) {
   const result = values
     ? Object.fromEntries(
-        Object.entries(values).map(([key, value]) => [
-          key,
-          typeof key === 'string' && value === null ? '' : value,
-        ]),
+        Object.entries(values).map(([key, value]) => {
+          if (value === null) {
+            const isStringField =
+              typeof (values as any)[key] === 'string' ||
+              (values as any)[key] === null;
+            if (isStringField) {
+              return [key, ''];
+            }
+          }
+          return [key, value];
+        }),
       )
     : undefined;
 
