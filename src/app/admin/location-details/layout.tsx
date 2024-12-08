@@ -7,11 +7,11 @@ import { getAllLocationDetails } from './actions';
 export default function Layout({ children }: PropsWithChildren) {
   return (
     <ListLayout
-      path={'/admin/locationDetails'}
-      queryKey={['locationDetails']}
+      path={'/admin/location-details'}
+      queryKey={['location-details']}
       getItems={getAllLocationDetails}
       actionIcons={[
-        <NewLink key={'new-link'} href='/admin/locationDetails/new' />,
+        <NewLink key={'new-link'} href='/admin/location-details/new' />,
       ]}
       renderItem={(it) => <ListItem id={it.id} label={it.id} />}
     >

@@ -2,7 +2,7 @@
 
 import { Prisma } from '@prisma/client';
 import { Form } from '@/components/adease';
-import { TextInput } from '@mantine/core';
+import { Tabs, TextInput } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 
 type LocationDetail = Prisma.LocationDetailsCreateInput;
@@ -28,22 +28,30 @@ export default function LocationDetailForm({
     <Form
       title={title}
       action={onSubmit}
-      queryKey={['locationDetails']}
+      queryKey={['location-details']}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
-        router.push(`/admin/locationDetails/${id}`);
+        router.push(`/admin/location-details/${id}`);
       }}
     >
       {(form) => (
-        <>
-          <TextInput label='Location' {...form.getInputProps('location')} />
-          <TextInput
-            label='Cover Photo'
-            {...form.getInputProps('coverPhoto')}
-          />
-          <TextInput label='About' {...form.getInputProps('about')} />
-          <TextInput label='Tour Url' {...form.getInputProps('tourUrl')} />
-        </>
+        <Tabs defaultValue='details'>
+          <Tabs.List>
+            <Tabs.Tab value='details'>Details</Tabs.Tab>
+            <Tabs.Tab value='tour'>Virtual Tour</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel value='details'>
+            <TextInput label='Location' {...form.getInputProps('location')} />
+            <TextInput
+              label='Cover Photo'
+              {...form.getInputProps('coverPhoto')}
+            />
+            <TextInput label='About' {...form.getInputProps('about')} />
+          </Tabs.Panel>
+          <Tabs.Panel value='tour'>
+            <TextInput label='Tour Url' {...form.getInputProps('tourUrl')} />
+          </Tabs.Panel>
+        </Tabs>
       )}
     </Form>
   );

@@ -19,6 +19,8 @@ import {
   Icon,
   IconChevronRight,
   IconLogout2,
+  IconMap,
+  IconMapPin,
   IconPhoto,
   IconUsers,
 } from '@tabler/icons-react';
@@ -37,6 +39,11 @@ const navigation: NavItem[] = [
     label: 'Photos',
     href: '/admin/photos',
     icon: IconPhoto,
+  },
+  {
+    label: 'Locations',
+    href: '/admin/location-details',
+    icon: IconMap,
   },
 ];
 
