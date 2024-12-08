@@ -64,7 +64,7 @@ export default function PhotoForm({ onSubmit, defaultValues, title }: Props) {
             {...form.getInputProps('description')}
           />
           <LocationInput location={location} setLocation={setLocation} />
-          <UserInput {...form.getInputProps('user')} />
+          <UserInput label='User' {...form.getInputProps('userId')} />
         </>
       )}
     </Form>

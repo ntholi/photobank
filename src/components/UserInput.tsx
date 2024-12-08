@@ -11,12 +11,13 @@ type UserOption = {
 };
 
 interface Props extends Omit<AutocompleteProps, 'data'> {
+  label?: string;
   value?: string;
   onChange?: (value: string | null) => void;
 }
 
 export default forwardRef<HTMLInputElement, Props>(function UserInput(
-  { value, onChange, ...props },
+  { value, onChange, label, ...props },
   ref,
 ) {
   const [search, setSearch] = useState('');
@@ -42,7 +43,7 @@ export default forwardRef<HTMLInputElement, Props>(function UserInput(
   return (
     <Autocomplete
       ref={ref}
-      label='User'
+      label={label || 'User'}
       value={value || ''}
       onChange={onChange}
       onInput={(e) => setSearch(e.currentTarget.value)}
