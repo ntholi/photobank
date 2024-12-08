@@ -28,7 +28,7 @@ export default async function PhotoEdit({ params }: Props) {
       <Form
         title={'Edit Photo'}
         defaultValues={photos}
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit as any}
       />
     </Box>
   );

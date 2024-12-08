@@ -41,6 +41,7 @@ export default function PhotoForm({ onSubmit, defaultValues, title }: Props) {
       title={title}
       action={(values: Photo) => {
         const updateData: Photo = {
+          id: values.id,
           status: values.status,
           description: values.description,
           location: location
