@@ -14,7 +14,7 @@ export async function GET(req: Request) {
           },
         },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { order: 'asc' },
     })
   ).map((it) => it.photo);
 

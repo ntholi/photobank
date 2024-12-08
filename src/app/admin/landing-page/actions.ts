@@ -3,6 +3,13 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
+export async function getHomePhotos() {
+  return await prisma.homePhoto.findMany({
+    select: { id: true, photo: true, order: true },
+    orderBy: { order: 'asc' },
+  });
+}
+
 export async function handleAdd(photoId: string) {
   try {
     await prisma.homePhoto.create({

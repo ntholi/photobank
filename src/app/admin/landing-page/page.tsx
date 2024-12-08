@@ -1,6 +1,5 @@
 'use client';
 
-import prisma from '@/lib/prisma';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import {
@@ -12,11 +11,15 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { revalidatePath } from 'next/cache';
+import { useEffect, useState } from 'react';
+import {
+  getHomePhotos,
+  handleAdd,
+  handleDelete,
+  handleReorder,
+} from './actions';
 import AddButton from './AddButton';
 import { SortablePhoto } from './SortablePhoto';
-import { useState, useEffect } from 'react';
-import { handleAdd, handleDelete, handleReorder } from './actions';
 
 interface HomePhoto {
   id: number;
@@ -31,9 +34,7 @@ export default function HomePage() {
   const [photos, setPhotos] = useState<HomePhoto[]>([]);
 
   useEffect(() => {
-    fetch('/api/home-photos')
-      .then((res) => res.json())
-      .then((data) => setPhotos(data));
+    getHomePhotos().then((data) => setPhotos(data));
   }, []);
 
   async function handlePhotoAdd(photoId: string) {
