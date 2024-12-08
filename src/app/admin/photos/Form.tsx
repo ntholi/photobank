@@ -8,6 +8,7 @@ import LocationInput from '@/app/old/admin/locations/LocationInput';
 import { useState } from 'react';
 import { Location } from '@prisma/client';
 import { sanitize } from '@/utils';
+import UserInput from '@/components/UserInput';
 
 type Photo = Omit<Prisma.PhotoUpdateInput, 'location'> & {
   location?:
@@ -63,7 +64,7 @@ export default function PhotoForm({ onSubmit, defaultValues, title }: Props) {
             {...form.getInputProps('description')}
           />
           <LocationInput location={location} setLocation={setLocation} />
-          <TextInput label='User' {...form.getInputProps('user')} />
+          <UserInput {...form.getInputProps('user')} />
         </>
       )}
     </Form>
