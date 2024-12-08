@@ -15,7 +15,7 @@ import LocationInput from '@/components/LocationInput';
 import { LocationDetailsCreate } from '@/repositories/location-details/repository';
 import { sanitize } from '@/utils';
 import ImagePicker from '@/components/ImagePicker';
-import TourInput from './TourInput';
+import TourInput from '../virtual-tours/TourInput';
 
 type Props = {
   onSubmit: (values: LocationDetailsCreate) => Promise<LocationDetailsCreate>;

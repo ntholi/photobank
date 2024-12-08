@@ -4,7 +4,7 @@ import { Form } from '@/components/adease';
 import { Stack, Autocomplete } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { LocationDetails } from '@prisma/client';
-import TourInput from '../location-details/TourInput';
+import TourInput from './TourInput';
 import { getAllLocationDetails } from '../location-details/actions';
 
 type Props = {

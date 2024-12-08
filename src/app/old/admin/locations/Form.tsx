@@ -8,8 +8,7 @@ import { useTransition } from 'react';
 import ImagePicker from '../../../../components/ImagePicker';
 import RichTextField from '../../components/RichTextField';
 import LocationInput from '../../../../components/LocationInput';
-import TourInput from '../../../admin/location-details/TourInput';
-
+import TourInput from '../../../admin/virtual-tours/TourInput';
 export type LocationDetailsFormData = LocationDetails & {
   location: Location | null;
   coverPhoto: Photo | null;
