@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import RichTextField from '@/app/old/components/RichTextField';
 import LocationInput from '@/components/LocationInput';
 import { LocationDetailsCreate } from '@/repositories/location-details/repository';
+import { sanitize } from '@/utils';
 
 type Props = {
   onSubmit: (values: LocationDetailsCreate) => Promise<LocationDetailsCreate>;
@@ -42,7 +43,7 @@ export default function LocationDetailForm({
       title={title}
       action={onSubmit}
       queryKey={['location-details']}
-      defaultValues={defaultValues}
+      defaultValues={sanitize(defaultValues)}
       onSuccess={({ id }) => {
         router.push(`/admin/location-details/${id}`);
       }}
