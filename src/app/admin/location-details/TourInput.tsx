@@ -1,19 +1,19 @@
 import { Group, RingProgress, Text, rem } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
-import { useForm } from '@mantine/form';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
 import axios, { AxiosProgressEvent } from 'axios';
-import { use, useEffect, useState } from 'react';
-import { LocationDetailsFormData } from './Form';
+import { useEffect, useState } from 'react';
 
 type Props = {
-  form: ReturnType<typeof useForm<LocationDetailsFormData>>;
+  value?: string;
+  onChange?: (value: string) => void;
+  onBlur?: () => void;
 };
 
 const toursUrl = //TODO: This should be an environment variable
   'http://lehakoe-virtual-tours.s3-website.eu-central-1.amazonaws.com/';
 
-export default function TourInput({ form }: Props) {
+export default function TourInput({ value, onChange }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number>();
 
@@ -34,7 +34,7 @@ export default function TourInput({ form }: Props) {
         });
         if (fileName) {
           setProgress(0);
-          form.setFieldValue('tourUrl', `${toursUrl}${fileName.split('.')[0]}`);
+          onChange?.(`${toursUrl}${fileName.split('.')[0]}`);
         }
       } catch (error) {
         console.error(error);
@@ -58,8 +58,8 @@ export default function TourInput({ form }: Props) {
       onReject={(files) => console.log('rejected files', files)}
     >
       <Group
-        justify="center"
-        gap="xl"
+        justify='center'
+        gap='xl'
         mih={220}
         style={{ pointerEvents: 'none' }}
       >
@@ -98,17 +98,17 @@ export default function TourInput({ form }: Props) {
             sections={[{ value: progress, color: 'blue' }]}
             thickness={2}
             label={
-              <Text c="blue" ta="center" size="xl">
+              <Text c='blue' ta='center' size='xl'>
                 {progress ? `${progress.toFixed(0)}%` : '0%'}
               </Text>
             }
           />
         ) : (
           <div>
-            <Text size="xl" inline>
+            <Text size='xl' inline>
               Drag or click to select tour file
             </Text>
-            <Text size="sm" c="dimmed" inline mt={7}>
+            <Text size='sm' c='dimmed' inline mt={7}>
               Inside the zipped file the tour should be contained in a folder
             </Text>
           </div>

@@ -15,6 +15,7 @@ import LocationInput from '@/components/LocationInput';
 import { LocationDetailsCreate } from '@/repositories/location-details/repository';
 import { sanitize } from '@/utils';
 import ImagePicker from '@/components/ImagePicker';
+import TourInput from './TourInput';
 
 type Props = {
   onSubmit: (values: LocationDetailsCreate) => Promise<LocationDetailsCreate>;
@@ -77,7 +78,9 @@ export default function LocationDetailForm({
             </Stack>
           </Tabs.Panel>
           <Tabs.Panel value='tour' p={'sm'}>
-            <TextInput label='Tour Url' {...form.getInputProps('tourUrl')} />
+            <Stack p={'lg'}>
+              <TourInput {...form.getInputProps('tourUrl')} />
+            </Stack>
           </Tabs.Panel>
         </Tabs>
       )}
