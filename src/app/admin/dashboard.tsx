@@ -1,14 +1,30 @@
 'use client';
 import { Shell } from '@/components/adease';
-import { ActionIcon, Avatar, Flex, Group, Stack, Text, LoadingOverlay, Image } from '@mantine/core';
+import {
+  ActionIcon,
+  Avatar,
+  Flex,
+  Group,
+  Stack,
+  Text,
+  LoadingOverlay,
+  Image,
+  useMantineColorScheme,
+} from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import React from 'react'
-import { Icon, IconChevronRight, IconLogout2, IconUsers } from '@tabler/icons-react';
+import React from 'react';
+import {
+  Icon,
+  IconChevronRight,
+  IconLogout2,
+  IconUsers,
+} from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
 import { Indicator, NavLink } from '@mantine/core';
 import Link from 'next/link';
+import NextImage from 'next/image';
 
 const navigation: NavItem[] = [
   {
@@ -16,14 +32,11 @@ const navigation: NavItem[] = [
     href: '/admin/users',
     icon: IconUsers,
   },
-]
+];
 
-export default function Dashboard({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Dashboard({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
+  const { colorScheme } = useMantineColorScheme();
 
   if (status == 'loading') {
     return (
@@ -37,11 +50,20 @@ export default function Dashboard({
     <Shell>
       <Shell.Header>
         <Group>
-          <Image src={'/images/logo.png'} height={40} alt='logo' />
+          <Link href='/admin'>
+            <Image
+              alt=''
+              src={`/images/logo/${colorScheme === 'dark' ? 'white.png' : 'black.png'}`}
+              h={50}
+              component={NextImage}
+              width={100}
+              height={100}
+            />
+          </Link>
         </Group>
       </Shell.Header>
       <Shell.Navigation>
-        <Navigation navigation={navigation}/>
+        <Navigation navigation={navigation} />
       </Shell.Navigation>
       <Shell.Body>{children}</Shell.Body>
       <Shell.User>
@@ -55,7 +77,7 @@ function UserButton() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  if(!session?.user){
+  if (!session?.user) {
     router.push('/api/auth/signin');
   }
 
@@ -94,8 +116,8 @@ export type NavItem = {
   children?: NavItem[];
   notificationCount?: () => number;
 };
-  
-export function Navigation({navigation}: {navigation: NavItem[]}) {
+
+export function Navigation({ navigation }: { navigation: NavItem[] }) {
   return (
     <>
       {navigation.map((item, index) => (
@@ -110,21 +132,21 @@ function DisplayWithNotification({ item }: { item: NavItem }) {
     const value = item.notificationCount();
     return (
       <Indicator
-      position='middle-end'
-      color='red'
-      offset={20}
-      size={23}
-      label={value}
-      disabled={!value}
-    >
+        position='middle-end'
+        color='red'
+        offset={20}
+        size={23}
+        label={value}
+        disabled={!value}
+      >
         <ItemDisplay item={item} />
       </Indicator>
     );
   }
   return <ItemDisplay item={item} />;
-};
+}
 
-function ItemDisplay({ item }: { item: NavItem }){
+function ItemDisplay({ item }: { item: NavItem }) {
   const pathname = usePathname();
   const Icon = item.icon;
   const navLink = (
@@ -133,8 +155,10 @@ function ItemDisplay({ item }: { item: NavItem }){
       component={item.href ? Link : undefined}
       href={item.href || ''}
       active={item.href ? pathname.startsWith(item.href) : false}
-      leftSection={<Icon size="1.1rem" />}
-      rightSection={item.href ? <IconChevronRight size="0.8rem" stroke={1.5} /> : undefined}
+      leftSection={<Icon size='1.1rem' />}
+      rightSection={
+        item.href ? <IconChevronRight size='0.8rem' stroke={1.5} /> : undefined
+      }
       opened={!!item.children}
     >
       {item.children?.map((child, index) => (
@@ -143,4 +167,4 @@ function ItemDisplay({ item }: { item: NavItem }){
     </NavLink>
   );
   return navLink;
-};
+}
