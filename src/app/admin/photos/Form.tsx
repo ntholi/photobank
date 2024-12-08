@@ -14,13 +14,15 @@ type Props = {
   onError?: (
     error: Error | React.SyntheticEvent<HTMLDivElement, Event>
   ) => void;
+  title?: string;
 };
 
-export default function PhotoForm({ onSubmit, defaultValues }: Props) {
+export default function PhotoForm({ onSubmit, defaultValues, title }: Props) {
   const router = useRouter();
   
   return (
     <Form 
+      title={title}
       action={onSubmit} 
       queryKey={['photos']}
 

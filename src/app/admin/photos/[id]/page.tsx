@@ -14,15 +14,15 @@ type Props = {
 export default async function PhotoDetails({ params }: Props) {
   const { id } = await params;
   const photos = await getPhoto(id);
-  
+
   if (!photos) {
     return notFound();
   }
 
   return (
     <DetailsView>
-      <DetailsViewHeader 
-        title={'Photo'} 
+      <DetailsViewHeader
+        title={'Photo'}
         queryKey={['photos']}
         handleDelete={async () => {
           'use server';
@@ -33,8 +33,6 @@ export default async function PhotoDetails({ params }: Props) {
         <FieldView label='File Name'>{photos.fileName}</FieldView>
         <FieldView label='Status'>{photos.status}</FieldView>
         <FieldView label='Description'>{photos.description}</FieldView>
-        <FieldView label='Location'>{photos.location}</FieldView>
-        <FieldView label='User'>{photos.user}</FieldView>
       </DetailsViewBody>
     </DetailsView>
   );
