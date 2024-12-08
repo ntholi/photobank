@@ -1,8 +1,6 @@
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import axios from 'axios';
-import { imageProcessorUrl } from '@/lib/config/urls';
 import { auth } from '@/auth';
+import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { processImage } from '../../../server/photos/imageService';
 

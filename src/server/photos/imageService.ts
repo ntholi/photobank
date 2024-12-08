@@ -80,10 +80,15 @@ export async function processImage(fileName: string): Promise<ProcessedImages> {
     ]);
 
     const labels = await detectLabels(thumbnailKey);
+
+    const uniqueLabels = labels.filter(
+      (label, index) =>
+        labels.findIndex((l) => l.name === label.name) === index,
+    );
     return {
       thumbnail: thumbnailKey,
       watermarked: watermarkedKey,
-      labels: labels,
+      labels: uniqueLabels,
     };
   } catch (error) {
     console.error('Error processing image:', error);
