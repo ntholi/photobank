@@ -14,6 +14,7 @@ export async function GET(req: Request, res: Response) {
       {
         name: 'All',
         type: 'all',
+        id: 0,
       },
       ...filters,
     ],
