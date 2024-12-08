@@ -1,7 +1,7 @@
 'use client';
 
+import { ListItem, ListLayout } from '@/components/adease';
 import { PropsWithChildren } from 'react';
-import { ListItem, ListLayout, NewLink } from '@/components/adease';
 import { getAllUsers } from './actions';
 
 export default function Layout({ children }: PropsWithChildren) {
@@ -10,7 +10,6 @@ export default function Layout({ children }: PropsWithChildren) {
       path={'/admin/users'}
       queryKey={['users']}
       getItems={getAllUsers}
-      actionIcons={[<NewLink key={'new-link'} href='/admin/users/new' />]}
       renderItem={(it) => (
         <ListItem
           id={it.id}
