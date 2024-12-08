@@ -10,7 +10,14 @@ export default class PhotoRepository {
 
   async findById(id: string) {
     return await prisma.photo.findUnique({
-      where: { id },
+      where: {
+        id: id,
+      },
+      include: {
+        labels: true,
+        user: true,
+        location: true,
+      },
     });
   }
 
@@ -25,7 +32,7 @@ export default class PhotoRepository {
     page: number = 1,
     search: string,
     searchProperties: (keyof Photo)[] = [],
-    pageSize: number = 15
+    pageSize: number = 15,
   ) {
     try {
       const offset = (page - 1) * pageSize;
