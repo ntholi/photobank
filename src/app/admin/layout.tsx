@@ -2,10 +2,10 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
 
+import { Metadata } from 'next';
+import React from 'react';
 import Dashboard from './dashboard';
 import Providers from './providers';
-import React from 'react';
-import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Admin',
