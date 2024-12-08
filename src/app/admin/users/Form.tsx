@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { Form } from '@/components/adease';
 import { TextInput, Checkbox } from '@mantine/core';
 import { useRouter } from 'next/navigation';
+import { sanitize } from '@/utils';
 
 type User = Prisma.UserCreateInput;
 
@@ -12,19 +13,18 @@ type Props = {
   defaultValues?: Prisma.UserGetPayload<{}>;
   onSuccess?: (value: User) => void;
   onError?: (
-    error: Error | React.SyntheticEvent<HTMLDivElement, Event>
+    error: Error | React.SyntheticEvent<HTMLDivElement, Event>,
   ) => void;
 };
 
 export default function UserForm({ onSubmit, defaultValues }: Props) {
   const router = useRouter();
-  
-  return (
-    <Form 
-      action={onSubmit} 
-      queryKey={['users']}
 
-      defaultValues={defaultValues}
+  return (
+    <Form
+      action={onSubmit}
+      queryKey={['users']}
+      defaultValues={sanitize(defaultValues)}
       onSuccess={({ id }) => {
         router.push(`/admin/users/${id}`);
       }}

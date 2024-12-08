@@ -20,3 +20,21 @@ export function variableNameToLabel(str: string) {
     .replace(/^./, (str) => str.toUpperCase())
     .trim();
 }
+
+/**
+ * Sanitizes an object by replacing string values that are null with an empty string.
+ * @param values The object to sanitize.
+ * @returns The sanitized object.
+ */
+export function sanitize<T>(values: T) {
+  const result = values
+    ? Object.fromEntries(
+        Object.entries(values).map(([key, value]) => [
+          key,
+          typeof key === 'string' && value === null ? '' : value,
+        ]),
+      )
+    : undefined;
+
+  return result as T;
+}

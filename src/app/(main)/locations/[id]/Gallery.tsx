@@ -1,6 +1,6 @@
 'use client';
 import { thumbnail } from '@/lib/config/urls';
-import { shorten } from '@/lib/utils';
+import { shorten } from '@/utils';
 import { Image, Spinner } from '@nextui-org/react';
 import { Location, Photo, Tag } from '@prisma/client';
 import axios from 'axios';

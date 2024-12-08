@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { PhotoWithData } from '@/lib/types';
 import MotionImage from './MotionImage';
-import { shorten } from '@/lib/utils';
+import { shorten } from '@/utils';
 
 type Props = {
   data: PhotoWithData;

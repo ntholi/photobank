@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { toDateTime } from '@/lib/utils';
+import { toDateTime } from '@/utils';
 import {
   Anchor,
   Badge,
@@ -38,7 +38,7 @@ export default async function UserPage(props: Props) {
   const rows = data.map((user) => (
     <TableTr key={user.id}>
       <TableTd>
-        <Anchor component={Link} target="_blank" href={profilePath(user)}>
+        <Anchor component={Link} target='_blank' href={profilePath(user)}>
           {user.id}
         </Anchor>
       </TableTd>
@@ -46,7 +46,7 @@ export default async function UserPage(props: Props) {
       <TableTd>{user.email}</TableTd>
       <TableTd>{user.role}</TableTd>
       <TableTd>
-        <Badge variant="default" size="sm">
+        <Badge variant='default' size='sm'>
           {user.blocked ? 'Blocked' : 'Active'}
         </Badge>
       </TableTd>
@@ -59,16 +59,16 @@ export default async function UserPage(props: Props) {
 
   return (
     <Stack>
-      <Paper p="lg" withBorder>
+      <Paper p='lg' withBorder>
         <Group>
-          <Title fw={400} size={18} c="gray">
+          <Title fw={400} size={18} c='gray'>
             Users
           </Title>
-          <Divider orientation="vertical" />
+          <Divider orientation='vertical' />
           <UserFilter />
         </Group>
       </Paper>
-      <Paper p="lg" withBorder>
+      <Paper p='lg' withBorder>
         <Table highlightOnHover>
           <TableThead>
             <TableTr>
