@@ -1,3 +1,4 @@
+import '@mantine/dropzone/styles.css';
 import { Group, RingProgress, Text, rem } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react';
