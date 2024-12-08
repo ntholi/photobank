@@ -1,16 +1,21 @@
 'use client';
 
 import { Form } from '@/components/adease';
-import { Stack, Autocomplete } from '@mantine/core';
+import { Autocomplete, Stack } from '@mantine/core';
+import { Location, LocationDetails } from '@prisma/client';
 import { useEffect, useState } from 'react';
-import { LocationDetails } from '@prisma/client';
+import { getLocationDetailsWithoutTour } from './actions';
 import TourInput from './TourInput';
-import { getAllLocationDetails } from '../location-details/actions';
+
+type LocationDetailsWithLocation = LocationDetails & {
+  location: Location;
+};
 
 type Props = {
   onSubmit: (values: {
     locationDetailsId: string;
     tourUrl: string;
+    locationName?: string;
   }) => Promise<any>;
   defaultValues?: {
     locationDetailsId?: string;
@@ -25,14 +30,14 @@ export default function VirtualTourForm({
   defaultValues,
   title,
 }: Props) {
-  const [locations, setLocations] = useState<LocationDetails[]>([]);
+  const [locations, setLocations] = useState<LocationDetailsWithLocation[]>([]);
   const [locationNames, setLocationNames] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchLocations = async () => {
-      const result = await getAllLocationDetails();
-      setLocations(result.items);
-      setLocationNames(result.items.map((it) => it.location.name));
+      const result = await getLocationDetailsWithoutTour();
+      setLocations(result as LocationDetailsWithLocation[]);
+      setLocationNames(result.map((it) => it.location.name));
     };
     fetchLocations();
   }, []);
@@ -58,9 +63,10 @@ export default function VirtualTourForm({
               }
             }}
           />
-          {form.values.locationDetailsId && (
-            <TourInput {...form.getInputProps('tourUrl')} />
-          )}
+          <TourInput
+            disabled={!form.values.locationDetailsId}
+            {...form.getInputProps('tourUrl')}
+          />
         </Stack>
       )}
     </Form>

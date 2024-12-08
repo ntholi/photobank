@@ -18,12 +18,13 @@ type Props = {
   value?: string;
   onChange?: (value: string) => void;
   onBlur?: () => void;
+  disabled?: boolean;
 };
 
 const toursUrl = //TODO: This should be an environment variable
   'http://lehakoe-virtual-tours.s3-website.eu-central-1.amazonaws.com/';
 
-export default function TourInput({ value, onChange, onBlur }: Props) {
+export default function TourInput({ value, onChange, disabled }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number>();
 
@@ -87,7 +88,10 @@ export default function TourInput({ value, onChange, onBlur }: Props) {
       accept={[MIME_TYPES.zip]}
       onDrop={(files) => setFile(files[0])}
       onReject={(files) => console.log('rejected files', files)}
-      disabled={progress !== undefined}
+      disabled={disabled || progress !== undefined}
+      style={{
+        cursor: disabled ? 'not-allowed' : 'pointer',
+      }}
     >
       <Group
         justify='center'

@@ -1,9 +1,6 @@
 import { Box } from '@mantine/core';
+import { saveVirtualTour } from '../actions';
 import Form from '../Form';
-import {
-  updateLocationDetail,
-  getLocationDetail,
-} from '../../location-details/actions';
 
 export default function NewPage() {
   const handleSubmit = async (values: {
@@ -11,13 +8,7 @@ export default function NewPage() {
     tourUrl: string;
   }) => {
     'use server';
-    const locationDetails = await getLocationDetail(values.locationDetailsId);
-    if (!locationDetails) throw new Error('Location not found');
-
-    return await updateLocationDetail(values.locationDetailsId, {
-      ...locationDetails,
-      tourUrl: values.tourUrl,
-    });
+    await saveVirtualTour(values.locationDetailsId, values.tourUrl);
   };
 
   return (
