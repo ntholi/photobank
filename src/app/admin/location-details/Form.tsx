@@ -10,21 +10,19 @@ import {
   useComputedColorScheme,
 } from '@mantine/core';
 import { useRouter } from 'next/navigation';
-import ImagePicker from '@/components/ImagePicker';
 import RichTextField from '@/app/old/components/RichTextField';
 import LocationInput from '@/components/LocationInput';
-
-type LocationDetail = Prisma.LocationDetailsCreateInput;
+import { LocationDetailsCreate } from '@/repositories/location-details/repository';
 
 type Props = {
-  onSubmit: (values: LocationDetail) => Promise<LocationDetail>;
+  onSubmit: (values: LocationDetailsCreate) => Promise<LocationDetailsCreate>;
   defaultValues?: Prisma.LocationDetailsGetPayload<{
     include: {
       coverPhoto: true;
       location: true;
     };
   }>;
-  onSuccess?: (value: LocationDetail) => void;
+  onSuccess?: (value: LocationDetailsCreate) => void;
   onError?: (
     error: Error | React.SyntheticEvent<HTMLDivElement, Event>,
   ) => void;

@@ -1,8 +1,6 @@
-import { Prisma } from '@prisma/client';
-import LocationDetailRepository from './repository';
+import { LocationDetails, Prisma } from '@prisma/client';
+import LocationDetailRepository, { LocationDetailsCreate } from './repository';
 import withAuth from '@/utils/withAuth';
-
-type LocationDetail = Prisma.LocationDetailsCreateInput;
 
 class LocationDetailService {
   constructor(
@@ -20,7 +18,7 @@ class LocationDetailService {
   async search(
     page: number = 1,
     search = '',
-    searchProperties: (keyof LocationDetail)[],
+    searchProperties: (keyof LocationDetails)[],
   ) {
     return withAuth(
       async () => this.repository.search(page, search, searchProperties),
@@ -28,11 +26,11 @@ class LocationDetailService {
     );
   }
 
-  async create(data: LocationDetail & { location: Location }) {
+  async create(data: LocationDetailsCreate) {
     return withAuth(async () => this.repository.create(data), []);
   }
 
-  async update(id: string, data: LocationDetail) {
+  async update(id: string, data: Prisma.LocationDetailsUpdateInput) {
     return withAuth(async () => this.repository.update(id, data), []);
   }
 
