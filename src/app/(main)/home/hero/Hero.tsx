@@ -34,14 +34,14 @@ export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
         transitionData ? transitionData : initData,
       ]);
     }, 500);
-  }, [data, initData, sliderData, transitionData]);
+  }, [data, initData, sliderData, transitionData]); 
 
   React.useEffect(() => {
     let interval: NodeJS.Timeout;
     if (autoPlay) {
       interval = setInterval(() => {
         handleNext();
-      }, 5000); // Change slide every 5 seconds
+      }, 5000);
     }
     return () => {
       if (interval) {
