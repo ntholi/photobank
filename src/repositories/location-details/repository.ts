@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { Prisma } from '@prisma/client';
+import { LocationDetails, Prisma, Location } from '@prisma/client';
 
 type LocationDetail = Prisma.LocationDetailsCreateInput;
 
@@ -70,9 +70,27 @@ export default class LocationDetailRepository {
     return count > 0;
   }
 
-  async create(data: Prisma.LocationDetailsCreateInput) {
+  async create(data: LocationDetail & { location: Location }) {
+    const locationData = await prisma.location.upsert({
+      create: {
+        id: data.location.id,
+        name: data.location.name,
+        latitude: data.location.latitude,
+        longitude: data.location.longitude,
+      },
+      update: {},
+      where: { id: data.location.id },
+    });
+
+    const { id, location, coverPhotoId, ...rest } = data;
     return await prisma.locationDetails.create({
-      data,
+      data: {
+        ...rest,
+        // coverPhoto: coverPhotoId
+        //   ? { connect: { id: coverPhotoId } }
+        //   : undefined,
+        location: { connect: { id: locationData.id } },
+      },
     });
   }
 

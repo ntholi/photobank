@@ -6,9 +6,7 @@ import { Prisma } from '@prisma/client';
 type LocationDetail = Prisma.LocationDetailsCreateInput;
 
 export default async function NewPage() {
-  const handleSubmit = async (
-    values: LocationDetail,
-  ): Promise<LocationDetail> => {
+  const handleSubmit = async (values: LocationDetail) => {
     'use server';
     await createLocationDetail(values);
     return values;

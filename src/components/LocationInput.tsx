@@ -4,27 +4,29 @@ import { useEffect, useRef, useState } from 'react';
 import { Location } from '@prisma/client';
 import { LOCATION_BOUNDS } from '@/lib/constants';
 
-type Props = {
-  disabled?: boolean;
-  location: Location | null;
-  setLocation: React.Dispatch<React.SetStateAction<Location | null>>;
-};
-
 interface GooglePlace extends google.maps.places.PlaceResult {}
 
+type Props = {
+  value?: Location | null;
+  onChange?: (location: Location | null) => void;
+  disabled?: boolean;
+  error?: React.ReactNode;
+};
+
 export default function LocationInput({
-  location,
+  value,
+  onChange,
   disabled,
-  setLocation,
+  error,
 }: Props) {
   const inputRef = useRef<google.maps.places.SearchBox | null>(null);
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
-    if (location) {
-      setInputValue(location.name || '');
+    if (value) {
+      setInputValue(value.name || '');
     }
-  }, [location]);
+  }, [value]);
 
   const handlePlaceChanged = () => {
     const searchBox = inputRef.current;
@@ -39,13 +41,21 @@ export default function LocationInput({
       const name = place.name;
 
       if (id && latitude && longitude && name) {
-        setLocation({ id, name, latitude, longitude });
+        onChange?.({
+          id,
+          name,
+          latitude,
+          longitude,
+        });
       }
     }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.currentTarget.value);
+    if (event.currentTarget.value === '') {
+      onChange?.(null);
+    }
   };
 
   return (
@@ -59,13 +69,14 @@ export default function LocationInput({
         bounds={LOCATION_BOUNDS}
       >
         <Box>
-          <Group align="flex-start" gap="xs">
+          <Group align='flex-start' gap='xs'>
             <TextInput
-              label="Location"
+              label='Location'
               value={inputValue}
               onChange={handleInputChange}
               style={{ flex: 1 }}
               disabled={disabled}
+              error={error}
             />
           </Group>
         </Box>

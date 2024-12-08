@@ -12,6 +12,7 @@ import {
 import { useRouter } from 'next/navigation';
 import ImagePicker from '@/components/ImagePicker';
 import RichTextField from '@/app/old/components/RichTextField';
+import LocationInput from '@/components/LocationInput';
 
 type LocationDetail = Prisma.LocationDetailsCreateInput;
 
@@ -57,21 +58,7 @@ export default function LocationDetailForm({
           </Tabs.List>
           <Tabs.Panel value='details' p={'sm'}>
             <Stack>
-              <TextInput label='Location' {...form.getInputProps('location')} />
-              {form.values.location ? (
-                <ImagePicker
-                  location={form.values.location}
-                  photoFileName={defaultValues?.coverPhoto?.fileName}
-                  {...form.getInputProps('coverPhotoId')}
-                />
-              ) : (
-                <Paper
-                  withBorder
-                  h={265}
-                  w='100%'
-                  bg={colorScheme == 'dark' ? 'dark.7' : 'gray.1'}
-                ></Paper>
-              )}
+              <LocationInput {...form.getInputProps('location')} />
               <RichTextField label='About' {...form.getInputProps('about')} />
             </Stack>
           </Tabs.Panel>

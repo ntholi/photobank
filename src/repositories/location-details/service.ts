@@ -28,7 +28,7 @@ class LocationDetailService {
     );
   }
 
-  async create(data: LocationDetail) {
+  async create(data: LocationDetail & { location: Location }) {
     return withAuth(async () => this.repository.create(data), []);
   }
 
