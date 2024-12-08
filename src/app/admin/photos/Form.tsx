@@ -39,15 +39,30 @@ export default function PhotoForm({ onSubmit, defaultValues, title }: Props) {
   return (
     <Form
       title={title}
-      action={(values: Photo) => {
+      action={async (values: Photo) => {
         const updateData: Photo = {
           id: values.id,
           status: values.status,
           description: values.description,
-          location: location
-            ? { connect: { id: location.id } }
-            : { disconnect: true },
         };
+
+        if (location !== (defaultValues?.location as Location)) {
+          if (location && location.id) {
+            try {
+              const locationExists = await fetch(
+                `/api/locations/${location.id}`,
+              );
+              if (locationExists.ok) {
+                updateData.location = { connect: { id: location.id } };
+              }
+            } catch (error) {
+              console.error('Failed to verify location:', error);
+            }
+          } else {
+            updateData.location = { disconnect: true };
+          }
+        }
+
         return onSubmit(updateData);
       }}
       queryKey={['photos']}
