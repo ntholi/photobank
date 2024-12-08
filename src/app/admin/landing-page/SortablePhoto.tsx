@@ -16,18 +16,34 @@ interface SortablePhotoProps {
 }
 
 export function SortablePhoto({ id, photo, handleDelete }: SortablePhotoProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     cursor: 'grab',
+    opacity: isDragging ? 0.5 : 1,
+    scale: isDragging ? 1.05 : 1,
+    boxShadow: isDragging ? '0 0 20px rgba(0,0,0,0.15)' : 'none',
+    zIndex: isDragging ? 1 : 0,
   };
 
   return (
-    <Box ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Box pos={'relative'}>
+    <Box ref={setNodeRef} style={style} {...attributes} {...listeners} p='xs'>
+      <Box
+        pos={'relative'}
+        style={{
+          transition: 'transform 200ms ease',
+          transform: isDragging ? 'scale(1.05)' : 'scale(1)',
+        }}
+      >
         <Image src={thumbnail(photo.fileName)} h={200} />
         <DeleteButton
           pos={'absolute'}
