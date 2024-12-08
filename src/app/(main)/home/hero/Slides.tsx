@@ -8,9 +8,9 @@ type Props = {
 
 function Slides({ data }: Props) {
   return (
-    <div className=" flex w-full gap-6">
-      {data.map((data) => {
-        return <SliderCard key={data.url} data={data} />;
+    <div className='flex w-full gap-6'>
+      {data.map((it) => {
+        return <SliderCard key={it.url} data={it} />;
       })}
     </div>
   );
