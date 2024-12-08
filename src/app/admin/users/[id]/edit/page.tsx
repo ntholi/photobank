@@ -19,6 +19,9 @@ export default async function UserEdit({ params }: Props) {
 
   const handleSubmit = async (values: User): Promise<User> => {
     'use server';
+    if (!values.emailVerified) {
+      values.emailVerified = null;
+    }
     await updateUser(id, values);
     return values;
   };
