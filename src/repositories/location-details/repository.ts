@@ -13,6 +13,10 @@ export default class LocationDetailRepository {
   async findById(id: string) {
     return await prisma.locationDetails.findUnique({
       where: { id },
+      include: {
+        location: true,
+        coverPhoto: true,
+      },
     });
   }
 
