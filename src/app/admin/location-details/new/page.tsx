@@ -16,7 +16,7 @@ export default async function NewPage() {
 
   return (
     <Box p={'lg'}>
-      <Form title={'Create LocationDetail'} onSubmit={handleSubmit} />
+      <Form title={'Create Location'} onSubmit={handleSubmit} />
     </Box>
   );
 }

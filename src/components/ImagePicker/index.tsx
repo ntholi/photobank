@@ -58,16 +58,16 @@ export default function ImagePicker(props: ImagePickerProps) {
       <Modal
         opened={opened}
         onClose={close}
-        title="Crop Image"
+        title='Crop Image'
         size={'lg'}
       ></Modal>
-      <Text size="sm" fw={500}>
+      <Text size='sm' fw={500}>
         {props.label}
       </Text>
       <Paper
         withBorder
         h={props.height || 265}
-        w="100%"
+        w='100%'
         bg={colorScheme == 'dark' ? 'dark.7' : 'gray.1'}
       >
         {image ? (

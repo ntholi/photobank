@@ -5,7 +5,7 @@ import { useForm } from '@mantine/form';
 import { Location, LocationDetails, Photo } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
-import ImagePicker from '../../components/ImagePicker';
+import ImagePicker from '../../../../components/ImagePicker';
 import RichTextField from '../../components/RichTextField';
 import LocationInput from '../../../../components/LocationInput';
 import TourInput from './TourInput';

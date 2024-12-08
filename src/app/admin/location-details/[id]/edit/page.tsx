@@ -28,7 +28,7 @@ export default async function LocationDetailEdit({ params }: Props) {
   return (
     <Box p={'lg'}>
       <Form
-        title={'Edit LocationDetail'}
+        title={'Edit Location'}
         defaultValues={locationDetails}
         onSubmit={handleSubmit}
       />

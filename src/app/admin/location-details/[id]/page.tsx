@@ -22,8 +22,8 @@ export default async function LocationDetailDetails({ params }: Props) {
   return (
     <DetailsView>
       <DetailsViewHeader
-        title={'LocationDetail'}
-        queryKey={['locationDetails']}
+        title={'Location'}
+        queryKey={['location-details']}
         handleDelete={async () => {
           'use server';
           await deleteLocationDetail(id);
