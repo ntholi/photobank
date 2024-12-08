@@ -19,6 +19,36 @@ export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
       data: initData,
       index: 0,
     });
+  const [autoPlay, setAutoPlay] = React.useState(true);
+
+  const handleNext = React.useCallback(() => {
+    setData((prev) => prev.slice(1));
+    setCurrentSlideData({
+      data: transitionData ? transitionData : initData,
+      index: sliderData.findIndex((ele) => ele.url === data[0].url),
+    });
+    setTransitionData(data[0]);
+    setTimeout(() => {
+      setData((newData) => [
+        ...newData,
+        transitionData ? transitionData : initData,
+      ]);
+    }, 500);
+  }, [data, initData, sliderData, transitionData]);
+
+  React.useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (autoPlay) {
+      interval = setInterval(() => {
+        handleNext();
+      }, 5000); // Change slide every 5 seconds
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [autoPlay, handleNext]);
 
   return (
     <section
@@ -49,6 +79,7 @@ export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
                 handleTransitionData={setTransitionData}
                 handleCurrentSlideData={setCurrentSlideData}
                 sliderData={sliderData}
+                handleNext={handleNext}
               />
             </div>
           </div>

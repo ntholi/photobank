@@ -13,6 +13,7 @@ type Props = {
     React.SetStateAction<CurrentSlideData>
   >;
   initData: PhotoWithData;
+  handleNext?: () => void;
 };
 
 function Controls({
@@ -24,6 +25,7 @@ function Controls({
   handleTransitionData,
   handleCurrentSlideData,
   initData,
+  handleNext,
 }: Props) {
   const handlePrev = () => {
     handleData((prevData) => [
@@ -39,19 +41,23 @@ function Controls({
     handleTransitionData(data[data.length - 1]);
   };
 
-  const handleNext = () => {
-    handleData((prev) => prev.slice(1));
-    handleCurrentSlideData({
-      data: transitionData ? transitionData : initData,
-      index: sliderData.findIndex((ele) => ele.url === data[0].url),
-    });
-    handleTransitionData(data[0]);
-    setTimeout(() => {
-      handleData((newData) => [
-        ...newData,
-        transitionData ? transitionData : initData,
-      ]);
-    }, 500);
+  const onNext = () => {
+    if (handleNext) {
+      handleNext();
+    } else {
+      handleData((prev) => prev.slice(1));
+      handleCurrentSlideData({
+        data: transitionData ? transitionData : initData,
+        index: sliderData.findIndex((ele) => ele.url === data[0].url),
+      });
+      handleTransitionData(data[0]);
+      setTimeout(() => {
+        handleData((newData) => [
+          ...newData,
+          transitionData ? transitionData : initData,
+        ]);
+      }, 500);
+    }
   };
 
   return (
@@ -59,7 +65,7 @@ function Controls({
       <SliderButton handleClick={handlePrev}>
         <IoIosArrowBack className=" text-xl" />
       </SliderButton>
-      <SliderButton handleClick={handleNext}>
+      <SliderButton handleClick={onNext}>
         <IoIosArrowForward className=" text-xl" />
       </SliderButton>
       {/* <Progress curIndex={currentSlideData.index} length={sliderData.length} /> */}
