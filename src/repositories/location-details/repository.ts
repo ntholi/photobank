@@ -51,6 +51,9 @@ export default class LocationDetailRepository {
       const [items, total] = await Promise.all([
         prisma.locationDetails.findMany({
           where,
+          include: {
+            location: true,
+          },
           skip: offset,
           take: pageSize,
         }),
@@ -103,6 +106,7 @@ export default class LocationDetailRepository {
 
   async update(id: string, data: LocationDetails) {
     const { locationId, coverPhotoId, ...rest } = data;
+    // TODO: Make it able to update location as well
     return await prisma.locationDetails.update({
       where: { id },
       data: {
