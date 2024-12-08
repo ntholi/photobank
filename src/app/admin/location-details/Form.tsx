@@ -14,6 +14,7 @@ import RichTextField from '@/app/old/components/RichTextField';
 import LocationInput from '@/components/LocationInput';
 import { LocationDetailsCreate } from '@/repositories/location-details/repository';
 import { sanitize } from '@/utils';
+import ImagePicker from '@/components/ImagePicker';
 
 type Props = {
   onSubmit: (values: LocationDetailsCreate) => Promise<LocationDetailsCreate>;
@@ -58,6 +59,20 @@ export default function LocationDetailForm({
           <Tabs.Panel value='details' p={'sm'}>
             <Stack>
               <LocationInput {...form.getInputProps('location')} />
+              {form.values.location ? (
+                <ImagePicker
+                  location={form.values.location}
+                  photoFileName={defaultValues?.coverPhoto?.fileName}
+                  {...form.getInputProps('coverPhotoId')}
+                />
+              ) : (
+                <Paper
+                  withBorder
+                  h={265}
+                  w='100%'
+                  bg={colorScheme == 'dark' ? 'dark.7' : 'gray.1'}
+                ></Paper>
+              )}
               <RichTextField label='About' {...form.getInputProps('about')} />
             </Stack>
           </Tabs.Panel>

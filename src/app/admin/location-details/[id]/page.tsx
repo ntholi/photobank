@@ -6,6 +6,8 @@ import {
 } from '@/components/adease';
 import { notFound } from 'next/navigation';
 import { getLocationDetail, deleteLocationDetail } from '../actions';
+import { Anchor, Fieldset, Text, Image } from '@mantine/core';
+import { thumbnail } from '@/lib/config/urls';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -13,9 +15,9 @@ type Props = {
 
 export default async function LocationDetailDetails({ params }: Props) {
   const { id } = await params;
-  const locationDetails = await getLocationDetail(id);
+  const item = await getLocationDetail(id);
 
-  if (!locationDetails) {
+  if (!item) {
     return notFound();
   }
 
@@ -30,12 +32,23 @@ export default async function LocationDetailDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <FieldView label='Location'>{locationDetails.location.name}</FieldView>
-        <FieldView label='Cover Photo'>
-          {locationDetails.coverPhoto?.fileName}
+        <FieldView label='Name'>{item.location.name}</FieldView>
+        <FieldView label='Virtual Tour'>
+          {item.tourUrl && (
+            <Anchor target='_blank' href={`${item.tourUrl}/index.htm`}>
+              {item.tourUrl?.split('/').at(-1)}
+            </Anchor>
+          )}
         </FieldView>
-        <FieldView label='About'>{locationDetails.about}</FieldView>
-        <FieldView label='Tour Url'>{locationDetails.tourUrl}</FieldView>
+        {item.coverPhoto && (
+          <Image
+            style={{ maxHeight: '40vh' }}
+            src={thumbnail(item.coverPhoto?.fileName)}
+          />
+        )}
+        <Fieldset legend={'About Location'}>
+          <Text>{item.about}</Text>
+        </Fieldset>
       </DetailsViewBody>
     </DetailsView>
   );
