@@ -4,29 +4,52 @@ import { Prisma } from '@prisma/client';
 import { Form } from '@/components/adease';
 import { TextInput } from '@mantine/core';
 import { useRouter } from 'next/navigation';
+import LocationInput from '@/app/old/admin/locations/LocationInput';
+import { useState } from 'react';
+import { Location } from '@prisma/client';
+import { sanitize } from '@/utils';
 
-type Photo = Prisma.PhotoCreateInput;
+type Photo = Omit<Prisma.PhotoUpdateInput, 'location'> & {
+  location?:
+    | Location
+    | null
+    | { connect: { id: string } }
+    | { disconnect: true };
+};
 
 type Props = {
   onSubmit: (values: Photo) => Promise<Photo>;
-  defaultValues?: Prisma.PhotoGetPayload<{}>;
+  defaultValues?: Prisma.PhotoGetPayload<{
+    include: {
+      location: true;
+    };
+  }>;
   onSuccess?: (value: Photo) => void;
   onError?: (
-    error: Error | React.SyntheticEvent<HTMLDivElement, Event>
+    error: Error | React.SyntheticEvent<HTMLDivElement, Event>,
   ) => void;
   title?: string;
 };
 
 export default function PhotoForm({ onSubmit, defaultValues, title }: Props) {
   const router = useRouter();
-  
-  return (
-    <Form 
-      title={title}
-      action={onSubmit} 
-      queryKey={['photos']}
+  const [location, setLocation] = useState<Location | null>(
+    (defaultValues?.location as Location) || null,
+  );
 
-      defaultValues={defaultValues}
+  return (
+    <Form
+      title={title}
+      action={(values) =>
+        onSubmit({
+          ...values,
+          location: location
+            ? { connect: { id: location.id } }
+            : { disconnect: true },
+        })
+      }
+      queryKey={['photos']}
+      defaultValues={sanitize(defaultValues)}
       onSuccess={({ id }) => {
         router.push(`/admin/photos/${id}`);
       }}
@@ -35,8 +58,11 @@ export default function PhotoForm({ onSubmit, defaultValues, title }: Props) {
         <>
           <TextInput label='File Name' {...form.getInputProps('fileName')} />
           <TextInput label='Status' {...form.getInputProps('status')} />
-          <TextInput label='Description' {...form.getInputProps('description')} />
-          <TextInput label='Location' {...form.getInputProps('location')} />
+          <TextInput
+            label='Description'
+            {...form.getInputProps('description')}
+          />
+          <LocationInput location={location} setLocation={setLocation} />
           <TextInput label='User' {...form.getInputProps('user')} />
         </>
       )}

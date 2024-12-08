@@ -26,7 +26,8 @@ export function variableNameToLabel(str: string) {
  * @param values The object to sanitize.
  * @returns The sanitized object.
  */
-export function sanitize<T extends {}>(values: T) {
+export function sanitize<T extends {}>(values: T | undefined) {
+  if (!values) return undefined;
   const result = values
     ? Object.fromEntries(
         Object.entries(values).map(([key, value]) => {

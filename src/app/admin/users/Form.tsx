@@ -36,7 +36,7 @@ export default function UserForm({ onSubmit, defaultValues }: Props) {
       action={onSubmit}
       title='User'
       queryKey={['users']}
-      defaultValues={sanitize(defaultValues!)}
+      defaultValues={sanitize(defaultValues)}
       onSuccess={({ id }) => {
         router.push(`/admin/users/${id}`);
       }}
