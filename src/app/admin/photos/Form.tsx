@@ -1,7 +1,7 @@
 'use client';
 
 import { Form } from '@/components/adease';
-import LocationInput from '@/components/LocationInput';
+import LocationInput from '@/components/LocationInput'; // Update import
 import { sanitize } from '@/utils';
 import { TextInput } from '@mantine/core';
 import { Location, Prisma } from '@prisma/client';
@@ -78,7 +78,7 @@ export default function PhotoForm({ onSubmit, defaultValues, title }: Props) {
             label='Description'
             {...form.getInputProps('description')}
           />
-          <LocationInput location={location} setLocation={setLocation} />
+          <LocationInput {...form.getInputProps('location')} />
         </>
       )}
     </Form>
