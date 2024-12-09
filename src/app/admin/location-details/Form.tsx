@@ -10,12 +10,12 @@ import {
   useComputedColorScheme,
 } from '@mantine/core';
 import { useRouter } from 'next/navigation';
-import RichTextField from '@/app/old/components/RichTextField';
 import LocationInput from '@/components/LocationInput';
 import { LocationDetailsCreate } from '@/repositories/location-details/repository';
 import { sanitize } from '@/utils';
 import ImagePicker from '@/components/ImagePicker';
 import TourInput from '../virtual-tours/TourInput';
+import RichTextField from '@/components/RichTextField';
 
 type Props = {
   onSubmit: (values: LocationDetailsCreate) => Promise<LocationDetailsCreate>;

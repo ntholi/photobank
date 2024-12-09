@@ -1,5 +1,3 @@
-import DeleteIconButton from '@/app/old/components/DeleteIconButton';
-import HeaderDisplay from '@/app/old/components/HeaderDisplay';
 import { thumbnail } from '@/lib/config/urls';
 import { profilePath } from '@/lib/constants';
 import { dateTime } from '@/lib/format';
@@ -24,6 +22,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import React from 'react';
 import { deletePhoto, getPhoto } from '../actions';
+import { FormHeader } from '@/components/adease';
 
 type Props = {
   params: Promise<{
@@ -41,11 +40,7 @@ export default async function Page(props: Props) {
 
   return (
     <Box p={'lg'}>
-      <HeaderDisplay
-        title={item.id}
-        actionButtons={[<DeleteIconButton action={deletePhoto} id={id} />]}
-      />
-
+      <FormHeader title={item.id} closable={false} />
       <Grid p='lg'>
         <GridCol span={{ base: 12, md: 6 }}>
           <Card shadow='sm' padding='lg' radius='md' withBorder>

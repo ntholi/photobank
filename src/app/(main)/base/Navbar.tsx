@@ -27,7 +27,7 @@ import { RiDashboardLine } from 'react-icons/ri';
 import Logo from './Logo';
 import { isExcludePath } from './excludePaths';
 import { nameToInitials } from '../(profile)/users/[id]/UserBio';
-import { ADMIN_ROLES } from '@/app/old/base/AdminShell';
+import { Role } from '@prisma/client';
 
 const navItems = [
   {
@@ -43,6 +43,8 @@ const navItems = [
     href: '/virtual-tours',
   },
 ];
+
+const ADMIN_ROLES: (Role | undefined)[] = ['admin', 'moderator'];
 
 export default function Navbar() {
   const { data: session } = useSession();
