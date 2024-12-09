@@ -1,7 +1,5 @@
 'use client';
 import { CurrentSlideData, PhotoWithData } from '@/lib/types';
-import { Button } from '@nextui-org/react';
-import { IconArrowDown } from '@tabler/icons-react';
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
 import BackgroundImage from './BackgroundImage';
@@ -22,11 +20,6 @@ export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
       index: 0,
     });
   const [autoPlay, setAutoPlay] = React.useState(true);
-
-  const scrollToGallery = () => {
-    const gallerySection = document.getElementById('gallery');
-    gallerySection?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   const handleNext = React.useCallback(() => {
     setData((prev) => prev.slice(1));
@@ -90,19 +83,6 @@ export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
               />
             </div>
           </div>
-          {/* <div className='absolute bottom-8 left-1/2 z-30 hidden -translate-x-1/2 md:block'>
-            <Button
-              color='primary'
-              radius='full'
-              isIconOnly
-              size='lg'
-              variant='solid'
-              onClick={scrollToGallery}
-              className='animate-bounce hover:animate-none'
-            >
-              <IconArrowDown color='white' />
-            </Button>
-          </div> */}
         </div>
       </AnimatePresence>
     </section>
