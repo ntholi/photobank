@@ -9,7 +9,7 @@ import {
   getContributorApplication,
   deleteContributorApplication,
 } from '../actions';
-import { Fieldset, Group, Stack, Text } from '@mantine/core';
+import { Box, Fieldset, Group, Paper, Stack, Text } from '@mantine/core';
 import StatusUpdater from './StatusUpdater';
 
 type Props = {
@@ -35,18 +35,22 @@ export default async function ContributorApplicationDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <Group justify={'space-between'} align='start'>
-          <Stack w={'50%'}>
-            <FieldView label='Name'>{application.user.name}</FieldView>
-            <FieldView label='Email'>{application.user.email}</FieldView>
-          </Stack>
-          <StatusUpdater application={application} />
+        <Group grow align='stretch'>
+          <Paper withBorder p={'md'}>
+            <Stack>
+              <FieldView label='Name'>{application.user.name}</FieldView>
+              <FieldView label='Email'>{application.user.email}</FieldView>
+            </Stack>
+          </Paper>
+          <Paper withBorder p={'md'}>
+            <StatusUpdater application={application} />
+          </Paper>
         </Group>
-        <Stack mt={'lg'} gap={'xs'}>
+        <Box mt={'lg'}>
           <Fieldset legend='Motivation'>
             <Text>{application.message}</Text>
           </Fieldset>
-        </Stack>
+        </Box>
       </DetailsViewBody>
     </DetailsView>
   );
