@@ -1,24 +1,15 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 
 interface SplashScreenProps {
   children: React.ReactNode;
 }
 
 export default function SplashScreen({ children }: SplashScreenProps) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
+  const { status } = useSession();
+  if (status === 'loading') {
     return (
       <div className='fixed inset-0 z-50 flex items-center justify-center bg-white'>
         <div className='flex animate-pulse items-center justify-center'>
