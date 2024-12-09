@@ -67,7 +67,7 @@ export default function TourInput({ value, onChange, disabled }: Props) {
       <Fieldset legend='Virtual Tour'>
         <Group gap='sm'>
           <Text size='sm' style={{ flex: 1 }}>
-            <Anchor size='0.8rem' href={value} target='_blank'>
+            <Anchor size='0.8rem' href={`${value}/index.htm`} target='_blank'>
               {value}
             </Anchor>
           </Text>
