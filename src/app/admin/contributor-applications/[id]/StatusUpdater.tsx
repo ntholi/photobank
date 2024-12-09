@@ -5,7 +5,7 @@ import { IconBan, IconCheck, IconHourglass } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { updateApplicationStatus } from '../actions';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type Props = {
   application: ContributorApplication;
@@ -16,19 +16,27 @@ export default function StatusUpdater({ application }: Props) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  async function handleUpdate(status: ApplicationStatus) {
+  const { mutate, isPending } = useMutation({
+    mutationFn: ({ status }: { status: ApplicationStatus }) =>
+      updateApplicationStatus(application.id, application.userId, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['contributor-applications'],
+      });
+      router.refresh();
+    },
+  });
+
+  function handleUpdate(status: ApplicationStatus) {
     setValue(status);
-    await updateApplicationStatus(application.id, application.userId, status);
-    await queryClient.invalidateQueries({
-      queryKey: ['contributor-applications'],
-    });
-    router.refresh();
+    mutate({ status });
   }
 
   return (
     <SegmentedControl
       value={value}
       size='sm'
+      disabled={isPending}
       onChange={(value) => {
         handleUpdate(value as ApplicationStatus);
       }}
