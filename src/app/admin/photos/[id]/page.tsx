@@ -103,7 +103,7 @@ export default async function Page(props: Props) {
         <Divider />
         <List>
           {item.labels.map((it) => (
-            <ListItem>
+            <ListItem key={it.label}>
               <Text size='0.8rem'>{it.label}</Text>
             </ListItem>
           ))}
