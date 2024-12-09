@@ -25,7 +25,7 @@ export default async function ContentPage({ params }: Props) {
   return (
     <Container className='py-16'>
       <article className='prose lg:prose-lg mx-auto max-w-3xl'>
-        <h1 className='text-3xl font-bold'>{slugToTitle(params.slug)}</h1>
+        <h1 className='mb-2 text-3xl font-bold'>{slugToTitle(params.slug)}</h1>
         <div dangerouslySetInnerHTML={{ __html: content.body || '' }} />
       </article>
     </Container>
