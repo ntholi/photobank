@@ -13,7 +13,9 @@ export default function Layout({ children }: PropsWithChildren) {
       actionIcons={[
         <NewLink key={'new-link'} href='/admin/contributor-applications/new' />,
       ]}
-      renderItem={(it) => <ListItem id={it.id} label={it.id} />}
+      renderItem={(it) => (
+        <ListItem id={it.id} label={it.user.name || it.user.id} />
+      )}
     >
       {children}
     </ListLayout>

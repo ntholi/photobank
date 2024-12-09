@@ -73,6 +73,9 @@ export default class ContributorApplicationRepository {
           where,
           skip: offset,
           take: pageSize,
+          include: {
+            user: true,
+          },
         }),
         prisma.contributorApplication.count({ where }),
       ]);
