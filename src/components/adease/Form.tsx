@@ -23,6 +23,8 @@ export type FormProps<T extends Record<string, unknown>, V> = Omit<
   onSuccess?: (values: T) => void;
   onError?: (error: Error) => void;
   queryKey: string[];
+  showHeader?: boolean;
+  closable?: boolean;
 };
 
 export function Form<T extends Record<string, unknown>, V>({
@@ -34,6 +36,8 @@ export function Form<T extends Record<string, unknown>, V>({
   onSuccess,
   onError,
   queryKey,
+  showHeader = true,
+  closable = true,
   ...props
 }: FormProps<T, V>) {
   const router = useRouter();
@@ -75,13 +79,16 @@ export function Form<T extends Record<string, unknown>, V>({
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <FormHeader
-        title={title}
-        isLoading={mutation.isPending}
-        onClose={() => {
-          router.back();
-        }}
-      />
+      {showHeader && (
+        <FormHeader
+          title={title}
+          isLoading={mutation.isPending}
+          onClose={() => {
+            router.back();
+          }}
+          closable={closable}
+        />
+      )}
       <Stack p='xl' {...props}>
         {children(form)}
       </Stack>

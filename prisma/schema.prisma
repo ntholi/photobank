@@ -251,3 +251,13 @@ model VirtualTour {
 
   @@map("virtual_tours")
 }
+
+model Content {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("content")
+}

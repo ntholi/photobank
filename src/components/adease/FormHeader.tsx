@@ -13,9 +13,15 @@ type Props = {
   title?: string;
   onClose?: () => void;
   isLoading?: boolean;
+  closable?: boolean;
 };
 
-export default function FormHeader({ title, isLoading, onClose }: Props) {
+export default function FormHeader({
+  title,
+  isLoading,
+  onClose,
+  closable = true,
+}: Props) {
   return (
     <>
       <Flex justify={title ? 'space-between' : 'end'} align={'center'}>
@@ -32,7 +38,7 @@ export default function FormHeader({ title, isLoading, onClose }: Props) {
           >
             Save
           </Button>
-          <CloseButton size={'lg'} onClick={onClose} />
+          {closable && <CloseButton size={'lg'} onClick={onClose} />}
         </Group>
       </Flex>
       <Divider my={15} />

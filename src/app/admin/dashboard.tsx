@@ -79,6 +79,11 @@ const navigation: NavItem[] = [
     href: '/admin/tags',
     icon: IconTags,
   },
+  {
+    label: 'Content',
+    href: '/admin/content',
+    icon: IconNote,
+  },
 ];
 
 function ApplicationsNavItem() {
