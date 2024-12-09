@@ -35,7 +35,7 @@ export default async function TagDetails({ params }: Props) {
         <Fieldset legend='Labels'>
           <List type='ordered' mt={'sm'}>
             {tag.labels.map((it) => (
-              <ListItem>{it}</ListItem>
+              <ListItem key={it}>{it}</ListItem>
             ))}
           </List>
         </Fieldset>
