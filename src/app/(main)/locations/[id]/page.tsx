@@ -82,22 +82,23 @@ export default async function LocationPage(props: Props) {
             {location.name}
           </h1>
         </div>
-        <NavButtons locationDetails={locationDetails}/>
+        <NavButtons locationDetails={locationDetails} />
       </header>
       {locationDetails?.about && (
-        <Container
-          width='lg'
-          className='mt-10 grid grid-cols-1 gap-10 md:grid-cols-3'
-        >
-          <section className='md:col-span-2'>
-            <h2 className='text-4xl font-semibold'>About {location.name}</h2>
-            <article
-              dangerouslySetInnerHTML={{ __html: locationDetails.about || '' }}
-              className='prose mt-5 text-lg'
-            />
-          </section>
+        <Container width='lg' className='mt-10'>
           <section>
-            <MapDisplay location={location} />
+            <h2 className='text-4xl font-semibold'>About {location.name}</h2>
+            <div className='grid grid-cols-1 gap-10 md:grid-cols-12'>
+              <article
+                dangerouslySetInnerHTML={{
+                  __html: locationDetails.about || '',
+                }}
+                className='prose mt-5 text-lg md:col-span-7'
+              />
+              <div className='md:col-span-5'>
+                <MapDisplay location={location} />
+              </div>
+            </div>
           </section>
         </Container>
       )}

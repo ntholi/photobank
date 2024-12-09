@@ -1,3 +1,4 @@
+import { cn } from '@nextui-org/react';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -22,7 +23,7 @@ function Container({ children, as, width = 'lg', ...props }: Props) {
     as || 'div',
     {
       ...props,
-      className: twMerge(
+      className: cn(
         'container mx-auto px-4 py-4 sm:px-6',
         widthMap[width],
         props.className,
