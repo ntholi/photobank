@@ -2,6 +2,9 @@
 CREATE TYPE "Role" AS ENUM ('user', 'contributor', 'moderator', 'admin');
 
 -- CreateEnum
+CREATE TYPE "UserStatus" AS ENUM ('active', 'blocked');
+
+-- CreateEnum
 CREATE TYPE "ApplicationStatus" AS ENUM ('pending', 'approved', 'rejected');
 
 -- CreateEnum
@@ -18,7 +21,7 @@ CREATE TABLE "users" (
     "email_verified" TIMESTAMP(3),
     "image" TEXT,
     "role" "Role" NOT NULL DEFAULT 'user',
-    "blocked" BOOLEAN NOT NULL DEFAULT false,
+    "status" "UserStatus" NOT NULL DEFAULT 'active',
     "website" TEXT,
     "bio" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -79,6 +82,7 @@ CREATE TABLE "contributor_applications" (
 CREATE TABLE "photos" (
     "id" TEXT NOT NULL,
     "fileName" TEXT NOT NULL,
+    "photoType" "PhotoType" NOT NULL DEFAULT 'image',
     "status" "PhotoStatus" NOT NULL DEFAULT 'draft',
     "description" TEXT,
     "user_id" TEXT NOT NULL,
@@ -105,6 +109,7 @@ CREATE TABLE "photo_labels" (
 CREATE TABLE "home_photos" (
     "id" SERIAL NOT NULL,
     "photo_id" TEXT NOT NULL,
+    "position" SERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -187,6 +192,30 @@ CREATE TABLE "audit_logs" (
     CONSTRAINT "audit_logs_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "virtual_tours" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT,
+    "imageUrl" TEXT NOT NULL,
+    "tourUrl" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "virtual_tours_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "content" (
+    "id" SERIAL NOT NULL,
+    "slug" TEXT NOT NULL,
+    "body" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "content_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -210,6 +239,9 @@ CREATE UNIQUE INDEX "location_details_cover_photo_id_key" ON "location_details"(
 
 -- CreateIndex
 CREATE UNIQUE INDEX "saved_photos_photo_id_key" ON "saved_photos"("photo_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "content_slug_key" ON "content"("slug");
 
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
