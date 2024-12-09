@@ -17,17 +17,17 @@ export default function LocationBody({ tourUrl, location }: Props) {
 
   return (
     <Tabs
-      aria-label="Options"
-      variant="underlined"
-      className="pb-3 pt-10 px-14 border-b w-full"
+      aria-label='Options'
+      variant='underlined'
+      className='w-full border-b px-14 pb-3 pt-10'
       selectedKey={selected}
       onSelectionChange={(key) => setSelected(key as string)}
     >
       <Tab
-        key="photos"
+        key='photos'
         title={
-          <div className="flex items-center space-x-2 text-medium">
-            <FaImage className="text-xl" />
+          <div className='flex items-center space-x-2 text-medium'>
+            <FaImage className='text-xl' />
             <span>Photos</span>
           </div>
         }
@@ -36,25 +36,27 @@ export default function LocationBody({ tourUrl, location }: Props) {
           <Gallery location={location} />
         </ClientOnly>
       </Tab>
-      <Tab
-        key="tour"
-        title={
-          <div className="flex items-center space-x-2 text-medium">
-            <GrThreeD className="text-xl" />
-            <span>Virtual Tour</span>
-          </div>
-        }
-      >
-        <div className="container mx-auto px-2 md:px-24">
-          <ClientOnly>
-            <div className="flex justify-center">
-              <div className="w-[80vw]">
-                <VirtualTour url={tourUrl} />
-              </div>
+      {tourUrl && (
+        <Tab
+          key='tour'
+          title={
+            <div className='flex items-center space-x-2 text-medium'>
+              <GrThreeD className='text-xl' />
+              <span>Virtual Tour</span>
             </div>
-          </ClientOnly>
-        </div>
-      </Tab>
+          }
+        >
+          <div className='container mx-auto px-2 md:px-24'>
+            <ClientOnly>
+              <div className='flex justify-center'>
+                <div className='w-[80vw]'>
+                  <VirtualTour url={tourUrl} />
+                </div>
+              </div>
+            </ClientOnly>
+          </div>
+        </Tab>
+      )}
     </Tabs>
   );
 }

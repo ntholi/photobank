@@ -82,7 +82,7 @@ export default async function LocationPage(props: Props) {
             {location.name}
           </h1>
         </div>
-        <NavButtons />
+        <NavButtons locationDetails={locationDetails}/>
       </header>
       {locationDetails?.about && (
         <Container
