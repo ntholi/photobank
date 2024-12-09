@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import { CircleMarker, MapContainer, Popup, TileLayer } from 'react-leaflet';
 import { Location } from '@prisma/client';
 import 'leaflet/dist/leaflet.css';
@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 
 type LocationWithCount = Location & { photoCount: number };
 
+const MapContainerMemo = memo(MapContainer);
+
 export default function Map() {
   const [locations, setLocations] = React.useState<LocationWithCount[]>([]);
   const router = useRouter();
@@ -17,6 +19,14 @@ export default function Map() {
     axios.get('/api/photos/locations').then((res) => {
       setLocations(res.data.locations);
     });
+
+    // Cleanup function to handle map container cleanup
+    return () => {
+      const mapContainer = document.querySelector('.leaflet-container');
+      if (mapContainer && (mapContainer as any)._leaflet_id) {
+        delete (mapContainer as any)._leaflet_id;
+      }
+    };
   }, []);
 
   const calculateRadius = (location: LocationWithCount) => {
@@ -26,7 +36,7 @@ export default function Map() {
 
   return (
     <Card>
-      <MapContainer center={[-29.652, 28.57]} zoom={8} scrollWheelZoom={false}>
+      <MapContainerMemo center={[-29.652, 28.57]} zoom={8} scrollWheelZoom={false}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -56,7 +66,7 @@ export default function Map() {
             </CircleMarker>
           ),
         )}
-      </MapContainer>
+      </MapContainerMemo>
     </Card>
   );
 }
