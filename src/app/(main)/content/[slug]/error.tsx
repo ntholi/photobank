@@ -12,7 +12,7 @@ export default function Error() {
       <div className='mx-auto max-w-3xl text-center'>
         <h2 className='text-2xl font-bold'>Something went wrong!</h2>
         <p className='mt-4 text-gray-600'>
-          We couldn't load this content. Please try again later.
+          We couldn&apos;t load this content. Please try again later.
         </p>
         <Button
           color='primary'

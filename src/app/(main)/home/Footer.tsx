@@ -27,7 +27,7 @@ export default function Footer({ className }: { className?: string }) {
             />
 
             <p className='max-w-xs text-gray-500'>
-              Lehakoe is Lesotho's Photobank and Virtual Tour platform. The
+              Lehakoe is Lesotho&apos;s Photobank and Virtual Tour platform. The
               platform is designed to promote tourism and showcase the beauty of
               Lesotho
             </p>
