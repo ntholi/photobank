@@ -11,7 +11,15 @@ import {
   Paper,
   ScrollArea,
 } from '@mantine/core';
-import { Icon, IconChevronRight, IconInfoCircle } from '@tabler/icons-react';
+import {
+  Icon,
+  IconChevronRight,
+  IconInfoCircle,
+  IconHelp,
+  IconLock,
+  IconFileText,
+  IconCopyright,
+} from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
@@ -23,14 +31,29 @@ type NavItem = {
 
 const items: NavItem[] = [
   {
-    label: 'About Us',
-    href: '/admin/content/about-us',
+    label: 'About',
+    href: '/admin/content/about',
     icon: IconInfoCircle,
+  },
+  {
+    label: 'FAQs',
+    href: '/admin/content/faqs',
+    icon: IconHelp,
+  },
+  {
+    label: 'Terms of Service',
+    href: '/admin/content/terms-of-service',
+    icon: IconFileText,
   },
   {
     label: 'Privacy Policy',
     href: '/admin/content/privacy-policy',
-    icon: IconInfoCircle,
+    icon: IconLock,
+  },
+  {
+    label: 'Copyright Notice',
+    href: '/admin/content/copyright-notice',
+    icon: IconCopyright,
   },
 ];
 
