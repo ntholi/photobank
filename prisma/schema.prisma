@@ -239,3 +239,15 @@ model AuditLog {
 
   @@map("audit_logs")
 }
+
+model VirtualTour {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String
+  tourUrl     String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("virtual_tours")
+}
