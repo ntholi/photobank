@@ -35,7 +35,7 @@ const navItems = [
     href: '/',
   },
   {
-    label: 'Browse',
+    label: 'Gallery',
     href: '/#gallery',
   },
   {
@@ -100,7 +100,7 @@ export default function Navbar() {
         </NavbarBrand>
         <ul className='ml-2 hidden justify-start gap-4 sm:flex'>
           {navItems.map((item) => {
-            if (item.label == 'Browse') {
+            if (item.label == 'Gallery') {
               return (
                 <NavbarItem key={item.href}>
                   <button color='foreground' onClick={scrollToGallery}>
