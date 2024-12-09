@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 type Props = {
   height?: number;
   defaultValue?: string;
-  label: string;
+  label?: string;
   placeholder?: string;
   value?: any;
   onChange?: any;
@@ -57,7 +57,7 @@ export default function RichTextField(props: Props) {
         />
       </Modal>
       <Group justify='space-between' align='end'>
-        <Text fw='bold'>{props.label}</Text>
+        {props.label && <Text fw='bold'>{props.label}</Text>}
         <ActionIcon variant='default' onClick={open}>
           <IconMaximize size={'1rem'} />
         </ActionIcon>

@@ -1,9 +1,9 @@
 'use client';
 
-import { Textarea } from '@mantine/core';
+import { Form } from '@/components/adease';
+import RichTextField from '@/components/RichTextField';
 import { Content } from '@prisma/client';
 import { saveContent } from '../actions';
-import { Form } from '@/components/adease';
 
 type Props = {
   slug: string;
@@ -25,7 +25,9 @@ export default function ContentForm({ content, slug }: Props) {
       queryKey={['content', slug]}
       defaultValues={content}
     >
-      {(form) => <Textarea {...form.getInputProps('body')} />}
+      {(form) => (
+        <RichTextField label={title} {...form.getInputProps('body')} />
+      )}
     </Form>
   );
 }
