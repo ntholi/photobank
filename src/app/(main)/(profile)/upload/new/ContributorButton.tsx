@@ -58,7 +58,7 @@ export default function ContributorButton({ onOpen }: Props) {
       if (data.application) {
         setApplication(data.application);
         await queryClient.invalidateQueries({
-          queryKey: ['pending-applications'],
+          queryKey: ['contributor-applications'],
         });
       }
     } finally {

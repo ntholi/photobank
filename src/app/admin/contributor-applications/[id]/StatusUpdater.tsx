@@ -19,7 +19,9 @@ export default function StatusUpdater({ application }: Props) {
   async function handleUpdate(status: ApplicationStatus) {
     setValue(status);
     await updateApplicationStatus(application.id, application.userId, status);
-    await queryClient.invalidateQueries({ queryKey: ['pending-applications'] });
+    await queryClient.invalidateQueries({
+      queryKey: ['contributor-applications'],
+    });
     router.refresh();
   }
 
