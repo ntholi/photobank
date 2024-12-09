@@ -21,14 +21,7 @@ import {
 import AddButton from './AddButton';
 import { SortablePhoto } from './SortablePhoto';
 
-interface HomePhoto {
-  id: number;
-  photo: {
-    id: string;
-    fileName: string;
-  };
-  order: number;
-}
+type HomePhoto = Awaited<ReturnType<typeof getHomePhotos>>[number];
 
 export default function HomePage() {
   const [photos, setPhotos] = useState<HomePhoto[]>([]);
@@ -39,8 +32,7 @@ export default function HomePage() {
 
   async function handlePhotoAdd(photoId: string) {
     await handleAdd(photoId);
-    const res = await fetch('/api/home-photos');
-    const data = await res.json();
+    const data = await getHomePhotos();
     setPhotos(data);
   }
 
@@ -53,8 +45,7 @@ export default function HomePage() {
     const { active, over } = event;
     if (active.id !== over.id) {
       await handleReorder(active.id, over.id);
-      const res = await fetch('/api/home-photos');
-      const data = await res.json();
+      const data = await getHomePhotos();
       setPhotos(data);
     }
   }
