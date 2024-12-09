@@ -1,10 +1,10 @@
 'use client';
-import Link from 'next/link';
 import Image from 'next/image';
-import { BsTwitter, BsFacebook, BsInstagram } from 'react-icons/bs';
-import { APP_NAME } from '@/lib/constants';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { BsFacebook, BsInstagram, BsTwitter } from 'react-icons/bs';
 import { isExcludePath } from '../base/excludePaths';
+import { cn } from '@nextui-org/react';
 
 export default function Footer({ className }: { className?: string }) {
   const logoHeight = 35;
@@ -15,7 +15,7 @@ export default function Footer({ className }: { className?: string }) {
   }
 
   return (
-    <footer className={`border-t bg-gray-100 ${className}`}>
+    <footer className={cn(`border-t bg-gray-100`, className)}>
       <div className='mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8'>
         <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
           <div>
@@ -120,7 +120,7 @@ export default function Footer({ className }: { className?: string }) {
               <ul className='mt-6 space-y-4 text-sm'>
                 <li>
                   <Link
-                    href='#'
+                    href='/content/about'
                     className='text-gray-700 transition hover:opacity-75'
                   >
                     About
@@ -129,19 +129,11 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href='#'
+                    href='https://ltdc.org.ls/'
+                    target='_blank'
                     className='text-gray-700 transition hover:opacity-75'
                   >
-                    Meet the Team
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href='#'
-                    className='text-gray-700 transition hover:opacity-75'
-                  >
-                    Careers
+                    LTDC
                   </Link>
                 </li>
               </ul>
@@ -190,33 +182,6 @@ export default function Footer({ className }: { className?: string }) {
                     className='text-gray-700 transition hover:opacity-75'
                   >
                     Copyright Notice
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href='/content/disclaimer'
-                    className='text-gray-700 transition hover:opacity-75'
-                  >
-                    Disclaimer
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href='/content/cookie-policy'
-                    className='text-gray-700 transition hover:opacity-75'
-                  >
-                    Cookie Policy
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href='/content/anti-spam-policy'
-                    className='text-gray-700 transition hover:opacity-75'
-                  >
-                    Anti-Spam Policy
                   </Link>
                 </li>
               </ul>
