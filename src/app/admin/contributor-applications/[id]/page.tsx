@@ -42,7 +42,7 @@ export default async function ContributorApplicationDetails({ params }: Props) {
               <FieldView label='Email'>{application.user.email}</FieldView>
             </Stack>
           </Paper>
-          <Paper withBorder p={'md'}>
+          <Paper withBorder p={'md'} style={{ position: 'relative' }}>
             <StatusUpdater application={application} />
           </Paper>
         </Group>
