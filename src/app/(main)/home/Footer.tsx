@@ -15,70 +15,70 @@ export default function Footer({ className }: { className?: string }) {
   }
 
   return (
-    <footer className={`bg-gray-100 border-t ${className}`}>
-      <div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+    <footer className={`border-t bg-gray-100 ${className}`}>
+      <div className='mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8'>
+        <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
           <div>
             <Image
               src={`/images/logo/transparent.png`}
               width={logoHeight * 3.22}
               height={logoHeight}
-              alt="logo"
+              alt='logo'
             />
 
-            <p className="max-w-xs text-gray-500">
+            <p className='max-w-xs text-gray-500'>
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse non
               cupiditate quae nam molestias.
             </p>
 
-            <ul className="mt-8 flex gap-6">
+            <ul className='mt-8 flex gap-6'>
               <li>
                 <Link
-                  href="/"
-                  rel="noreferrer"
-                  target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  href='/'
+                  rel='noreferrer'
+                  target='_blank'
+                  className='text-gray-700 transition hover:opacity-75'
                 >
-                  <span className="sr-only">Facebook</span>
+                  <span className='sr-only'>Facebook</span>
                   <BsFacebook />
                 </Link>
               </li>
 
               <li>
                 <Link
-                  href="/"
-                  rel="noreferrer"
-                  target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  href='/'
+                  rel='noreferrer'
+                  target='_blank'
+                  className='text-gray-700 transition hover:opacity-75'
                 >
-                  <span className="sr-only">Instagram</span>
+                  <span className='sr-only'>Instagram</span>
                   <BsInstagram />
                 </Link>
               </li>
 
               <li>
                 <Link
-                  href="/"
-                  rel="noreferrer"
-                  target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  href='/'
+                  rel='noreferrer'
+                  target='_blank'
+                  className='text-gray-700 transition hover:opacity-75'
                 >
-                  <span className="sr-only">Twitter</span>
+                  <span className='sr-only'>Twitter</span>
                   <BsTwitter />
                 </Link>
               </li>
             </ul>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
+          <div className='grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4'>
             <div>
-              <p className="font-medium text-gray-900">Services</p>
+              <p className='font-medium text-gray-900'>Services</p>
 
-              <ul className="mt-6 space-y-4 text-sm">
+              <ul className='mt-6 space-y-4 text-sm'>
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='#'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Photos
                   </Link>
@@ -86,8 +86,8 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='#'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Events
                   </Link>
@@ -95,8 +95,8 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='#'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Prices
                   </Link>
@@ -104,8 +104,8 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='#'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Subscription Plans
                   </Link>
@@ -114,13 +114,13 @@ export default function Footer({ className }: { className?: string }) {
             </div>
 
             <div>
-              <p className="font-medium text-gray-900">Organization</p>
+              <p className='font-medium text-gray-900'>Organization</p>
 
-              <ul className="mt-6 space-y-4 text-sm">
+              <ul className='mt-6 space-y-4 text-sm'>
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='#'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     About
                   </Link>
@@ -128,8 +128,8 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='#'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Meet the Team
                   </Link>
@@ -137,8 +137,8 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='#'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Careers
                   </Link>
@@ -147,13 +147,13 @@ export default function Footer({ className }: { className?: string }) {
             </div>
 
             <div>
-              <p className="font-medium text-gray-900">Helpful Links</p>
+              <p className='font-medium text-gray-900'>Helpful Links</p>
 
-              <ul className="mt-6 space-y-4 text-sm">
+              <ul className='mt-6 space-y-4 text-sm'>
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='/content/faqs'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     FAQs
                   </Link>
@@ -161,8 +161,8 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='/content/terms-of-service'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Terms of Service
                   </Link>
@@ -170,8 +170,8 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='/content/privacy-policy'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Privacy Policy
                   </Link>
@@ -180,13 +180,13 @@ export default function Footer({ className }: { className?: string }) {
             </div>
 
             <div>
-              <p className="font-medium text-gray-900">Legal</p>
+              <p className='font-medium text-gray-900'>Legal</p>
 
-              <ul className="mt-6 space-y-4 text-sm">
+              <ul className='mt-6 space-y-4 text-sm'>
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='/content/copyright-notice'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Copyright Notice
                   </Link>
@@ -194,8 +194,8 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='/content/disclaimer'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Disclaimer
                   </Link>
@@ -203,8 +203,8 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='/content/cookie-policy'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Cookie Policy
                   </Link>
@@ -212,8 +212,8 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
+                    href='/content/anti-spam-policy'
+                    className='text-gray-700 transition hover:opacity-75'
                   >
                     Anti-Spam Policy
                   </Link>
@@ -223,7 +223,7 @@ export default function Footer({ className }: { className?: string }) {
           </div>
         </div>
 
-        <p className="text-xs text-gray-500">
+        <p className='text-xs text-gray-500'>
           &copy; {new Date().getFullYear()}. {APP_NAME}. All rights reserved.
         </p>
       </div>
