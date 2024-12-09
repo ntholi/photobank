@@ -1,11 +1,25 @@
 import withAuth from '@/utils/withAuth';
-import { ContributorApplication as Application } from '@prisma/client';
+import {
+  ContributorApplication as Application,
+  ContributorApplication,
+} from '@prisma/client';
 import ContributorApplicationRepository from './repository';
 
 class ContributorApplicationService {
   constructor(
     private readonly repository = new ContributorApplicationRepository(),
   ) {}
+
+  async updateApplicationStatus(
+    id: number,
+    userId: string,
+    status: ContributorApplication['status'],
+  ) {
+    return withAuth(
+      async () => this.repository.updateApplicationStatus(id, userId, status),
+      [],
+    );
+  }
 
   async first() {
     return withAuth(async () => this.repository.findFirst(), []);

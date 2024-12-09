@@ -1,12 +1,20 @@
 'use server';
 
-import { Prisma } from '@prisma/client';
+import { ContributorApplication } from '@prisma/client';
 
 import { contributorApplicationsService as service } from '@/repositories/contributor-applications/service';
 import { ContributorApplication as Application } from '@prisma/client';
 
 export async function getContributorApplication(id: number) {
   return service.get(id);
+}
+
+export async function updateApplicationStatus(
+  id: number,
+  userId: string,
+  status: ContributorApplication['status'],
+) {
+  return service.updateApplicationStatus(id, userId, status);
 }
 
 export async function getAllContributorApplications(

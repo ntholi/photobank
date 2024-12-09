@@ -1,16 +1,10 @@
 'use client';
 import { Center, SegmentedControl, Text } from '@mantine/core';
 import { ApplicationStatus, ContributorApplication } from '@prisma/client';
-import {
-  IconBan,
-  IconCheck,
-  IconCross,
-  IconHourglass,
-} from '@tabler/icons-react';
-import React from 'react';
-import { updateApplicationStatus } from '../../../old/admin/contributor-applications/actions';
-import { revalidatePath } from 'next/cache';
+import { IconBan, IconCheck, IconHourglass } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
+import React from 'react';
+import { updateApplicationStatus } from '../actions';
 
 type Props = {
   application: ContributorApplication;

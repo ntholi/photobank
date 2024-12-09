@@ -1,7 +1,32 @@
 import prisma from '@/lib/prisma';
-import { ContributorApplication as Application } from '@prisma/client';
+import {
+  ContributorApplication as Application,
+  ContributorApplication,
+} from '@prisma/client';
 
 export default class ContributorApplicationRepository {
+  async updateApplicationStatus(
+    id: number,
+    userId: string,
+    status: ContributorApplication['status'],
+  ) {
+    await prisma.contributorApplication.update({
+      where: { id: Number(id) },
+      data: { status },
+    });
+    if (status === 'approved') {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { role: 'contributor' },
+      });
+    } else {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { role: 'user' },
+      });
+    }
+  }
+
   async findFirst() {
     return await prisma.contributorApplication.findFirst();
   }

@@ -27,10 +27,10 @@ export default function ContributorApplicationForm({
     <Form
       title={title}
       action={onSubmit}
-      queryKey={['contributor_applications']}
+      queryKey={['contributor-applications']}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
-        router.push(`/admin/contributor_applications/${id}`);
+        router.push(`/admin/contributor-applications/${id}`);
       }}
     >
       {(form) => (

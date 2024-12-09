@@ -30,30 +30,3 @@ export async function createApplication(data: ContributorApplication) {
     data,
   });
 }
-
-export async function updateApplicationStatus(
-  id: number,
-  userId: string,
-  status: ContributorApplication['status'],
-) {
-  const session = await auth();
-  if (session?.user?.role != 'admin') throw new Error('User not admin');
-
-  await prisma.contributorApplication.update({
-    where: { id: Number(id) },
-    data: { status },
-  });
-  if (status === 'approved') {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { role: 'contributor' },
-    });
-  } else {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { role: 'user' },
-    });
-  }
-
-  revalidatePath(`/admin/contributor-applications/${id}`);
-}

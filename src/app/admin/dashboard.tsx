@@ -20,9 +20,11 @@ import {
   IconHome,
   IconLogout2,
   IconMap,
+  IconNote,
   IconPhoto,
   IconStereoGlasses,
   IconTags,
+  IconUser,
   IconUsers,
 } from '@tabler/icons-react';
 import { signOut, useSession } from 'next-auth/react';
@@ -39,8 +41,19 @@ const navigation: NavItem[] = [
   },
   {
     label: 'Users',
-    href: '/admin/users',
     icon: IconUsers,
+    children: [
+      {
+        label: 'Users',
+        href: '/admin/users',
+        icon: IconUser,
+      },
+      {
+        label: 'Applications',
+        href: '/admin/contributor-applications',
+        icon: IconNote,
+      },
+    ],
   },
   {
     label: 'Photos',
