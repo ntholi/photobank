@@ -7,10 +7,11 @@ import UploadForm from '../Form';
 import axios, { AxiosProgressEvent } from 'axios';
 import { Location } from '@prisma/client';
 import { useSession } from 'next-auth/react';
-import { IconX } from '@tabler/icons-react';
+import { IconX, IconRotateClockwise } from '@tabler/icons-react';
 
 export default function Page() {
   const [file, setFile] = useState<File>();
+  const [rotation, setRotation] = useState(0);
   const [progress, setProgress] = useState<number>();
   const [isSaving, startSaving] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -34,17 +35,50 @@ export default function Page() {
     loadFile();
   }, []);
 
+  const handleRotate = () => {
+    setRotation((prev) => (prev + 90) % 360);
+  };
+
   const handleFileUpload = async () => {
     if (file) {
       setProgress(0);
       setError(null);
       const ext = file.name.split('.').pop();
       try {
+        let fileToUpload = file;
+
+        if (rotation !== 0) {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          const img = new window.Image();
+
+          await new Promise((resolve) => {
+            img.onload = resolve;
+            img.src = URL.createObjectURL(file);
+          });
+
+          const isVertical = rotation === 90 || rotation === 270;
+          canvas.width = isVertical ? img.height : img.width;
+          canvas.height = isVertical ? img.width : img.height;
+
+          if (ctx) {
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((rotation * Math.PI) / 180);
+            ctx.drawImage(img, -img.width / 2, -img.height / 2);
+          }
+
+          const blob = await new Promise<Blob>((resolve) =>
+            canvas.toBlob((blob) => resolve(blob!), `image/${ext}`),
+          );
+
+          fileToUpload = new File([blob], file.name, { type: file.type });
+        }
+
         const { url, fileName } = (
           await axios.get(`/api/photos/upload-url?ext=${ext}`)
         ).data;
 
-        await axios.put(url, file, {
+        await axios.put(url, fileToUpload, {
           onUploadProgress: (e: AxiosProgressEvent) => {
             if (e.total) {
               setProgress((e.loaded / e.total) * 100);
@@ -95,13 +129,25 @@ export default function Page() {
 
   return (
     <section className='grid gap-5 pt-5 md:mt-8 md:px-16 lg:grid-cols-2'>
-      <div>
+      <div className='relative'>
         {file ? (
-          <Image
-            src={URL.createObjectURL(file)}
-            alt={'Uploaded Image'}
-            shadow='sm'
-          />
+          <>
+            <Image
+              src={URL.createObjectURL(file)}
+              alt={'Uploaded Image'}
+              shadow='sm'
+              style={{ transform: `rotate(${rotation}deg)` }}
+              className='transition-transform duration-200'
+            />
+            <Button
+              isIconOnly
+              className='absolute right-2 top-2 z-50 bg-white/80 backdrop-blur-sm'
+              onClick={handleRotate}
+              size='sm'
+            >
+              <IconRotateClockwise size={'1.2rem'} />
+            </Button>
+          </>
         ) : (
           <Skeleton />
         )}
