@@ -129,7 +129,7 @@ export default function Page() {
 
   return (
     <section className='grid gap-5 pt-5 md:mt-8 md:px-16 lg:grid-cols-2'>
-      <div className='relative aspect-square w-full overflow-hidden bg-default-100'>
+      <div className='relative aspect-square w-full overflow-hidden rounded-lg border-2 border-dotted border-default-200 bg-gray-50 p-2'>
         {file ? (
           <>
             <div className='relative h-full w-full'>
@@ -145,7 +145,7 @@ export default function Page() {
             </div>
             <Button
               isIconOnly
-              className='absolute right-2 top-2 z-50 bg-white/80 backdrop-blur-sm'
+              className='absolute right-2 top-2 z-50'
               onClick={handleRotate}
               size='sm'
             >
