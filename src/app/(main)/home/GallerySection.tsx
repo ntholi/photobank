@@ -14,52 +14,53 @@ export default function GallerySection() {
   useEffect(() => {}, [tag]);
 
   return (
-    <section id="gallery" className="pt-10">
-      <div className="px-4">
+    <section className='pt-10'>
+      <div className='px-4'>
         <Divider />
       </div>
       <Tabs
-        aria-label="Options"
-        variant="underlined"
-        className="pb-3 pt-10 px-14 border-b w-full"
+        aria-label='Options'
+        variant='underlined'
+        className='w-full border-b px-14 pb-3 pt-10'
       >
         <Tab
-          key="photos"
+          key='photos'
+          id='gallery'
           title={
-            <div className="flex items-center space-x-2 text-medium">
-              <FaImages className="text-xl" />
+            <div className='flex items-center space-x-2 text-medium'>
+              <FaImages className='text-xl' />
               <span>Photos</span>
             </div>
           }
         >
-          <div className="min-h-screen mt-5">
-            <div className="max-w-5xl mx-auto">
+          <div className='mt-5 min-h-screen'>
+            <div className='mx-auto max-w-5xl'>
               <Input
-                type="text"
-                size="lg"
-                endContent={<FaSearch color="gray" />}
-                variant="bordered"
-                placeholder="Search Photos"
+                type='text'
+                size='lg'
+                endContent={<FaSearch color='gray' />}
+                variant='bordered'
+                placeholder='Search Photos'
                 onChange={(e) => setSearchKey(e.target.value)}
               />
               <FilterBar setSelected={setTag} selected={tag} />
             </div>
 
-            <div className="mt-10">
+            <div className='mt-10'>
               <Gallery searchKey={searchKey} tag={tag} />
             </div>
           </div>
         </Tab>
         <Tab
-          key="map"
+          key='map'
           title={
-            <div className="flex items-center space-x-2 text-medium">
-              <FaMap className="text-xl" />
+            <div className='flex items-center space-x-2 text-medium'>
+              <FaMap className='text-xl' />
               <span>Map</span>
             </div>
           }
         >
-          <div className="container mx-auto px-2 md:px-24">
+          <div className='container mx-auto px-2 md:px-24'>
             <MapWrapper />
           </div>
         </Tab>

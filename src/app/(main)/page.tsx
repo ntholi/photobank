@@ -33,7 +33,7 @@ export default async function Page() {
         </>
       ) : (
         <section className='flex h-screen items-center justify-center'>
-          <p>Photobank Empty</p>
+          <p>PhotoBank Empty</p>
         </section>
       )}
     </>

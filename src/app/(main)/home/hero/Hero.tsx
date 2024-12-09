@@ -1,11 +1,13 @@
 'use client';
 import { CurrentSlideData, PhotoWithData } from '@/lib/types';
+import { Button } from '@nextui-org/react';
+import { IconArrowDown } from '@tabler/icons-react';
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
+import BackgroundImage from './BackgroundImage';
+import Controls from './Controls';
 import SlideInfo from './SlideInfo';
 import Slides from './Slides';
-import Controls from './Controls';
-import BackgroundImage from './BackgroundImage';
 
 export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
   const initData = sliderData[0];
@@ -21,6 +23,11 @@ export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
     });
   const [autoPlay, setAutoPlay] = React.useState(true);
 
+  const scrollToGallery = () => {
+    const gallerySection = document.getElementById('gallery');
+    gallerySection?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const handleNext = React.useCallback(() => {
     setData((prev) => prev.slice(1));
     setCurrentSlideData({
@@ -34,7 +41,7 @@ export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
         transitionData ? transitionData : initData,
       ]);
     }, 500);
-  }, [data, initData, sliderData, transitionData]); 
+  }, [data, initData, sliderData, transitionData]);
 
   React.useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -52,24 +59,23 @@ export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
 
   return (
     <section
-      className={`
-        relative min-h-screen select-none overflow-hidden text-white antialiased`}
+      className={`relative min-h-screen select-none overflow-hidden text-white antialiased`}
     >
       <AnimatePresence>
         <BackgroundImage
-          key="background"
+          key='background'
           transitionData={transitionData}
           currentSlideData={currentSlideData}
         />
-        <div key="content" className="absolute z-20  h-full w-full">
-          <div className="flex h-full w-full grid-cols-10 flex-col md:grid">
-            <div className="col-span-4 mb-3 flex h-full flex-1 flex-col justify-end px-5 md:mb-0 md:justify-center md:px-10">
+        <div key='content' className='absolute z-20 h-full w-full'>
+          <div className='flex h-full w-full grid-cols-10 flex-col md:grid'>
+            <div className='col-span-4 mb-3 flex h-full flex-1 flex-col justify-end px-5 md:mb-0 md:justify-center md:px-10'>
               <SlideInfo
                 transitionData={transitionData}
                 currentSlideData={currentSlideData}
               />
             </div>
-            <div className="col-span-6 flex h-full flex-1 flex-col justify-start p-4 md:justify-center md:p-10">
+            <div className='col-span-6 flex h-full flex-1 flex-col justify-start p-4 md:justify-center md:p-10'>
               <Slides data={data} />
               <Controls
                 currentSlideData={currentSlideData}
@@ -84,6 +90,19 @@ export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
               />
             </div>
           </div>
+          {/* <div className='absolute bottom-8 left-1/2 z-30 hidden -translate-x-1/2 md:block'>
+            <Button
+              color='primary'
+              radius='full'
+              isIconOnly
+              size='lg'
+              variant='solid'
+              onClick={scrollToGallery}
+              className='animate-bounce hover:animate-none'
+            >
+              <IconArrowDown color='white' />
+            </Button>
+          </div> */}
         </div>
       </AnimatePresence>
     </section>
