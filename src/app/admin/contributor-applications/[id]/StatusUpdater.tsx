@@ -5,6 +5,7 @@ import { IconBan, IconCheck, IconHourglass } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { updateApplicationStatus } from '../actions';
+import { useQueryClient } from '@tanstack/react-query';
 
 type Props = {
   application: ContributorApplication;
@@ -12,11 +13,13 @@ type Props = {
 
 export default function StatusUpdater({ application }: Props) {
   const [value, setValue] = React.useState(application.status);
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   async function handleUpdate(status: ApplicationStatus) {
     setValue(status);
     await updateApplicationStatus(application.id, application.userId, status);
+    await queryClient.invalidateQueries({ queryKey: ['pending-applications'] });
     router.refresh();
   }
 

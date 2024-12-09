@@ -32,6 +32,7 @@ import NextImage from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
+import { usePendingApplications } from './contributor-applications/hooks';
 
 const navigation: NavItem[] = [
   {
@@ -52,6 +53,9 @@ const navigation: NavItem[] = [
         label: 'Applications',
         href: '/admin/contributor-applications',
         icon: IconNote,
+        notificationCount: () => {
+          return 0;
+        },
       },
     ],
   },
@@ -77,9 +81,31 @@ const navigation: NavItem[] = [
   },
 ];
 
+function ApplicationsNavItem() {
+  const { data: pendingApplications } = usePendingApplications();
+
+  return {
+    label: 'Applications',
+    href: '/admin/contributor-applications',
+    icon: IconNote,
+    notificationCount: () => pendingApplications?.length || 0,
+  };
+}
+
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
   const { colorScheme } = useMantineColorScheme();
+
+  const applicationsNavItem = ApplicationsNavItem();
+
+  const fullNavigation = [
+    navigation[0],
+    {
+      ...navigation[1],
+      children: [navigation[1].children![0], applicationsNavItem],
+    },
+    ...navigation.slice(2),
+  ];
 
   if (status == 'loading') {
     return (
@@ -106,7 +132,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         </Group>
       </Shell.Header>
       <Shell.Navigation>
-        <Navigation navigation={navigation} />
+        <Navigation navigation={fullNavigation} />
       </Shell.Navigation>
       <Shell.Body>{children}</Shell.Body>
       <Shell.User>

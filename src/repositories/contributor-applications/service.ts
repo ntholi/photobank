@@ -55,6 +55,10 @@ class ContributorApplicationService {
   async count() {
     return withAuth(async () => this.repository.count(), []);
   }
+
+  async getPendingApplications() {
+    return withAuth(async () => this.repository.getPendingApplications(), []);
+  }
 }
 
 export const contributorApplicationsService =

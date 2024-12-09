@@ -24,6 +24,10 @@ export async function getAllContributorApplications(
   return service.search(page, search, []);
 }
 
+export async function getPendingContributorApplications() {
+  return service.getPendingApplications();
+}
+
 export async function createContributorApplication(application: Application) {
   return service.create(application);
 }

@@ -125,6 +125,12 @@ export default class ContributorApplicationRepository {
   async deleteAll() {
     await prisma.contributorApplication.deleteMany();
   }
+
+  async getPendingApplications() {
+    return await prisma.contributorApplication.findMany({
+      where: { status: 'pending' },
+    });
+  }
 }
 
 export const contributor_applicationsRepository =

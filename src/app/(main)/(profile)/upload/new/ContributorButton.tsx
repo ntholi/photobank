@@ -16,6 +16,7 @@ import {
   Textarea,
   useDisclosure,
 } from '@nextui-org/react';
+import { useQueryClient } from '@tanstack/react-query';
 
 type Props = {
   onOpen: () => void;
@@ -30,6 +31,7 @@ export default function ContributorButton({ onOpen }: Props) {
   const { isOpen, onOpen: openModel, onOpenChange } = useDisclosure();
 
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     async function fetchUser() {
@@ -55,6 +57,9 @@ export default function ContributorButton({ onOpen }: Props) {
       );
       if (data.application) {
         setApplication(data.application);
+        await queryClient.invalidateQueries({
+          queryKey: ['pending-applications'],
+        });
       }
     } finally {
       setLoading(false);
