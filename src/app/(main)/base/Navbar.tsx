@@ -39,8 +39,8 @@ const navItems = [
     href: '/#gallery',
   },
   {
-    label: 'About',
-    href: '#',
+    label: 'Virtual Tours',
+    href: '/virtual-tours',
   },
 ];
 
