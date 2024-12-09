@@ -8,7 +8,7 @@ import {
   IconHourglass,
 } from '@tabler/icons-react';
 import React from 'react';
-import { updateApplicationStatus } from '../actions';
+import { updateApplicationStatus } from '../../../old/admin/contributor-applications/actions';
 import { revalidatePath } from 'next/cache';
 import { useRouter } from 'next/navigation';
 
@@ -29,7 +29,7 @@ export default function StatusUpdater({ application }: Props) {
   return (
     <SegmentedControl
       value={value}
-      size="sm"
+      size='sm'
       onChange={(value) => {
         handleUpdate(value as ApplicationStatus);
       }}
@@ -38,8 +38,8 @@ export default function StatusUpdater({ application }: Props) {
           value: 'approved',
           label: (
             <Center style={{ gap: 10 }}>
-              <IconCheck size={'0.95rem'} color="green" />
-              <Text size="sm">Approve</Text>
+              <IconCheck size={'0.95rem'} color='green' />
+              <Text size='sm'>Approve</Text>
             </Center>
           ),
         },
@@ -47,8 +47,8 @@ export default function StatusUpdater({ application }: Props) {
           value: 'rejected',
           label: (
             <Center style={{ gap: 10 }}>
-              <IconBan size={'0.95rem'} color="red" />
-              <Text size="sm">Reject</Text>
+              <IconBan size={'0.95rem'} color='red' />
+              <Text size='sm'>Reject</Text>
             </Center>
           ),
         },
@@ -56,8 +56,8 @@ export default function StatusUpdater({ application }: Props) {
           value: 'pending',
           label: (
             <Center style={{ gap: 10 }}>
-              <IconHourglass size={'0.95rem'} color="gray" />
-              <Text size="sm">Pending</Text>
+              <IconHourglass size={'0.95rem'} color='gray' />
+              <Text size='sm'>Pending</Text>
             </Center>
           ),
         },

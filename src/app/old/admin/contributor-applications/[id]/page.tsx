@@ -4,7 +4,7 @@ import HeaderDisplay from '@/app/old/components/HeaderDisplay';
 import { Box, Fieldset, Group, Stack, Text } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import { deleteApplication, getApplication } from '../actions';
-import StatusUpdater from './StatusUpdater';
+import StatusUpdater from '../../../../admin/contributor-applications/[id]/StatusUpdater';
 
 type Props = {
   params: Promise<{
