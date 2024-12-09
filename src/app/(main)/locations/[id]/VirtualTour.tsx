@@ -1,3 +1,4 @@
+import { tourViaCloudfront } from '@/lib/config/urls';
 import React from 'react';
 
 interface Props {
@@ -23,13 +24,13 @@ export default function VirtualTour({ url }: Props) {
           width: '100%',
           height: '100%',
         }}
-        src={`${url}/index.htm`}
-        name="TOUR NAME"
-        width="100%"
-        height="100%"
-        frameBorder="0"
+        src={`${tourViaCloudfront(url)}/index.htm`}
+        name='TOUR NAME'
+        width='100%'
+        height='100%'
+        frameBorder='0'
         allowFullScreen={true}
-        allow="fullscreen; accelerometer; gyroscope; magnetometer; vr; xr; xr-spatial-tracking; autoplay; camera; microphone"
+        allow='fullscreen; accelerometer; gyroscope; magnetometer; vr; xr; xr-spatial-tracking; autoplay; camera; microphone'
       ></iframe>
     </div>
   );

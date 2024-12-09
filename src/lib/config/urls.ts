@@ -21,3 +21,9 @@ export const watermarked = (fileName: string) => {
   const name = fileName.split('.')[0];
   return `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${name}_watermarked.jpg`;
 };
+
+export const tourViaCloudfront = (tourUrl: string) => {
+  const url = new URL(tourUrl);
+  const path = url.pathname.split('/').pop();
+  return `https://d3mms2fka9bra2.cloudfront.net/${path}`;
+};
