@@ -36,6 +36,31 @@ export default function Hero({ sliderData }: { sliderData: PhotoWithData[] }) {
     }, 500);
   }, [data, initData, sliderData, transitionData]);
 
+  const handleScrollToGallery = () => {
+    document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  React.useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 0) {
+        // Scrolling down
+        e.preventDefault();
+        handleScrollToGallery();
+      }
+    };
+
+    const heroSection = document.querySelector('section');
+    if (heroSection) {
+      heroSection.addEventListener('wheel', handleWheel, { passive: false });
+    }
+
+    return () => {
+      if (heroSection) {
+        heroSection.removeEventListener('wheel', handleWheel);
+      }
+    };
+  }, []);
+
   React.useEffect(() => {
     let interval: NodeJS.Timeout;
     if (autoPlay) {

@@ -14,7 +14,7 @@ export default function GallerySection() {
   useEffect(() => {}, [tag]);
 
   return (
-    <section className='pt-10'>
+    <section id="gallery" className='pt-10'>
       <div className='px-4'>
         <Divider />
       </div>
