@@ -5,8 +5,8 @@ import { revalidatePath } from 'next/cache';
 
 export async function getHomePhotos() {
   return await prisma.homePhoto.findMany({
-    select: { id: true, photo: true, order: true },
-    orderBy: { order: 'asc' },
+    select: { id: true, photo: true, position: true },
+    orderBy: { position: 'asc' },
   });
 }
 
@@ -36,8 +36,8 @@ export async function handleDelete(id: number) {
 
 export async function handleReorder(activeId: number, overId: number) {
   const photos = await prisma.homePhoto.findMany({
-    select: { id: true, order: true },
-    orderBy: { order: 'asc' },
+    select: { id: true, position: true },
+    orderBy: { position: 'asc' },
   });
 
   const activeItem = photos.find((p) => p.id === activeId);
@@ -48,11 +48,11 @@ export async function handleReorder(activeId: number, overId: number) {
   await prisma.$transaction([
     prisma.homePhoto.update({
       where: { id: activeItem.id },
-      data: { order: overItem.order },
+      data: { position: overItem.position },
     }),
     prisma.homePhoto.update({
       where: { id: overItem.id },
-      data: { order: activeItem.order },
+      data: { position: activeItem.position },
     }),
   ]);
 
