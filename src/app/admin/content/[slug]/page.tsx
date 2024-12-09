@@ -1,7 +1,7 @@
-import { Box, Center, Loader, Skeleton } from '@mantine/core';
+import { Box, Center, Loader } from '@mantine/core';
+import { Suspense } from 'react';
 import { getContent } from '../actions';
 import ContentForm from './ContentForm';
-import { Suspense } from 'react';
 
 type Props = {
   params: Promise<{
