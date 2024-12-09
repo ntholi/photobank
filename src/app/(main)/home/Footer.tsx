@@ -27,8 +27,9 @@ export default function Footer({ className }: { className?: string }) {
             />
 
             <p className='max-w-xs text-gray-500'>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse non
-              cupiditate quae nam molestias.
+              Lehakoe is Lesotho's Photobank and Virtual Tour platform. The
+              platform is designed to promote tourism and showcase the beauty of
+              Lesotho
             </p>
 
             <ul className='mt-8 flex gap-6'>
@@ -77,7 +78,7 @@ export default function Footer({ className }: { className?: string }) {
               <ul className='mt-6 space-y-4 text-sm'>
                 <li>
                   <Link
-                    href='#'
+                    href='#/gallery'
                     className='text-gray-700 transition hover:opacity-75'
                   >
                     Photos
@@ -86,10 +87,19 @@ export default function Footer({ className }: { className?: string }) {
 
                 <li>
                   <Link
-                    href='#'
+                    href='/virtual-tours'
                     className='text-gray-700 transition hover:opacity-75'
                   >
-                    Events
+                    Virtual Tours
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href='#/gallery'
+                    className='text-gray-700 transition hover:opacity-75'
+                  >
+                    Map
                   </Link>
                 </li>
 
@@ -99,15 +109,6 @@ export default function Footer({ className }: { className?: string }) {
                     className='text-gray-700 transition hover:opacity-75'
                   >
                     Prices
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href='#'
-                    className='text-gray-700 transition hover:opacity-75'
-                  >
-                    Subscription Plans
                   </Link>
                 </li>
               </ul>
@@ -224,7 +225,8 @@ export default function Footer({ className }: { className?: string }) {
         </div>
 
         <p className='text-xs text-gray-500'>
-          &copy; {new Date().getFullYear()}. {APP_NAME}. All rights reserved.
+          &copy; {new Date().getFullYear()}. Lesotho Tourism Development
+          Corporation. All rights reserved.
         </p>
       </div>
     </footer>
