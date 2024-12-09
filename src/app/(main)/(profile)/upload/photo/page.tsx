@@ -129,16 +129,16 @@ export default function Page() {
 
   return (
     <section className='grid gap-5 pt-5 md:mt-8 md:px-16 lg:grid-cols-2'>
-      <div className='relative aspect-square w-full overflow-hidden rounded-lg border-2 border-dotted border-default-200 bg-gray-50 p-2'>
+      <div className='relative min-h-[300px] w-full overflow-hidden rounded-lg border-2 border-dotted border-default-200 bg-gray-50 p-2'>
         {file ? (
           <>
-            <div className='relative h-full w-full'>
+            <div className='relative flex h-full w-full items-center justify-center'>
               <img
                 src={URL.createObjectURL(file)}
                 alt={'Uploaded Image'}
-                className='absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-contain'
+                className='max-h-[80vh] w-auto max-w-full object-contain'
                 style={{
-                  transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
+                  transform: `rotate(${rotation}deg)`,
                   transformOrigin: 'center',
                 }}
               />
