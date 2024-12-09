@@ -129,16 +129,20 @@ export default function Page() {
 
   return (
     <section className='grid gap-5 pt-5 md:mt-8 md:px-16 lg:grid-cols-2'>
-      <div className='relative'>
+      <div className='relative aspect-square w-full overflow-hidden bg-default-100'>
         {file ? (
           <>
-            <Image
-              src={URL.createObjectURL(file)}
-              alt={'Uploaded Image'}
-              shadow='sm'
-              style={{ transform: `rotate(${rotation}deg)` }}
-              className='transition-transform duration-200'
-            />
+            <div className='relative h-full w-full'>
+              <img
+                src={URL.createObjectURL(file)}
+                alt={'Uploaded Image'}
+                className='absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-contain'
+                style={{
+                  transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
+                  transformOrigin: 'center',
+                }}
+              />
+            </div>
             <Button
               isIconOnly
               className='absolute right-2 top-2 z-50 bg-white/80 backdrop-blur-sm'
@@ -149,7 +153,7 @@ export default function Page() {
             </Button>
           </>
         ) : (
-          <Skeleton />
+          <Skeleton className='h-full w-full' />
         )}
       </div>
       <div>
