@@ -72,7 +72,7 @@ export default function Page() {
       const fileName = await handleFileUpload();
       startSaving(async () => {
         try {
-          await axios.post('/api/photos', {
+          await axios.post('/api/photos/uploads', {
             fileName,
             location,
             description,

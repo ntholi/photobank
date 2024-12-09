@@ -26,7 +26,7 @@ export default function VideoForm({ videoUrl, isSaving }: VideoFormProps) {
       const blob = await response.blob();
       const file = new File([blob], 'video.mp4', { type: 'video/mp4' });
 
-      const { url, fileName } = (await axios.get(`/api/videos/upload-url`))
+      const { url, fileName } = (await axios.get(`/api/photos/upload-url`))
         .data;
 
       await axios.put(url, file, {
