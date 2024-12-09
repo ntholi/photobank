@@ -1,7 +1,7 @@
 'use client';
 
 import { thumbnail } from '@/lib/config/urls';
-import { shorten } from '@/utils';
+import { shorten, stripHtml } from '@/utils';
 import {
   Card,
   CardHeader,
@@ -27,18 +27,22 @@ export function VirtualTourCard({ location }: VirtualTourCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className='h-full transition-transform duration-200 hover:scale-105'>
-        <CardHeader className='p-0'>
-          <Image
-            alt={location.location.name}
-            className='h-[200px] w-full object-cover'
-            src={thumbnail(location.coverPhoto?.fileName || '')}
-          />
+      <Card className='h-full'>
+        <CardHeader className='flex-col items-center justify-center overflow-hidden p-0'>
+          <div className='w-full'>
+            <Image
+              width={'100%'}
+              alt={location.location.name}
+              className='h-[200px] w-full object-cover'
+              src={thumbnail(location.coverPhoto?.fileName || '')}
+              radius='none'
+            />
+          </div>
         </CardHeader>
         <CardBody>
           <h3 className='mb-2 text-xl font-bold'>{location.location.name}</h3>
           <p className='text-gray-600 dark:text-gray-400'>
-            {shorten(location.about)}
+            {shorten(stripHtml(location.about))}
           </p>
         </CardBody>
         <CardFooter>

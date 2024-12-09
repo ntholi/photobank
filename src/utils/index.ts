@@ -14,6 +14,11 @@ export function shorten(str: string | null | undefined, length: number = 52) {
   return str.length > length ? str.slice(0, length) + '...' : str;
 }
 
+export function stripHtml(str: string | null | undefined) {
+  if (!str) return '';
+  return str.replace(/<[^>]*>?/gm, '');
+}
+
 export function variableNameToLabel(str: string) {
   return str
     .replace(/([A-Z])/g, ' $1')
