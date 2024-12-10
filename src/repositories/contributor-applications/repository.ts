@@ -55,10 +55,15 @@ export default class ContributorApplicationRepository {
   ) {
     try {
       const offset = (page - 1) * pageSize;
-      let where = {};
+      let where: any = {
+        status: {
+          in: ['pending', 'rejected'],
+        },
+      };
 
       if (search && search.trim() !== '') {
         where = {
+          ...where,
           OR: searchProperties.map((property) => ({
             [property]: {
               contains: search.trim(),
