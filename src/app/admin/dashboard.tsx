@@ -33,25 +33,30 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { usePendingApplications } from './contributor-applications/hooks';
+import { Role } from '@prisma/client';
 
 const navigation: NavItem[] = [
   {
     label: 'Landing Page',
     href: '/admin/landing-page',
     icon: IconHome,
+    roles: ['admin'],
   },
   {
     label: 'Users',
     icon: IconUsers,
+    roles: ['admin'],
     children: [
       {
         label: 'Users',
         href: '/admin/users',
         icon: IconUser,
+        roles: ['admin'],
       },
       {
         label: 'Applications',
         href: '/admin/contributor-applications',
+        roles: ['admin'],
         icon: IconNote,
         notificationCount: () => {
           return 0;
@@ -63,36 +68,42 @@ const navigation: NavItem[] = [
     label: 'Photos',
     href: '/admin/photos',
     icon: IconPhoto,
+    roles: ['admin', 'moderator'],
   },
   {
     label: 'Locations',
     href: '/admin/location-details',
     icon: IconMap,
+    roles: ['admin'],
   },
   {
     label: 'Virtual Tours',
     href: '/admin/virtual-tours',
     icon: IconStereoGlasses,
+    roles: ['admin'],
   },
   {
     label: 'Tags',
     href: '/admin/tags',
     icon: IconTags,
+    roles: ['admin'],
   },
   {
     label: 'Content',
     href: '/admin/content',
     icon: IconNote,
+    roles: ['admin'],
   },
 ];
 
-function ApplicationsNavItem() {
+function ApplicationsNavItem(): NavItem {
   const { data: pendingApplications } = usePendingApplications();
 
   return {
     label: 'Applications',
     href: '/admin/contributor-applications',
     icon: IconNote,
+    roles: ['admin'],
     notificationCount: () => pendingApplications?.length || 0,
   };
 }
@@ -188,6 +199,7 @@ export type NavItem = {
   href?: string;
   icon: Icon;
   children?: NavItem[];
+  roles: (Role | undefined)[];
   notificationCount?: () => number;
 };
 
@@ -221,8 +233,14 @@ function DisplayWithNotification({ item }: { item: NavItem }) {
 }
 
 function ItemDisplay({ item }: { item: NavItem }) {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const Icon = item.icon;
+
+  if (!item.roles.includes(session?.user?.role)) {
+    return null;
+  }
+
   const navLink = (
     <NavLink
       label={item.label}
