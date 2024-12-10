@@ -46,7 +46,7 @@ export default function VirtualTourForm({
     <Form
       title={title}
       action={onSubmit}
-      queryKey={['virtual-tours']}
+      queryKey={['location-details']}
       defaultValues={defaultValues}
     >
       {(form) => (

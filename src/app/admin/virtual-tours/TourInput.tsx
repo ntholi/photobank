@@ -33,7 +33,7 @@ export default function TourInput({ value, onChange, disabled }: Props) {
       setProgress(0);
       try {
         const { url, fileName } = (
-          await axios.get(`/api/virtualtours/upload-url`)
+          await axios.get(`/api/virtual-tours/upload-url`)
         ).data;
 
         await axios.put(url, file, {

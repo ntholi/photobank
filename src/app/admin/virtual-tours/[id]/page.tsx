@@ -22,7 +22,10 @@ export default async function VirtualTourDetails({ params }: Props) {
 
   return (
     <DetailsView>
-      <DetailsViewHeader title={'Virtual Tour'} queryKey={['virtual-tours']} />
+      <DetailsViewHeader
+        title={'Virtual Tour'}
+        queryKey={['location-details']}
+      />
       <DetailsViewBody>
         <FieldView label='Location'>{item.location.name}</FieldView>
         <FieldView label='Virtual Tour'>

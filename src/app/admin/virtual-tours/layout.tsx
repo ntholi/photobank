@@ -8,7 +8,7 @@ export default function Layout({ children }: PropsWithChildren) {
   return (
     <ListLayout
       path={'/admin/virtual-tours'}
-      queryKey={['virtual-tours']}
+      queryKey={['location-details']}
       getItems={getLocationsWithTour}
       actionIcons={[
         <NewLink key={'new-link'} href='/admin/virtual-tours/new' />,
