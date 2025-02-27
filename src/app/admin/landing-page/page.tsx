@@ -76,7 +76,7 @@ export default function HomePage() {
             items={photos.map((p) => p.id)}
             strategy={rectSortingStrategy}
           >
-            <SimpleGrid cols={4} mt={'xl'}>
+            <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} mt={'xl'}>
               {photos.map((item) => (
                 <SortablePhoto
                   key={item.id}

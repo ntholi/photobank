@@ -1,5 +1,5 @@
 'use client';
-import { MantineProvider } from '@mantine/core';
+import { MantineProvider, Notification } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { AppProgressBar } from 'next-nprogress-bar';
@@ -10,6 +10,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <MantineProvider defaultColorScheme='auto'>
       <Notifications />
       <ModalsProvider>
+        <Notification />
         {children}
         <AppProgressBar
           height='3px'
