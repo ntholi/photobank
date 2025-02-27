@@ -24,7 +24,7 @@ export default function DeleteButton({
     <ActionIcon
       variant='filled'
       color='red'
-      onClick={onDelete}
+      onMouseDown={onDelete}
       {...props}
       style={{ touchAction: 'none' }}
     >

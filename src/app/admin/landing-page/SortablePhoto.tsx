@@ -29,8 +29,8 @@ export function SortablePhoto({ id, photo, handleDelete }: SortablePhotoProps) {
     transform: CSS.Transform.toString(transform),
     transition,
     cursor: 'grab',
-    opacity: isDragging ? 0.5 : 1,
-    scale: isDragging ? 1.05 : 1,
+    opacity: isDragging ? 0.3 : 1,
+    scale: isDragging ? 1.03 : 1,
     boxShadow: isDragging ? '0 0 20px rgba(0,0,0,0.15)' : 'none',
     zIndex: isDragging ? 1 : 0,
   };
@@ -38,7 +38,6 @@ export function SortablePhoto({ id, photo, handleDelete }: SortablePhotoProps) {
   return (
     <Box ref={setNodeRef} style={style} {...attributes} {...listeners} p='xs'>
       <Box pos={'relative'}>
-        <Image src={thumbnail(photo.fileName)} h={200} />
         <DeleteButton
           pos={'absolute'}
           top={5}
@@ -52,6 +51,7 @@ export function SortablePhoto({ id, photo, handleDelete }: SortablePhotoProps) {
             }
           }}
         />
+        <Image src={thumbnail(photo.fileName)} h={200} />
       </Box>
     </Box>
   );
