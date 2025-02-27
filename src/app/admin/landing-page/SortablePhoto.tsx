@@ -37,13 +37,7 @@ export function SortablePhoto({ id, photo, handleDelete }: SortablePhotoProps) {
 
   return (
     <Box ref={setNodeRef} style={style} {...attributes} {...listeners} p='xs'>
-      <Box
-        pos={'relative'}
-        style={{
-          transition: 'transform 200ms ease',
-          transform: isDragging ? 'scale(1.05)' : 'scale(1)',
-        }}
-      >
+      <Box pos={'relative'}>
         <Image src={thumbnail(photo.fileName)} h={200} />
         <DeleteButton
           pos={'absolute'}
