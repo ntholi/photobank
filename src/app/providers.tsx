@@ -1,31 +1,18 @@
 'use client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SessionProvider } from 'next-auth/react';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
-import type { ThemeProviderProps } from 'next-themes';
+import { PropsWithChildren } from 'react';
 
-import * as React from 'react';
-import { HeroUIProvider } from '@heroui/system';
-import { useRouter } from 'next/navigation';
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
+const queryClient = new QueryClient();
 
-export interface ProvidersProps {
-  children: React.ReactNode;
-  themeProps?: ThemeProviderProps;
-}
-
-declare module '@react-types/shared' {
-  interface RouterConfig {
-    routerOptions: NonNullable<
-      Parameters<ReturnType<typeof useRouter>['push']>[1]
-    >;
-  }
-}
-
-export function Providers({ children, themeProps }: ProvidersProps) {
-  const router = useRouter();
-
+export default function Providers({ children }: PropsWithChildren) {
   return (
-    <HeroUIProvider navigate={router.push}>
-      <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
-    </HeroUIProvider>
+    <SessionProvider>
+      <QueryClientProvider client={queryClient}>
+        <NuqsAdapter>{children}</NuqsAdapter>
+      </QueryClientProvider>
+    </SessionProvider>
   );
 }
