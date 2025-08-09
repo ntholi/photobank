@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1754717680414,
-      "tag": "0000_open_prima",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1754725204119,
-      "tag": "0001_dizzy_scream",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1754727728592,
-      "tag": "0002_lowly_rogue",
+      "when": 1754727985719,
+      "tag": "0000_misty_exodus",
       "breakpoints": true
     }
   ]

@@ -22,21 +22,21 @@ export const users = sqliteTable('users', {
 });
 
 export const accounts = sqliteTable(
-  'account',
+  'accounts',
   {
-    userId: text('userId')
+    userId: text()
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    type: text('type').$type<AdapterAccountType>().notNull(),
-    provider: text('provider').notNull(),
-    providerAccountId: text('providerAccountId').notNull(),
-    refresh_token: text('refresh_token'),
-    access_token: text('access_token'),
-    expires_at: integer('expires_at'),
-    token_type: text('token_type'),
-    scope: text('scope'),
-    id_token: text('id_token'),
-    session_state: text('session_state'),
+    type: text().$type<AdapterAccountType>().notNull(),
+    provider: text().notNull(),
+    providerAccountId: text().notNull(),
+    refresh_token: text(),
+    access_token: text(),
+    expires_at: integer(),
+    token_type: text(),
+    scope: text(),
+    id_token: text(),
+    session_state: text(),
   },
   (account) => ({
     compoundKey: primaryKey({
@@ -45,20 +45,20 @@ export const accounts = sqliteTable(
   })
 );
 
-export const sessions = sqliteTable('session', {
-  sessionToken: text('sessionToken').primaryKey(),
-  userId: text('userId')
+export const sessions = sqliteTable('sessions', {
+  sessionToken: text().primaryKey(),
+  userId: text()
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  expires: integer('expires', { mode: 'timestamp_ms' }).notNull(),
+  expires: integer({ mode: 'timestamp_ms' }).notNull(),
 });
 
 export const verificationTokens = sqliteTable(
-  'verificationToken',
+  'verification_tokens',
   {
-    identifier: text('identifier').notNull(),
-    token: text('token').notNull(),
-    expires: integer('expires', { mode: 'timestamp_ms' }).notNull(),
+    identifier: text().notNull(),
+    token: text().notNull(),
+    expires: integer({ mode: 'timestamp_ms' }).notNull(),
   },
   (verificationToken) => ({
     compositePk: primaryKey({
@@ -68,20 +68,20 @@ export const verificationTokens = sqliteTable(
 );
 
 export const authenticators = sqliteTable(
-  'authenticator',
+  'authenticators',
   {
-    credentialID: text('credentialID').notNull().unique(),
-    userId: text('userId')
+    credentialID: text().notNull().unique(),
+    userId: text()
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    providerAccountId: text('providerAccountId').notNull(),
-    credentialPublicKey: text('credentialPublicKey').notNull(),
-    counter: integer('counter').notNull(),
-    credentialDeviceType: text('credentialDeviceType').notNull(),
-    credentialBackedUp: integer('credentialBackedUp', {
+    providerAccountId: text().notNull(),
+    credentialPublicKey: text().notNull(),
+    counter: integer().notNull(),
+    credentialDeviceType: text().notNull(),
+    credentialBackedUp: integer({
       mode: 'boolean',
     }).notNull(),
-    transports: text('transports'),
+    transports: text(),
   },
   (authenticator) => ({
     compositePK: primaryKey({
