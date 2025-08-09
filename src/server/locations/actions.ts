@@ -6,7 +6,7 @@ import 'dotenv/config';
 export type PlaceSuggestion = {
   placeId: string;
   description: string;
-  mainText?: string;
+  mainText: string;
   secondaryText?: string;
 };
 
@@ -22,72 +22,44 @@ export async function getLocation(id: string) {
   return service.get(id);
 }
 
-export async function searchPlaces(
-  input: string,
-  sessionToken?: string
-): Promise<PlaceSuggestion[]> {
+export async function searchPlaces(input: string): Promise<PlaceSuggestion[]> {
   const key = process.env.GOOGLE_MAPS_API_KEY as string;
   if (!key) return [];
-  const res = await fetch(
-    'https://places.googleapis.com/v1/places:autocomplete',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Goog-Api-Key': key,
-        'X-Goog-FieldMask':
-          'suggestions.placePrediction.placeId,suggestions.placePrediction.text',
-      },
-      cache: 'no-store',
-      body: JSON.stringify({ input, sessionToken }),
-    }
-  );
-  console.log('----------------> Res:', res);
+  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${key}`;
+  const res = await fetch(url);
   const json: {
-    suggestions?: Array<{
-      placePrediction?: { placeId?: string; text?: { text?: string } };
+    predictions?: Array<{
+      description: string;
+      place_id: string;
+      structured_formatting?: { main_text: string; secondary_text?: string };
     }>;
   } = await res.json();
-  const suggestions = json.suggestions ?? [];
-  return suggestions
-    .map((s) => ({
-      placeId: s.placePrediction?.placeId ?? '',
-      description: s.placePrediction?.text?.text ?? '',
-      mainText: s.placePrediction?.text?.text ?? '',
-    }))
-    .filter((s) => s.placeId && s.description);
+  const preds = json.predictions ?? [];
+  return preds.map((p) => ({
+    placeId: p.place_id,
+    description: p.description,
+    mainText: p.structured_formatting?.main_text ?? p.description,
+    secondaryText: p.structured_formatting?.secondary_text,
+  }));
 }
 
-export async function getPlaceDetails(
-  placeId: string,
-  sessionToken?: string
-): Promise<{
+export async function getPlaceDetails(placeId: string): Promise<{
   placeId: string;
   name: string;
   formattedAddress?: string | null;
 }> {
   const key = process.env.GOOGLE_MAPS_API_KEY as string;
   if (!key) throw new Error('Missing Google Maps API key');
-  const res = await fetch(
-    `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}${sessionToken ? `?sessionToken=${encodeURIComponent(sessionToken)}` : ''}`,
-    {
-      method: 'GET',
-      headers: {
-        'X-Goog-Api-Key': key,
-        'X-Goog-FieldMask': 'id,displayName,formattedAddress',
-      },
-      cache: 'no-store',
-    }
-  );
+  const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(placeId)}&key=${key}&fields=place_id,name,formatted_address`;
+  const res = await fetch(url);
   const json: {
-    id?: string;
-    displayName?: { text?: string };
-    formattedAddress?: string;
+    result?: { place_id: string; name: string; formatted_address?: string };
   } = await res.json();
-  if (!json.id) throw new Error('No place details');
+  const r = json.result;
+  if (!r) throw new Error('No place details');
   return {
-    placeId: json.id,
-    name: json.displayName?.text ?? '',
-    formattedAddress: json.formattedAddress ?? null,
+    placeId: r.place_id,
+    name: r.name,
+    formattedAddress: r.formatted_address ?? null,
   };
 }
