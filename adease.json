@@ -1,0 +1,8 @@
+{
+  "baseDir": "src",
+  "adminDir": "admin",
+  "database": {
+    "type": "drizzle",
+    "engine": "sqlite"
+  }
+}
