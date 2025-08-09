@@ -25,7 +25,7 @@ export type ListLayoutProps<T> = {
   getData: (
     page: number,
     search: string
-  ) => Promise<{ items: T[]; totalPages: number }>;
+  ) => Promise<{ items: T[]; totalPages: number; totalItems?: number }>;
   renderItem: (item: T) => React.ReactNode;
   path: string;
   queryKey: string[];
@@ -50,7 +50,11 @@ export function ListLayout<T>({
 
   const {
     isLoading,
-    data: { items, totalPages } = { items: [], totalPages: 0 },
+    data: { items, totalPages, totalItems } = {
+      items: [],
+      totalPages: 0,
+      totalItems: 0,
+    },
   } = useQuery({
     queryKey: [...queryKey, page, search],
     queryFn: () => getData(page, search),
@@ -60,7 +64,7 @@ export function ListLayout<T>({
   const renderListItem = (item: T) => {
     const itemElement = renderItem(item);
     if (React.isValidElement(itemElement) && itemElement.type === ListItem) {
-      return React.cloneElement<React.ComponentProps<typeof ListItem>>(
+      return React.cloneElement(
         itemElement as React.ReactElement<
           React.ComponentProps<typeof ListItem>
         >,
@@ -93,12 +97,12 @@ export function ListLayout<T>({
   }
 
   return (
-    <Grid columns={14} gutter={'xl'}>
-      <GridCol span={isMobile ? 14 : 4} pr={isMobile ? 0 : 7}>
-        <Paper withBorder h={'88vh'} mr={isMobile ? 'md' : 0}>
+    <Grid columns={14} gutter='md'>
+      <GridCol span={isMobile ? 14 : 4} pb={0}>
+        <Paper withBorder h='88vh'>
           <Flex direction='column' h='100%'>
-            <Stack p={'md'}>
-              <Flex justify='space-between' align={'center'} gap={'xs'}>
+            <Stack p='md' gap='sm'>
+              <Flex justify='space-between' align='center' gap='md'>
                 <Group style={{ width: '100%', flex: 1 }}>
                   <SearchField style={{ width: '100%' }} />
                 </Group>
@@ -107,31 +111,36 @@ export function ListLayout<T>({
                 ))}
               </Flex>
             </Stack>
+
             <Divider />
-            <ScrollArea type='always' style={{ flex: 1 }} p={'sm'}>
+
+            <ScrollArea type='always' style={{ flex: 1 }} p='md'>
               {isLoading ? (
-                <>
+                <Stack gap='sm'>
                   {Array.from({ length: 5 }).map((_, index) => (
-                    <Skeleton height={35} key={index} mb={'md'} />
+                    <Skeleton height={35} key={index} />
                   ))}
-                </>
+                </Stack>
               ) : (
-                items.map((item: T, index: number) => (
-                  <React.Fragment key={index}>
-                    {renderListItem(item)}
-                  </React.Fragment>
-                ))
+                <Stack gap={3}>
+                  {items.map((item: T, index: number) => (
+                    <React.Fragment key={index}>
+                      {renderListItem(item)}
+                    </React.Fragment>
+                  ))}
+                </Stack>
               )}
             </ScrollArea>
 
             <Divider />
-            <Pagination total={totalPages} />
+
+            <Pagination total={totalPages} totalItems={totalItems} />
           </Flex>
         </Paper>
       </GridCol>
 
       {!isMobile && (
-        <GridCol span={10}>
+        <GridCol span={10} pb={0} pr={5}>
           <Paper withBorder>
             <ScrollArea h='88vh' type='always'>
               {children}
