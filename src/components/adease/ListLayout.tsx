@@ -14,7 +14,7 @@ import {
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'next-nprogress-bar';
+import { useRouter } from 'nextjs-toploader/app';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
 import { ListItem } from './ListItem';
@@ -60,7 +60,7 @@ export function ListLayout<T>({
   const renderListItem = (item: T) => {
     const itemElement = renderItem(item);
     if (React.isValidElement(itemElement) && itemElement.type === ListItem) {
-      return React.cloneElement(
+      return React.cloneElement<React.ComponentProps<typeof ListItem>>(
         itemElement as React.ReactElement<
           React.ComponentProps<typeof ListItem>
         >,

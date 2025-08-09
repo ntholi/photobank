@@ -1,12 +1,26 @@
 'use client';
 
 import { Shell } from '@/components/adease';
-import { ActionIcon, Avatar, Flex, Group, Stack, Text, LoadingOverlay, Image } from '@mantine/core';
+import {
+  ActionIcon,
+  Avatar,
+  Flex,
+  Group,
+  Stack,
+  Text,
+  LoadingOverlay,
+  Image,
+} from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { signOut, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import React from 'react';
-import { Icon, IconChevronRight, IconLogout2, IconUsers } from '@tabler/icons-react';
+import {
+  Icon,
+  IconChevronRight,
+  IconLogout2,
+  IconUsers,
+} from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
 import { Indicator, NavLink } from '@mantine/core';
 import Link from 'next/link';
@@ -33,11 +47,7 @@ const navigation: NavItem[] = [
   },
 ];
 
-export default function Dashboard({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Dashboard({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
 
   if (status === 'loading') {
@@ -144,7 +154,9 @@ function ItemDisplay({ item }: { item: NavItem }) {
       href={item.href || ''}
       active={item.href ? pathname.startsWith(item.href) : false}
       leftSection={<Icon size='1.1rem' />}
-      rightSection={item.href ? <IconChevronRight size='0.8rem' stroke={1.5} /> : undefined}
+      rightSection={
+        item.href ? <IconChevronRight size='0.8rem' stroke={1.5} /> : undefined
+      }
       opened={!!item.children}
     >
       {item.children?.map((child, index) => (

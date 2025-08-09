@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 export interface ListItemProps extends Omit<NavLinkProps, 'component'> {
   id: string | number;
   path?: string;
+  onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
 export function ListItem({ id, path, onClick, ...props }: ListItemProps) {
