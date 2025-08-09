@@ -91,13 +91,24 @@ export const authenticators = sqliteTable(
   })
 );
 
+export const locations = sqliteTable('locations', {
+  id: text({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  placeId: text().unique().notNull(),
+  name: text().notNull(),
+  formattedAddress: text(),
+  createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
+  updatedAt: integer({ mode: 'timestamp' }),
+});
+
 export const content = sqliteTable('content', {
   id: text({ length: 21 })
     .$defaultFn(() => nanoid())
     .primaryKey(),
   type: text(),
   fileName: text(),
-  location: text(),
+  locationId: text().references(() => locations.id),
   status: text(),
   createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
   updatedAt: integer({ mode: 'timestamp' }),

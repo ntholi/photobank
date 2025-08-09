@@ -1,0 +1,17 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+the server code is stored in src/server and the pattern I use for all server code is actions.ts -> service.ts -> repository.ts. Never use api route handlers, always use actions.ts files to handle server code.
+
+action.ts only contains calls to service.ts methods, service.ts contains business logic and calls to repository.ts methods, and repository.ts contains direct database calls using drizzle
+
+service.ts files should make use of withAuth.ts for authorization and always creates an instance of the service class using serviceWrapper.ts
+
+When writting drizzle queries, try to only return the necessary columns
+
+When calling server code in the client components, use tanstack query and strictly call code in actions.ts files
+
+When breaking up components or creating additional functionality, put the new component in the same directory as the parent component, unless the component is a shared component, then put it in src/app/components

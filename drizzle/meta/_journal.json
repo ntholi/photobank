@@ -15,6 +15,13 @@
       "when": 1754751581625,
       "tag": "0001_careless_strong_guy",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1754754817101,
+      "tag": "0002_flashy_piledriver",
+      "breakpoints": true
     }
   ]
 }

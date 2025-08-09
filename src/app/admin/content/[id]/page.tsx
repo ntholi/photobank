@@ -6,6 +6,7 @@ import {
 } from '@/components/adease';
 import { notFound } from 'next/navigation';
 import { getContent, deleteContent } from '@/server/content/actions';
+import { getLocation } from '@/server/locations/actions';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -18,6 +19,10 @@ export default async function ContentDetails({ params }: Props) {
   if (!content) {
     return notFound();
   }
+
+  const location = content.locationId
+    ? await getLocation(content.locationId)
+    : undefined;
 
   return (
     <DetailsView>
@@ -32,7 +37,7 @@ export default async function ContentDetails({ params }: Props) {
       <DetailsViewBody>
         <FieldView label='Type'>{content.type}</FieldView>
         <FieldView label='File Name'>{content.fileName}</FieldView>
-        <FieldView label='Location'>{content.location}</FieldView>
+        <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
         <FieldView label='Status'>{content.status}</FieldView>
       </DetailsViewBody>
     </DetailsView>
