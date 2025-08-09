@@ -1,11 +1,24 @@
 import {
   DetailsView,
+  DetailsViewBody,
   DetailsViewHeader,
   FieldView,
-  DetailsViewBody,
 } from '@/components/adease';
+import { largeProfilePic, toTitleCase } from '@/utils/utils';
+import {
+  Avatar,
+  Badge,
+  Card,
+  Center,
+  Grid,
+  GridCol,
+  Group,
+  Stack,
+  Text,
+} from '@mantine/core';
 import { notFound } from 'next/navigation';
-import { getUser, deleteUser } from '@/server/users/actions';
+import { deleteUser, getUser } from '../../../../server/users/actions';
+import { UserRole } from '@/db/schema';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -13,16 +26,16 @@ type Props = {
 
 export default async function UserDetails({ params }: Props) {
   const { id } = await params;
-  const user = await getUser(id);
+  const users = await getUser(id);
 
-  if (!user) {
+  if (!users) {
     return notFound();
   }
 
   return (
     <DetailsView>
       <DetailsViewHeader
-        title={'User'}
+        title={users.name ?? 'User'}
         queryKey={['users']}
         handleDelete={async () => {
           'use server';
@@ -30,9 +43,41 @@ export default async function UserDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <FieldView label='Name'>{user.name}</FieldView>
-        <FieldView label='Email'>{user.email}</FieldView>
+        <Grid>
+          <GridCol span={{ base: 12, md: 5 }}>
+            <Card withBorder p={'sm'}>
+              <Center>
+                <Avatar src={largeProfilePic(users.image)} size={200} />
+              </Center>
+            </Card>
+          </GridCol>
+          <GridCol span={{ base: 12, md: 7 }}>
+            <Stack gap={'lg'} p={'sm'}>
+              <FieldView label='Name'>{users.name}</FieldView>
+              <Group align='center'>
+                <Text c='dimmed' size='0.95rem'>
+                  Role
+                </Text>
+                <Badge color={getRoleColor(users.role)}>
+                  {toTitleCase(users.role)}
+                </Badge>
+              </Group>
+              <FieldView label='Email'>{users.email}</FieldView>
+            </Stack>
+          </GridCol>
+        </Grid>
       </DetailsViewBody>
     </DetailsView>
   );
+}
+
+function getRoleColor(role: UserRole) {
+  switch (role) {
+    case 'admin':
+      return 'red';
+    case 'user':
+      return 'blue';
+    default:
+      return 'gray';
+  }
 }
