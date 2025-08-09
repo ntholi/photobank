@@ -102,14 +102,26 @@ export const locations = sqliteTable('locations', {
   updatedAt: integer({ mode: 'timestamp' }),
 });
 
+export const contentTypes = ['image', 'video'] as const;
+export type ContentType = (typeof contentTypes)[number];
+
+export const contentStatuses = [
+  'draft',
+  'pending',
+  'published',
+  'rejected',
+  'archived',
+] as const;
+export type ContentStatus = (typeof contentStatuses)[number];
+
 export const content = sqliteTable('content', {
   id: text({ length: 21 })
     .$defaultFn(() => nanoid())
     .primaryKey(),
-  type: text(),
+  type: text({ enum: contentTypes }).notNull().default('image'),
   fileName: text(),
   locationId: text().references(() => locations.id),
-  status: text(),
+  status: text({ enum: contentStatuses }).notNull().default('published'),
   createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
   updatedAt: integer({ mode: 'timestamp' }),
 });

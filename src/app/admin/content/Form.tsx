@@ -45,7 +45,6 @@ export default function ContentForm({
     >
       {(form) => (
         <>
-          <TextInput label='Type' {...form.getInputProps('type')} />
           <TextInput label='File Name' {...form.getInputProps('fileName')} />
           <input type='hidden' {...form.getInputProps('locationId')} />
           <LocationPicker
@@ -58,7 +57,6 @@ export default function ContentForm({
               setLocationName(selected.name);
             }}
           />
-          <TextInput label='Status' {...form.getInputProps('status')} />
         </>
       )}
     </Form>
