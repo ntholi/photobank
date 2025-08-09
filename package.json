@@ -58,6 +58,7 @@
     "nuqs": "^2.4.3",
     "react": "19.1.1",
     "react-dom": "19.1.1",
+    "winston": "^3.17.0",
     "zod": "^4.0.16"
   },
   "devDependencies": {
