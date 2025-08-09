@@ -1,7 +1,0 @@
-{
-  "baseDir": "src",
-  "adminDir": "admin",
-  "database": {
-    "type": "prisma"
-  }
-}
