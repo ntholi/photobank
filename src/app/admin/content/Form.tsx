@@ -25,11 +25,11 @@ export default function ContentForm({ onSubmit, defaultValues, title }: Props) {
     <Form
       title={title}
       action={onSubmit}
-      queryKey={['contents']}
+      queryKey={['content']}
       schema={createInsertSchema(content)}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
-        router.push(`/admin/contents/${id}`);
+        router.push(`/admin/content/${id}`);
       }}
     >
       {(form) => (

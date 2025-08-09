@@ -10,4 +10,4 @@ export default class ContentRepository extends BaseRepository<
   }
 }
 
-export const contentsRepository = new ContentRepository();
+export const contentRepository = new ContentRepository();

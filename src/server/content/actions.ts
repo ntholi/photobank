@@ -9,7 +9,7 @@ export async function getContent(id: string) {
   return service.get(id);
 }
 
-export async function getContents(page: number = 1, search = '') {
+export async function getContentList(page: number = 1, search = '') {
   return service.getAll({ page, search });
 }
 

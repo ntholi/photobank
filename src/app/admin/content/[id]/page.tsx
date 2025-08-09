@@ -23,7 +23,7 @@ export default async function ContentDetails({ params }: Props) {
     <DetailsView>
       <DetailsViewHeader
         title={'Content'}
-        queryKey={['contents']}
+        queryKey={['content']}
         handleDelete={async () => {
           'use server';
           await deleteContent(id);

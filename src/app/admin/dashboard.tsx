@@ -8,7 +8,9 @@ import {
   Group,
   Indicator,
   LoadingOverlay,
+  MantineColor,
   NavLink,
+  Skeleton,
   Stack,
   Text,
 } from '@mantine/core';
@@ -16,7 +18,9 @@ import { modals } from '@mantine/modals';
 import {
   Icon,
   IconChevronRight,
+  IconFile,
   IconLogout2,
+  IconPhoto,
   IconUsers,
 } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
@@ -26,18 +30,25 @@ import { usePathname } from 'next/navigation';
 import { useRouter } from 'nextjs-toploader/app';
 import React from 'react';
 import Logo from './base/Logo';
+import { UserRole } from '@/db/schema';
+import { Session } from 'next-auth';
 
 type NotificationConfig = {
   queryKey: string[];
   queryFn: () => Promise<number>;
+  refetchInterval?: number;
+  color?: MantineColor;
 };
-
 export type NavItem = {
   label: string;
   href?: string;
-  icon: Icon;
+  icon?: Icon;
+  description?: string;
+  roles?: UserRole[];
+  isVisible?: (session: Session | null) => boolean;
   children?: NavItem[];
   notificationCount?: NotificationConfig;
+  isLoading?: boolean;
 };
 
 const navigation: NavItem[] = [
@@ -45,6 +56,13 @@ const navigation: NavItem[] = [
     label: 'Users',
     href: '/admin/users',
     icon: IconUsers,
+    roles: ['admin'],
+  },
+  {
+    label: 'Content',
+    href: '/admin/content',
+    icon: IconPhoto,
+    roles: ['moderator', 'admin'],
   },
 ];
 
@@ -128,12 +146,13 @@ function DisplayWithNotification({ item }: { item: NavItem }) {
     queryKey: item.notificationCount?.queryKey ?? [],
     queryFn: () => item.notificationCount?.queryFn() ?? Promise.resolve(0),
     enabled: !!item.notificationCount,
+    refetchInterval: item.notificationCount?.refetchInterval,
   });
 
   return (
     <Indicator
       position='middle-end'
-      color='red'
+      color={item.notificationCount?.color ?? 'red'}
       offset={20}
       size={23}
       label={notificationCount}
@@ -147,6 +166,42 @@ function DisplayWithNotification({ item }: { item: NavItem }) {
 function ItemDisplay({ item }: { item: NavItem }) {
   const pathname = usePathname();
   const Icon = item.icon;
+  const { data: session } = useSession();
+
+  if (item.isVisible && !item.isVisible(session)) {
+    return null;
+  }
+
+  if (
+    item.roles &&
+    (!session?.user?.role ||
+      !item.roles.includes(session.user.role as UserRole))
+  ) {
+    return null;
+  }
+
+  if (item.isLoading) {
+    return (
+      <NavLink
+        label={item.label}
+        leftSection={Icon ? <Icon size='1.1rem' /> : null}
+        description={item.description}
+        opened={true}
+      >
+        {[1, 2, 3].map((i) => (
+          <NavLink
+            key={`skeleton-${i}`}
+            label={
+              <Stack gap={5}>
+                <Skeleton height={28} width='60%' radius='sm' animate />
+                <Skeleton height={12} width='90%' radius='sm' animate />
+              </Stack>
+            }
+          />
+        ))}
+      </NavLink>
+    );
+  }
 
   const navLink = (
     <NavLink
@@ -154,7 +209,8 @@ function ItemDisplay({ item }: { item: NavItem }) {
       component={item.href ? Link : undefined}
       href={item.href || ''}
       active={item.href ? pathname.startsWith(item.href) : false}
-      leftSection={<Icon size='1.1rem' />}
+      leftSection={Icon ? <Icon size='1.1rem' /> : null}
+      description={item.description}
       rightSection={
         item.href ? <IconChevronRight size='0.8rem' stroke={1.5} /> : undefined
       }

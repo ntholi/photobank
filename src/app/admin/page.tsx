@@ -7,7 +7,7 @@ export default function AdminPage() {
   return (
     <Stack h={'70vh'} w={'100%'} justify='center' align='center'>
       <div>
-        <Title fw={'lighter'}>Admin Panel</Title>
+        <Title fw={'lighter'}>Dashboard</Title>
         <Suspense fallback={<Text>...</Text>}>
           <UserDisplay />
         </Suspense>

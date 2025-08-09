@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <MantineProvider defaultColorScheme='dark'>
-      <NextTopLoader />
+      <NextTopLoader showSpinner={false} />
       <Notifications />
       <ModalsProvider>
         <SessionProvider>
