@@ -13,25 +13,24 @@ type Props = {
 
 export default async function UserDetails({ params }: Props) {
   const { id } = await params;
-  const user = await getUser(Number(id));
-  
+  const user = await getUser(id);
+
   if (!user) {
     return notFound();
   }
 
   return (
     <DetailsView>
-      <DetailsViewHeader 
-        title={'User'} 
+      <DetailsViewHeader
+        title={'User'}
         queryKey={['users']}
         handleDelete={async () => {
           'use server';
-          await deleteUser(Number(id));
+          await deleteUser(id);
         }}
       />
       <DetailsViewBody>
         <FieldView label='Name'>{user.name}</FieldView>
-        <FieldView label='Age'>{user.age}</FieldView>
         <FieldView label='Email'>{user.email}</FieldView>
       </DetailsViewBody>
     </DetailsView>

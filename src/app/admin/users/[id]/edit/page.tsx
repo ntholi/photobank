@@ -9,7 +9,7 @@ type Props = {
 
 export default async function UserEdit({ params }: Props) {
   const { id } = await params;
-  const user = await getUser(Number(id));
+  const user = await getUser(id);
   if (!user) {
     return notFound();
   }
@@ -21,7 +21,7 @@ export default async function UserEdit({ params }: Props) {
         defaultValues={user}
         onSubmit={async (value) => {
           'use server';
-          return await updateUser(Number(id), value);
+          return await updateUser(id, value);
         }}
       />
     </Box>
