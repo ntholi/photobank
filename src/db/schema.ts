@@ -6,6 +6,7 @@ import {
 } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccountType } from 'next-auth/adapters';
 import { nanoid } from 'nanoid';
+import { sql } from 'drizzle-orm';
 
 export const userRoles = ['user', 'contributor', 'moderator', 'admin'] as const;
 export type UserRole = (typeof userRoles)[number];
@@ -89,3 +90,15 @@ export const authenticators = sqliteTable(
     }),
   })
 );
+
+export const content = sqliteTable('content', {
+  id: text({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  type: text(),
+  fileName: text(),
+  location: text(),
+  status: text(),
+  createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
+  updatedAt: integer({ mode: 'timestamp' }),
+});
