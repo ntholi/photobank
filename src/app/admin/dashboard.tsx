@@ -6,25 +6,26 @@ import {
   Avatar,
   Flex,
   Group,
+  Indicator,
+  LoadingOverlay,
+  NavLink,
   Stack,
   Text,
-  LoadingOverlay,
-  Image,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { signOut, useSession } from 'next-auth/react';
-import { useRouter } from 'nextjs-toploader/app';
-import React from 'react';
 import {
   Icon,
   IconChevronRight,
   IconLogout2,
   IconUsers,
 } from '@tabler/icons-react';
-import { usePathname } from 'next/navigation';
-import { Indicator, NavLink } from '@mantine/core';
-import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
+import React from 'react';
+import Logo from './base/Logo';
 
 type NotificationConfig = {
   queryKey: string[];
@@ -62,7 +63,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     <Shell>
       <Shell.Header>
         <Group>
-          <Image src={'/images/logo.png'} height={40} alt='logo' />
+          <Logo size='md' />
         </Group>
       </Shell.Header>
       <Shell.Navigation>
