@@ -1,7 +1,9 @@
 'use server';
 
+import { locations } from '@/db/schema';
 import { locationsService as service } from './service';
-import 'dotenv/config';
+
+type Location = typeof locations.$inferInsert;
 
 export type PlaceSuggestion = {
   placeId: string;
@@ -20,6 +22,22 @@ export async function upsertLocationByPlaceId(input: {
 
 export async function getLocation(id: string) {
   return service.get(id);
+}
+
+export async function getLocations(page: number = 1, search = '') {
+  return service.getAll({ page, search });
+}
+
+export async function createLocation(location: Location) {
+  return service.create(location);
+}
+
+export async function updateLocation(id: string, location: Partial<Location>) {
+  return service.update(id, location);
+}
+
+export async function deleteLocation(id: string) {
+  return service.delete(id);
 }
 
 export async function searchPlaces(input: string): Promise<PlaceSuggestion[]> {

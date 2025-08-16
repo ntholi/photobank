@@ -17,8 +17,7 @@ export const userRoleEnum = pgEnum('user_role', [
   'moderator',
   'admin',
 ]);
-export const userRoles = ['user', 'contributor', 'moderator', 'admin'] as const;
-export type UserRole = (typeof userRoles)[number];
+export type UserRole = (typeof userRoleEnum.enumValues)[number];
 
 export const users = pgTable('users', {
   id: text()
@@ -98,20 +97,7 @@ export const authenticators = pgTable(
   })
 );
 
-export const locations = pgTable('locations', {
-  id: varchar({ length: 21 })
-    .$defaultFn(() => nanoid())
-    .primaryKey(),
-  placeId: text().unique().notNull(),
-  name: text().notNull(),
-  address: text(),
-  createdAt: timestamp({ mode: 'date' }).defaultNow(),
-  updatedAt: timestamp({ mode: 'date' }),
-});
-
 export const contentTypeEnum = pgEnum('content_type', ['image', 'video']);
-export const contentTypes = ['image', 'video'] as const;
-export type ContentType = (typeof contentTypes)[number];
 
 export const contentStatusEnum = pgEnum('content_status', [
   'draft',
@@ -120,14 +106,6 @@ export const contentStatusEnum = pgEnum('content_status', [
   'rejected',
   'archived',
 ]);
-export const contentStatuses = [
-  'draft',
-  'pending',
-  'published',
-  'rejected',
-  'archived',
-] as const;
-export type ContentStatus = (typeof contentStatuses)[number];
 
 export const content = pgTable('content', {
   id: varchar({ length: 21 })
@@ -137,6 +115,17 @@ export const content = pgTable('content', {
   fileName: text(),
   locationId: varchar({ length: 21 }).references(() => locations.id),
   status: contentStatusEnum().notNull().default('published'),
+  createdAt: timestamp({ mode: 'date' }).defaultNow(),
+  updatedAt: timestamp({ mode: 'date' }),
+});
+
+export const locations = pgTable('locations', {
+  id: varchar({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  placeId: text().unique().notNull(),
+  name: text().notNull(),
+  address: text(),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
   updatedAt: timestamp({ mode: 'date' }),
 });

@@ -1,22 +1,40 @@
-import withAuth from '@/server/base/withAuth';
-import { serviceWrapper } from '@/server/base/serviceWrapper';
-import LocationsRepository from './repository';
 import { locations } from '@/db/schema';
+import LocationRepository from './repository';
+import withAuth from '@/server/base/withAuth';
+import { QueryOptions } from '../base/BaseRepository';
+import { serviceWrapper } from '../base/serviceWrapper';
 
-type LocationInsert = typeof locations.$inferInsert;
+type Location = typeof locations.$inferInsert;
 
-class LocationsService {
-  constructor(private readonly repository = new LocationsRepository()) {}
+class LocationService {
+  constructor(private readonly repository = new LocationRepository()) {}
 
-  async get(id: string) {
-    return withAuth(async () => this.repository.findById(id), ['all']);
+  async first() {
+    return withAuth(async () => this.repository.findFirst(), []);
   }
 
-  async getByPlaceId(placeId: string) {
-    return withAuth(
-      async () => this.repository.findByPlaceId(placeId),
-      ['all']
-    );
+  async get(id: string) {
+    return withAuth(async () => this.repository.findById(id), []);
+  }
+
+  async getAll(params: QueryOptions<typeof locations>) {
+    return withAuth(async () => this.repository.query(params), []);
+  }
+
+  async create(data: Location) {
+    return withAuth(async () => this.repository.create(data), []);
+  }
+
+  async update(id: string, data: Partial<Location>) {
+    return withAuth(async () => this.repository.update(id, data), []);
+  }
+
+  async delete(id: string) {
+    return withAuth(async () => this.repository.delete(id), []);
+  }
+
+  async count() {
+    return withAuth(async () => this.repository.count(), []);
   }
 
   async upsertByPlaceId(data: {
@@ -25,9 +43,9 @@ class LocationsService {
     address?: string | null;
   }) {
     return withAuth(async () => {
-      const existing = await this.repository.findByPlaceId(data.placeId);
+      const existing = await this.repository.findById(data.placeId);
       if (existing) return existing;
-      const entity: LocationInsert = {
+      const entity: Location = {
         placeId: data.placeId,
         name: data.name,
         address: data.address ?? null,
@@ -37,4 +55,4 @@ class LocationsService {
   }
 }
 
-export const locationsService = serviceWrapper(LocationsService, 'Locations');
+export const locationsService = serviceWrapper(LocationService, 'Location');

@@ -30,8 +30,8 @@ import { usePathname } from 'next/navigation';
 import { useRouter } from 'nextjs-toploader/app';
 import React from 'react';
 import Logo from './base/Logo';
-import { UserRole } from '@/db/schema';
 import { Session } from 'next-auth';
+import { UserRole } from '@/db/schema';
 
 type NotificationConfig = {
   queryKey: string[];
@@ -39,6 +39,7 @@ type NotificationConfig = {
   refetchInterval?: number;
   color?: MantineColor;
 };
+
 export type NavItem = {
   label: string;
   href?: string;
