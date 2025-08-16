@@ -1,14 +1,12 @@
 'use server';
 
-import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { s3Client, bucketName } from '@/lib/aws';
-import { nanoid } from 'nanoid';
+import { bucketName, s3Client } from '@/lib/aws';
 import withAuth from '@/server/base/withAuth';
-import { serviceWrapper } from '@/server/base/serviceWrapper';
+import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import { nanoid } from 'nanoid';
 
 type UploadResult = {
   key: string;
-  url: string;
   fileName: string;
   fileSize: number;
   contentType: string;
@@ -44,11 +42,8 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
 
   await s3Client.send(command);
 
-  const url = `https://${bucketName}.s3.amazonaws.com/${key}`;
-
   return {
     key,
-    url,
     fileName: file.name,
     fileSize: file.size,
     contentType: file.type,
@@ -65,21 +60,18 @@ export async function uploadContentFile(
       throw new Error('No file provided');
     }
 
-    // Validate file type
     if (!ALLOWED_MIME_TYPES.includes(file.type)) {
       throw new Error('Invalid file type. Only images and videos are allowed.');
     }
 
-    // Validate file size
     if (file.size > MAX_FILE_SIZE) {
       throw new Error(
         `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`
       );
     }
 
-    // Generate unique key
     const fileExtension = file.name.split('.').pop();
-    const key = `content/${nanoid()}.${fileExtension}`;
+    const key = `${nanoid()}.${fileExtension}`;
 
     return uploadFileToS3(file, key);
   }, ['contributor']);

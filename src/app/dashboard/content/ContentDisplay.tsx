@@ -1,23 +1,18 @@
 'use client';
 
+import { content } from '@/db/schema';
 import { thumbnail } from '@/lib/utils';
 import { Image, Box, Text, Paper, Center, AspectRatio } from '@mantine/core';
 import { IconPhoto, IconVideo, IconFileX } from '@tabler/icons-react';
 
-type ContentDisplayProps = {
-  fileUrl?: string | null;
-  fileName?: string | null;
-  contentType: 'image' | 'video';
-  fileSize?: number | null;
+type Props = {
+  content: typeof content.$inferInsert;
 };
 
-export default function ContentDisplay({
-  fileUrl,
-  fileName,
-  contentType,
-  fileSize,
-}: ContentDisplayProps) {
-  if (!fileUrl) {
+export default function ContentDisplay({ content }: Props) {
+  const { fileName, s3Key, type, fileSize } = content;
+
+  if (!s3Key) {
     return (
       <Paper p='xl' withBorder>
         <Center>
@@ -32,14 +27,12 @@ export default function ContentDisplay({
     );
   }
 
-  console.log('xxxxxxxxxxxxxxxxxxxxxxxx', thumbnail(fileName || ''));
-
-  if (contentType === 'image') {
+  if (type === 'image') {
     return (
       <Paper p='md' withBorder>
         <AspectRatio ratio={16 / 9} maw={800}>
           <Image
-            src={thumbnail(fileName || '')}
+            src={thumbnail(s3Key || '')}
             alt={fileName || 'Content image'}
             radius='md'
             fit='contain'
@@ -62,7 +55,7 @@ export default function ContentDisplay({
     );
   }
 
-  if (contentType === 'video') {
+  if (type === 'video') {
     return (
       <Paper p='md' withBorder>
         <AspectRatio ratio={16 / 9} maw={800}>
@@ -74,7 +67,7 @@ export default function ContentDisplay({
               borderRadius: 'var(--mantine-radius-md)',
             }}
           >
-            <source src={fileUrl} />
+            <source src={s3Key} />
             <Center h='100%'>
               <Box ta='center'>
                 <IconVideo size={48} color='var(--mantine-color-gray-5)' />

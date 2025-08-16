@@ -113,7 +113,6 @@ export const content = pgTable('content', {
     .primaryKey(),
   type: contentTypeEnum().notNull().default('image'),
   fileName: text(),
-  fileUrl: text(),
   s3Key: text(),
   fileSize: integer(),
   locationId: varchar({ length: 21 }).references(() => locations.id),

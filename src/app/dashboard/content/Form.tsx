@@ -49,7 +49,6 @@ export default function ContentForm({
         const contentData: Content = {
           ...values,
           fileName: uploadResult.fileName,
-          fileUrl: uploadResult.url,
           s3Key: uploadResult.key,
           fileSize: uploadResult.fileSize,
           type: selectedFile.type.startsWith('image/') ? 'image' : 'video',
@@ -81,7 +80,6 @@ export default function ContentForm({
         id: true,
         createdAt: true,
         updatedAt: true,
-        fileUrl: true,
         s3Key: true,
         fileSize: true,
       })}

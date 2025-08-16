@@ -38,12 +38,7 @@ export default async function ContentDetails({ params }: Props) {
       />
       <DetailsViewBody>
         <Stack gap='lg'>
-          <ContentDisplay
-            fileUrl={content.fileUrl}
-            fileName={content.fileName}
-            contentType={content.type}
-            fileSize={content.fileSize}
-          />
+          <ContentDisplay content={content} />
 
           <div>
             <FieldView label='Type'>{content.type}</FieldView>
