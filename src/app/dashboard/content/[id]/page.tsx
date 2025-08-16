@@ -7,6 +7,8 @@ import {
 import { notFound } from 'next/navigation';
 import { getContent, deleteContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
+import ContentDisplay from '../ContentDisplay';
+import { Stack } from '@mantine/core';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -35,10 +37,31 @@ export default async function ContentDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <FieldView label='Type'>{content.type}</FieldView>
-        <FieldView label='File Name'>{content.fileName}</FieldView>
-        <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
-        <FieldView label='Status'>{content.status}</FieldView>
+        <Stack gap='lg'>
+          <ContentDisplay
+            fileUrl={content.fileUrl}
+            fileName={content.fileName}
+            contentType={content.type}
+            fileSize={content.fileSize}
+          />
+
+          <div>
+            <FieldView label='Type'>{content.type}</FieldView>
+            <FieldView label='File Name'>{content.fileName}</FieldView>
+            <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
+            <FieldView label='Status'>{content.status}</FieldView>
+            {content.fileSize && (
+              <FieldView label='File Size'>
+                {(content.fileSize / 1024 / 1024).toFixed(2)} MB
+              </FieldView>
+            )}
+            {content.createdAt && (
+              <FieldView label='Created'>
+                {new Date(content.createdAt).toLocaleDateString()}
+              </FieldView>
+            )}
+          </div>
+        </Stack>
       </DetailsViewBody>
     </DetailsView>
   );
