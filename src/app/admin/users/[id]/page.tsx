@@ -4,7 +4,7 @@ import {
   DetailsViewHeader,
   FieldView,
 } from '@/components/adease';
-import { largeProfilePic, toTitleCase } from '@/utils/utils';
+import { largeProfilePic, toTitleCase } from '@/lib/utils';
 import {
   Avatar,
   Badge,
