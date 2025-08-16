@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 
 type Location = typeof locations.$inferInsert;
 
-
 type Props = {
   onSubmit: (values: Location) => Promise<Location>;
   defaultValues?: Location;
@@ -19,18 +18,22 @@ type Props = {
   title?: string;
 };
 
-export default function LocationForm({ onSubmit, defaultValues, title }: Props) {
+export default function LocationForm({
+  onSubmit,
+  defaultValues,
+  title,
+}: Props) {
   const router = useRouter();
-  
+
   return (
-    <Form 
+    <Form
       title={title}
-      action={onSubmit} 
+      action={onSubmit}
       queryKey={['locations']}
-      schema={createInsertSchema(locations)} 
+      schema={createInsertSchema(locations)}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
-        router.push(`/admin/locations/${id}`);
+        router.push(`/dashboard/locations/${id}`);
       }}
     >
       {(form) => (

@@ -7,7 +7,7 @@ import { getUsers } from '@/server/users/actions';
 export default function Layout({ children }: PropsWithChildren) {
   return (
     <ListLayout
-      path={'/admin/users'}
+      path={'/dashboard/users'}
       queryKey={['users']}
       getData={getUsers}
       renderItem={(it) => (

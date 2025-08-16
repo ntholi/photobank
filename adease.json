@@ -1,6 +1,6 @@
 {
   "baseDir": "src",
-  "adminDir": "admin",
+  "adminDir": "dashboard",
   "database": {
     "type": "drizzle",
     "engine": "postgresql"

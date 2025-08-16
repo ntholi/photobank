@@ -29,7 +29,7 @@ export default function UserForm({ onSubmit, defaultValues, title }: Props) {
       schema={createInsertSchema(users)}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
-        router.push(`/admin/users/${id}`);
+        router.push(`/dashboard/users/${id}`);
       }}
     >
       {(form) => (

@@ -23,7 +23,7 @@ export default function Logo({ size = 'xs' }: Props) {
   };
 
   return (
-    <Link href='/admin'>
+    <Link href='/dashboard'>
       <Image
         h={sizeMap[size]}
         component={NextImage}

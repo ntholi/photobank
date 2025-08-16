@@ -40,7 +40,7 @@ export default function ContentForm({
       schema={createInsertSchema(content)}
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
-        router.push(`/admin/content/${id}`);
+        router.push(`/dashboard/content/${id}`);
       }}
     >
       {(form) => (

@@ -55,13 +55,13 @@ export type NavItem = {
 const navigation: NavItem[] = [
   {
     label: 'Users',
-    href: '/admin/users',
+    href: '/dashboard/users',
     icon: IconUsers,
     roles: ['admin'],
   },
   {
     label: 'Content',
-    href: '/admin/content',
+    href: '/dashboard/content',
     icon: IconPhoto,
     roles: ['moderator', 'admin'],
   },
