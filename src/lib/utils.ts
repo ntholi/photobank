@@ -192,8 +192,3 @@ export async function getCountryFromIP(ipAddress: string): Promise<{
     };
   }
 }
-
-export const thumbnail = (fileName: string) => {
-  const name = fileName.split('.')[0];
-  return `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${name}_thumb.jpg`;
-};

@@ -114,11 +114,13 @@ export const content = pgTable('content', {
   type: contentTypeEnum().notNull().default('image'),
   fileName: text(),
   s3Key: text(),
+  thumbnailKey: text(),
+  watermarkedKey: text(),
   fileSize: integer(),
   locationId: varchar({ length: 21 }).references(() => locations.id),
   status: contentStatusEnum().notNull().default('published'),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
-  updatedAt: timestamp({ mode: 'date' }),
+  updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
 });
 
 export const locations = pgTable('locations', {

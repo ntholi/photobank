@@ -50,6 +50,8 @@ export default function ContentForm({
           ...values,
           fileName: uploadResult.fileName,
           s3Key: uploadResult.key,
+          thumbnailKey: uploadResult.thumbnailKey || null,
+          watermarkedKey: uploadResult.watermarkedKey || null,
           fileSize: uploadResult.fileSize,
           type: selectedFile.type.startsWith('image/') ? 'image' : 'video',
         };
@@ -81,6 +83,8 @@ export default function ContentForm({
         createdAt: true,
         updatedAt: true,
         s3Key: true,
+        thumbnailKey: true,
+        watermarkedKey: true,
         fileSize: true,
       })}
       defaultValues={defaultValues}

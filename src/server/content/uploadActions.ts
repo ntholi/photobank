@@ -1,15 +1,23 @@
 'use server';
 
-import { bucketName, s3Client } from '@/lib/aws';
+import { bucketName, processedBucketName, s3Client } from '@/lib/aws';
+import {
+  createThumbnail,
+  createWatermarkedImage,
+  isImageFile,
+} from '@/lib/imageProcessor';
 import withAuth from '@/server/base/withAuth';
 import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { nanoid } from 'nanoid';
+import { contentService } from './service';
 
 type UploadResult = {
   key: string;
   fileName: string;
   fileSize: number;
   contentType: string;
+  thumbnailKey?: string;
+  watermarkedKey?: string;
 };
 
 const ALLOWED_MIME_TYPES = [
@@ -42,12 +50,67 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
 
   await s3Client.send(command);
 
-  return {
+  const result: UploadResult = {
     key,
     fileName: file.name,
     fileSize: file.size,
     contentType: file.type,
   };
+
+  if (isImageFile(file.type)) {
+    try {
+      const baseKey = key.split('.')[0];
+
+      const thumbnail = await createThumbnail(buffer, 300);
+      const thumbnailKey = `${baseKey}_thumb.webp`;
+
+      await s3Client.send(
+        new PutObjectCommand({
+          Bucket: processedBucketName,
+          Key: thumbnailKey,
+          Body: thumbnail.buffer,
+          ContentType: thumbnail.contentType,
+          Metadata: {
+            originalKey: key,
+            type: 'thumbnail',
+            width: thumbnail.width.toString(),
+            height: thumbnail.height.toString(),
+            processedAt: new Date().toISOString(),
+          },
+        })
+      );
+
+      const watermarked = await createWatermarkedImage(
+        buffer,
+        900,
+        'Photobank'
+      );
+      const watermarkedKey = `${baseKey}_watermarked.webp`;
+
+      await s3Client.send(
+        new PutObjectCommand({
+          Bucket: processedBucketName,
+          Key: watermarkedKey,
+          Body: watermarked.buffer,
+          ContentType: watermarked.contentType,
+          Metadata: {
+            originalKey: key,
+            type: 'watermarked',
+            width: watermarked.width.toString(),
+            height: watermarked.height.toString(),
+            processedAt: new Date().toISOString(),
+          },
+        })
+      );
+
+      result.thumbnailKey = thumbnailKey;
+      result.watermarkedKey = watermarkedKey;
+    } catch (error) {
+      console.error('Failed to process image:', error);
+    }
+  }
+
+  return result;
 }
 
 export async function uploadContentFile(
@@ -73,7 +136,9 @@ export async function uploadContentFile(
     const fileExtension = file.name.split('.').pop();
     const key = `${nanoid()}.${fileExtension}`;
 
-    return uploadFileToS3(file, key);
+    const uploadResult = await uploadFileToS3(file, key);
+
+    return uploadResult;
   }, ['contributor']);
 }
 
@@ -85,5 +150,29 @@ export async function deleteContentFile(key: string): Promise<void> {
     });
 
     await s3Client.send(command);
+
+    const baseKey = key.split('.')[0];
+
+    try {
+      await s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: processedBucketName,
+          Key: `${baseKey}_thumb.webp`,
+        })
+      );
+    } catch (error) {
+      console.error('Failed to delete thumbnail:', error);
+    }
+
+    try {
+      await s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: processedBucketName,
+          Key: `${baseKey}_watermarked.webp`,
+        })
+      );
+    } catch (error) {
+      console.error('Failed to delete watermarked image:', error);
+    }
   }, ['contributor']);
 }
