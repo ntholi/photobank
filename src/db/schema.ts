@@ -6,10 +6,17 @@ import {
   integer,
   boolean,
   varchar,
+  pgEnum,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccountType } from 'next-auth/adapters';
 import { nanoid } from 'nanoid';
 
+export const userRoleEnum = pgEnum('user_role', [
+  'user',
+  'contributor',
+  'moderator',
+  'admin',
+]);
 export const userRoles = ['user', 'contributor', 'moderator', 'admin'] as const;
 export type UserRole = (typeof userRoles)[number];
 
@@ -18,7 +25,7 @@ export const users = pgTable('users', {
     .primaryKey()
     .$defaultFn(() => nanoid()),
   name: text(),
-  role: text({ enum: userRoles }).notNull().default('user'),
+  role: userRoleEnum().notNull().default('user'),
   email: text().unique(),
   emailVerified: timestamp({ mode: 'date' }),
   image: text(),
@@ -102,9 +109,17 @@ export const locations = pgTable('locations', {
   updatedAt: timestamp({ mode: 'date' }),
 });
 
+export const contentTypeEnum = pgEnum('content_type', ['image', 'video']);
 export const contentTypes = ['image', 'video'] as const;
 export type ContentType = (typeof contentTypes)[number];
 
+export const contentStatusEnum = pgEnum('content_status', [
+  'draft',
+  'pending',
+  'published',
+  'rejected',
+  'archived',
+]);
 export const contentStatuses = [
   'draft',
   'pending',
@@ -118,10 +133,10 @@ export const content = pgTable('content', {
   id: varchar({ length: 21 })
     .$defaultFn(() => nanoid())
     .primaryKey(),
-  type: text({ enum: contentTypes }).notNull().default('image'),
+  type: contentTypeEnum().notNull().default('image'),
   fileName: text(),
   locationId: varchar({ length: 21 }).references(() => locations.id),
-  status: text({ enum: contentStatuses }).notNull().default('published'),
+  status: contentStatusEnum().notNull().default('published'),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
   updatedAt: timestamp({ mode: 'date' }),
 });
