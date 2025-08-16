@@ -3,6 +3,6 @@
   "adminDir": "admin",
   "database": {
     "type": "drizzle",
-    "engine": "sqlite"
+    "engine": "postgresql"
   }
 }

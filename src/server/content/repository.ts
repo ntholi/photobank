@@ -6,7 +6,7 @@ export default class ContentRepository extends BaseRepository<
   'id'
 > {
   constructor() {
-    super(content, 'id');
+    super(content, content.id);
   }
 }
 

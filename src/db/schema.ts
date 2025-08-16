@@ -1,43 +1,45 @@
 import {
-  integer,
-  sqliteTable,
+  timestamp,
+  pgTable,
   text,
   primaryKey,
-} from 'drizzle-orm/sqlite-core';
+  integer,
+  boolean,
+  varchar,
+} from 'drizzle-orm/pg-core';
 import type { AdapterAccountType } from 'next-auth/adapters';
 import { nanoid } from 'nanoid';
-import { sql } from 'drizzle-orm';
 
 export const userRoles = ['user', 'contributor', 'moderator', 'admin'] as const;
 export type UserRole = (typeof userRoles)[number];
 
-export const users = sqliteTable('users', {
-  id: text()
+export const users = pgTable('users', {
+  id: text('id')
     .primaryKey()
     .$defaultFn(() => nanoid()),
-  name: text(),
-  role: text({ enum: userRoles }).notNull().default('user'),
-  email: text().unique(),
-  emailVerified: integer({ mode: 'timestamp_ms' }),
-  image: text(),
+  name: text('name'),
+  role: text('role', { enum: userRoles }).notNull().default('user'),
+  email: text('email').unique(),
+  emailVerified: timestamp('email_verified', { mode: 'date' }),
+  image: text('image'),
 });
 
-export const accounts = sqliteTable(
+export const accounts = pgTable(
   'accounts',
   {
-    userId: text()
+    userId: text('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    type: text().$type<AdapterAccountType>().notNull(),
-    provider: text().notNull(),
-    providerAccountId: text().notNull(),
-    refresh_token: text(),
-    access_token: text(),
-    expires_at: integer(),
-    token_type: text(),
-    scope: text(),
-    id_token: text(),
-    session_state: text(),
+    type: text('type').$type<AdapterAccountType>().notNull(),
+    provider: text('provider').notNull(),
+    providerAccountId: text('provider_account_id').notNull(),
+    refresh_token: text('refresh_token'),
+    access_token: text('access_token'),
+    expires_at: integer('expires_at'),
+    token_type: text('token_type'),
+    scope: text('scope'),
+    id_token: text('id_token'),
+    session_state: text('session_state'),
   },
   (account) => ({
     compoundKey: primaryKey({
@@ -46,20 +48,20 @@ export const accounts = sqliteTable(
   })
 );
 
-export const sessions = sqliteTable('sessions', {
-  sessionToken: text().primaryKey(),
-  userId: text()
+export const sessions = pgTable('sessions', {
+  sessionToken: text('session_token').primaryKey(),
+  userId: text('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  expires: integer({ mode: 'timestamp_ms' }).notNull(),
+  expires: timestamp('expires', { mode: 'date' }).notNull(),
 });
 
-export const verificationTokens = sqliteTable(
+export const verificationTokens = pgTable(
   'verification_tokens',
   {
-    identifier: text().notNull(),
-    token: text().notNull(),
-    expires: integer({ mode: 'timestamp_ms' }).notNull(),
+    identifier: text('identifier').notNull(),
+    token: text('token').notNull(),
+    expires: timestamp('expires', { mode: 'date' }).notNull(),
   },
   (verificationToken) => ({
     compositePk: primaryKey({
@@ -68,21 +70,19 @@ export const verificationTokens = sqliteTable(
   })
 );
 
-export const authenticators = sqliteTable(
+export const authenticators = pgTable(
   'authenticators',
   {
-    credentialID: text().notNull().unique(),
-    userId: text()
+    credentialID: text('credential_id').notNull().unique(),
+    userId: text('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    providerAccountId: text().notNull(),
-    credentialPublicKey: text().notNull(),
-    counter: integer().notNull(),
-    credentialDeviceType: text().notNull(),
-    credentialBackedUp: integer({
-      mode: 'boolean',
-    }).notNull(),
-    transports: text(),
+    providerAccountId: text('provider_account_id').notNull(),
+    credentialPublicKey: text('credential_public_key').notNull(),
+    counter: integer('counter').notNull(),
+    credentialDeviceType: text('credential_device_type').notNull(),
+    credentialBackedUp: boolean('credential_backed_up').notNull(),
+    transports: text('transports'),
   },
   (authenticator) => ({
     compositePK: primaryKey({
@@ -91,15 +91,15 @@ export const authenticators = sqliteTable(
   })
 );
 
-export const locations = sqliteTable('locations', {
-  id: text({ length: 21 })
+export const locations = pgTable('locations', {
+  id: varchar('id', { length: 21 })
     .$defaultFn(() => nanoid())
     .primaryKey(),
-  placeId: text().unique().notNull(),
-  name: text().notNull(),
-  formattedAddress: text(),
-  createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
-  updatedAt: integer({ mode: 'timestamp' }),
+  placeId: text('place_id').unique().notNull(),
+  name: text('name').notNull(),
+  formattedAddress: text('formatted_address'),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+  updatedAt: timestamp('updated_at', { mode: 'date' }),
 });
 
 export const contentTypes = ['image', 'video'] as const;
@@ -114,14 +114,18 @@ export const contentStatuses = [
 ] as const;
 export type ContentStatus = (typeof contentStatuses)[number];
 
-export const content = sqliteTable('content', {
-  id: text({ length: 21 })
+export const content = pgTable('content', {
+  id: varchar('id', { length: 21 })
     .$defaultFn(() => nanoid())
     .primaryKey(),
-  type: text({ enum: contentTypes }).notNull().default('image'),
-  fileName: text(),
-  locationId: text().references(() => locations.id),
-  status: text({ enum: contentStatuses }).notNull().default('published'),
-  createdAt: integer({ mode: 'timestamp' }).default(sql`(unixepoch())`),
-  updatedAt: integer({ mode: 'timestamp' }),
+  type: text('type', { enum: contentTypes }).notNull().default('image'),
+  fileName: text('file_name'),
+  locationId: varchar('location_id', { length: 21 }).references(
+    () => locations.id
+  ),
+  status: text('status', { enum: contentStatuses })
+    .notNull()
+    .default('published'),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+  updatedAt: timestamp('updated_at', { mode: 'date' }),
 });

@@ -8,7 +8,7 @@ export default class LocationsRepository extends BaseRepository<
   'id'
 > {
   constructor() {
-    super(locations, 'id');
+    super(locations, locations.id);
   }
 
   async findByPlaceId(placeId: string) {
