@@ -34,10 +34,14 @@ class BaseRepository<
     this.primaryKey = primaryKey;
   }
 
+  private getColumn<K extends keyof ModelSelect<T>>(key: K): Column {
+    return (this.table as unknown as Record<string, Column>)[key as string];
+  }
+
   async findFirst(): Promise<ModelSelect<T> | undefined> {
     return await db
       .select()
-      .from(this.table as any)
+      .from(this.table as unknown as Table)
       .limit(1)
       .then(([result]) => result);
   }
@@ -45,13 +49,13 @@ class BaseRepository<
   async findById(id: ModelSelect<T>[PK]): Promise<ModelSelect<T> | null> {
     const result = await db
       .select()
-      .from(this.table as any)
+      .from(this.table as unknown as Table)
       .where(eq(this.primaryKey, id));
     return result.length > 0 ? result[0] : null;
   }
 
   async findAll(): Promise<ModelSelect<T>[]> {
-    const result = await db.select().from(this.table as any);
+    const result = await db.select().from(this.table as unknown as Table);
     return result;
   }
 
@@ -68,14 +72,17 @@ class BaseRepository<
     const offset = (page - 1) * size;
 
     let orderBy = sort.map((sortOption) => {
-      const column = (this.table as any)[sortOption.column] as Column;
-      return sql`${column} ${
-        sortOption.order === 'desc' ? sql`DESC` : sql`ASC`
-      }`;
+      const column = this.getColumn(sortOption.column);
+      return sql`${column} ${sortOption.order === 'desc' ? sql`DESC` : sql`ASC`} `;
     });
 
-    if (orderBy.length === 0 && 'createdAt' in this.table) {
-      orderBy = [sql`${(this.table as any).createdAt} DESC`];
+    if (orderBy.length === 0 && 'created_at' in this.table) {
+      const createdAt = (this.table as unknown as Record<string, Column>)[
+        'created_at'
+      ];
+      if (createdAt) {
+        orderBy = [sql`${createdAt} DESC`];
+      }
     }
 
     let where: SQL | undefined;
@@ -83,7 +90,7 @@ class BaseRepository<
     if (search && searchColumns.length > 0) {
       const searchCondition = or(
         ...searchColumns.map((column) =>
-          like((this.table as any)[column as keyof T] as Column, `%${search}%`)
+          like(this.getColumn(column as keyof ModelSelect<T>), `%${search}%`)
         )
       );
 
@@ -124,7 +131,7 @@ class BaseRepository<
 
     const items = await db
       .select()
-      .from(this.table as any)
+      .from(this.table as unknown as Table)
       .orderBy(...orderBy)
       .where(where)
       .limit(limit)
@@ -136,17 +143,14 @@ class BaseRepository<
   async exists(id: ModelSelect<T>[PK]): Promise<boolean> {
     const [result] = await db
       .select({ count: count() })
-      .from(this.table as any)
+      .from(this.table as unknown as Table)
       .where(eq(this.primaryKey, id))
       .limit(1);
     return result?.count > 0;
   }
 
   async create(entity: ModelInsert<T>): Promise<ModelSelect<T>> {
-    const result = await db
-      .insert(this.table as any)
-      .values(entity)
-      .returning();
+    const result = await db.insert(this.table).values(entity).returning();
     return (result as ModelSelect<T>[])[0];
   }
 
@@ -155,7 +159,7 @@ class BaseRepository<
     entity: Partial<ModelInsert<T>>
   ): Promise<ModelSelect<T>> {
     const [updated] = (await db
-      .update(this.table as any)
+      .update(this.table)
       .set(entity)
       .where(eq(this.primaryKey, id))
       .returning()) as ModelSelect<T>[];
@@ -164,12 +168,12 @@ class BaseRepository<
   }
 
   async delete(id: ModelSelect<T>[PK]): Promise<void> {
-    await db.delete(this.table as any).where(eq(this.primaryKey, id));
+    await db.delete(this.table).where(eq(this.primaryKey, id));
   }
 
   async deleteById(id: ModelSelect<T>[PK]): Promise<boolean> {
     const result = await db
-      .delete(this.table as any)
+      .delete(this.table)
       .where(eq(this.primaryKey, id))
       .returning();
     return (result as ModelSelect<T>[]).length > 0;
@@ -177,7 +181,7 @@ class BaseRepository<
 
   async updateById(id: ModelSelect<T>[PK], entity: Partial<ModelInsert<T>>) {
     const [updated] = (await db
-      .update(this.table as any)
+      .update(this.table)
       .set(entity)
       .where(eq(this.primaryKey, id))
       .returning()) as ModelSelect<T>[];
@@ -186,13 +190,15 @@ class BaseRepository<
   }
 
   async count(filter?: SQL): Promise<number> {
-    const query = db.select({ count: count() }).from(this.table as any);
+    const query = db
+      .select({ count: count() })
+      .from(this.table as unknown as Table);
     const [result] = await (filter ? query.where(filter) : query);
     return result?.count ?? 0;
   }
 
   async deleteAll(): Promise<void> {
-    await db.delete(this.table as any);
+    await db.delete(this.table);
   }
 }
 
