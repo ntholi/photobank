@@ -104,7 +104,7 @@ export const locations = pgTable('locations', {
     .primaryKey(),
   placeId: text().unique().notNull(),
   name: text().notNull(),
-  formattedAddress: text(),
+  address: text(),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
   updatedAt: timestamp({ mode: 'date' }),
 });

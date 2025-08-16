@@ -17,7 +17,7 @@ export default class LocationsRepository extends BaseRepository<
         id: locations.id,
         placeId: locations.placeId,
         name: locations.name,
-        formattedAddress: locations.formattedAddress,
+        address: locations.address,
       })
       .from(locations)
       .where(eq(locations.placeId, placeId))

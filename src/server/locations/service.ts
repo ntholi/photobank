@@ -22,7 +22,7 @@ class LocationsService {
   async upsertByPlaceId(data: {
     placeId: string;
     name: string;
-    formattedAddress?: string | null;
+    address?: string | null;
   }) {
     return withAuth(async () => {
       const existing = await this.repository.findByPlaceId(data.placeId);
@@ -30,7 +30,7 @@ class LocationsService {
       const entity: LocationInsert = {
         placeId: data.placeId,
         name: data.name,
-        formattedAddress: data.formattedAddress ?? null,
+        address: data.address ?? null,
       };
       return this.repository.create(entity);
     }, ['contributor']);

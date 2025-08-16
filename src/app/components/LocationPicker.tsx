@@ -18,7 +18,7 @@ type Props = Omit<AutocompleteProps, 'data' | 'onOptionSubmit' | 'onSelect'> & {
   onLocationSelect?: (selected: {
     id: string;
     name: string;
-    formattedAddress?: string | null;
+    address?: string | null;
   }) => void;
   required?: boolean;
 };
@@ -118,7 +118,7 @@ export default function LocationPicker({
           onLocationSelect?.({
             id: saved.id,
             name: saved.name,
-            formattedAddress: saved.formattedAddress ?? null,
+            address: saved.address ?? null,
           });
         } catch (error) {
           setSelected(null);

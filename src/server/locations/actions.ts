@@ -13,7 +13,7 @@ export type PlaceSuggestion = {
 export async function upsertLocationByPlaceId(input: {
   placeId: string;
   name: string;
-  formattedAddress?: string | null;
+  address?: string | null;
 }) {
   return service.upsertByPlaceId(input);
 }
@@ -46,7 +46,7 @@ export async function searchPlaces(input: string): Promise<PlaceSuggestion[]> {
 export async function getPlaceDetails(placeId: string): Promise<{
   placeId: string;
   name: string;
-  formattedAddress?: string | null;
+  address?: string | null;
 }> {
   const key = process.env.GOOGLE_MAPS_API_KEY as string;
   if (!key) throw new Error('Missing Google Maps API key');
@@ -60,6 +60,6 @@ export async function getPlaceDetails(placeId: string): Promise<{
   return {
     placeId: r.place_id,
     name: r.name,
-    formattedAddress: r.formatted_address ?? null,
+    address: r.formatted_address ?? null,
   };
 }
