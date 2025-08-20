@@ -60,7 +60,6 @@ export default function FileUpload({
   };
 
   const handleFileSelect = (file: File) => {
-    // Validate file type
     if (!accept.includes(file.type)) {
       notifications.show({
         title: 'Invalid file type',
@@ -70,7 +69,6 @@ export default function FileUpload({
       return;
     }
 
-    // Validate file size
     if (file.size > maxSize) {
       notifications.show({
         title: 'File too large',
@@ -82,7 +80,6 @@ export default function FileUpload({
 
     onChange(file);
 
-    // Create preview URL
     if (file.type.startsWith('image/')) {
       const url = URL.createObjectURL(file);
       setPreview(url);
@@ -166,6 +163,8 @@ export default function FileUpload({
               backgroundColor: disabled
                 ? 'var(--mantine-color-gray-1)'
                 : undefined,
+              cursor: 'pointer',
+              border: '1px dashed var(--mantine-color-gray-7)',
             },
           }}
         >

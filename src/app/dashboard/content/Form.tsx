@@ -97,6 +97,8 @@ export default function ContentForm({
           thumbnailKey: true,
           watermarkedKey: true,
           fileSize: true,
+          type: true,
+          status: true,
         }) as any
       }
       defaultValues={defaultValues}
@@ -124,35 +126,6 @@ export default function ContentForm({
               selectedFile?.name || form.getInputProps('fileName').value || ''
             }
             readOnly={!!selectedFile}
-          />
-
-          <Select
-            label='Content Type'
-            data={[
-              { value: 'image', label: 'Image' },
-              { value: 'video', label: 'Video' },
-            ]}
-            {...form.getInputProps('type')}
-            value={
-              selectedFile
-                ? selectedFile.type.startsWith('image/')
-                  ? 'image'
-                  : 'video'
-                : form.getInputProps('type').value
-            }
-            readOnly={!!selectedFile}
-          />
-
-          <Select
-            label='Status'
-            data={[
-              { value: 'draft', label: 'Draft' },
-              { value: 'pending', label: 'Pending' },
-              { value: 'published', label: 'Published' },
-              { value: 'rejected', label: 'Rejected' },
-              { value: 'archived', label: 'Archived' },
-            ]}
-            {...form.getInputProps('status')}
           />
 
           <input type='hidden' {...form.getInputProps('locationId')} />
