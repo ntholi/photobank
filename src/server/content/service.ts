@@ -25,7 +25,7 @@ class ContentService {
     return withAuth(async () => this.repository.create(data), ['contributor']);
   }
 
-  async update(id: string, data: Content) {
+  async update(id: string, data: Partial<Content>) {
     return withAuth(
       async () => this.repository.update(id, data),
       ['contributor', 'moderator']

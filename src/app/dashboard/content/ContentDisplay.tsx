@@ -33,23 +33,7 @@ export default function ContentDisplay({ content }: Props) {
   const { data: urls, isLoading } = useQuery({
     queryKey: ['content-urls', content.id],
     queryFn: () => getContentUrls(content),
-    enabled: !!s3Key,
   });
-
-  if (!s3Key) {
-    return (
-      <Paper p='xl' withBorder>
-        <Center>
-          <Box ta='center'>
-            <IconFileX size={48} color='var(--mantine-color-gray-5)' />
-            <Text size='sm' c='dimmed' mt='xs'>
-              No content file available
-            </Text>
-          </Box>
-        </Center>
-      </Paper>
-    );
-  }
 
   if (isLoading) {
     return (
@@ -125,16 +109,12 @@ export default function ContentDisplay({ content }: Props) {
                 {(fileSize / 1024 / 1024).toFixed(2)} MB
               </Text>
             )}
-            {thumbnailKey && (
-              <Text size='xs' c='dimmed'>
-                Thumbnail: {thumbnailKey}
-              </Text>
-            )}
-            {watermarkedKey && (
-              <Text size='xs' c='dimmed'>
-                Watermarked: {watermarkedKey}
-              </Text>
-            )}
+            <Text size='xs' c='dimmed'>
+              Thumbnail: {thumbnailKey}
+            </Text>
+            <Text size='xs' c='dimmed'>
+              Watermarked: {watermarkedKey}
+            </Text>
           </Box>
         )}
       </Paper>

@@ -19,15 +19,7 @@ export default function Layout({ children }: PropsWithChildren) {
           id={content.id}
           label={
             <Group gap='sm' wrap='nowrap'>
-              <Avatar
-                size='sm'
-                radius='md'
-                src={
-                  content.thumbnailKey
-                    ? getImageUrl(content.thumbnailKey)
-                    : null
-                }
-              >
+              <Avatar radius={'xs'} src={getImageUrl(content.thumbnailKey)}>
                 {content.type === 'image' ? (
                   <IconPhoto size={16} />
                 ) : (
@@ -42,14 +34,6 @@ export default function Layout({ children }: PropsWithChildren) {
                   <Badge size='xs' variant='light'>
                     {content.type}
                   </Badge>
-                  <Badge size='xs' variant='outline'>
-                    {content.status}
-                  </Badge>
-                  {content.fileSize && (
-                    <Text size='xs' c='dimmed'>
-                      {(content.fileSize / 1024 / 1024).toFixed(1)}MB
-                    </Text>
-                  )}
                 </Group>
               </div>
             </Group>

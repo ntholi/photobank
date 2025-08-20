@@ -12,6 +12,16 @@ import { uploadContentFile } from '@/server/content/uploadActions';
 import { notifications } from '@mantine/notifications';
 
 type Content = typeof content.$inferInsert;
+type FormContent = Omit<
+  Content,
+  | 's3Key'
+  | 'thumbnailKey'
+  | 'watermarkedKey'
+  | 'fileSize'
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt'
+>;
 
 type Props = {
   onSubmit: (values: Content) => Promise<Content>;
@@ -37,7 +47,7 @@ export default function ContentForm({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  const handleFormSubmit = async (values: Content) => {
+  const handleFormSubmit = async (values: FormContent) => {
     if (selectedFile && !defaultValues) {
       setUploading(true);
       try {
@@ -50,8 +60,8 @@ export default function ContentForm({
           ...values,
           fileName: uploadResult.fileName,
           s3Key: uploadResult.key,
-          thumbnailKey: uploadResult.thumbnailKey || null,
-          watermarkedKey: uploadResult.watermarkedKey || null,
+          thumbnailKey: uploadResult.thumbnailKey,
+          watermarkedKey: uploadResult.watermarkedKey,
           fileSize: uploadResult.fileSize,
           type: selectedFile.type.startsWith('image/') ? 'image' : 'video',
         };
@@ -69,7 +79,7 @@ export default function ContentForm({
         setUploading(false);
       }
     } else {
-      return await onSubmit(values);
+      return await onSubmit(values as Content);
     }
   };
 
@@ -78,15 +88,17 @@ export default function ContentForm({
       title={title}
       action={handleFormSubmit}
       queryKey={['content']}
-      schema={createInsertSchema(content).omit({
-        id: true,
-        createdAt: true,
-        updatedAt: true,
-        s3Key: true,
-        thumbnailKey: true,
-        watermarkedKey: true,
-        fileSize: true,
-      })}
+      schema={
+        createInsertSchema(content).omit({
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          s3Key: true,
+          thumbnailKey: true,
+          watermarkedKey: true,
+          fileSize: true,
+        }) as any
+      }
       defaultValues={defaultValues}
       onSuccess={(result) => {
         const contentWithId = result as Content & { id: string };

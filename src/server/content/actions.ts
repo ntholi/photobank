@@ -28,13 +28,9 @@ export async function deleteContent(id: string) {
 
 export async function getContentUrls(contentItem: typeof content.$inferSelect) {
   const urls = {
-    original: contentItem.s3Key ? getImageUrl(contentItem.s3Key) : null,
-    thumbnail: contentItem.thumbnailKey
-      ? getImageUrl(contentItem.thumbnailKey)
-      : null,
-    watermarked: contentItem.watermarkedKey
-      ? getImageUrl(contentItem.watermarkedKey)
-      : null,
+    original: getImageUrl(contentItem.s3Key),
+    thumbnail: getImageUrl(contentItem.thumbnailKey),
+    watermarked: getImageUrl(contentItem.watermarkedKey),
   };
 
   return urls;

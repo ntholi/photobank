@@ -16,8 +16,8 @@ type UploadResult = {
   fileName: string;
   fileSize: number;
   contentType: string;
-  thumbnailKey?: string;
-  watermarkedKey?: string;
+  thumbnailKey: string;
+  watermarkedKey: string;
 };
 
 const ALLOWED_MIME_TYPES = [
@@ -50,19 +50,14 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
 
   await s3Client.send(command);
 
-  const result: UploadResult = {
-    key,
-    fileName: file.name,
-    fileSize: file.size,
-    contentType: file.type,
-  };
+  const baseKey = key.split('.')[0];
+  let thumbnailKey: string;
+  let watermarkedKey: string;
 
   if (isImageFile(file.type)) {
     try {
-      const baseKey = key.split('.')[0];
-
       const thumbnail = await createThumbnail(buffer, 300);
-      const thumbnailKey = `${baseKey}_thumb.webp`;
+      thumbnailKey = `${baseKey}_thumb.webp`;
 
       await s3Client.send(
         new PutObjectCommand({
@@ -85,7 +80,7 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
         900,
         'Photobank'
       );
-      const watermarkedKey = `${baseKey}_watermarked.webp`;
+      watermarkedKey = `${baseKey}_watermarked.webp`;
 
       await s3Client.send(
         new PutObjectCommand({
@@ -102,13 +97,24 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
           },
         })
       );
-
-      result.thumbnailKey = thumbnailKey;
-      result.watermarkedKey = watermarkedKey;
     } catch (error) {
       console.error('Failed to process image:', error);
+      thumbnailKey = key;
+      watermarkedKey = key;
     }
+  } else {
+    thumbnailKey = key;
+    watermarkedKey = key;
   }
+
+  const result: UploadResult = {
+    key,
+    fileName: file.name,
+    fileSize: file.size,
+    contentType: file.type,
+    thumbnailKey,
+    watermarkedKey,
+  };
 
   return result;
 }
