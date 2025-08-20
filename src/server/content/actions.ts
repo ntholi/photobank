@@ -2,7 +2,6 @@
 
 import { content } from '@/db/schema';
 import { contentService as service } from './service';
-import { getImageUrl } from '@/lib/utils';
 
 type Content = typeof content.$inferInsert;
 
@@ -24,14 +23,4 @@ export async function updateContent(id: string, content: Partial<Content>) {
 
 export async function deleteContent(id: string) {
   return service.delete(id);
-}
-
-export async function getContentUrls(contentItem: typeof content.$inferSelect) {
-  const urls = {
-    original: getImageUrl(contentItem.s3Key),
-    thumbnail: getImageUrl(contentItem.thumbnailKey),
-    watermarked: getImageUrl(contentItem.watermarkedKey),
-  };
-
-  return urls;
 }

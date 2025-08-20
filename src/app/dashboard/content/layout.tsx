@@ -27,7 +27,7 @@ export default function Layout({ children }: PropsWithChildren) {
                 )}
               </Avatar>
               <div style={{ flex: 1, overflow: 'hidden' }}>
-                <Text size='sm' fw={500} truncate>
+                <Text fw={300} truncate>
                   {content.fileName || `${content.type}_${content.id}`}
                 </Text>
                 <Group gap='xs'>

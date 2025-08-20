@@ -1,7 +1,7 @@
 'use client';
 
 import { content } from '@/db/schema';
-import { getContentUrls } from '@/server/content/actions';
+import { getImageUrl } from '@/lib/utils';
 import {
   AspectRatio,
   Box,
@@ -12,13 +12,7 @@ import {
   Paper,
   Text,
 } from '@mantine/core';
-import {
-  IconDownload,
-  IconEye,
-  IconFileX,
-  IconVideo,
-} from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
+import { IconDownload, IconEye, IconVideo } from '@tabler/icons-react';
 import { useState } from 'react';
 
 type Props = {
@@ -28,24 +22,13 @@ type Props = {
 export default function ContentDisplay({ content }: Props) {
   const { fileName, s3Key, thumbnailKey, watermarkedKey, type, fileSize } =
     content;
-  const [showWatermarked, setShowWatermarked] = useState(false);
+  const [showWatermarked, setShowWatermarked] = useState(true);
 
-  const { data: urls, isLoading } = useQuery({
-    queryKey: ['content-urls', content.id],
-    queryFn: () => getContentUrls(content),
-  });
-
-  if (isLoading) {
-    return (
-      <Paper p='xl' withBorder>
-        <Center>
-          <Text size='sm' c='dimmed'>
-            Loading content...
-          </Text>
-        </Center>
-      </Paper>
-    );
-  }
+  const urls = {
+    original: getImageUrl(s3Key),
+    thumbnail: getImageUrl(thumbnailKey),
+    watermarked: getImageUrl(watermarkedKey),
+  };
 
   if (type === 'image') {
     return (
@@ -53,9 +36,9 @@ export default function ContentDisplay({ content }: Props) {
         <AspectRatio ratio={16 / 9} maw={800}>
           <Image
             src={
-              showWatermarked && urls?.watermarked
+              showWatermarked && urls.watermarked
                 ? urls.watermarked
-                : urls?.thumbnail || undefined
+                : urls.thumbnail || undefined
             }
             alt={fileName || 'Content image'}
             radius='md'
@@ -64,9 +47,9 @@ export default function ContentDisplay({ content }: Props) {
           />
         </AspectRatio>
 
-        {(urls?.thumbnail || urls?.watermarked) && (
+        {(urls.thumbnail || urls.watermarked) && (
           <Group mt='sm' gap='xs'>
-            {urls?.thumbnail && (
+            {urls.thumbnail && (
               <Button
                 size='xs'
                 variant={!showWatermarked ? 'filled' : 'light'}
@@ -76,7 +59,7 @@ export default function ContentDisplay({ content }: Props) {
                 Thumbnail
               </Button>
             )}
-            {urls?.watermarked && (
+            {urls.watermarked && (
               <Button
                 size='xs'
                 variant={showWatermarked ? 'filled' : 'light'}
@@ -91,7 +74,7 @@ export default function ContentDisplay({ content }: Props) {
               variant='light'
               leftSection={<IconDownload size={14} />}
               component='a'
-              href={urls?.original || undefined}
+              href={urls.original || undefined}
               target='_blank'
             >
               Original
@@ -109,12 +92,6 @@ export default function ContentDisplay({ content }: Props) {
                 {(fileSize / 1024 / 1024).toFixed(2)} MB
               </Text>
             )}
-            <Text size='xs' c='dimmed'>
-              Thumbnail: {thumbnailKey}
-            </Text>
-            <Text size='xs' c='dimmed'>
-              Watermarked: {watermarkedKey}
-            </Text>
           </Box>
         )}
       </Paper>
@@ -133,7 +110,7 @@ export default function ContentDisplay({ content }: Props) {
               borderRadius: 'var(--mantine-radius-md)',
             }}
           >
-            <source src={urls?.watermarked || undefined} />
+            <source src={urls.watermarked || undefined} />
             <Center h='100%'>
               <Box ta='center'>
                 <IconVideo size={48} color='var(--mantine-color-gray-5)' />
