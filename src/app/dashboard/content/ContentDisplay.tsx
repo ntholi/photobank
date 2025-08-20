@@ -5,11 +5,10 @@ import { getImageUrl } from '@/lib/utils';
 import {
   AspectRatio,
   Box,
-  Button,
   Center,
-  Group,
   Image,
   Paper,
+  Tabs,
   Text,
 } from '@mantine/core';
 import { IconDownload, IconEye, IconVideo } from '@tabler/icons-react';
@@ -22,7 +21,13 @@ type Props = {
 export default function ContentDisplay({ content }: Props) {
   const { fileName, s3Key, thumbnailKey, watermarkedKey, type, fileSize } =
     content;
-  const [showWatermarked, setShowWatermarked] = useState(true);
+  const [activeTab, setActiveTab] = useState('preview');
+
+  const handleTabChange = (value: string | null) => {
+    if (value) {
+      setActiveTab(value);
+    }
+  };
 
   const urls = {
     original: getImageUrl(s3Key),
@@ -31,56 +36,50 @@ export default function ContentDisplay({ content }: Props) {
   };
 
   if (type === 'image') {
+    const getImageSrc = () => {
+      switch (activeTab) {
+        case 'thumbnail':
+          return urls.thumbnail;
+        case 'preview':
+          return urls.watermarked;
+        case 'original':
+          return urls.original;
+        default:
+          return urls.watermarked || urls.thumbnail;
+      }
+    };
+
     return (
       <Paper p='md' withBorder>
-        <AspectRatio ratio={16 / 9} maw={800}>
-          <Image
-            src={
-              showWatermarked && urls.watermarked
-                ? urls.watermarked
-                : urls.thumbnail || undefined
-            }
-            alt={fileName || 'Content image'}
-            radius='md'
-            fit='contain'
-            fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgTm90IEZvdW5kPC90ZXh0Pjwvc3ZnPg=='
-          />
-        </AspectRatio>
-
-        {(urls.thumbnail || urls.watermarked) && (
-          <Group mt='sm' gap='xs'>
+        <Tabs value={activeTab} onChange={handleTabChange}>
+          <Tabs.List>
             {urls.thumbnail && (
-              <Button
-                size='xs'
-                variant={!showWatermarked ? 'filled' : 'light'}
-                leftSection={<IconEye size={14} />}
-                onClick={() => setShowWatermarked(false)}
-              >
+              <Tabs.Tab value='thumbnail' leftSection={<IconEye size={14} />}>
                 Thumbnail
-              </Button>
+              </Tabs.Tab>
             )}
             {urls.watermarked && (
-              <Button
-                size='xs'
-                variant={showWatermarked ? 'filled' : 'light'}
-                leftSection={<IconEye size={14} />}
-                onClick={() => setShowWatermarked(true)}
-              >
+              <Tabs.Tab value='preview' leftSection={<IconEye size={14} />}>
                 Preview
-              </Button>
+              </Tabs.Tab>
             )}
-            <Button
-              size='xs'
-              variant='light'
-              leftSection={<IconDownload size={14} />}
-              component='a'
-              href={urls.original || undefined}
-              target='_blank'
-            >
+            <Tabs.Tab value='original' leftSection={<IconDownload size={14} />}>
               Original
-            </Button>
-          </Group>
-        )}
+            </Tabs.Tab>
+          </Tabs.List>
+
+          <Tabs.Panel value={activeTab} mt='md'>
+            <AspectRatio ratio={16 / 9} maw={800}>
+              <Image
+                src={getImageSrc()}
+                alt={fileName || 'Content image'}
+                radius='md'
+                fit='contain'
+                fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgTm90IEZvdW5kPC90ZXh0Pjwvc3ZnPg=='
+              />
+            </AspectRatio>
+          </Tabs.Panel>
+        </Tabs>
 
         {fileName && (
           <Box mt='sm'>
@@ -99,28 +98,55 @@ export default function ContentDisplay({ content }: Props) {
   }
 
   if (type === 'video') {
+    const getVideoSrc = () => {
+      switch (activeTab) {
+        case 'preview':
+          return urls.watermarked;
+        case 'original':
+          return urls.original;
+        default:
+          return urls.watermarked || urls.original;
+      }
+    };
+
     return (
       <Paper p='md' withBorder>
-        <AspectRatio ratio={16 / 9} maw={800}>
-          <video
-            controls
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 'var(--mantine-radius-md)',
-            }}
-          >
-            <source src={urls.watermarked || undefined} />
-            <Center h='100%'>
-              <Box ta='center'>
-                <IconVideo size={48} color='var(--mantine-color-gray-5)' />
-                <Text size='sm' c='dimmed' mt='xs'>
-                  Video cannot be played in this browser
-                </Text>
-              </Box>
-            </Center>
-          </video>
-        </AspectRatio>
+        <Tabs value={activeTab} onChange={handleTabChange}>
+          <Tabs.List>
+            {urls.watermarked && (
+              <Tabs.Tab value='preview' leftSection={<IconEye size={14} />}>
+                Preview
+              </Tabs.Tab>
+            )}
+            <Tabs.Tab value='original' leftSection={<IconDownload size={14} />}>
+              Original
+            </Tabs.Tab>
+          </Tabs.List>
+
+          <Tabs.Panel value={activeTab} mt='md'>
+            <AspectRatio ratio={16 / 9} maw={800}>
+              <video
+                controls
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 'var(--mantine-radius-md)',
+                }}
+              >
+                <source src={getVideoSrc()} />
+                <Center h='100%'>
+                  <Box ta='center'>
+                    <IconVideo size={48} color='var(--mantine-color-gray-5)' />
+                    <Text size='sm' c='dimmed' mt='xs'>
+                      Video cannot be played in this browser
+                    </Text>
+                  </Box>
+                </Center>
+              </video>
+            </AspectRatio>
+          </Tabs.Panel>
+        </Tabs>
+
         {fileName && (
           <Box mt='sm'>
             <Text size='sm' fw={500}>

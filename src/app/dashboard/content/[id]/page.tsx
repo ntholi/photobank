@@ -26,8 +26,6 @@ export default async function ContentDetails({ params }: Props) {
     ? await getLocation(content.locationId)
     : undefined;
 
-  console.log('content', content);
-
   return (
     <DetailsView>
       <DetailsViewHeader
@@ -42,7 +40,7 @@ export default async function ContentDetails({ params }: Props) {
         <Stack gap='lg'>
           <ContentDisplay content={content} />
 
-          <div>
+          <Stack gap='xs'>
             <FieldView label='Type'>{content.type}</FieldView>
             <FieldView label='File Name'>{content.fileName}</FieldView>
             <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
@@ -57,7 +55,7 @@ export default async function ContentDetails({ params }: Props) {
                 {new Date(content.createdAt).toLocaleDateString()}
               </FieldView>
             )}
-          </div>
+          </Stack>
         </Stack>
       </DetailsViewBody>
     </DetailsView>
