@@ -1,11 +1,11 @@
 'use client';
 
-import { PropsWithChildren } from 'react';
 import { ListItem, ListLayout, NewLink } from '@/components/adease';
+import { getImageUrl } from '@/lib/utils';
 import { getContentList } from '@/server/content/actions';
-import { getThumbnailUrl } from '@/lib/aws';
-import { Avatar, Group, Text, Badge } from '@mantine/core';
+import { Avatar, Badge, Group, Text } from '@mantine/core';
 import { IconPhoto, IconVideo } from '@tabler/icons-react';
+import { PropsWithChildren } from 'react';
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
@@ -22,11 +22,11 @@ export default function Layout({ children }: PropsWithChildren) {
               <Avatar
                 size='sm'
                 radius='md'
-                // src={
-                //   content.thumbnailKey
-                //     ? getThumbnailUrl(content.thumbnailKey)
-                //     : null
-                // }
+                src={
+                  content.thumbnailKey
+                    ? getImageUrl(content.thumbnailKey)
+                    : null
+                }
               >
                 {content.type === 'image' ? (
                   <IconPhoto size={16} />

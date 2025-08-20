@@ -192,3 +192,7 @@ export async function getCountryFromIP(ipAddress: string): Promise<{
     };
   }
 }
+
+export function getImageUrl(key: string): string {
+  return `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${key}`;
+}

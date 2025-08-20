@@ -1,8 +1,8 @@
 'use server';
 
 import { content } from '@/db/schema';
-import { getThumbnailUrl, getWatermarkedUrl } from '@/lib/aws';
 import { contentService as service } from './service';
+import { getImageUrl } from '@/lib/utils';
 
 type Content = typeof content.$inferInsert;
 
@@ -28,12 +28,12 @@ export async function deleteContent(id: string) {
 
 export async function getContentUrls(contentItem: typeof content.$inferSelect) {
   const urls = {
-    original: contentItem.s3Key ? getWatermarkedUrl(contentItem.s3Key) : null,
+    original: contentItem.s3Key ? getImageUrl(contentItem.s3Key) : null,
     thumbnail: contentItem.thumbnailKey
-      ? getThumbnailUrl(contentItem.thumbnailKey)
+      ? getImageUrl(contentItem.thumbnailKey)
       : null,
     watermarked: contentItem.watermarkedKey
-      ? getWatermarkedUrl(contentItem.watermarkedKey)
+      ? getImageUrl(contentItem.watermarkedKey)
       : null,
   };
 

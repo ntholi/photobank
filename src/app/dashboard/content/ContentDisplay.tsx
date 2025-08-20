@@ -1,34 +1,40 @@
 'use client';
 
 import { content } from '@/db/schema';
-import { getThumbnailUrl, getWatermarkedUrl } from '@/lib/aws';
+import { getContentUrls } from '@/server/content/actions';
 import {
-  Image,
-  Box,
-  Text,
-  Paper,
-  Center,
   AspectRatio,
-  Group,
+  Box,
   Button,
+  Center,
+  Group,
+  Image,
+  Paper,
+  Text,
 } from '@mantine/core';
 import {
-  IconPhoto,
-  IconVideo,
-  IconFileX,
-  IconEye,
   IconDownload,
+  IconEye,
+  IconFileX,
+  IconVideo,
 } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 type Props = {
-  content: typeof content.$inferInsert;
+  content: typeof content.$inferSelect;
 };
 
 export default function ContentDisplay({ content }: Props) {
   const { fileName, s3Key, thumbnailKey, watermarkedKey, type, fileSize } =
     content;
   const [showWatermarked, setShowWatermarked] = useState(false);
+
+  const { data: urls, isLoading } = useQuery({
+    queryKey: ['content-urls', content.id],
+    queryFn: () => getContentUrls(content),
+    enabled: !!s3Key,
+  });
 
   if (!s3Key) {
     return (
@@ -45,21 +51,28 @@ export default function ContentDisplay({ content }: Props) {
     );
   }
 
-  console.log(
-    'getWatermarkedUrl(watermarkedKey)',
-    watermarkedKey ? getWatermarkedUrl(watermarkedKey) : 'No watermarked key'
-  );
-  console.log(
-    'getThumbnailUrl(thumbnailKey)',
-    thumbnailKey ? getThumbnailUrl(thumbnailKey) : 'No thumbnail key'
-  );
+  if (isLoading) {
+    return (
+      <Paper p='xl' withBorder>
+        <Center>
+          <Text size='sm' c='dimmed'>
+            Loading content...
+          </Text>
+        </Center>
+      </Paper>
+    );
+  }
 
   if (type === 'image') {
     return (
       <Paper p='md' withBorder>
         <AspectRatio ratio={16 / 9} maw={800}>
           <Image
-            src={thumbnailKey ? getThumbnailUrl(thumbnailKey) : undefined}
+            src={
+              showWatermarked && urls?.watermarked
+                ? urls.watermarked
+                : urls?.thumbnail || undefined
+            }
             alt={fileName || 'Content image'}
             radius='md'
             fit='contain'
@@ -67,17 +80,19 @@ export default function ContentDisplay({ content }: Props) {
           />
         </AspectRatio>
 
-        {(thumbnailKey || watermarkedKey) && (
+        {(urls?.thumbnail || urls?.watermarked) && (
           <Group mt='sm' gap='xs'>
-            <Button
-              size='xs'
-              variant={!showWatermarked ? 'filled' : 'light'}
-              leftSection={<IconEye size={14} />}
-              onClick={() => setShowWatermarked(false)}
-            >
-              Thumbnail
-            </Button>
-            {watermarkedKey && (
+            {urls?.thumbnail && (
+              <Button
+                size='xs'
+                variant={!showWatermarked ? 'filled' : 'light'}
+                leftSection={<IconEye size={14} />}
+                onClick={() => setShowWatermarked(false)}
+              >
+                Thumbnail
+              </Button>
+            )}
+            {urls?.watermarked && (
               <Button
                 size='xs'
                 variant={showWatermarked ? 'filled' : 'light'}
@@ -92,9 +107,7 @@ export default function ContentDisplay({ content }: Props) {
               variant='light'
               leftSection={<IconDownload size={14} />}
               component='a'
-              href={
-                watermarkedKey ? getWatermarkedUrl(watermarkedKey) : undefined
-              }
+              href={urls?.original || undefined}
               target='_blank'
             >
               Original
@@ -140,11 +153,7 @@ export default function ContentDisplay({ content }: Props) {
               borderRadius: 'var(--mantine-radius-md)',
             }}
           >
-            <source
-              src={
-                watermarkedKey ? getWatermarkedUrl(watermarkedKey) : undefined
-              }
-            />
+            <source src={urls?.watermarked || undefined} />
             <Center h='100%'>
               <Box ta='center'>
                 <IconVideo size={48} color='var(--mantine-color-gray-5)' />
