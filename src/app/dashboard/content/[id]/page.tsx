@@ -26,6 +26,8 @@ export default async function ContentDetails({ params }: Props) {
     ? await getLocation(content.locationId)
     : undefined;
 
+  console.log('content', content);
+
   return (
     <DetailsView>
       <DetailsViewHeader

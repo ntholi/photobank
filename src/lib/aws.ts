@@ -14,10 +14,6 @@ export const s3Client = new S3Client({
   },
 });
 
-export function getS3Url(key: string, bucket: string = bucketName): string {
-  return `https://${bucket}.s3.${bucketRegion}.amazonaws.com/${key}`;
-}
-
 export function getThumbnailUrl(thumbnailKey: string): string {
   return `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${thumbnailKey}`;
 }

@@ -22,11 +22,11 @@ export default function Layout({ children }: PropsWithChildren) {
               <Avatar
                 size='sm'
                 radius='md'
-                src={
-                  content.thumbnailKey
-                    ? getThumbnailUrl(content.thumbnailKey)
-                    : null
-                }
+                // src={
+                //   content.thumbnailKey
+                //     ? getThumbnailUrl(content.thumbnailKey)
+                //     : null
+                // }
               >
                 {content.type === 'image' ? (
                   <IconPhoto size={16} />

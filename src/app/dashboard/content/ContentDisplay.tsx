@@ -1,7 +1,7 @@
 'use client';
 
 import { content } from '@/db/schema';
-import { getThumbnailUrl, getWatermarkedUrl, getS3Url } from '@/lib/aws';
+import { getThumbnailUrl, getWatermarkedUrl } from '@/lib/aws';
 import {
   Image,
   Box,
@@ -47,23 +47,19 @@ export default function ContentDisplay({ content }: Props) {
 
   console.log(
     'getWatermarkedUrl(watermarkedKey)',
-    getWatermarkedUrl(watermarkedKey)
+    watermarkedKey ? getWatermarkedUrl(watermarkedKey) : 'No watermarked key'
   );
-  console.log('getThumbnailUrl(thumbnailKey)', getThumbnailUrl(thumbnailKey));
-
-  const imageUrl =
-    showWatermarked && watermarkedKey
-      ? getWatermarkedUrl(watermarkedKey)
-      : thumbnailKey
-        ? getThumbnailUrl(thumbnailKey)
-        : getS3Url(s3Key);
+  console.log(
+    'getThumbnailUrl(thumbnailKey)',
+    thumbnailKey ? getThumbnailUrl(thumbnailKey) : 'No thumbnail key'
+  );
 
   if (type === 'image') {
     return (
       <Paper p='md' withBorder>
         <AspectRatio ratio={16 / 9} maw={800}>
           <Image
-            src={imageUrl}
+            src={thumbnailKey ? getThumbnailUrl(thumbnailKey) : undefined}
             alt={fileName || 'Content image'}
             radius='md'
             fit='contain'
@@ -96,7 +92,9 @@ export default function ContentDisplay({ content }: Props) {
               variant='light'
               leftSection={<IconDownload size={14} />}
               component='a'
-              href={getS3Url(s3Key)}
+              href={
+                watermarkedKey ? getWatermarkedUrl(watermarkedKey) : undefined
+              }
               target='_blank'
             >
               Original
@@ -142,7 +140,11 @@ export default function ContentDisplay({ content }: Props) {
               borderRadius: 'var(--mantine-radius-md)',
             }}
           >
-            <source src={getS3Url(s3Key)} />
+            <source
+              src={
+                watermarkedKey ? getWatermarkedUrl(watermarkedKey) : undefined
+              }
+            />
             <Center h='100%'>
               <Box ta='center'>
                 <IconVideo size={48} color='var(--mantine-color-gray-5)' />
