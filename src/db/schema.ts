@@ -8,6 +8,7 @@ import {
   varchar,
   pgEnum,
   jsonb,
+  serial,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccountType } from 'next-auth/adapters';
 import { nanoid } from 'nanoid';
@@ -121,6 +122,18 @@ export const content = pgTable('content', {
   fileSize: integer(),
   locationId: varchar({ length: 21 }).references(() => locations.id),
   status: contentStatusEnum().notNull().default('published'),
+  createdAt: timestamp({ mode: 'date' }).defaultNow(),
+  updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
+});
+
+export const homeContent = pgTable('home_content', {
+  id: varchar({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  position: integer().notNull(),
+  contentId: varchar({ length: 21 })
+    .notNull()
+    .references(() => content.id, { onDelete: 'cascade' }),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
   updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
 });
