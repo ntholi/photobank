@@ -1,14 +1,16 @@
 import { DetectLabelsCommand, Label } from '@aws-sdk/client-rekognition';
 import { rekognitionClient, bucketName } from './aws';
 
-export interface RecognitionLabel {
+export interface ContentLabel {
   name: string;
   confidence: number;
-  instances?: string;
-  parents?: string;
-  aliases?: string;
-  categories?: string;
+  instances?: Array<{ boundingBox?: object; confidence?: number }>;
+  parents?: string[];
+  aliases?: string[];
+  categories?: string[];
 }
+
+export interface RecognitionLabel extends ContentLabel {}
 
 export interface RecognitionResult {
   labels: RecognitionLabel[];
@@ -47,21 +49,25 @@ export async function detectLabels(
         name: label.Name || '',
         confidence: Math.round((label.Confidence || 0) * 100) / 100,
         instances: label.Instances?.length
-          ? JSON.stringify(
-              label.Instances.map((instance) => ({
-                boundingBox: instance.BoundingBox,
-                confidence: instance.Confidence,
-              }))
-            )
+          ? label.Instances.map((instance) => ({
+              boundingBox: instance.BoundingBox,
+              confidence: instance.Confidence,
+            }))
           : undefined,
         parents: label.Parents?.length
-          ? JSON.stringify(label.Parents.map((parent) => parent.Name))
+          ? label.Parents.map((parent) => parent.Name).filter(
+              (name): name is string => !!name
+            )
           : undefined,
         aliases: label.Aliases?.length
-          ? JSON.stringify(label.Aliases.map((alias) => alias.Name))
+          ? label.Aliases.map((alias) => alias.Name).filter(
+              (name): name is string => !!name
+            )
           : undefined,
         categories: label.Categories?.length
-          ? JSON.stringify(label.Categories.map((category) => category.Name))
+          ? label.Categories.map((category) => category.Name).filter(
+              (name): name is string => !!name
+            )
           : undefined,
       })
     );
@@ -105,21 +111,25 @@ export async function detectLabelsFromBuffer(
         name: label.Name || '',
         confidence: Math.round((label.Confidence || 0) * 100) / 100,
         instances: label.Instances?.length
-          ? JSON.stringify(
-              label.Instances.map((instance) => ({
-                boundingBox: instance.BoundingBox,
-                confidence: instance.Confidence,
-              }))
-            )
+          ? label.Instances.map((instance) => ({
+              boundingBox: instance.BoundingBox,
+              confidence: instance.Confidence,
+            }))
           : undefined,
         parents: label.Parents?.length
-          ? JSON.stringify(label.Parents.map((parent) => parent.Name))
+          ? label.Parents.map((parent) => parent.Name).filter(
+              (name): name is string => !!name
+            )
           : undefined,
         aliases: label.Aliases?.length
-          ? JSON.stringify(label.Aliases.map((alias) => alias.Name))
+          ? label.Aliases.map((alias) => alias.Name).filter(
+              (name): name is string => !!name
+            )
           : undefined,
         categories: label.Categories?.length
-          ? JSON.stringify(label.Categories.map((category) => category.Name))
+          ? label.Categories.map((category) => category.Name).filter(
+              (name): name is string => !!name
+            )
           : undefined,
       })
     );

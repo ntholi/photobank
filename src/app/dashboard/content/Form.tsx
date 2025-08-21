@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { uploadContentFile } from '@/server/content/uploadActions';
-import { createRecognitionLabels } from '@/server/recognitionLabels/actions';
+import { createContentLabels } from '@/server/content-labels/actions';
 import { notifications } from '@mantine/notifications';
 
 type Content = typeof content.$inferInsert;
@@ -70,23 +70,23 @@ export default function ContentForm({
         const createdContent = await onSubmit(contentData);
 
         if (
-          uploadResult.recognitionLabels &&
-          uploadResult.recognitionLabels.length > 0
+          uploadResult.contentLabels &&
+          uploadResult.contentLabels.length > 0
         ) {
           try {
-            await createRecognitionLabels(
+            await createContentLabels(
               createdContent.id as string,
-              uploadResult.recognitionLabels
+              uploadResult.contentLabels
             );
             console.log(
-              `Saved ${uploadResult.recognitionLabels.length} recognition labels for content ${createdContent.id}`
+              `Saved ${uploadResult.contentLabels.length} content labels for content ${createdContent.id}`
             );
           } catch (error) {
-            console.error('Failed to save recognition labels:', error);
+            console.error('Failed to save content labels:', error);
             notifications.show({
               title: 'Warning',
               message:
-                'Content uploaded successfully, but failed to save recognition labels',
+                'Content uploaded successfully, but failed to save content labels',
               color: 'yellow',
             });
           }

@@ -7,6 +7,7 @@ import {
   boolean,
   varchar,
   pgEnum,
+  jsonb,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccountType } from 'next-auth/adapters';
 import { nanoid } from 'nanoid';
@@ -160,7 +161,7 @@ export const contentTags = pgTable(
   })
 );
 
-export const recognitionLabels = pgTable('recognition_labels', {
+export const contentLabels = pgTable('content_labels', {
   id: varchar({ length: 21 })
     .$defaultFn(() => nanoid())
     .primaryKey(),
@@ -169,9 +170,10 @@ export const recognitionLabels = pgTable('recognition_labels', {
     .references(() => content.id, { onDelete: 'cascade' }),
   name: text().notNull(),
   confidence: integer().notNull(),
-  instances: text(),
-  parents: text(),
-  aliases: text(),
-  categories: text(),
+  instances:
+    jsonb().$type<Array<{ boundingBox?: object; confidence?: number }>>(),
+  parents: jsonb().$type<string[]>(),
+  aliases: jsonb().$type<string[]>(),
+  categories: jsonb().$type<string[]>(),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
 });

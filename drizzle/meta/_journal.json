@@ -71,6 +71,13 @@
       "when": 1755765864858,
       "tag": "0009_familiar_redwing",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1755768516694,
+      "tag": "0010_late_lockjaw",
+      "breakpoints": true
     }
   ]
 }
