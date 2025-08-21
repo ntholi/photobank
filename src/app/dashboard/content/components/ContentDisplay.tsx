@@ -2,6 +2,7 @@
 
 import { content } from '@/db/schema';
 import { getImageUrl } from '@/lib/utils';
+import { usePresignedUrl } from '@/hooks/usePresignedUrl';
 import {
   AspectRatio,
   Badge,
@@ -9,6 +10,7 @@ import {
   Center,
   Flex,
   Image,
+  Loader,
   Paper,
   Tabs,
   Text,
@@ -22,9 +24,12 @@ type Props = {
 };
 
 export default function ContentDisplay({ content }: Props) {
-  const { fileName, s3Key, thumbnailKey, watermarkedKey, type, fileSize } =
+  const { id, fileName, s3Key, thumbnailKey, watermarkedKey, type, fileSize } =
     content;
   const [activeTab, setActiveTab] = useState('preview');
+
+  const { data: presignedData, isLoading: isLoadingPresigned } =
+    usePresignedUrl(id, activeTab === 'original');
 
   const handleTabChange = (value: string | null) => {
     if (value) {
@@ -33,7 +38,7 @@ export default function ContentDisplay({ content }: Props) {
   };
 
   const urls = {
-    original: getImageUrl(s3Key),
+    original: presignedData?.url || '',
     thumbnail: getImageUrl(thumbnailKey),
     watermarked: getImageUrl(watermarkedKey),
   };
@@ -46,11 +51,13 @@ export default function ContentDisplay({ content }: Props) {
         case 'preview':
           return urls.watermarked;
         case 'original':
-          return urls.original;
+          return urls.original || urls.watermarked || urls.thumbnail;
         default:
           return urls.watermarked || urls.thumbnail;
       }
     };
+
+    const isOriginalDisabled = activeTab === 'original' && isLoadingPresigned;
 
     return (
       <Paper p='md' withBorder>
@@ -79,13 +86,24 @@ export default function ContentDisplay({ content }: Props) {
 
           <Tabs.Panel value={activeTab} mt='md'>
             <AspectRatio ratio={16 / 9} maw={800}>
-              <Image
-                src={getImageSrc()}
-                alt={fileName || 'Content image'}
-                radius='md'
-                fit='contain'
-                fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgTm90IEZvdW5kPC90ZXh0Pjwvc3ZnPg=='
-              />
+              {isOriginalDisabled ? (
+                <Center h='100%'>
+                  <Box ta='center'>
+                    <Loader size='md' />
+                    <Text size='sm' c='dimmed' mt='xs'>
+                      Loading original content...
+                    </Text>
+                  </Box>
+                </Center>
+              ) : (
+                <Image
+                  src={getImageSrc()}
+                  alt={fileName || 'Content image'}
+                  radius='md'
+                  fit='contain'
+                  fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgTm90IEZvdW5kPC90ZXh0Pjwvc3ZnPg=='
+                />
+              )}
             </AspectRatio>
           </Tabs.Panel>
         </Tabs>
@@ -112,11 +130,13 @@ export default function ContentDisplay({ content }: Props) {
         case 'preview':
           return urls.watermarked;
         case 'original':
-          return urls.original;
+          return urls.original || urls.watermarked;
         default:
           return urls.watermarked || urls.original;
       }
     };
+
+    const isOriginalDisabled = activeTab === 'original' && isLoadingPresigned;
 
     return (
       <Paper p='md' withBorder>
@@ -135,24 +155,38 @@ export default function ContentDisplay({ content }: Props) {
 
           <Tabs.Panel value={activeTab} mt='md'>
             <AspectRatio ratio={16 / 9} maw={800}>
-              <video
-                controls
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: 'var(--mantine-radius-md)',
-                }}
-              >
-                <source src={getVideoSrc()} />
+              {isOriginalDisabled ? (
                 <Center h='100%'>
                   <Box ta='center'>
-                    <IconVideo size={48} color='var(--mantine-color-gray-5)' />
+                    <Loader size='md' />
                     <Text size='sm' c='dimmed' mt='xs'>
-                      Video cannot be played in this browser
+                      Loading original content...
                     </Text>
                   </Box>
                 </Center>
-              </video>
+              ) : (
+                <video
+                  controls
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: 'var(--mantine-radius-md)',
+                  }}
+                >
+                  <source src={getVideoSrc()} />
+                  <Center h='100%'>
+                    <Box ta='center'>
+                      <IconVideo
+                        size={48}
+                        color='var(--mantine-color-gray-5)'
+                      />
+                      <Text size='sm' c='dimmed' mt='xs'>
+                        Video cannot be played in this browser
+                      </Text>
+                    </Box>
+                  </Center>
+                </video>
+              )}
             </AspectRatio>
           </Tabs.Panel>
         </Tabs>

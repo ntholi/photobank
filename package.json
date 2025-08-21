@@ -14,8 +14,10 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.10.0",
+    "@aws-sdk/client-bedrock-runtime": "^3.872.0",
     "@aws-sdk/client-rekognition": "^3.872.0",
     "@aws-sdk/client-s3": "^3.864.0",
+    "@aws-sdk/s3-request-presigner": "^3.872.0",
     "@heroui/button": "2.2.24",
     "@heroui/code": "2.2.18",
     "@heroui/input": "2.4.25",

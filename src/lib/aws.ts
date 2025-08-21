@@ -1,4 +1,6 @@
 import { S3Client } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { RekognitionClient } from '@aws-sdk/client-rekognition';
 import { BedrockRuntimeClient } from '@aws-sdk/client-bedrock-runtime';
 
@@ -62,3 +64,25 @@ function createBedrockClient() {
 export const s3Client = createS3Client();
 export const rekognitionClient = createRekognitionClient();
 export const bedrockClient = createBedrockClient();
+
+export async function generatePresignedUrl(
+  key: string,
+  expiresIn: number = 3600
+): Promise<string> {
+  if (!key) {
+    throw new Error('S3 key is required to generate presigned URL');
+  }
+
+  const command = new GetObjectCommand({
+    Bucket: bucketName,
+    Key: key,
+  });
+
+  try {
+    const presignedUrl = await getSignedUrl(s3Client, command, { expiresIn });
+    return presignedUrl;
+  } catch (error) {
+    console.error('Error generating presigned URL:', error);
+    throw new Error('Failed to generate presigned URL');
+  }
+}
