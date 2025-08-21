@@ -28,27 +28,36 @@ export async function selectTagsForContent(
       return [];
     }
 
-    const instruction = `Based on the following image recognition labels, select up to ${maxTags} most relevant tags from the provided list.
+    const instruction = `You are a tag selection AI. Your task is to select the most relevant tags from a predefined list based on image recognition labels.
 
-Recognition Labels: ${labels.join(', ')}
+Image Recognition Labels: ${labels.join(', ')}
 
-Available Tags: ${availableTags.join(', ')}
+Predefined Tag Options: ${availableTags.join(', ')}
 
-Please respond with ONLY the selected tag names separated by commas, with no additional text or explanation. Select the tags that best describe the content based on the recognition labels.`;
+Rules:
+1. Select up to ${maxTags} tags that are most relevant to the image content
+2. Only choose from the predefined tag options listed above
+3. If no tags are relevant, respond with "NONE"
+4. Response format: tag1, tag2, tag3 (comma-separated, no numbers, no explanations)
+
+Response:`;
 
     console.log('Sending instruction to Titan:', instruction);
 
     const command = new InvokeModelCommand({
-      modelId: 'amazon.titan-text-express-v1',
+      modelId: 'anthropic.claude-3-haiku-20240307-v1:0',
       contentType: 'application/json',
       accept: 'application/json',
       body: JSON.stringify({
-        inputText: instruction,
-        textGenerationConfig: {
-          maxTokenCount: 100,
-          temperature: 0.1,
-          topP: 0.9,
-        },
+        anthropic_version: 'bedrock-2023-05-31',
+        max_tokens: 100,
+        temperature: 0.1,
+        messages: [
+          {
+            role: 'user',
+            content: instruction,
+          },
+        ],
       }),
     });
 
@@ -59,16 +68,45 @@ Please respond with ONLY the selected tag names separated by commas, with no add
     }
 
     const responseBody = JSON.parse(new TextDecoder().decode(response.body));
-    const generatedText = responseBody.results?.[0]?.outputText || '';
+    const generatedText = responseBody.content?.[0]?.text || '';
 
     console.log('Titan response:', generatedText);
 
-    const selectedTags = generatedText
+    let selectedTags: string[] = [];
+
+    if (generatedText.trim().toUpperCase() === 'NONE') {
+      console.log('AI determined no tags are relevant');
+      return [];
+    }
+
+    selectedTags = generatedText
       .trim()
-      .split(',')
+      .replace(/^\d+\.\s*/gm, '') // Remove numbered list formatting
+      .split(/[,\n]/) // Split by comma or newline
       .map((tag: string) => tag.trim())
-      .filter((tag: string) => tag && availableTags.includes(tag))
+      .filter((tag: string) => {
+        if (!tag) return false;
+        // Check if tag exists in available tags (case insensitive)
+        const matchingTag = availableTags.find(
+          (availableTag) => availableTag.toLowerCase() === tag.toLowerCase()
+        );
+        return !!matchingTag;
+      })
+      .map((tag: string) => {
+        // Return the exact case from available tags
+        return (
+          availableTags.find(
+            (availableTag) => availableTag.toLowerCase() === tag.toLowerCase()
+          ) || tag
+        );
+      })
       .slice(0, maxTags);
+
+    if (selectedTags.length === 0) {
+      console.log('No matching tags found in available tags list');
+      console.log('Raw response:', generatedText);
+      console.log('Available tags:', availableTags);
+    }
 
     console.log(`Selected ${selectedTags.length} tags:`, selectedTags);
 
