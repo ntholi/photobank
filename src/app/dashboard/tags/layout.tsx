@@ -11,7 +11,7 @@ export default function Layout({ children }: PropsWithChildren) {
       queryKey={['tags']}
       getData={getTags}
       actionIcons={[<NewLink key={'new-link'} href='/dashboard/tags/new' />]}
-      renderItem={(it) => <ListItem id={it.id} label={it.id} />}
+      renderItem={(it) => <ListItem id={it.id} label={it.name} />}
     >
       {children}
     </ListLayout>

@@ -5,6 +5,7 @@ import { getLocation } from '@/server/locations/actions';
 import ContentDisplay from '../components/ContentDisplay';
 import { ContentDetailsHeader } from '../components/ContentDetailsHeader';
 import { ContentLabels } from '../components/ContentLabels';
+import { ContentTags } from '../components/ContentTags';
 import { Stack } from '@mantine/core';
 import { formatDate, formatDateTime } from '@/lib/utils';
 
@@ -42,6 +43,7 @@ export default async function ContentDetailsPage({ params }: Props) {
           <FieldView label='Date Uploaded'>
             {formatDateTime(content.createdAt)}
           </FieldView>
+          <ContentTags contentId={content.id} />
           <ContentLabels contentId={content.id} />
         </Stack>
       </DetailsViewBody>
