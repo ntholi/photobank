@@ -2,9 +2,11 @@
 
 import {
   Badge,
+  Box,
   Card,
   Divider,
   Group,
+  Paper,
   Popover,
   Progress,
   SimpleGrid,
@@ -38,8 +40,8 @@ function LabelCard({ label }: { label: ContentLabel }) {
   };
 
   return (
-    <Card padding='md' radius='md' withBorder>
-      <Stack gap='xs'>
+    <Card radius='md' withBorder>
+      <Card.Section withBorder p={'xs'}>
         <Group justify='space-between' align='flex-start'>
           <Text fw={600} size='sm'>
             {label.name}
@@ -52,14 +54,9 @@ function LabelCard({ label }: { label: ContentLabel }) {
             {label.confidence}%
           </Badge>
         </Group>
+      </Card.Section>
 
-        <Progress
-          value={label.confidence}
-          color={getConfidenceColor(label.confidence)}
-          size='xs'
-          radius='xl'
-        />
-
+      <Box py={'md'}>
         {label.categories && label.categories.length > 0 && (
           <Group gap={4}>
             {label.categories.map((category, index) => (
@@ -69,9 +66,9 @@ function LabelCard({ label }: { label: ContentLabel }) {
             ))}
           </Group>
         )}
+      </Box>
 
-        <Divider mt={'xs'} />
-
+      <Card.Section withBorder p={'xs'}>
         {label.parents && label.parents.length > 0 && (
           <Text size='xs' c='gray.6'>
             {formatArray(label.parents)}
@@ -90,7 +87,7 @@ function LabelCard({ label }: { label: ContentLabel }) {
             {label.instances.length !== 1 ? 's' : ''}
           </Text>
         )}
-      </Stack>
+      </Card.Section>
     </Card>
   );
 }
