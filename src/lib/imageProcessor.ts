@@ -32,7 +32,7 @@ export async function createThumbnail(
 export async function createWatermarkedImage(
   imageBuffer: Buffer,
   maxSize: number = 900,
-  watermarkText: string = 'Photobank'
+  watermarkText: string = 'Lehakoe'
 ): Promise<ProcessedImage> {
   const image = sharp(imageBuffer);
   const metadata = await image.metadata();
@@ -49,25 +49,26 @@ export async function createWatermarkedImage(
     })
     .toBuffer();
 
-  const fontSize = Math.max(24, Math.floor(Math.min(newWidth, newHeight) / 25));
+  const fontSize = Math.max(64, Math.floor(Math.min(newWidth, newHeight) / 8));
 
   const watermarkSvg = `
     <svg width="${newWidth}" height="${newHeight}">
       <defs>
         <style>
           .watermark { 
-            font-family: Arial, sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             font-size: ${fontSize}px; 
-            fill: rgba(255, 255, 255, 0.7); 
-            stroke: rgba(0, 0, 0, 0.3); 
-            stroke-width: 1px;
+            fill: rgba(255, 255, 255, 0.6); 
+            stroke: rgba(0, 0, 0, 0.2); 
+            stroke-width: 0.5px;
             text-anchor: middle;
             dominant-baseline: middle;
+            letter-spacing: 0.1em;
+            font-weight: bold;
           }
         </style>
       </defs>
       <text x="${newWidth / 2}" y="${newHeight / 2}" class="watermark">${watermarkText}</text>
-      <text x="${newWidth - 100}" y="${newHeight - 30}" class="watermark" style="font-size: ${Math.floor(fontSize * 0.7)}px;">${watermarkText}</text>
     </svg>
   `;
 

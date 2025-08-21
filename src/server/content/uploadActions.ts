@@ -82,11 +82,7 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
         })
       );
 
-      const watermarked = await createWatermarkedImage(
-        buffer,
-        900,
-        'Photobank'
-      );
+      const watermarked = await createWatermarkedImage(buffer, 900, 'Lehakoe');
       watermarkedKey = `${baseKey}_watermarked.webp`;
 
       await s3Client.send(
