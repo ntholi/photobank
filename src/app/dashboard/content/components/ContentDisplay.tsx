@@ -69,7 +69,12 @@ export default function ContentDisplay({ content }: Props) {
             <Tabs.Tab value='original' leftSection={<IconDownload size={14} />}>
               Original
             </Tabs.Tab>
-            <ContentTypeBadge contentType={type} top={5} right={0} />
+            <ContentTypeBadge
+              contentType={type}
+              top={5}
+              right={0}
+              pos='absolute'
+            />
           </Tabs.List>
 
           <Tabs.Panel value={activeTab} mt='md'>

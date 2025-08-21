@@ -38,10 +38,9 @@ export default async function ContentDetailsPage({ params }: Props) {
         <Stack gap='lg'>
           <ContentDisplay content={content} />
 
-          <Stack gap='sm'>
+          <Stack gap={'md'}>
             <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
-            <FieldView label='Status'>{content.status}</FieldView>
-            <FieldView label='Created'>
+            <FieldView label='Date Uploaded'>
               {formatDateTime(content.createdAt)}
             </FieldView>
           </Stack>

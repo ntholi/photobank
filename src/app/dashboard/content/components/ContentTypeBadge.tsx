@@ -6,8 +6,8 @@ type Props = {
 
 export function ContentTypeBadge({ contentType, ...rest }: Props) {
   const badgeProps = {
-    image: { color: 'teal', label: 'Image' },
-    video: { color: 'green', label: 'Video' },
+    image: { color: 'cyan', label: 'Image' },
+    video: { color: 'indigo', label: 'Video' },
   };
 
   const props = badgeProps[contentType as keyof typeof badgeProps] || {
@@ -16,14 +16,7 @@ export function ContentTypeBadge({ contentType, ...rest }: Props) {
   };
 
   return (
-    <Badge
-      color={props.color}
-      size='sm'
-      radius='sm'
-      variant='light'
-      pos='absolute'
-      {...rest}
-    >
+    <Badge color={props.color} variant='light' size='xs' {...rest}>
       {props.label}
     </Badge>
   );

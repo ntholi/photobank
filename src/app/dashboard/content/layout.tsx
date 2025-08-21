@@ -6,6 +6,7 @@ import { getContentList } from '@/server/content/actions';
 import { Avatar, Badge, Group, Text } from '@mantine/core';
 import { IconPhoto, IconVideo } from '@tabler/icons-react';
 import { PropsWithChildren } from 'react';
+import { ContentTypeBadge } from './components/ContentTypeBadge';
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
@@ -31,9 +32,7 @@ export default function Layout({ children }: PropsWithChildren) {
                   {content.fileName || `${content.type}_${content.id}`}
                 </Text>
                 <Group gap='xs'>
-                  <Badge size='xs' variant='light'>
-                    {content.type}
-                  </Badge>
+                  <ContentTypeBadge contentType={content.type} size='xs' />
                 </Group>
               </div>
             </Group>
