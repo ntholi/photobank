@@ -9,7 +9,8 @@
     "lint": "eslint --fix",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "seed:tags": "tsx scripts/seed-tags.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.10.0",
@@ -53,6 +54,7 @@
     "dayjs": "^1.11.13",
     "dotenv": "^17.2.1",
     "drizzle-orm": "^0.44.4",
+    "drizzle-seed": "^0.3.1",
     "drizzle-zod": "^0.8.3",
     "framer-motion": "12.23.12",
     "intl-messageformat": "10.7.16",
