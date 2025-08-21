@@ -10,6 +10,7 @@ import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { uploadContentFile } from '@/server/content/uploadActions';
 import { createContentLabels } from '@/server/content-labels/actions';
+import { createContentTags } from '@/server/content-tags/actions';
 import { notifications } from '@mantine/notifications';
 
 type Content = typeof content.$inferInsert;
@@ -87,6 +88,28 @@ export default function ContentForm({
               title: 'Warning',
               message:
                 'Content uploaded successfully, but failed to save content labels',
+              color: 'yellow',
+            });
+          }
+        }
+
+        if (uploadResult.selectedTags && uploadResult.selectedTags.length > 0) {
+          try {
+            await createContentTags(
+              createdContent.id as string,
+              uploadResult.selectedTags,
+              100
+            );
+            console.log(
+              `Saved ${uploadResult.selectedTags.length} content tags for content ${createdContent.id}:`,
+              uploadResult.selectedTags
+            );
+          } catch (error) {
+            console.error('Failed to save content tags:', error);
+            notifications.show({
+              title: 'Warning',
+              message:
+                'Content uploaded successfully, but failed to save AI-selected tags',
               color: 'yellow',
             });
           }

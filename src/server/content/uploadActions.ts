@@ -7,10 +7,12 @@ import {
   isImageFile,
 } from '@/lib/imageProcessor';
 import { detectLabelsFromBuffer, ContentLabel } from '@/lib/recognition';
+import { selectTagsForContent } from '@/lib/titan';
 import withAuth from '@/server/base/withAuth';
 import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { nanoid } from 'nanoid';
 import { contentService } from './service';
+import { tagsService } from '@/server/tags/service';
 
 type UploadResult = {
   key: string;
@@ -20,6 +22,7 @@ type UploadResult = {
   thumbnailKey: string;
   watermarkedKey: string;
   contentLabels?: ContentLabel[];
+  selectedTags?: string[];
 };
 
 const ALLOWED_MIME_TYPES = [
@@ -56,6 +59,7 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
   let thumbnailKey: string;
   let watermarkedKey: string;
   let contentLabels: ContentLabel[] | undefined;
+  let selectedTags: string[] | undefined;
 
   if (isImageFile(file.type)) {
     try {
@@ -105,6 +109,29 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
         const recognitionResult = await detectLabelsFromBuffer(buffer);
         contentLabels = recognitionResult.labels;
         console.log(`Detected ${contentLabels.length} labels for image ${key}`);
+
+        if (contentLabels.length > 0) {
+          try {
+            const allTagsResult = await tagsService.getAll({});
+            const availableTagNames = allTagsResult.items.map(
+              (tag: { name: string }) => tag.name
+            );
+            const labelNames = contentLabels.map((label) => label.name);
+
+            selectedTags = await selectTagsForContent(
+              labelNames,
+              availableTagNames,
+              3
+            );
+            console.log(
+              `Selected ${selectedTags.length} tags for image ${key}:`,
+              selectedTags
+            );
+          } catch (error) {
+            console.error('Failed to select tags with Titan:', error);
+            selectedTags = undefined;
+          }
+        }
       } catch (error) {
         console.error('Failed to detect labels:', error);
         contentLabels = undefined;
@@ -127,6 +154,7 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
     thumbnailKey,
     watermarkedKey,
     contentLabels,
+    selectedTags,
   };
 
   return result;
