@@ -4,7 +4,7 @@ import { content } from '@/db/schema';
 import { Form } from '@/components/adease';
 import { TextInput, Select, Stack } from '@mantine/core';
 import LocationPicker from '@/app/components/LocationPicker';
-import FileUpload from './FileUpload';
+import FileUpload from './components/FileUpload';
 import { useState } from 'react';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';

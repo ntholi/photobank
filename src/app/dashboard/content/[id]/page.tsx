@@ -2,8 +2,8 @@ import { DetailsView, FieldView, DetailsViewBody } from '@/components/adease';
 import { notFound } from 'next/navigation';
 import { getContent, deleteContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
-import ContentDisplay from '../ContentDisplay';
-import { ContentDetailsHeader } from '../ContentDetailsHeader';
+import ContentDisplay from '../components/ContentDisplay';
+import { ContentDetailsHeader } from '../components/ContentDetailsHeader';
 import { Stack } from '@mantine/core';
 import { formatDate, formatDateTime } from '@/lib/utils';
 

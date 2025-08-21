@@ -15,7 +15,7 @@ import {
 } from '@mantine/core';
 import { IconDownload, IconEye, IconVideo } from '@tabler/icons-react';
 import { useState } from 'react';
-import { ContentTypeBadge } from './components/ContentTypeBadge';
+import { ContentTypeBadge } from './ContentTypeBadge';
 
 type Props = {
   content: typeof content.$inferSelect;
