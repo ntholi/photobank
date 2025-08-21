@@ -2,6 +2,7 @@
 
 import { contentLabels } from '@/db/schema';
 import { contentLabelsService as service } from './service';
+import { ContentLabel as RecognitionContentLabel } from '@/lib/recognition';
 
 type ContentLabel = typeof contentLabels.$inferInsert;
 
@@ -19,7 +20,7 @@ export async function createContentLabel(contentLabel: ContentLabel) {
 
 export async function createContentLabels(
   contentId: string,
-  labels: ContentLabel[]
+  labels: RecognitionContentLabel[]
 ) {
   return service.createMany(contentId, labels);
 }

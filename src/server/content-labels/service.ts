@@ -3,6 +3,7 @@ import ContentLabelRepository from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import { serviceWrapper } from '../base/serviceWrapper';
+import { ContentLabel as RecognitionContentLabel } from '@/lib/recognition';
 
 type ContentLabel = typeof contentLabels.$inferInsert;
 
@@ -37,7 +38,7 @@ class ContentLabelService {
     return withAuth(async () => this.repository.count(), []);
   }
 
-  async createMany(contentId: string, labels: ContentLabel[]) {
+  async createMany(contentId: string, labels: RecognitionContentLabel[]) {
     return withAuth(async () => {
       const labelsToInsert: ContentLabel[] = labels.map((label) => ({
         contentId,
