@@ -9,6 +9,7 @@ import { getContent, deleteContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
 import ContentDisplay from '../ContentDisplay';
 import { Stack } from '@mantine/core';
+import { formatDate, formatDateTime } from '@/lib/utils';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -40,8 +41,7 @@ export default async function ContentDetails({ params }: Props) {
         <Stack gap='lg'>
           <ContentDisplay content={content} />
 
-          <Stack gap='xs'>
-            <FieldView label='Type'>{content.type}</FieldView>
+          <Stack gap='sm'>
             <FieldView label='File Name'>{content.fileName}</FieldView>
             <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
             <FieldView label='Status'>{content.status}</FieldView>
@@ -50,11 +50,10 @@ export default async function ContentDetails({ params }: Props) {
                 {(content.fileSize / 1024 / 1024).toFixed(2)} MB
               </FieldView>
             )}
-            {content.createdAt && (
-              <FieldView label='Created'>
-                {new Date(content.createdAt).toLocaleDateString()}
-              </FieldView>
-            )}
+
+            <FieldView label='Created'>
+              {formatDateTime(content.createdAt)}
+            </FieldView>
           </Stack>
         </Stack>
       </DetailsViewBody>

@@ -4,8 +4,10 @@ import { content } from '@/db/schema';
 import { getImageUrl } from '@/lib/utils';
 import {
   AspectRatio,
+  Badge,
   Box,
   Center,
+  Flex,
   Image,
   Paper,
   Tabs,
@@ -17,6 +19,32 @@ import { useState } from 'react';
 type Props = {
   content: typeof content.$inferSelect;
 };
+
+function TypeBadge({ contentType }: { contentType: string }) {
+  const badgeProps = {
+    image: { color: 'teal', label: 'Image' },
+    video: { color: 'green', label: 'Video' },
+  };
+
+  const props = badgeProps[contentType as keyof typeof badgeProps] || {
+    color: 'gray',
+    label: contentType,
+  };
+
+  return (
+    <Badge
+      color={props.color}
+      size='sm'
+      radius='sm'
+      variant='light'
+      pos='absolute'
+      top={5}
+      right={0}
+    >
+      {props.label}
+    </Badge>
+  );
+}
 
 export default function ContentDisplay({ content }: Props) {
   const { fileName, s3Key, thumbnailKey, watermarkedKey, type, fileSize } =
@@ -51,7 +79,7 @@ export default function ContentDisplay({ content }: Props) {
 
     return (
       <Paper p='md' withBorder>
-        <Tabs value={activeTab} onChange={handleTabChange}>
+        <Tabs value={activeTab} onChange={handleTabChange} pos={'relative'}>
           <Tabs.List>
             {urls.thumbnail && (
               <Tabs.Tab value='thumbnail' leftSection={<IconEye size={14} />}>
@@ -66,6 +94,7 @@ export default function ContentDisplay({ content }: Props) {
             <Tabs.Tab value='original' leftSection={<IconDownload size={14} />}>
               Original
             </Tabs.Tab>
+            <TypeBadge contentType={type} />
           </Tabs.List>
 
           <Tabs.Panel value={activeTab} mt='md'>
@@ -112,16 +141,22 @@ export default function ContentDisplay({ content }: Props) {
     return (
       <Paper p='md' withBorder>
         <Tabs value={activeTab} onChange={handleTabChange}>
-          <Tabs.List>
-            {urls.watermarked && (
-              <Tabs.Tab value='preview' leftSection={<IconEye size={14} />}>
-                Preview
+          <Flex justify='space-between' align='center' mb='xs'>
+            <Tabs.List>
+              {urls.watermarked && (
+                <Tabs.Tab value='preview' leftSection={<IconEye size={14} />}>
+                  Preview
+                </Tabs.Tab>
+              )}
+              <Tabs.Tab
+                value='original'
+                leftSection={<IconDownload size={14} />}
+              >
+                Original
               </Tabs.Tab>
-            )}
-            <Tabs.Tab value='original' leftSection={<IconDownload size={14} />}>
-              Original
-            </Tabs.Tab>
-          </Tabs.List>
+            </Tabs.List>
+            <TypeBadge contentType={type} />
+          </Flex>
 
           <Tabs.Panel value={activeTab} mt='md'>
             <AspectRatio ratio={16 / 9} maw={800}>
