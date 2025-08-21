@@ -1,12 +1,21 @@
 'use server';
 
-import { content } from '@/db/schema';
+import { content, contentTags } from '@/db/schema';
 import { contentService as service } from './service';
+import { eq } from 'drizzle-orm';
 
 type Content = typeof content.$inferInsert;
 
 export async function getContent(id: string) {
   return service.get(id);
+}
+
+export async function getContentByTag(
+  tagId: string,
+  page: number = 1,
+  size: number = 15
+) {
+  return service.getContentByTag(tagId, { page, size });
 }
 
 export async function getContentList(page: number = 1, search = '') {

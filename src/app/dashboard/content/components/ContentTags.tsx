@@ -58,6 +58,7 @@ function TagBadge({ tag }: { tag: ContentTagItem }) {
     <Popover position='top' withArrow shadow='md' opened={opened}>
       <Popover.Target>
         <Badge
+          style={{ cursor: 'pointer' }}
           component={Link}
           href={`/dashboard/tags/${tag.tagId}`}
           variant='transparent'

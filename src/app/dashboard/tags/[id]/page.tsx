@@ -6,6 +6,8 @@ import {
 } from '@/components/adease';
 import { notFound } from 'next/navigation';
 import { getTag, deleteTag } from '@/server/tags/actions';
+import TagContent from './TagPhotos';
+import { Stack } from '@mantine/core';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -30,8 +32,11 @@ export default async function TagDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <FieldView label='Name'>{tag.name}</FieldView>
-        <FieldView label='Slug'>{tag.slug}</FieldView>
+        <Stack gap='xl'>
+          <FieldView label='Name'>{tag.name}</FieldView>
+          <FieldView label='Slug'>{tag.slug}</FieldView>
+          <TagContent tagId={id} />
+        </Stack>
       </DetailsViewBody>
     </DetailsView>
   );

@@ -39,6 +39,16 @@ class ContentService {
   async count() {
     return withAuth(async () => this.repository.count(), []);
   }
+
+  async getContentByTag(
+    tagId: string,
+    params: QueryOptions<typeof content> = {}
+  ) {
+    return withAuth(
+      async () => this.repository.getContentByTag(tagId, params),
+      ['all']
+    );
+  }
 }
 
 export const contentService = serviceWrapper(ContentService, 'Content');
