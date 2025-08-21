@@ -22,14 +22,9 @@ export async function createContentTag(contentTag: ContentTag) {
 
 export async function createContentTags(
   contentId: string,
-  selectedTagNames: string[],
-  confidence: number = 100
+  selectedTags: Array<{ tag: string; confidence: number }>
 ) {
-  return contentTagsService.createContentTags(
-    contentId,
-    selectedTagNames,
-    confidence
-  );
+  return contentTagsService.createContentTags(contentId, selectedTags);
 }
 
 export async function updateContentTag(

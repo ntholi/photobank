@@ -22,7 +22,7 @@ type UploadResult = {
   thumbnailKey: string;
   watermarkedKey: string;
   contentLabels?: ContentLabel[];
-  selectedTags?: string[];
+  selectedTags?: Array<{ tag: string; confidence: number }>;
 };
 
 const ALLOWED_MIME_TYPES = [
@@ -59,7 +59,7 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
   let thumbnailKey: string;
   let watermarkedKey: string;
   let contentLabels: ContentLabel[] | undefined;
-  let selectedTags: string[] | undefined;
+  let selectedTags: Array<{ tag: string; confidence: number }> | undefined;
 
   if (isImageFile(file.type)) {
     try {
@@ -126,6 +126,8 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
             console.log(
               `Selected ${selectedTags.length} tags for image ${key}:`,
               selectedTags
+                .map((item) => `${item.tag}:${item.confidence}`)
+                .join(', ')
             );
           } catch (error) {
             console.error('Failed to select tags with Titan:', error);

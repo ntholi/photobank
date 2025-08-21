@@ -8,7 +8,10 @@ export interface TagSelectionRequest {
 }
 
 export interface TagSelectionResponse {
-  selectedTags: string[];
+  selectedTags: Array<{
+    tag: string;
+    confidence: number;
+  }>;
   reasoning?: string;
 }
 
@@ -16,7 +19,7 @@ export async function selectTagsForContent(
   labels: string[],
   availableTags: string[],
   maxTags: number = 3
-): Promise<string[]> {
+): Promise<Array<{ tag: string; confidence: number }>> {
   try {
     if (availableTags.length === 0) {
       console.log('No available tags to select from');
@@ -38,7 +41,10 @@ Rules:
 1. Select up to ${maxTags} tags that are most relevant to the image content
 2. Only choose from the predefined tag options listed above
 3. If no tags are relevant, respond with "NONE"
-4. Response format: tag1, tag2, tag3 (comma-separated, no numbers, no explanations)
+4. For each selected tag, provide a confidence score from 1-100
+5. Response format: tag1:confidence1, tag2:confidence2, tag3:confidence3
+
+Example response: People:85, Livestock:72, Herder Life:65
 
 Response:`;
 
@@ -72,35 +78,55 @@ Response:`;
 
     console.log('Titan response:', generatedText);
 
-    let selectedTags: string[] = [];
+    let selectedTags: Array<{ tag: string; confidence: number }> = [];
 
     if (generatedText.trim().toUpperCase() === 'NONE') {
       console.log('AI determined no tags are relevant');
       return [];
     }
 
-    selectedTags = generatedText
+    const tagEntries = generatedText
       .trim()
       .replace(/^\d+\.\s*/gm, '') // Remove numbered list formatting
       .split(/[,\n]/) // Split by comma or newline
-      .map((tag: string) => tag.trim())
-      .filter((tag: string) => {
-        if (!tag) return false;
-        // Check if tag exists in available tags (case insensitive)
-        const matchingTag = availableTags.find(
-          (availableTag) => availableTag.toLowerCase() === tag.toLowerCase()
+      .map((entry: string) => entry.trim())
+      .filter((entry: string) => entry);
+
+    for (const entry of tagEntries) {
+      // Parse tag:confidence format
+      const parts = entry.split(':');
+      if (parts.length !== 2) {
+        console.log(`Skipping malformed entry: ${entry}`);
+        continue;
+      }
+
+      const tagName = parts[0].trim();
+      const confidenceStr = parts[1].trim();
+      const confidence = parseInt(confidenceStr, 10);
+
+      if (isNaN(confidence) || confidence < 1 || confidence > 100) {
+        console.log(
+          `Invalid confidence score for ${tagName}: ${confidenceStr}`
         );
-        return !!matchingTag;
-      })
-      .map((tag: string) => {
-        // Return the exact case from available tags
-        return (
-          availableTags.find(
-            (availableTag) => availableTag.toLowerCase() === tag.toLowerCase()
-          ) || tag
-        );
-      })
-      .slice(0, maxTags);
+        continue;
+      }
+
+      // Check if tag exists in available tags (case insensitive)
+      const matchingTag = availableTags.find(
+        (availableTag) => availableTag.toLowerCase() === tagName.toLowerCase()
+      );
+
+      if (matchingTag) {
+        selectedTags.push({
+          tag: matchingTag,
+          confidence,
+        });
+      } else {
+        console.log(`Tag not found in available tags: ${tagName}`);
+      }
+    }
+
+    selectedTags = selectedTags.slice(0, maxTags);
 
     if (selectedTags.length === 0) {
       console.log('No matching tags found in available tags list');
@@ -108,7 +134,10 @@ Response:`;
       console.log('Available tags:', availableTags);
     }
 
-    console.log(`Selected ${selectedTags.length} tags:`, selectedTags);
+    console.log(
+      `Selected ${selectedTags.length} tags:`,
+      selectedTags.map((item) => `${item.tag}:${item.confidence}`).join(', ')
+    );
 
     return selectedTags;
   } catch (error) {

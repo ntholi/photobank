@@ -79,37 +79,39 @@ class ContentTagService {
 
   async createContentTags(
     contentId: string,
-    selectedTagNames: string[],
-    confidence: number = 100
+    selectedTags: Array<{ tag: string; confidence: number }>
   ) {
     return withAuth(async () => {
-      if (selectedTagNames.length === 0) {
+      if (selectedTags.length === 0) {
         return [];
       }
 
+      const tagNames = selectedTags.map((item) => item.tag);
       const tagRecords = await db
         .select()
         .from(tags)
         .where(
-          selectedTagNames.length === 1
-            ? eq(tags.name, selectedTagNames[0])
-            : inArray(tags.name, selectedTagNames)
+          tagNames.length === 1
+            ? eq(tags.name, tagNames[0])
+            : inArray(tags.name, tagNames)
         );
 
       if (tagRecords.length === 0) {
-        console.log(
-          'No matching tags found in database for:',
-          selectedTagNames
-        );
+        console.log('No matching tags found in database for:', tagNames);
         return [];
       }
 
       const contentTagsToInsert: ContentTag[] = tagRecords.map(
-        (tag: typeof tags.$inferSelect) => ({
-          contentId,
-          tagId: tag.id,
-          confidence,
-        })
+        (tag: typeof tags.$inferSelect) => {
+          const selectedTag = selectedTags.find(
+            (item) => item.tag === tag.name
+          );
+          return {
+            contentId,
+            tagId: tag.id,
+            confidence: selectedTag?.confidence || 100,
+          };
+        }
       );
 
       return await this.repository.createMany(contentTagsToInsert);

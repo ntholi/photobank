@@ -97,12 +97,13 @@ export default function ContentForm({
           try {
             await createContentTags(
               createdContent.id as string,
-              uploadResult.selectedTags,
-              100
+              uploadResult.selectedTags
             );
             console.log(
               `Saved ${uploadResult.selectedTags.length} content tags for content ${createdContent.id}:`,
               uploadResult.selectedTags
+                .map((item) => `${item.tag}:${item.confidence}`)
+                .join(', ')
             );
           } catch (error) {
             console.error('Failed to save content tags:', error);
