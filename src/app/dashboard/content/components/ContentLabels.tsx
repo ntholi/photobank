@@ -5,13 +5,13 @@ import {
   Card,
   Divider,
   Group,
+  Popover,
   Progress,
   SimpleGrid,
   Skeleton,
   Stack,
   Text,
   Title,
-  Tooltip,
 } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { getContentLabelsByContentId } from '@/server/content-labels/actions';
@@ -39,7 +39,7 @@ function LabelCard({ label }: { label: ContentLabel }) {
 
   return (
     <Card padding='md' radius='md' withBorder>
-      <Stack gap='sm'>
+      <Stack gap='xs'>
         <Group justify='space-between' align='flex-start'>
           <Text fw={600} size='sm'>
             {label.name}
@@ -63,14 +63,14 @@ function LabelCard({ label }: { label: ContentLabel }) {
         {label.categories && label.categories.length > 0 && (
           <Group gap={4}>
             {label.categories.map((category, index) => (
-              <Badge key={index} variant='outline' size='xs' color='gray'>
+              <Badge key={index} variant='default' size='xs' color='gray'>
                 {category}
               </Badge>
             ))}
           </Group>
         )}
 
-        <Divider />
+        <Divider mt={'xs'} />
 
         {label.parents && label.parents.length > 0 && (
           <Text size='xs' c='gray.6'>
@@ -79,28 +79,16 @@ function LabelCard({ label }: { label: ContentLabel }) {
         )}
 
         {label.aliases && label.aliases.length > 0 && (
-          <div>
-            <Text size='xs' c='dimmed' mb={4}>
-              Aliases
-            </Text>
-            <Text size='xs' c='gray.6'>
-              {formatArray(label.aliases)}
-            </Text>
-          </div>
+          <Text size='xs' c='gray.6'>
+            {formatArray(label.aliases)}
+          </Text>
         )}
 
         {label.instances && label.instances.length > 0 && (
-          <Tooltip
-            label={`${label.instances.length} instance${
-              label.instances.length !== 1 ? 's' : ''
-            } detected in image`}
-            position='bottom'
-          >
-            <Badge variant='dot' size='xs' color='blue'>
-              {label.instances.length} instance
-              {label.instances.length !== 1 ? 's' : ''}
-            </Badge>
-          </Tooltip>
+          <Text size='xs' c='dimmed' mb={4}>
+            {label.instances.length} instance
+            {label.instances.length !== 1 ? 's' : ''}
+          </Text>
         )}
       </Stack>
     </Card>
@@ -191,7 +179,7 @@ export function ContentLabels({ contentId }: ContentLabelsProps) {
         <Title order={4} size='md'>
           Content Labels
         </Title>
-        <Badge variant='light' color='blue'>
+        <Badge variant='default' size='sm'>
           {sortedLabels.length} detected
         </Badge>
       </Group>
