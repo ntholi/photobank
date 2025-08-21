@@ -3,6 +3,7 @@
 import { contentLabels } from '@/db/schema';
 import { contentLabelsService as service } from './service';
 import { ContentLabel as RecognitionContentLabel } from '@/lib/recognition';
+import { eq } from 'drizzle-orm';
 
 type ContentLabel = typeof contentLabels.$inferInsert;
 
@@ -12,6 +13,13 @@ export async function getContentLabel(id: string) {
 
 export async function getContentLabels(page: number = 1, search = '') {
   return service.getAll({ page, search });
+}
+
+export async function getContentLabelsByContentId(contentId: string) {
+  return service.getAll({
+    filter: eq(contentLabels.contentId, contentId),
+    size: 100,
+  });
 }
 
 export async function createContentLabel(contentLabel: ContentLabel) {

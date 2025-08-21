@@ -4,6 +4,7 @@ import { getContent, deleteContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
 import ContentDisplay from '../components/ContentDisplay';
 import { ContentDetailsHeader } from '../components/ContentDetailsHeader';
+import { ContentLabels } from '../components/ContentLabels';
 import { Stack } from '@mantine/core';
 import { formatDate, formatDateTime } from '@/lib/utils';
 
@@ -37,6 +38,8 @@ export default async function ContentDetailsPage({ params }: Props) {
       <DetailsViewBody>
         <Stack gap='lg'>
           <ContentDisplay content={content} />
+
+          <ContentLabels contentId={content.id} />
 
           <Stack gap={'md'}>
             <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
