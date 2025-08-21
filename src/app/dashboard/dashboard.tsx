@@ -20,7 +20,9 @@ import {
   IconChevronRight,
   IconFile,
   IconLogout2,
+  IconMapPin,
   IconPhoto,
+  IconTags,
   IconUsers,
 } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
@@ -63,6 +65,18 @@ const navigation: NavItem[] = [
     label: 'Content',
     href: '/dashboard/content',
     icon: IconPhoto,
+    roles: ['moderator', 'admin'],
+  },
+  {
+    label: 'Tags',
+    href: '/dashboard/tags',
+    icon: IconTags,
+    roles: ['admin'],
+  },
+  {
+    label: 'Locations',
+    href: '/dashboard/locations',
+    icon: IconMapPin,
     roles: ['moderator', 'admin'],
   },
 ];

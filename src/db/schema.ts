@@ -133,3 +133,29 @@ export const locations = pgTable('locations', {
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
   updatedAt: timestamp({ mode: 'date' }),
 });
+
+export const tags = pgTable('tags', {
+  id: varchar({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  name: text().notNull(),
+  slug: text().unique().notNull(),
+  createdAt: timestamp({ mode: 'date' }).defaultNow(),
+});
+
+export const contentTags = pgTable(
+  'content_tags',
+  {
+    contentId: varchar({ length: 21 })
+      .notNull()
+      .references(() => content.id, { onDelete: 'cascade' }),
+    tagId: varchar({ length: 21 })
+      .notNull()
+      .references(() => tags.id, { onDelete: 'cascade' }),
+    confidence: integer().default(100),
+    createdAt: timestamp({ mode: 'date' }).defaultNow(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.contentId, table.tagId] }),
+  })
+);

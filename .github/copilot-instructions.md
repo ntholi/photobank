@@ -2,11 +2,13 @@
 
 These instructions govern automated code generation for the Photobank application (Next.js 15, TypeScript strict). Enforce architectural, security, and UI layer separation rules exactly as defined below.
 
+This is a Lesotho Photobank app called "Lehakoe" it is used to host millions of photos and short videos of Lesotho, about Lesotho, taken in Lesotho. It will be used for promoting tourism in Lesotho.
+
 ## 1. Core Architecture
 
 3-layer server pattern for every resource under `src/server/[resource]/`:
 
-1. `actions.ts` server actions ( `'use server'` ) exported for UI
+1. `actions.ts` server actions ( `'use server'` )
 2. `service.ts` business logic wrapped by `serviceWrapper()` and gated by `withAuth()`
 3. `repository.ts` data access extending `BaseRepository<Table, PrimaryKey>` and using Drizzle
 
@@ -39,14 +41,17 @@ Zone A `(main)` directory: `src/app/(main)/**`
 
 - UI library: HeroUI (formerly NextUI) only (`@heroui/*` packages)
 - Do NOT import Mantine components here.
-- Styling approach: combine HeroUI props + minimal Tailwind utility classes. Keep interface elegant, spacious, and minimal—avoid visual clutter and heavy borders. Favor subtle elevation (soft shadow or 1px border with opacity).
+- Styling approach: combine HeroUI props + minimal Tailwind utility classes. Keep interface elegant, beautiful, very professional, and minimal—avoid visual clutter and heavy borders. Favor subtle elevation (soft shadow or 1px border with opacity).
 - Use existing provider in `(main)/providers.tsx` to configure HeroUI theme. Extend tokens there rather than inline theme hacks.
+- If adding a new component under `(main)`, choose a HeroUI equivalent before creating custom elements.
 
 Zone B Dashboard: `src/app/dashboard/**`
 
 - UI library: Mantine only.
 - Do NOT import HeroUI components here.
 - Maintain a structured, data-dense but readable dashboard aesthetic. Use spacing scale consistently; avoid arbitrary pixel values. Use `c="colorName"` prop for colors. Prefer semantic variants (filled, light, subtle) over custom CSS.
+- Avoid over customizing mantine components try as much as possible to only use native mantine defined properties for styling avoid as much as possible using the style property.
+- If adding a dashboard table or form, use Mantine core components, Mantine Form helper, and existing patterns.
 
 Shared / Cross-Zone Code:
 
@@ -54,18 +59,13 @@ Shared / Cross-Zone Code:
 - A primitive must not import HeroUI or Mantine directly; if styling differs, create thin adapters in each zone.
 - Never leak one zone's provider or theme tokens into the other.
 
-Migration / Enforcement Notes:
-
-- If adding a new component under `(main)`, choose a HeroUI equivalent before creating custom elements.
-- If adding a dashboard table or form, use Mantine core components, Mantine Form helper, and existing patterns.
-
 ## 5. Frontend Patterns (Both Zones)
 
 - Never create traditional API routes; always call server actions.
 - Data fetching: TanStack Query for all remote/stateful server calls (no raw `useEffect` for fetching).
+- Prioritize using server components fetching data by directly calling functions `actions.ts`. Only use TanStack Query where it is not possible to use server components.
 - Mutations: use `useMutation` and invalidate queries by key.
 - Forms: prefer zod schemas; in Mantine zone use `@mantine/form` + `mantine-form-zod-resolver`, in HeroUI zone compose controlled components with zod validation utilities (keep logic co-located).
-- List → detail layout: reuse `ListLayout` pattern where applicable (extend minimally, don't fork).
 - Co-locate modals with the trigger component to avoid prop drilling.
 - Progressive enhancement: components render quickly with skeleton/loading states derived from HeroUI or Mantine equivalents, not custom spinners unless necessary.
 
@@ -77,7 +77,7 @@ Migration / Enforcement Notes:
 
 ## 6. Styling & Theming Principles
 
-- Minimal, elegant, accessible. Favor spacing and typography over decorative chrome.
+- Minimal, elegant, very beautiful, accessible. Favor spacing and typography over decorative chrome.
 - Light & dark mode must both work; test contrast (WCAG AA) for text/background combinations.
 - No inline hex values except for one-off algorithmic colors; prefer theme tokens.
 - Avoid duplicating spacing constants; use framework spacing scale or Tailwind standard increments.
@@ -121,25 +121,14 @@ Only when Drizzle can't express the query cleanly or for performance-critical ag
 - Use snake_case column aliases.
 - Parameterize inputs; never string interpolate user data.
 
-## 12. Testing (Add When Implemented)
-
-- Prefer Vitest for unit tests of pure logic (repositories, service functions without side effects).
-- Mock external services (S3) with lightweight stubs.
-
-## 13. Prohibited Patterns
+## 12. Prohibited Patterns
 
 - Mixing Mantine and HeroUI in a single file.
 - Creating API route handlers for functionality available via server actions.
 - Inline role or permission checks inside UI components—delegate to service or access-check function passed through action.
 - Duplicating existing pagination, search, or list item components.
 
-## 14. Commit & Dependency Hygiene
-
-- Use pnpm only.
-- Avoid adding UI libraries beyond HeroUI + Mantine; justify any new dependency with a clear gap.
-- Keep bundle slim: avoid large icon packs; tree-shake by importing individual icons.
-
-## 15. Development Commands
+## 13. Development Commands
 
 ```bash
 pnpm dev              # Development server with Turbopack
@@ -149,7 +138,7 @@ pnpm db:migrate       # Apply migrations to database
 pnpm db:studio        # Open Drizzle Studio
 ```
 
-## 16. When Unsure
+## 14. When Unsure
 
 If framework choice is ambiguous, decide based on path: `(main)` -> HeroUI, `dashboard` -> Mantine. If a component must appear in both contexts, extract logic-only version and wrap separately per zone.
 
