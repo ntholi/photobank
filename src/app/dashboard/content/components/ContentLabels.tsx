@@ -47,11 +47,11 @@ function LabelCard({ label }: { label: ContentLabel }) {
             {label.name}
           </Text>
           <Badge
-            color={getConfidenceColor(label.confidence)}
+            color={getConfidenceColor(label.confidence / 100)}
             variant='light'
             size='sm'
           >
-            {label.confidence}%
+            {(label.confidence / 100).toFixed(2)}%
           </Badge>
         </Group>
       </Card.Section>

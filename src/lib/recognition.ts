@@ -47,7 +47,7 @@ export async function detectLabels(
     const labels: RecognitionLabel[] = (response.Labels || []).map(
       (label: Label) => ({
         name: label.Name || '',
-        confidence: Math.round((label.Confidence || 0) * 100) / 100,
+        confidence: label.Confidence || 0,
         instances: label.Instances?.length
           ? label.Instances.map((instance) => ({
               boundingBox: instance.BoundingBox,
@@ -109,7 +109,7 @@ export async function detectLabelsFromBuffer(
     const labels: RecognitionLabel[] = (response.Labels || []).map(
       (label: Label) => ({
         name: label.Name || '',
-        confidence: Math.round((label.Confidence || 0) * 100) / 100,
+        confidence: label.Confidence || 0,
         instances: label.Instances?.length
           ? label.Instances.map((instance) => ({
               boundingBox: instance.BoundingBox,
