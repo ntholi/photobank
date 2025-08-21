@@ -1,24 +1,36 @@
 'use server';
 
-import { contentLabelsService } from './service';
+import { contentLabels } from '@/db/schema';
+import { contentLabelsService as service } from './service';
 
-export async function getContentLabelsByContentId(contentId: string) {
-  return contentLabelsService.getByContentId(contentId);
+type ContentLabel = typeof contentLabels.$inferInsert;
+
+export async function getContentLabel(id: string) {
+  return service.get(id);
 }
 
-export async function getContentLabels(
-  params: Parameters<typeof contentLabelsService.getAll>[0]
-) {
-  return contentLabelsService.getAll(params);
+export async function getContentLabels(page: number = 1, search = '') {
+  return service.getAll({ page, search });
+}
+
+export async function createContentLabel(contentLabel: ContentLabel) {
+  return service.create(contentLabel);
 }
 
 export async function createContentLabels(
   contentId: string,
-  labels: Parameters<typeof contentLabelsService.createMany>[1]
+  labels: ContentLabel[]
 ) {
-  return contentLabelsService.createMany(contentId, labels);
+  return service.createMany(contentId, labels);
 }
 
-export async function deleteContentLabelsByContentId(contentId: string) {
-  return contentLabelsService.deleteByContentId(contentId);
+export async function updateContentLabel(
+  id: string,
+  contentLabel: Partial<ContentLabel>
+) {
+  return service.update(id, contentLabel);
+}
+
+export async function deleteContentLabel(id: string) {
+  return service.delete(id);
 }

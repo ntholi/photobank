@@ -1,30 +1,45 @@
 import { contentLabels } from '@/db/schema';
-import ContentLabelsRepository from './repository';
+import ContentLabelRepository from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import { serviceWrapper } from '../base/serviceWrapper';
-import { ContentLabel } from '@/lib/recognition';
 
-type ContentLabelInsert = typeof contentLabels.$inferInsert;
+type ContentLabel = typeof contentLabels.$inferInsert;
 
-class ContentLabelsService {
-  constructor(private readonly repository = new ContentLabelsRepository()) {}
+class ContentLabelService {
+  constructor(private readonly repository = new ContentLabelRepository()) {}
 
-  async getByContentId(contentId: string) {
-    return withAuth(async () => this.repository.findByContentId(contentId), []);
+  async first() {
+    return withAuth(async () => this.repository.findFirst(), []);
+  }
+
+  async get(id: string) {
+    return withAuth(async () => this.repository.findById(id), []);
   }
 
   async getAll(params: QueryOptions<typeof contentLabels>) {
     return withAuth(async () => this.repository.query(params), []);
   }
 
-  async create(data: ContentLabelInsert) {
-    return withAuth(async () => this.repository.create(data), ['contributor']);
+  async create(data: ContentLabel) {
+    return withAuth(async () => this.repository.create(data), []);
+  }
+
+  async update(id: string, data: Partial<ContentLabel>) {
+    return withAuth(async () => this.repository.update(id, data), []);
+  }
+
+  async delete(id: string) {
+    return withAuth(async () => this.repository.delete(id), []);
+  }
+
+  async count() {
+    return withAuth(async () => this.repository.count(), []);
   }
 
   async createMany(contentId: string, labels: ContentLabel[]) {
     return withAuth(async () => {
-      const labelsToInsert: ContentLabelInsert[] = labels.map((label) => ({
+      const labelsToInsert: ContentLabel[] = labels.map((label) => ({
         contentId,
         name: label.name,
         confidence: Math.round(label.confidence * 100),
@@ -42,20 +57,9 @@ class ContentLabelsService {
       return results;
     }, ['contributor']);
   }
-
-  async deleteByContentId(contentId: string) {
-    return withAuth(
-      async () => this.repository.deleteByContentId(contentId),
-      ['contributor']
-    );
-  }
-
-  async count() {
-    return withAuth(async () => this.repository.count(), []);
-  }
 }
 
 export const contentLabelsService = serviceWrapper(
-  ContentLabelsService,
-  'ContentLabels'
+  ContentLabelService,
+  'ContentLabel'
 );
