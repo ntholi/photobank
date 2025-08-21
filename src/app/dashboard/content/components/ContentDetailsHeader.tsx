@@ -53,11 +53,11 @@ export function ContentDetailsHeader({
             <StatusBadge status={status} />
           </Group>
         ) : (
-          <Group>
+          <Group align='center' gap='lg'>
             <Title order={3} fw={100}>
               {title}
             </Title>
-            <StatusBadge status={status} />
+            <StatusBadge status={status} mt={5} />
           </Group>
         )}
         <Group>

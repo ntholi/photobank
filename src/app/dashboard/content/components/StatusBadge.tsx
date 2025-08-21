@@ -1,11 +1,11 @@
 import { ContentStatus } from '@/db/schema';
-import { Badge } from '@mantine/core';
+import { Badge, BadgeProps } from '@mantine/core';
 
 type Props = {
   status: ContentStatus;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   variant?: 'light' | 'filled' | 'outline' | 'dot' | 'transparent';
-};
+} & BadgeProps;
 
 function getStatusConfig(status: ContentStatus) {
   const configs = {
@@ -39,11 +39,16 @@ function getStatusConfig(status: ContentStatus) {
   );
 }
 
-export function StatusBadge({ status, size = 'sm', variant = 'dot' }: Props) {
+export function StatusBadge({
+  status,
+  size = 'sm',
+  variant = 'dot',
+  ...rest
+}: Props) {
   const config = getStatusConfig(status);
 
   return (
-    <Badge color={config.color} size={size} variant={variant}>
+    <Badge color={config.color} size={size} variant={variant} {...rest}>
       {config.label}
     </Badge>
   );
