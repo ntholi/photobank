@@ -62,6 +62,12 @@ const navigation: NavItem[] = [
     roles: ['admin'],
   },
   {
+    label: 'Home Content',
+    href: '/dashboard/home-content',
+    icon: IconPhoto,
+    roles: ['admin'],
+  },
+  {
     label: 'Content',
     href: '/dashboard/content',
     icon: IconPhoto,
