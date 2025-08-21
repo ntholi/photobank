@@ -154,6 +154,14 @@ class BaseRepository<
     return (result as ModelSelect<T>[])[0];
   }
 
+  async createMany(entities: ModelInsert<T>[]): Promise<ModelSelect<T>[]> {
+    if (entities.length === 0) {
+      return [];
+    }
+    const result = await db.insert(this.table).values(entities).returning();
+    return result as ModelSelect<T>[];
+  }
+
   async update(
     id: ModelSelect<T>[PK],
     entity: Partial<ModelInsert<T>>

@@ -50,12 +50,7 @@ class ContentLabelService {
         categories: label.categories,
       }));
 
-      const results = [];
-      for (const label of labelsToInsert) {
-        const result = await this.repository.create(label);
-        results.push(result);
-      }
-      return results;
+      return await this.repository.createMany(labelsToInsert);
     }, ['contributor']);
   }
 }
