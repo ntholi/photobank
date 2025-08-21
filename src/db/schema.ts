@@ -107,6 +107,7 @@ export const contentStatusEnum = pgEnum('content_status', [
   'rejected',
   'archived',
 ]);
+export type ContentStatus = (typeof contentStatusEnum.enumValues)[number];
 
 export const content = pgTable('content', {
   id: varchar({ length: 21 })

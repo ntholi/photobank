@@ -1,13 +1,9 @@
-import {
-  DetailsView,
-  DetailsViewHeader,
-  FieldView,
-  DetailsViewBody,
-} from '@/components/adease';
+import { DetailsView, FieldView, DetailsViewBody } from '@/components/adease';
 import { notFound } from 'next/navigation';
 import { getContent, deleteContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
 import ContentDisplay from '../ContentDisplay';
+import { ContentDetailsHeader } from '../ContentDetailsHeader';
 import { Stack } from '@mantine/core';
 import { formatDate, formatDateTime } from '@/lib/utils';
 
@@ -15,7 +11,7 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-export default async function ContentDetails({ params }: Props) {
+export default async function ContentDetailsPage({ params }: Props) {
   const { id } = await params;
   const content = await getContent(id);
 
@@ -29,8 +25,9 @@ export default async function ContentDetails({ params }: Props) {
 
   return (
     <DetailsView>
-      <DetailsViewHeader
+      <ContentDetailsHeader
         title={'Content'}
+        status={content.status}
         queryKey={['content']}
         handleDelete={async () => {
           'use server';
@@ -42,15 +39,8 @@ export default async function ContentDetails({ params }: Props) {
           <ContentDisplay content={content} />
 
           <Stack gap='sm'>
-            <FieldView label='File Name'>{content.fileName}</FieldView>
             <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
             <FieldView label='Status'>{content.status}</FieldView>
-            {content.fileSize && (
-              <FieldView label='File Size'>
-                {(content.fileSize / 1024 / 1024).toFixed(2)} MB
-              </FieldView>
-            )}
-
             <FieldView label='Created'>
               {formatDateTime(content.createdAt)}
             </FieldView>
