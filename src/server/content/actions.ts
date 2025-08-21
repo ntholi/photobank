@@ -2,6 +2,7 @@
 
 import { content, contentTags } from '@/db/schema';
 import { contentService as service } from './service';
+import { generatePresignedUrl } from '@/lib/aws';
 import { eq } from 'drizzle-orm';
 
 type Content = typeof content.$inferInsert;
@@ -32,4 +33,24 @@ export async function updateContent(id: string, content: Partial<Content>) {
 
 export async function deleteContent(id: string) {
   return service.delete(id);
+}
+
+export async function getContentPresignedUrl(contentId: string) {
+  const content = await service.get(contentId);
+
+  if (!content) {
+    throw new Error('Content not found');
+  }
+
+  if (!content.s3Key) {
+    throw new Error('No original file available for this content');
+  }
+
+  const url = await generatePresignedUrl(content.s3Key, 900);
+
+  return {
+    url,
+    expiresIn: 900,
+    fileName: content.fileName,
+  };
 }

@@ -124,7 +124,7 @@ Only when Drizzle can't express the query cleanly or for performance-critical ag
 ## 12. Prohibited Patterns
 
 - Mixing Mantine and HeroUI in a single file.
-- Creating API route handlers for functionality available via server actions.
+- Never Creating API route handlers for functionality available via server actions. always prefer server actions over route handlers
 - Inline role or permission checks inside UI components—delegate to service or access-check function passed through action.
 - Duplicating existing pagination, search, or list item components.
 
