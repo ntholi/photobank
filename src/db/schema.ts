@@ -159,3 +159,19 @@ export const contentTags = pgTable(
     pk: primaryKey({ columns: [table.contentId, table.tagId] }),
   })
 );
+
+export const recognitionLabels = pgTable('recognition_labels', {
+  id: varchar({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  contentId: varchar({ length: 21 })
+    .notNull()
+    .references(() => content.id, { onDelete: 'cascade' }),
+  name: text().notNull(),
+  confidence: integer().notNull(),
+  instances: text(),
+  parents: text(),
+  aliases: text(),
+  categories: text(),
+  createdAt: timestamp({ mode: 'date' }).defaultNow(),
+});

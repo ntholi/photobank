@@ -6,6 +6,7 @@ import {
   createWatermarkedImage,
   isImageFile,
 } from '@/lib/imageProcessor';
+import { detectLabelsFromBuffer, RecognitionLabel } from '@/lib/recognition';
 import withAuth from '@/server/base/withAuth';
 import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { nanoid } from 'nanoid';
@@ -18,6 +19,7 @@ type UploadResult = {
   contentType: string;
   thumbnailKey: string;
   watermarkedKey: string;
+  recognitionLabels?: RecognitionLabel[];
 };
 
 const ALLOWED_MIME_TYPES = [
@@ -53,6 +55,7 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
   const baseKey = key.split('.')[0];
   let thumbnailKey: string;
   let watermarkedKey: string;
+  let recognitionLabels: RecognitionLabel[] | undefined;
 
   if (isImageFile(file.type)) {
     try {
@@ -97,6 +100,17 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
           },
         })
       );
+
+      try {
+        const recognitionResult = await detectLabelsFromBuffer(buffer);
+        recognitionLabels = recognitionResult.labels;
+        console.log(
+          `Detected ${recognitionLabels.length} labels for image ${key}`
+        );
+      } catch (error) {
+        console.error('Failed to detect labels:', error);
+        recognitionLabels = undefined;
+      }
     } catch (error) {
       console.error('Failed to process image:', error);
       thumbnailKey = key;
@@ -114,6 +128,7 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
     contentType: file.type,
     thumbnailKey,
     watermarkedKey,
+    recognitionLabels,
   };
 
   return result;

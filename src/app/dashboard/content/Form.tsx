@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { uploadContentFile } from '@/server/content/uploadActions';
+import { createRecognitionLabels } from '@/server/recognitionLabels/actions';
 import { notifications } from '@mantine/notifications';
 
 type Content = typeof content.$inferInsert;
@@ -66,7 +67,32 @@ export default function ContentForm({
           type: selectedFile.type.startsWith('image/') ? 'image' : 'video',
         };
 
-        return await onSubmit(contentData);
+        const createdContent = await onSubmit(contentData);
+
+        if (
+          uploadResult.recognitionLabels &&
+          uploadResult.recognitionLabels.length > 0
+        ) {
+          try {
+            await createRecognitionLabels(
+              createdContent.id as string,
+              uploadResult.recognitionLabels
+            );
+            console.log(
+              `Saved ${uploadResult.recognitionLabels.length} recognition labels for content ${createdContent.id}`
+            );
+          } catch (error) {
+            console.error('Failed to save recognition labels:', error);
+            notifications.show({
+              title: 'Warning',
+              message:
+                'Content uploaded successfully, but failed to save recognition labels',
+              color: 'yellow',
+            });
+          }
+        }
+
+        return createdContent;
       } catch (error) {
         notifications.show({
           title: 'Upload Error',
