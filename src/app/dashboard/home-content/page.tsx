@@ -4,7 +4,6 @@ import { ContentTypeBadge } from '@/app/dashboard/content/components/ContentType
 import { StatusBadge } from '@/app/dashboard/content/components/StatusBadge';
 import { ContentPicker } from '@/components/ContentPicker';
 import { DeleteButton } from '@/components/adease/DeleteButton';
-import { content } from '@/db/schema';
 import { getImageUrl } from '@/lib/utils';
 import {
   addContentToHome,
@@ -16,17 +15,13 @@ import {
   closestCenter,
   DndContext,
   DragEndEvent,
-  DragOverlay,
-  DragStartEvent,
   KeyboardSensor,
-  MeasuringStrategy,
   PointerSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
 import {
   arrayMove,
-  defaultAnimateLayoutChanges,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
@@ -47,7 +42,6 @@ import {
   Stack,
   Text,
   Title,
-  Tooltip,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import {
@@ -55,13 +49,10 @@ import {
   IconPhoto,
   IconPlus,
   IconRefresh,
-  IconTrash,
 } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
-
-type ContentItem = typeof content.$inferSelect;
 
 interface HomeContentItem {
   id: string;
@@ -78,77 +69,6 @@ interface HomeContentItem {
   };
 }
 
-function SortableItemContent({
-  item,
-  onRemove,
-  isDragging = false,
-  showGrip = true,
-  showRemove = true,
-}: {
-  item: HomeContentItem;
-  onRemove?: (id: string) => () => Promise<void>;
-  isDragging?: boolean;
-  showGrip?: boolean;
-  showRemove?: boolean;
-}) {
-  const imageSize = 80;
-
-  return (
-    <Group gap='sm' wrap='nowrap' align='center'>
-      {showGrip && (
-        <ActionIcon
-          variant='subtle'
-          color='gray'
-          style={{
-            cursor: isDragging ? 'grabbing' : 'grab',
-          }}
-        >
-          <IconGripVertical size={18} />
-        </ActionIcon>
-      )}
-
-      <Indicator
-        label={item.position + 1}
-        size={20}
-        color='blue'
-        position='top-start'
-      >
-        <Link href={`/dashboard/content/${item.content.id}`}>
-          <Image
-            src={getImageUrl(item.content.thumbnailKey)}
-            width={imageSize}
-            height={imageSize}
-            radius='sm'
-            fit='cover'
-            style={{ flexShrink: 0, cursor: 'pointer' }}
-            fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'
-          />
-        </Link>
-      </Indicator>
-
-      <Stack gap={4} style={{ flex: 1 }}>
-        <Text size='sm' fw={500} truncate>
-          {item.content.fileName || 'Untitled'}
-        </Text>
-        <Group gap='xs'>
-          <ContentTypeBadge contentType={item.content.type} />
-          <StatusBadge status={item.content.status} variant='light' size='xs' />
-        </Group>
-      </Stack>
-
-      {showRemove && onRemove && (
-        <DeleteButton
-          handleDelete={onRemove(item.contentId)}
-          message='Are you sure you want to remove this item from the home page?'
-          queryKey={['home-content-with-details']}
-          variant='subtle'
-          size='sm'
-        />
-      )}
-    </Group>
-  );
-}
-
 function SortableItem({
   item,
   onRemove,
@@ -163,42 +83,63 @@ function SortableItem({
     transform,
     transition,
     isDragging,
-  } = useSortable({
-    id: item.id,
-    animateLayoutChanges: (args) =>
-      args.isSorting || args.wasDragging
-        ? false
-        : defaultAnimateLayoutChanges(args),
-  });
-
-  const transformStyle = transform
-    ? { ...transform, scaleX: 1, scaleY: 1 }
-    : null;
+  } = useSortable({ id: item.id });
 
   const style = {
-    transform: CSS.Transform.toString(transformStyle),
+    transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
-    width: '100%',
   };
 
   return (
-    <div ref={setNodeRef} style={style}>
-      <Card
-        padding='sm'
-        radius='md'
-        withBorder
-        style={{
-          borderStyle: isDragging ? 'dashed' : 'solid',
-        }}
-      >
-        <div {...attributes} {...listeners}>
-          <SortableItemContent
-            item={item}
-            onRemove={onRemove}
-            isDragging={isDragging}
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <Card padding='sm' radius='md' withBorder>
+        <Group gap='sm' wrap='nowrap' align='center'>
+          <ActionIcon variant='subtle' color='gray'>
+            <IconGripVertical size={18} />
+          </ActionIcon>
+
+          <Indicator
+            label={item.position + 1}
+            size={20}
+            color='blue'
+            position='top-start'
+          >
+            <Link href={`/dashboard/content/${item.content.id}`}>
+              <Image
+                src={getImageUrl(item.content.thumbnailKey)}
+                width={80}
+                height={80}
+                radius='sm'
+                fit='cover'
+                style={{ cursor: 'pointer' }}
+                fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'
+              />
+            </Link>
+          </Indicator>
+
+          <Stack gap={4} style={{ flex: 1 }}>
+            <Text size='sm' fw={500} truncate>
+              {item.content.fileName || 'Untitled'}
+            </Text>
+            <Group gap='xs'>
+              <ContentTypeBadge contentType={item.content.type} />
+              <StatusBadge
+                status={item.content.status}
+                variant='light'
+                size='xs'
+              />
+            </Group>
+          </Stack>
+
+          <DeleteButton
+            handleDelete={onRemove(item.contentId)}
+            message='Are you sure you want to remove this item from the home page?'
+            queryKey={['home-content-with-details']}
+            variant='subtle'
+            size='sm'
           />
-        </div>
+        </Group>
       </Card>
     </div>
   );
@@ -206,7 +147,6 @@ function SortableItem({
 
 export default function HomeContentPage() {
   const [pickerOpened, setPickerOpened] = useState(false);
-  const [activeId, setActiveId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const sensors = useSensors(
@@ -223,52 +163,6 @@ export default function HomeContentPage() {
 
   const addMutation = useMutation({
     mutationFn: addContentToHome,
-    onMutate: async (contentIds: string[]) => {
-      await queryClient.cancelQueries({
-        queryKey: ['home-content-with-details'],
-      });
-
-      const previousData = queryClient.getQueryData<HomeContentItem[]>([
-        'home-content-with-details',
-      ]);
-
-      if (previousData) {
-        const newItems = contentIds.map((contentId, index) => ({
-          id: `temp-${contentId}-${Date.now()}`,
-          position: previousData.length + index,
-          contentId,
-          createdAt: new Date(),
-          content: {
-            id: contentId,
-            fileName: 'Loading...',
-            thumbnailKey: '',
-            watermarkedKey: '',
-            type: 'image' as const,
-            status: 'published' as const,
-          },
-        }));
-
-        queryClient.setQueryData<HomeContentItem[]>(
-          ['home-content-with-details'],
-          [...previousData, ...newItems]
-        );
-      }
-
-      return { previousData };
-    },
-    onError: (err, contentIds, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(
-          ['home-content-with-details'],
-          context.previousData
-        );
-      }
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to add content to home',
-        color: 'red',
-      });
-    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ['home-content-with-details'],
@@ -279,59 +173,27 @@ export default function HomeContentPage() {
         color: 'green',
       });
     },
+    onError: () => {
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to add content to home',
+        color: 'red',
+      });
+    },
   });
 
   const orderMutation = useMutation({
     mutationFn: updateHomeContentOrder,
-    onMutate: async (updates: { id: string; position: number }[]) => {
-      await queryClient.cancelQueries({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
         queryKey: ['home-content-with-details'],
       });
-
-      const previousData = queryClient.getQueryData<HomeContentItem[]>([
-        'home-content-with-details',
-      ]);
-
-      if (previousData) {
-        const updatedData = [...previousData];
-        updates.forEach((update) => {
-          const itemIndex = updatedData.findIndex(
-            (item) => item.id === update.id
-          );
-          if (itemIndex !== -1) {
-            updatedData[itemIndex] = {
-              ...updatedData[itemIndex],
-              position: update.position,
-            };
-          }
-        });
-
-        updatedData.sort((a, b) => a.position - b.position);
-
-        queryClient.setQueryData<HomeContentItem[]>(
-          ['home-content-with-details'],
-          updatedData
-        );
-      }
-
-      return { previousData };
     },
-    onError: (err, updates, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(
-          ['home-content-with-details'],
-          context.previousData
-        );
-      }
+    onError: () => {
       notifications.show({
         title: 'Error',
         message: 'Failed to update order',
         color: 'red',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['home-content-with-details'],
       });
     },
   });
@@ -339,44 +201,26 @@ export default function HomeContentPage() {
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
-
       if (active.id !== over?.id && homeContent) {
         const oldIndex = homeContent.findIndex((item) => item.id === active.id);
         const newIndex = homeContent.findIndex((item) => item.id === over?.id);
-
         if (oldIndex !== -1 && newIndex !== -1) {
           const newOrder = arrayMove(homeContent, oldIndex, newIndex);
-
-          queryClient.setQueryData<HomeContentItem[]>(
-            ['home-content-with-details'],
-            newOrder.map((item, index) => ({
-              ...item,
-              position: index,
-            }))
-          );
-
-          const updates = newOrder.map(
-            (item: HomeContentItem, index: number) => ({
-              id: item.id,
-              position: index,
-            })
-          );
-
+          const updates = newOrder.map((item, index) => ({
+            id: item.id,
+            position: index,
+          }));
           orderMutation.mutate(updates);
         }
       }
-      setActiveId(null);
     },
-    [homeContent, orderMutation, queryClient]
+    [homeContent, orderMutation]
   );
 
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    setActiveId(String(event.active.id));
-  }, []);
-
   const handleContentSelect = useCallback(
-    (item: ContentItem) => {
+    (item: { id: string }) => {
       addMutation.mutate([item.id]);
+      setPickerOpened(false);
     },
     [addMutation]
   );
@@ -387,8 +231,6 @@ export default function HomeContentPage() {
     },
     []
   );
-
-  const existingContentIds = homeContent?.map((item) => item.contentId) || [];
 
   if (isLoading) {
     return (
@@ -434,12 +276,7 @@ export default function HomeContentPage() {
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
-              measuring={{
-                droppable: { strategy: MeasuringStrategy.BeforeDragging },
-              }}
-              onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
-              onDragCancel={() => setActiveId(null)}
             >
               <SortableContext
                 items={homeContent.map((item) => item.id)}
@@ -455,33 +292,6 @@ export default function HomeContentPage() {
                   ))}
                 </Stack>
               </SortableContext>
-              <DragOverlay dropAnimation={{ duration: 200 }}>
-                {activeId
-                  ? (() => {
-                      const activeItem = homeContent?.find(
-                        (i) => i.id === activeId
-                      );
-                      if (!activeItem) return null;
-                      return (
-                        <Card
-                          padding='sm'
-                          radius='md'
-                          withBorder
-                          shadow='md'
-                          style={{
-                            cursor: 'grabbing',
-                          }}
-                        >
-                          <SortableItemContent
-                            item={activeItem}
-                            isDragging={false}
-                            showRemove={false}
-                          />
-                        </Card>
-                      );
-                    })()
-                  : null}
-              </DragOverlay>
             </DndContext>
           ) : (
             <Center h={200}>
