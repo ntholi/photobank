@@ -197,6 +197,52 @@ export default function HomeContentPage() {
 
   const addMutation = useMutation({
     mutationFn: addContentToHome,
+    onMutate: async (contentIds: string[]) => {
+      await queryClient.cancelQueries({
+        queryKey: ['home-content-with-details'],
+      });
+
+      const previousData = queryClient.getQueryData<HomeContentItem[]>([
+        'home-content-with-details',
+      ]);
+
+      if (previousData) {
+        const newItems = contentIds.map((contentId, index) => ({
+          id: `temp-${contentId}-${Date.now()}`,
+          position: previousData.length + index,
+          contentId,
+          createdAt: new Date(),
+          content: {
+            id: contentId,
+            fileName: 'Loading...',
+            thumbnailKey: '',
+            watermarkedKey: '',
+            type: 'image' as const,
+            status: 'published' as const,
+          },
+        }));
+
+        queryClient.setQueryData<HomeContentItem[]>(
+          ['home-content-with-details'],
+          [...previousData, ...newItems]
+        );
+      }
+
+      return { previousData };
+    },
+    onError: (err, contentIds, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          ['home-content-with-details'],
+          context.previousData
+        );
+      }
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to add content to home',
+        color: 'red',
+      });
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ['home-content-with-details'],
@@ -207,17 +253,49 @@ export default function HomeContentPage() {
         color: 'green',
       });
     },
-    onError: () => {
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to add content to home',
-        color: 'red',
-      });
-    },
   });
 
   const removeMutation = useMutation({
     mutationFn: removeContentFromHome,
+    onMutate: async (contentId: string) => {
+      await queryClient.cancelQueries({
+        queryKey: ['home-content-with-details'],
+      });
+
+      const previousData = queryClient.getQueryData<HomeContentItem[]>([
+        'home-content-with-details',
+      ]);
+
+      if (previousData) {
+        const filteredData = previousData.filter(
+          (item) => item.contentId !== contentId
+        );
+        const reindexedData = filteredData.map((item, index) => ({
+          ...item,
+          position: index,
+        }));
+
+        queryClient.setQueryData<HomeContentItem[]>(
+          ['home-content-with-details'],
+          reindexedData
+        );
+      }
+
+      return { previousData };
+    },
+    onError: (err, contentId, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          ['home-content-with-details'],
+          context.previousData
+        );
+      }
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to remove content',
+        color: 'red',
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['home-content-with-details'],
@@ -228,27 +306,59 @@ export default function HomeContentPage() {
         color: 'green',
       });
     },
-    onError: () => {
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to remove content',
-        color: 'red',
-      });
-    },
   });
 
   const orderMutation = useMutation({
     mutationFn: updateHomeContentOrder,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onMutate: async (updates: { id: string; position: number }[]) => {
+      await queryClient.cancelQueries({
         queryKey: ['home-content-with-details'],
       });
+
+      const previousData = queryClient.getQueryData<HomeContentItem[]>([
+        'home-content-with-details',
+      ]);
+
+      if (previousData) {
+        const updatedData = [...previousData];
+        updates.forEach((update) => {
+          const itemIndex = updatedData.findIndex(
+            (item) => item.id === update.id
+          );
+          if (itemIndex !== -1) {
+            updatedData[itemIndex] = {
+              ...updatedData[itemIndex],
+              position: update.position,
+            };
+          }
+        });
+
+        updatedData.sort((a, b) => a.position - b.position);
+
+        queryClient.setQueryData<HomeContentItem[]>(
+          ['home-content-with-details'],
+          updatedData
+        );
+      }
+
+      return { previousData };
     },
-    onError: () => {
+    onError: (err, updates, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          ['home-content-with-details'],
+          context.previousData
+        );
+      }
       notifications.show({
         title: 'Error',
         message: 'Failed to update order',
         color: 'red',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['home-content-with-details'],
       });
     },
   });
@@ -263,6 +373,15 @@ export default function HomeContentPage() {
 
         if (oldIndex !== -1 && newIndex !== -1) {
           const newOrder = arrayMove(homeContent, oldIndex, newIndex);
+
+          queryClient.setQueryData<HomeContentItem[]>(
+            ['home-content-with-details'],
+            newOrder.map((item, index) => ({
+              ...item,
+              position: index,
+            }))
+          );
+
           const updates = newOrder.map(
             (item: HomeContentItem, index: number) => ({
               id: item.id,
@@ -275,7 +394,7 @@ export default function HomeContentPage() {
       }
       setActiveId(null);
     },
-    [homeContent, orderMutation]
+    [homeContent, orderMutation, queryClient]
   );
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
