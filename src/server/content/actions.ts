@@ -80,3 +80,11 @@ export async function getContentPresignedUrl(contentId: string) {
 export async function getFilteredContent(options: ContentFilterOptions) {
   return service.getFilteredContent(options);
 }
+
+export async function getGalleryContent(page: number = 1, search?: string) {
+  return service.getFilteredContent({
+    page,
+    size: 30,
+    search,
+  });
+}
