@@ -46,6 +46,18 @@ class LocationService {
       return this.repository.upsertByPlaceId(data);
     }, ['contributor']);
   }
+
+  async updateCoverContent(locationId: string, coverContentId: string | null) {
+    return withAuth(async () => {
+      return this.repository.updateCoverContent(locationId, coverContentId);
+    }, ['contributor']);
+  }
+
+  async getWithCoverContent(id: string) {
+    return withAuth(async () => {
+      return this.repository.findByIdWithCoverContent(id);
+    }, []);
+  }
 }
 
 export const locationsService = serviceWrapper(LocationService, 'Location');

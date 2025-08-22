@@ -49,6 +49,17 @@ export async function deleteLocation(id: string) {
   return service.delete(id);
 }
 
+export async function updateLocationCoverContent(
+  locationId: string,
+  coverContentId: string | null
+) {
+  return service.updateCoverContent(locationId, coverContentId);
+}
+
+export async function getLocationWithCoverContent(id: string) {
+  return service.getWithCoverContent(id);
+}
+
 export async function searchPlaces(input: string): Promise<PlaceSuggestion[]> {
   const key = process.env.GOOGLE_MAPS_API_KEY as string;
   if (!key) return [];

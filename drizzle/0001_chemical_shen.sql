@@ -1,0 +1,2 @@
+ALTER TABLE "locations" ADD COLUMN "cover_content_id" varchar(21);--> statement-breakpoint
+ALTER TABLE "locations" ADD CONSTRAINT "locations_cover_content_id_content_id_fk" FOREIGN KEY ("cover_content_id") REFERENCES "public"."content"("id") ON DELETE set null ON UPDATE no action;

@@ -150,6 +150,21 @@ export const locations = pgTable('locations', {
   updatedAt: timestamp({ mode: 'date' }),
 });
 
+export const locationDetails = pgTable('location_details', {
+  id: varchar({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  locationId: varchar({ length: 21 })
+    .notNull()
+    .references(() => locations.id, { onDelete: 'cascade' })
+    .unique(),
+  coverContentId: varchar({ length: 21 }).references(() => content.id, {
+    onDelete: 'set null',
+  }),
+  createdAt: timestamp({ mode: 'date' }).defaultNow(),
+  updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
+});
+
 export const tags = pgTable('tags', {
   id: varchar({ length: 21 })
     .$defaultFn(() => nanoid())

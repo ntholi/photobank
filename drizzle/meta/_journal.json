@@ -8,6 +8,20 @@
       "when": 1755847596315,
       "tag": "0000_quick_zzzax",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1755861000592,
+      "tag": "0001_chemical_shen",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1755862805476,
+      "tag": "0002_chief_jack_murdock",
+      "breakpoints": true
     }
   ]
 }
