@@ -55,7 +55,7 @@ export default function ProfileMenu() {
       <Button
         isIconOnly
         variant='light'
-        className='text-white/80 hover:text-white p-0 min-w-fit'
+        className='text-white/80 p-0 min-w-fit'
         aria-label='Loading profile'
         disabled
       >
@@ -70,7 +70,7 @@ export default function ProfileMenu() {
         <Button
           isIconOnly
           variant='light'
-          className='text-white/80 hover:text-white p-0 min-w-fit transition-all duration-200 hover:scale-105'
+          className='text-white/80 p-0 min-w-fit'
           aria-label={isAuthenticated ? 'User menu' : 'Sign in menu'}
         >
           {isAuthenticated && session.user?.image ? (
@@ -206,7 +206,11 @@ export default function ProfileMenu() {
             </DropdownSection>
 
             <DropdownSection>
-              <DropdownItem key='theme-toggle' isReadOnly className='py-2'>
+              <DropdownItem
+                key='theme-toggle'
+                className='cursor-default py-2 hover:bg-transparent data-[hover=true]:bg-transparent'
+                isReadOnly
+              >
                 <div className='flex items-center justify-between w-full'>
                   <div className='flex items-center gap-2'>
                     <div className='w-4 h-4 rounded-full bg-gradient-to-r from-orange-400 to-yellow-400 opacity-80' />
