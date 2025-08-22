@@ -3,7 +3,8 @@
 import React from 'react';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
 import { Button } from '@heroui/button';
-import { IoMdSearch, IoMdPerson, IoMdCamera } from 'react-icons/io';
+import { IoMdSearch, IoMdCamera } from 'react-icons/io';
+import ProfileMenu from './ProfileMenu';
 
 export default function NavbarComponent() {
   const [active, setActive] = React.useState(0);
@@ -51,14 +52,7 @@ export default function NavbarComponent() {
           </Button>
         </NavbarItem>
         <NavbarItem>
-          <Button
-            isIconOnly
-            variant='light'
-            className='text-white/80 hover:text-white p-0 min-w-fit'
-            aria-label='Profile'
-          >
-            <IoMdPerson className='text-lg' />
-          </Button>
+          <ProfileMenu />
         </NavbarItem>
       </NavbarContent>
     </Navbar>
