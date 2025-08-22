@@ -49,17 +49,25 @@ export async function createWatermarkedImage(
     })
     .toBuffer();
 
-  const fontSize = Math.max(64, Math.floor(Math.min(newWidth, newHeight) / 8));
+  // Get the actual dimensions of the resized image buffer
+  const resizedMetadata = await sharp(resized).metadata();
+  const actualWidth = resizedMetadata.width || newWidth;
+  const actualHeight = resizedMetadata.height || newHeight;
+
+  const fontSize = Math.max(
+    64,
+    Math.floor(Math.min(actualWidth, actualHeight) / 8)
+  );
 
   const watermarkSvg = `
-    <svg width="${newWidth}" height="${newHeight}">
+    <svg width="${actualWidth}" height="${actualHeight}">
       <defs>
         <style>
-          .watermark { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            font-size: ${fontSize}px; 
-            fill: rgba(255, 255, 255, 0.6); 
-            stroke: rgba(0, 0, 0, 0.2); 
+          .watermark {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: ${fontSize}px;
+            fill: rgba(255, 255, 255, 0.6);
+            stroke: rgba(0, 0, 0, 0.2);
             stroke-width: 0.5px;
             text-anchor: middle;
             dominant-baseline: middle;
@@ -68,7 +76,7 @@ export async function createWatermarkedImage(
           }
         </style>
       </defs>
-      <text x="${newWidth / 2}" y="${newHeight / 2}" class="watermark">${watermarkText}</text>
+      <text x="${actualWidth / 2}" y="${actualHeight / 2}" class="watermark">${watermarkText}</text>
     </svg>
   `;
 
@@ -89,8 +97,8 @@ export async function createWatermarkedImage(
   return {
     buffer: watermarked,
     contentType: 'image/webp',
-    width: finalMetadata.width || newWidth,
-    height: finalMetadata.height || newHeight,
+    width: finalMetadata.width || actualWidth,
+    height: finalMetadata.height || actualHeight,
   };
 }
 
