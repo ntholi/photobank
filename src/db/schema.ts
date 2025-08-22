@@ -115,6 +115,7 @@ export const content = pgTable('content', {
     .$defaultFn(() => nanoid())
     .primaryKey(),
   type: contentTypeEnum().notNull().default('image'),
+  description: text(),
   fileName: text(),
   s3Key: text().notNull(),
   thumbnailKey: text().notNull(),

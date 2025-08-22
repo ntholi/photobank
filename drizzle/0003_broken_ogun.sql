@@ -1,1 +1,0 @@
-ALTER TABLE "locations" RENAME COLUMN "formatted_address" TO "address";

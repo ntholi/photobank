@@ -5,85 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1755327257539,
-      "tag": "0000_unknown_karnak",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1755329983024,
-      "tag": "0001_smooth_shadowcat",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1755331471825,
-      "tag": "0002_fluffy_adam_destine",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1755334078686,
-      "tag": "0003_broken_ogun",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1755343945022,
-      "tag": "0004_flowery_squadron_sinister",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1755348291251,
-      "tag": "0005_thick_the_captain",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1755351569287,
-      "tag": "0006_concerned_dark_phoenix",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1755708316089,
-      "tag": "0007_broken_kylun",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1755759172333,
-      "tag": "0008_fine_roland_deschain",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "7",
-      "when": 1755765864858,
-      "tag": "0009_familiar_redwing",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "7",
-      "when": 1755768516694,
-      "tag": "0010_late_lockjaw",
-      "breakpoints": true
-    },
-    {
-      "idx": 11,
-      "version": "7",
-      "when": 1755803217635,
-      "tag": "0011_stale_gressill",
+      "when": 1755847596315,
+      "tag": "0000_quick_zzzax",
       "breakpoints": true
     }
   ]
