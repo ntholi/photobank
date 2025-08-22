@@ -27,6 +27,8 @@ type FileUploadProps = {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
+  onCancel?: () => void;
+  showCancel?: boolean;
 };
 
 const defaultAcceptedTypes = [
@@ -47,6 +49,8 @@ export default function FileUpload({
   placeholder = 'Click or drag file here to upload',
   disabled = false,
   required = false,
+  onCancel,
+  showCancel = false,
 }: FileUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
@@ -141,14 +145,28 @@ export default function FileUpload({
                 </Box>
               )}
             </Stack>
-            <ActionIcon
-              variant='subtle'
-              color='red'
-              onClick={handleRemove}
-              disabled={disabled || uploading}
-            >
-              <IconX size={16} />
-            </ActionIcon>
+            <Group gap='xs'>
+              {showCancel && onCancel && (
+                <ActionIcon
+                  variant='subtle'
+                  color='gray'
+                  onClick={onCancel}
+                  disabled={disabled || uploading}
+                  title='Cancel'
+                >
+                  <IconX size={16} />
+                </ActionIcon>
+              )}
+              <ActionIcon
+                variant='subtle'
+                color='red'
+                onClick={handleRemove}
+                disabled={disabled || uploading}
+                title={showCancel ? 'Remove' : 'Remove'}
+              >
+                <IconX size={16} />
+              </ActionIcon>
+            </Group>
           </Group>
         </Paper>
       ) : (

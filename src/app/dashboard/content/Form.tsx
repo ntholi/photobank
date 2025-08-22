@@ -5,6 +5,7 @@ import { Form } from '@/components/adease';
 import { TextInput, Select, Stack } from '@mantine/core';
 import LocationPicker from '@/app/components/LocationPicker';
 import FileUpload from './components/FileUpload';
+import ExistingContentDisplay from './components/ExistingContentDisplay';
 import { useState } from 'react';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
@@ -161,7 +162,9 @@ export default function ContentForm({
     >
       {(form) => (
         <Stack gap='md'>
-          {!defaultValues && (
+          {defaultValues ? (
+            <ExistingContentDisplay content={defaultValues as any} />
+          ) : (
             <FileUpload
               value={selectedFile}
               onChange={setSelectedFile}
