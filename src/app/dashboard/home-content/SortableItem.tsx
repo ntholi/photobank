@@ -16,6 +16,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconGripVertical } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -55,10 +56,15 @@ export default function SortableItem({ item }: { item: HomeContentItem }) {
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={style}>
       <Card padding='sm' radius='md' withBorder>
         <Group gap='sm' wrap='nowrap' align='center'>
-          <ActionIcon variant='subtle' color='gray'>
+          <ActionIcon
+            variant='subtle'
+            color='gray'
+            {...attributes}
+            {...listeners}
+          >
             <IconGripVertical size={18} />
           </ActionIcon>
 
@@ -101,6 +107,13 @@ export default function SortableItem({ item }: { item: HomeContentItem }) {
             queryKey={['home-content-with-details']}
             variant='subtle'
             size='sm'
+            onSuccess={() => {
+              notifications.show({
+                title: 'Success',
+                message: 'Item removed from home page',
+                color: 'green',
+              });
+            }}
           />
         </Group>
       </Card>
