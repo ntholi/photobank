@@ -14,12 +14,13 @@ import {
   Box,
   ActionIcon,
   Image,
+  Alert,
 } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { ContentPicker } from '@/components/ContentPicker';
 import RichTextField from '@/components/adease/RichTextField';
-import { IconX, IconPhoto } from '@tabler/icons-react';
+import { IconX, IconPhoto, IconAlertCircle } from '@tabler/icons-react';
 import { getImageUrl } from '@/lib/utils';
 import { updateLocationDetails } from '@/server/locations/actions';
 
@@ -98,21 +99,21 @@ export default function LocationForm({
         }}
       >
         {(form) => (
-          <Tabs defaultValue='details' keepMounted={false}>
+          <Tabs defaultValue='about' keepMounted={false}>
             <Tabs.List>
-              <Tabs.Tab value='details'>Location Details</Tabs.Tab>
-              <Tabs.Tab value='content'>Cover Content</Tabs.Tab>
               <Tabs.Tab value='about'>About</Tabs.Tab>
+              <Tabs.Tab value='content'>Cover</Tabs.Tab>
+              <Tabs.Tab value='details'>Details</Tabs.Tab>
             </Tabs.List>
 
-            <Tabs.Panel value='details' pt='xl'>
+            <Tabs.Panel value='about' pt='xl'>
               <Stack gap='md'>
-                <TextInput
-                  label='Place ID'
-                  {...form.getInputProps('placeId')}
+                <RichTextField
+                  label='About Information'
+                  value={aboutContent}
+                  onChange={setAboutContent}
+                  height={400}
                 />
-                <TextInput label='Name' {...form.getInputProps('name')} />
-                <TextInput label='Address' {...form.getInputProps('address')} />
               </Stack>
             </Tabs.Panel>
 
@@ -186,14 +187,23 @@ export default function LocationForm({
               </Stack>
             </Tabs.Panel>
 
-            <Tabs.Panel value='about' pt='xl'>
+            <Tabs.Panel value='details' pt='xl'>
               <Stack gap='md'>
-                <RichTextField
-                  label='About Information'
-                  value={aboutContent}
-                  onChange={setAboutContent}
-                  height={400}
+                <Alert
+                  variant='light'
+                  color='yellow'
+                  title='Warning'
+                  icon={<IconAlertCircle size={16} />}
+                >
+                  Please don't update the information below unless you are sure
+                  about it.
+                </Alert>
+                <TextInput
+                  label='Place ID'
+                  {...form.getInputProps('placeId')}
                 />
+                <TextInput label='Name' {...form.getInputProps('name')} />
+                <TextInput label='Address' {...form.getInputProps('address')} />
               </Stack>
             </Tabs.Panel>
           </Tabs>
