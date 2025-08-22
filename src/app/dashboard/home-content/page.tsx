@@ -1,67 +1,64 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import {
-  Container,
-  Title,
-  Button,
-  Group,
-  Grid,
-  Card,
-  Image,
-  Text,
-  ActionIcon,
-  Stack,
-  Center,
-  Loader,
-  Badge,
-  Box,
-  Paper,
-  Flex,
-  Tooltip,
-  HoverCard,
-  Indicator,
-} from '@mantine/core';
-import {
-  IconPlus,
-  IconTrash,
-  IconGripVertical,
-  IconPhoto,
-  IconRefresh,
-} from '@tabler/icons-react';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-  DragStartEvent,
-  DragOverlay,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import { ContentTypeBadge } from '@/app/dashboard/content/components/ContentTypeBadge';
+import { StatusBadge } from '@/app/dashboard/content/components/StatusBadge';
 import { ContentPicker } from '@/components/ContentPicker';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { notifications } from '@mantine/notifications';
-import { modals } from '@mantine/modals';
+import { content } from '@/db/schema';
 import { getImageUrl } from '@/lib/utils';
 import {
-  getAllHomeContentWithDetails,
   addContentToHome,
+  getAllHomeContentWithDetails,
   removeContentFromHome,
   updateHomeContentOrder,
 } from '@/server/home-contet/actions';
-import { content } from '@/db/schema';
-import { StatusBadge } from '@/app/dashboard/content/components/StatusBadge';
-import { ContentTypeBadge } from '@/app/dashboard/content/components/ContentTypeBadge';
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  KeyboardSensor,
+  MeasuringStrategy,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  defaultAnimateLayoutChanges,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import {
+  ActionIcon,
+  Button,
+  Card,
+  Center,
+  Container,
+  Group,
+  Image,
+  Indicator,
+  Loader,
+  Paper,
+  Stack,
+  Text,
+  Title,
+  Tooltip,
+} from '@mantine/core';
+import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
+import {
+  IconGripVertical,
+  IconPhoto,
+  IconPlus,
+  IconRefresh,
+  IconTrash,
+} from '@tabler/icons-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useState } from 'react';
 
 type ContentItem = typeof content.$inferSelect;
 
@@ -94,12 +91,23 @@ function SortableItem({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: item.id });
+  } = useSortable({
+    id: item.id,
+    animateLayoutChanges: (args) =>
+      args.isSorting || args.wasDragging
+        ? false
+        : defaultAnimateLayoutChanges(args),
+  });
+
+  const transformStyle = transform
+    ? { ...transform, scaleX: 1, scaleY: 1 }
+    : null;
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Transform.toString(transformStyle),
     transition,
     opacity: isDragging ? 0.5 : 1,
+    width: '100%',
   };
   const imageSize = 80;
 
@@ -110,7 +118,6 @@ function SortableItem({
         radius='md'
         withBorder
         style={{
-          cursor: 'grab',
           borderColor: isDragging ? 'var(--mantine-color-blue-6)' : undefined,
         }}
       >
@@ -120,38 +127,27 @@ function SortableItem({
             {...listeners}
             variant='subtle'
             color='gray'
-            style={{ cursor: 'grab' }}
+            style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
           >
             <IconGripVertical size={18} />
           </ActionIcon>
 
-          <HoverCard position='top-start' shadow='md' withinPortal>
-            <HoverCard.Target>
-              <Indicator
-                label={item.position + 1}
-                size={20}
-                color='blue'
-                position='top-start'
-              >
-                <Image
-                  src={getImageUrl(item.content.thumbnailKey)}
-                  width={imageSize}
-                  height={imageSize}
-                  radius='sm'
-                  fit='cover'
-                  fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'
-                />
-              </Indicator>
-            </HoverCard.Target>
-            <HoverCard.Dropdown p={0}>
-              <Image
-                src={getImageUrl(item.content.thumbnailKey)}
-                width={320}
-                height={200}
-                fit='cover'
-              />
-            </HoverCard.Dropdown>
-          </HoverCard>
+          <Indicator
+            label={item.position + 1}
+            size={20}
+            color='blue'
+            position='top-start'
+          >
+            <Image
+              src={getImageUrl(item.content.thumbnailKey)}
+              width={imageSize}
+              height={imageSize}
+              radius='sm'
+              fit='cover'
+              style={{ flexShrink: 0 }}
+              fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'
+            />
+          </Indicator>
 
           <Stack gap={4} style={{ flex: 1 }}>
             <Text size='sm' fw={500} truncate>
@@ -246,11 +242,6 @@ export default function HomeContentPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['home-content-with-details'],
-      });
-      notifications.show({
-        title: 'Success',
-        message: 'Updated content order',
-        color: 'green',
       });
     },
     onError: () => {
@@ -359,6 +350,9 @@ export default function HomeContentPage() {
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
+              measuring={{
+                droppable: { strategy: MeasuringStrategy.BeforeDragging },
+              }}
               onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
               onDragCancel={() => setActiveId(null)}
@@ -377,7 +371,7 @@ export default function HomeContentPage() {
                   ))}
                 </Stack>
               </SortableContext>
-              <DragOverlay>
+              <DragOverlay dropAnimation={{ duration: 200 }}>
                 {activeId
                   ? (() => {
                       const activeItem = homeContent?.find(
@@ -394,6 +388,7 @@ export default function HomeContentPage() {
                               height={imageSize}
                               radius='sm'
                               fit='cover'
+                              style={{ flexShrink: 0 }}
                             />
                             <Stack gap={4} style={{ flex: 1 }}>
                               <Text size='sm' fw={500} truncate>
