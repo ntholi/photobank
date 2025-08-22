@@ -3,6 +3,7 @@
 import { ContentTypeBadge } from '@/app/dashboard/content/components/ContentTypeBadge';
 import { StatusBadge } from '@/app/dashboard/content/components/StatusBadge';
 import { ContentPicker } from '@/components/ContentPicker';
+import { DeleteButton } from '@/components/adease/DeleteButton';
 import { content } from '@/db/schema';
 import { getImageUrl } from '@/lib/utils';
 import {
@@ -48,7 +49,6 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core';
-import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import {
   IconGripVertical,
@@ -58,6 +58,7 @@ import {
   IconTrash,
 } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useCallback, useState } from 'react';
 
 type ContentItem = typeof content.$inferSelect;
@@ -85,7 +86,7 @@ function SortableItemContent({
   showRemove = true,
 }: {
   item: HomeContentItem;
-  onRemove?: (id: string) => void;
+  onRemove?: (id: string) => () => Promise<void>;
   isDragging?: boolean;
   showGrip?: boolean;
   showRemove?: boolean;
@@ -112,15 +113,17 @@ function SortableItemContent({
         color='blue'
         position='top-start'
       >
-        <Image
-          src={getImageUrl(item.content.thumbnailKey)}
-          width={imageSize}
-          height={imageSize}
-          radius='sm'
-          fit='cover'
-          style={{ flexShrink: 0 }}
-          fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'
-        />
+        <Link href={`/dashboard/content/${item.content.id}`}>
+          <Image
+            src={getImageUrl(item.content.thumbnailKey)}
+            width={imageSize}
+            height={imageSize}
+            radius='sm'
+            fit='cover'
+            style={{ flexShrink: 0, cursor: 'pointer' }}
+            fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'
+          />
+        </Link>
       </Indicator>
 
       <Stack gap={4} style={{ flex: 1 }}>
@@ -134,15 +137,13 @@ function SortableItemContent({
       </Stack>
 
       {showRemove && onRemove && (
-        <Tooltip label='Remove from home' withArrow>
-          <ActionIcon
-            variant='subtle'
-            color='red'
-            onClick={() => onRemove(item.contentId)}
-          >
-            <IconTrash size={18} />
-          </ActionIcon>
-        </Tooltip>
+        <DeleteButton
+          handleDelete={onRemove(item.contentId)}
+          message='Are you sure you want to remove this item from the home page?'
+          queryKey={['home-content-with-details']}
+          variant='subtle'
+          size='sm'
+        />
       )}
     </Group>
   );
@@ -153,7 +154,7 @@ function SortableItem({
   onRemove,
 }: {
   item: HomeContentItem;
-  onRemove: (id: string) => void;
+  onRemove: (id: string) => () => Promise<void>;
 }) {
   const {
     attributes,
@@ -280,59 +281,6 @@ export default function HomeContentPage() {
     },
   });
 
-  const removeMutation = useMutation({
-    mutationFn: removeContentFromHome,
-    onMutate: async (contentId: string) => {
-      await queryClient.cancelQueries({
-        queryKey: ['home-content-with-details'],
-      });
-
-      const previousData = queryClient.getQueryData<HomeContentItem[]>([
-        'home-content-with-details',
-      ]);
-
-      if (previousData) {
-        const filteredData = previousData.filter(
-          (item) => item.contentId !== contentId
-        );
-        const reindexedData = filteredData.map((item, index) => ({
-          ...item,
-          position: index,
-        }));
-
-        queryClient.setQueryData<HomeContentItem[]>(
-          ['home-content-with-details'],
-          reindexedData
-        );
-      }
-
-      return { previousData };
-    },
-    onError: (err, contentId, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(
-          ['home-content-with-details'],
-          context.previousData
-        );
-      }
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to remove content',
-        color: 'red',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['home-content-with-details'],
-      });
-      notifications.show({
-        title: 'Success',
-        message: 'Removed content from home',
-        color: 'green',
-      });
-    },
-  });
-
   const orderMutation = useMutation({
     mutationFn: updateHomeContentOrder,
     onMutate: async (updates: { id: string; position: number }[]) => {
@@ -434,17 +382,10 @@ export default function HomeContentPage() {
   );
 
   const handleRemove = useCallback(
-    (contentId: string) => {
-      modals.openConfirmModal({
-        centered: true,
-        title: 'Remove from home',
-        children: 'This item will be removed from the home page.',
-        labels: { confirm: 'Remove', cancel: 'Cancel' },
-        confirmProps: { color: 'red' },
-        onConfirm: () => removeMutation.mutate(contentId),
-      });
+    (contentId: string) => async () => {
+      await removeContentFromHome(contentId);
     },
-    [removeMutation]
+    []
   );
 
   const existingContentIds = homeContent?.map((item) => item.contentId) || [];
