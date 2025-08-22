@@ -1,18 +1,18 @@
 'use client';
 
-import { content } from '@/db/schema';
-import { Form } from '@/components/adease';
-import { TextInput, Select, Stack } from '@mantine/core';
 import LocationPicker from '@/app/components/LocationPicker';
-import FileUpload from './components/FileUpload';
-import ExistingContentDisplay from './components/ExistingContentDisplay';
-import { useState } from 'react';
-import { createInsertSchema } from 'drizzle-zod';
-import { useRouter } from 'next/navigation';
-import { uploadContentFile } from '@/server/content/uploadActions';
+import { Form } from '@/components/adease';
+import { content } from '@/db/schema';
 import { createContentLabels } from '@/server/content-labels/actions';
 import { createContentTags } from '@/server/content-tags/actions';
+import { uploadContentFile } from '@/server/content/uploadActions';
+import { Stack, Textarea } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+import { createInsertSchema } from 'drizzle-zod';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import ExistingContentDisplay from './components/ExistingContentDisplay';
+import FileUpload from './components/FileUpload';
 
 type Content = typeof content.$inferInsert;
 type FormContent = Omit<
@@ -152,6 +152,7 @@ export default function ContentForm({
           fileName: true,
           type: true,
           status: true,
+          locationId: true,
         }) as any
       }
       defaultValues={defaultValues}
@@ -174,7 +175,6 @@ export default function ContentForm({
             />
           )}
 
-          <input type='hidden' {...form.getInputProps('locationId')} />
           <LocationPicker
             label='Location'
             placeholder='Search locations'
@@ -184,6 +184,14 @@ export default function ContentForm({
               form.setFieldValue('locationId', selected.id);
               setLocationName(selected.name);
             }}
+          />
+
+          <Textarea
+            {...form.getInputProps('description')}
+            label='Description'
+            placeholder='Enter description'
+            minRows={3}
+            autosize
           />
         </Stack>
       )}

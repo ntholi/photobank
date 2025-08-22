@@ -1,7 +1,7 @@
 'use client';
 
 import { content } from '@/db/schema';
-import { getImageUrl } from '@/lib/utils';
+import { formatDateTime, getImageUrl } from '@/lib/utils';
 import { usePresignedUrl } from '@/hooks/usePresignedUrl';
 import {
   AspectRatio,
@@ -108,8 +108,8 @@ export default function ContentDisplay({ content }: Props) {
           </Tabs.Panel>
         </Tabs>
 
-        {fileName && (
-          <Box mt='sm'>
+        <Flex mt='md' justify='space-between'>
+          <Box>
             <Text size='sm' fw={500}>
               {fileName}
             </Text>
@@ -119,7 +119,7 @@ export default function ContentDisplay({ content }: Props) {
               </Text>
             )}
           </Box>
-        )}
+        </Flex>
       </Paper>
     );
   }

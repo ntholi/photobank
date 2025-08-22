@@ -1,13 +1,13 @@
-import { DetailsView, FieldView, DetailsViewBody } from '@/components/adease';
-import { notFound } from 'next/navigation';
-import { getContent, deleteContent } from '@/server/content/actions';
+import { DetailsView, DetailsViewBody, FieldView } from '@/components/adease';
+import { formatDateTime } from '@/lib/utils';
+import { deleteContent, getContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
-import ContentDisplay from '../components/ContentDisplay';
+import { Box, Fieldset, Text, Stack } from '@mantine/core';
+import { notFound } from 'next/navigation';
 import { ContentDetailsHeader } from '../components/ContentDetailsHeader';
+import ContentDisplay from '../components/ContentDisplay';
 import { ContentLabels } from '../components/ContentLabels';
 import { ContentTags } from '../components/ContentTags';
-import { Stack } from '@mantine/core';
-import { formatDate, formatDateTime } from '@/lib/utils';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -39,10 +39,16 @@ export default async function ContentDetailsPage({ params }: Props) {
       <DetailsViewBody>
         <Stack gap='xl'>
           <ContentDisplay content={content} />
+
           <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
           <FieldView label='Date Uploaded'>
             {formatDateTime(content.createdAt)}
           </FieldView>
+
+          <Fieldset legend='Description'>
+            <Text size='sm'>{content.description}</Text>
+          </Fieldset>
+
           <ContentTags contentId={content.id} />
           <ContentLabels contentId={content.id} />
         </Stack>
