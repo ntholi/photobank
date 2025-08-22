@@ -427,9 +427,8 @@ export default function HomeContentPage() {
   }, []);
 
   const handleContentSelect = useCallback(
-    (items: ContentItem[]) => {
-      const contentIds = items.map((item) => item.id);
-      addMutation.mutate(contentIds);
+    (item: ContentItem) => {
+      addMutation.mutate([item.id]);
     },
     [addMutation]
   );
@@ -564,9 +563,7 @@ export default function HomeContentPage() {
           opened={pickerOpened}
           onClose={() => setPickerOpened(false)}
           onSelect={handleContentSelect}
-          multiple
-          selectedIds={existingContentIds}
-          title='Add Content to Home Page'
+          title='Add Image to Home Page'
         />
       </Stack>
     </Container>

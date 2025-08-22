@@ -19,19 +19,18 @@ import {
   ActionIcon,
   Button,
   Box,
-  Checkbox,
   ScrollArea,
-  Flex,
   Skeleton,
+  Combobox,
+  InputBase,
+  useCombobox,
 } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { IconSearch, IconCheck, IconX, IconPhoto } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
-import {
-  getFilteredContent,
-  getAllLocations,
-  getAllTags,
-} from '@/server/content/filterActions';
+import { getFilteredContent } from '@/server/content/actions';
+import { getAllLocations } from '@/server/locations/actions';
+import { getAllTags } from '@/server/tags/actions';
 import { getImageUrl } from '@/lib/utils';
 import { content } from '@/db/schema';
 
@@ -40,9 +39,8 @@ type ContentItem = typeof content.$inferSelect;
 interface ContentPickerProps {
   opened: boolean;
   onClose: () => void;
-  onSelect: (items: ContentItem[]) => void;
-  multiple?: boolean;
-  selectedIds?: string[];
+  onSelect: (item: ContentItem) => void;
+  selectedId?: string;
   title?: string;
 }
 
@@ -67,24 +65,29 @@ export function ContentPicker({
   opened,
   onClose,
   onSelect,
-  multiple = false,
-  selectedIds = [],
-  title = 'Select Content',
+  selectedId = '',
+  title = 'Select Image',
 }: ContentPickerProps) {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [locationId, setLocationId] = useState<string | null>(null);
+  const [locationSearch, setLocationSearch] = useState('');
   const [tagIds, setTagIds] = useState<string[]>([]);
-  const [selected, setSelected] = useState<Set<string>>(new Set(selectedIds));
+  const [selected, setSelected] = useState<string>(selectedId);
   const [debouncedSearch] = useDebouncedValue(search, 300);
+  const [debouncedLocationSearch] = useDebouncedValue(locationSearch, 300);
+
+  const locationCombobox = useCombobox({
+    onDropdownClose: () => locationCombobox.resetSelectedOption(),
+  });
 
   useEffect(() => {
-    setSelected(new Set(selectedIds));
-  }, [selectedIds]);
+    setSelected(selectedId);
+  }, [selectedId]);
 
   const { data: locationsData } = useQuery({
-    queryKey: ['locations-picker'],
-    queryFn: getAllLocations,
+    queryKey: ['locations-picker', debouncedLocationSearch],
+    queryFn: () => getAllLocations(debouncedLocationSearch, 50),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -104,45 +107,41 @@ export function ContentPicker({
         locationId: locationId || undefined,
         tagIds: tagIds.length > 0 ? tagIds : undefined,
       }),
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
   });
 
-  const handleToggleSelect = useCallback(
-    (item: ContentItem) => {
-      if (multiple) {
-        const newSelected = new Set(selected);
-        if (newSelected.has(item.id)) {
-          newSelected.delete(item.id);
-        } else {
-          newSelected.add(item.id);
-        }
-        setSelected(newSelected);
-      } else {
-        setSelected(new Set([item.id]));
-      }
-    },
-    [multiple, selected]
-  );
+  const handleSelectItem = useCallback((item: ContentItem) => {
+    if (item.type === 'image') {
+      setSelected(item.id);
+    }
+  }, []);
 
   const handleConfirm = useCallback(() => {
-    if (!contentData) return;
+    if (!contentData || !selected) return;
 
-    const selectedItems = contentData.items.filter((item) =>
-      selected.has(item.id)
-    );
-    onSelect(selectedItems);
-    onClose();
+    const selectedItem = contentData.items.find((item) => item.id === selected);
+    if (selectedItem) {
+      onSelect(selectedItem);
+      onClose();
+    }
   }, [contentData, selected, onSelect, onClose]);
 
   const handleClearFilters = () => {
     setSearch('');
     setLocationId(null);
+    setLocationSearch('');
     setTagIds([]);
     setPage(1);
   };
 
   const locations = locationsData || [];
   const tags = tagsData || [];
+
+  const locationOptions = locations.map((loc) => (
+    <Combobox.Option value={loc.id} key={loc.id}>
+      {loc.name}
+    </Combobox.Option>
+  ));
 
   return (
     <Modal
@@ -165,21 +164,62 @@ export function ContentPicker({
             }}
             style={{ flex: 1 }}
           />
-          <Select
-            placeholder='Filter by location'
-            data={locations.map((loc) => ({
-              value: loc.id,
-              label: loc.name,
-            }))}
-            value={locationId}
-            onChange={(value) => {
-              setLocationId(value);
+          <Combobox
+            store={locationCombobox}
+            onOptionSubmit={(val) => {
+              setLocationId(val);
               setPage(1);
+              locationCombobox.closeDropdown();
             }}
-            clearable
-            searchable
-            style={{ minWidth: 200 }}
-          />
+          >
+            <Combobox.Target>
+              <InputBase
+                placeholder='Filter by location'
+                value={
+                  locationId
+                    ? locations.find((l) => l.id === locationId)?.name || ''
+                    : locationSearch
+                }
+                onChange={(event) => {
+                  locationCombobox.openDropdown();
+                  locationCombobox.updateSelectedOptionIndex();
+                  setLocationSearch(event.currentTarget.value);
+                }}
+                onClick={() => locationCombobox.openDropdown()}
+                onFocus={() => locationCombobox.openDropdown()}
+                onBlur={() => {
+                  locationCombobox.closeDropdown();
+                  setLocationSearch('');
+                }}
+                rightSection={
+                  locationId ? (
+                    <ActionIcon
+                      size='xs'
+                      variant='transparent'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLocationId(null);
+                        setLocationSearch('');
+                        setPage(1);
+                      }}
+                    >
+                      <IconX size={14} />
+                    </ActionIcon>
+                  ) : null
+                }
+                style={{ minWidth: 200 }}
+              />
+            </Combobox.Target>
+            <Combobox.Dropdown>
+              <Combobox.Options>
+                {locationOptions.length > 0 ? (
+                  locationOptions
+                ) : (
+                  <Combobox.Empty>No locations found</Combobox.Empty>
+                )}
+              </Combobox.Options>
+            </Combobox.Dropdown>
+          </Combobox>
           <MultiSelect
             placeholder='Filter by tags'
             data={tags.map((tag) => ({
@@ -196,14 +236,15 @@ export function ContentPicker({
             style={{ minWidth: 200 }}
           />
           {(search || locationId || tagIds.length > 0) && (
-            <ActionIcon
+            <Button
               variant='subtle'
               color='gray'
               onClick={handleClearFilters}
-              title='Clear filters'
+              leftSection={<IconX size={16} />}
+              size='sm'
             >
-              <IconX size={16} />
-            </ActionIcon>
+              Clear filters
+            </Button>
           )}
         </Group>
 
@@ -213,7 +254,8 @@ export function ContentPicker({
           ) : contentData && contentData.items.length > 0 ? (
             <Grid gutter='sm'>
               {contentData.items.map((item) => {
-                const isSelected = selected.has(item.id);
+                const isSelected = selected === item.id;
+                const isVideo = item.type === 'video';
                 return (
                   <Grid.Col
                     key={item.id}
@@ -224,7 +266,8 @@ export function ContentPicker({
                       radius='md'
                       withBorder
                       style={{
-                        cursor: 'pointer',
+                        cursor: isVideo ? 'not-allowed' : 'pointer',
+                        opacity: isVideo ? 0.6 : 1,
                         borderColor: isSelected
                           ? 'var(--mantine-color-blue-6)'
                           : undefined,
@@ -238,7 +281,7 @@ export function ContentPicker({
                           ? '0 4px 16px rgba(0, 0, 0, 0.1)'
                           : undefined,
                       }}
-                      onClick={() => handleToggleSelect(item)}
+                      onClick={() => !isVideo && handleSelectItem(item)}
                     >
                       <Card.Section>
                         <Box pos='relative'>
@@ -271,9 +314,8 @@ export function ContentPicker({
                               size='sm'
                               variant='filled'
                               color='dark'
-                              leftSection={<IconPhoto size={12} />}
                             >
-                              Video
+                              Video (not selectable)
                             </Badge>
                           )}
                         </Box>
@@ -329,11 +371,7 @@ export function ContentPicker({
 
         <Group justify='space-between'>
           <Text size='sm' c='dimmed'>
-            {multiple
-              ? `${selected.size} item${selected.size !== 1 ? 's' : ''} selected`
-              : selected.size > 0
-                ? '1 item selected'
-                : 'No items selected'}
+            {selected ? '1 image selected' : 'No image selected'}
           </Text>
           <Group gap='sm'>
             <Button variant='default' onClick={onClose}>
@@ -341,7 +379,7 @@ export function ContentPicker({
             </Button>
             <Button
               onClick={handleConfirm}
-              disabled={selected.size === 0}
+              disabled={!selected}
               leftSection={<IconCheck size={16} />}
             >
               Confirm Selection

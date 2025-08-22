@@ -24,8 +24,17 @@ export async function getLocation(id: string) {
   return service.get(id);
 }
 
-export async function getLocations(page: number = 1, search = '') {
-  return service.getAll({ page, search });
+export async function getLocations(
+  page: number = 1,
+  search = '',
+  size: number = 20
+) {
+  return service.getAll({ page, search, size });
+}
+
+export async function getAllLocations(search = '', limit: number = 100) {
+  const result = await service.getAll({ page: 1, search, size: limit });
+  return result.items || [];
 }
 
 export async function createLocation(location: Location) {

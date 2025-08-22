@@ -1,5 +1,5 @@
 import { content } from '@/db/schema';
-import ContentRepository from './repository';
+import ContentRepository, { ContentFilterOptions } from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import { serviceWrapper } from '../base/serviceWrapper';
@@ -46,6 +46,13 @@ class ContentService {
   ) {
     return withAuth(
       async () => this.repository.getContentByTag(tagId, params),
+      ['all']
+    );
+  }
+
+  async getFilteredContent(options: ContentFilterOptions) {
+    return withAuth(
+      async () => this.repository.getFilteredContent(options),
       ['all']
     );
   }

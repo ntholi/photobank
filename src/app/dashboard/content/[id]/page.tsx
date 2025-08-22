@@ -39,7 +39,6 @@ export default async function ContentDetailsPage({ params }: Props) {
       <DetailsViewBody>
         <Stack gap='xl'>
           <ContentDisplay content={content} />
-
           <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
           <FieldView label='Date Uploaded'>
             {formatDateTime(content.createdAt)}

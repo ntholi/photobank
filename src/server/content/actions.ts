@@ -4,6 +4,7 @@ import { content, contentTags } from '@/db/schema';
 import { contentService as service } from './service';
 import { generatePresignedUrl } from '@/lib/aws';
 import { eq } from 'drizzle-orm';
+import { ContentFilterOptions } from './repository';
 
 type Content = typeof content.$inferInsert;
 
@@ -53,4 +54,8 @@ export async function getContentPresignedUrl(contentId: string) {
     expiresIn: 900,
     fileName: content.fileName,
   };
+}
+
+export async function getFilteredContent(options: ContentFilterOptions) {
+  return service.getFilteredContent(options);
 }
