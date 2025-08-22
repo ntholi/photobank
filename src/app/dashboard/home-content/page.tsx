@@ -18,6 +18,9 @@ import {
   Box,
   Paper,
   Flex,
+  Tooltip,
+  HoverCard,
+  Indicator,
 } from '@mantine/core';
 import {
   IconPlus,
@@ -34,6 +37,8 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
 } from '@dnd-kit/core';
 import {
   arrayMove,
@@ -46,6 +51,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { ContentPicker } from '@/components/ContentPicker';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { notifications } from '@mantine/notifications';
+import { modals } from '@mantine/modals';
 import { getImageUrl } from '@/lib/utils';
 import {
   getAllHomeContentWithDetails,
@@ -54,6 +60,8 @@ import {
   updateHomeContentOrder,
 } from '@/server/home-contet/actions';
 import { content } from '@/db/schema';
+import { StatusBadge } from '@/app/dashboard/content/components/StatusBadge';
+import { ContentTypeBadge } from '@/app/dashboard/content/components/ContentTypeBadge';
 
 type ContentItem = typeof content.$inferSelect;
 
@@ -93,6 +101,7 @@ function SortableItem({
     transition,
     opacity: isDragging ? 0.5 : 1,
   };
+  const imageSize = 80;
 
   return (
     <div ref={setNodeRef} style={style}>
@@ -105,7 +114,7 @@ function SortableItem({
           borderColor: isDragging ? 'var(--mantine-color-blue-6)' : undefined,
         }}
       >
-        <Group gap='sm' wrap='nowrap'>
+        <Group gap='sm' wrap='nowrap' align='center'>
           <ActionIcon
             {...attributes}
             {...listeners}
@@ -116,52 +125,57 @@ function SortableItem({
             <IconGripVertical size={18} />
           </ActionIcon>
 
-          <Image
-            src={getImageUrl(item.content.thumbnailKey)}
-            width={80}
-            height={80}
-            radius='sm'
-            fit='cover'
-            fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'
-          />
+          <HoverCard position='top-start' shadow='md' withinPortal>
+            <HoverCard.Target>
+              <Indicator
+                label={item.position + 1}
+                size={20}
+                color='blue'
+                position='top-start'
+              >
+                <Image
+                  src={getImageUrl(item.content.thumbnailKey)}
+                  width={imageSize}
+                  height={imageSize}
+                  radius='sm'
+                  fit='cover'
+                  fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'
+                />
+              </Indicator>
+            </HoverCard.Target>
+            <HoverCard.Dropdown p={0}>
+              <Image
+                src={getImageUrl(item.content.thumbnailKey)}
+                width={320}
+                height={200}
+                fit='cover'
+              />
+            </HoverCard.Dropdown>
+          </HoverCard>
 
           <Stack gap={4} style={{ flex: 1 }}>
             <Text size='sm' fw={500} truncate>
               {item.content.fileName || 'Untitled'}
             </Text>
             <Group gap='xs'>
-              <Badge size='xs' variant='light'>
-                Position: {item.position + 1}
-              </Badge>
-              {item.content.type === 'video' && (
-                <Badge size='xs' variant='filled' color='blue'>
-                  Video
-                </Badge>
-              )}
-              <Badge
-                size='xs'
+              <ContentTypeBadge contentType={item.content.type} />
+              <StatusBadge
+                status={item.content.status}
                 variant='light'
-                color={
-                  item.content.status === 'published'
-                    ? 'green'
-                    : item.content.status === 'archived'
-                      ? 'gray'
-                      : 'yellow'
-                }
-              >
-                {item.content.status}
-              </Badge>
+                size='xs'
+              />
             </Group>
           </Stack>
 
-          <ActionIcon
-            variant='subtle'
-            color='red'
-            onClick={() => onRemove(item.contentId)}
-            title='Remove from home'
-          >
-            <IconTrash size={18} />
-          </ActionIcon>
+          <Tooltip label='Remove from home' withArrow>
+            <ActionIcon
+              variant='subtle'
+              color='red'
+              onClick={() => onRemove(item.contentId)}
+            >
+              <IconTrash size={18} />
+            </ActionIcon>
+          </Tooltip>
         </Group>
       </Card>
     </div>
@@ -170,6 +184,7 @@ function SortableItem({
 
 export default function HomeContentPage() {
   const [pickerOpened, setPickerOpened] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const sensors = useSensors(
@@ -267,9 +282,14 @@ export default function HomeContentPage() {
           orderMutation.mutate(updates);
         }
       }
+      setActiveId(null);
     },
     [homeContent, orderMutation]
   );
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveId(String(event.active.id));
+  }, []);
 
   const handleContentSelect = useCallback(
     (items: ContentItem[]) => {
@@ -281,7 +301,14 @@ export default function HomeContentPage() {
 
   const handleRemove = useCallback(
     (contentId: string) => {
-      removeMutation.mutate(contentId);
+      modals.openConfirmModal({
+        centered: true,
+        title: 'Remove from home',
+        children: 'This item will be removed from the home page.',
+        labels: { confirm: 'Remove', cancel: 'Cancel' },
+        confirmProps: { color: 'red' },
+        onConfirm: () => removeMutation.mutate(contentId),
+      });
     },
     [removeMutation]
   );
@@ -332,7 +359,9 @@ export default function HomeContentPage() {
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
+              onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
+              onDragCancel={() => setActiveId(null)}
             >
               <SortableContext
                 items={homeContent.map((item) => item.id)}
@@ -348,6 +377,45 @@ export default function HomeContentPage() {
                   ))}
                 </Stack>
               </SortableContext>
+              <DragOverlay>
+                {activeId
+                  ? (() => {
+                      const activeItem = homeContent?.find(
+                        (i) => i.id === activeId
+                      );
+                      if (!activeItem) return null;
+                      const imageSize = 80;
+                      return (
+                        <Card padding='sm' radius='md' withBorder>
+                          <Group gap='sm' wrap='nowrap' align='center'>
+                            <Image
+                              src={getImageUrl(activeItem.content.thumbnailKey)}
+                              width={imageSize}
+                              height={imageSize}
+                              radius='sm'
+                              fit='cover'
+                            />
+                            <Stack gap={4} style={{ flex: 1 }}>
+                              <Text size='sm' fw={500} truncate>
+                                {activeItem.content.fileName || 'Untitled'}
+                              </Text>
+                              <Group gap='xs'>
+                                <ContentTypeBadge
+                                  contentType={activeItem.content.type}
+                                />
+                                <StatusBadge
+                                  status={activeItem.content.status}
+                                  variant='light'
+                                  size='xs'
+                                />
+                              </Group>
+                            </Stack>
+                          </Group>
+                        </Card>
+                      );
+                    })()
+                  : null}
+              </DragOverlay>
             </DndContext>
           ) : (
             <Center h={200}>
