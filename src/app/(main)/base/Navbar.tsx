@@ -4,10 +4,39 @@ import React from 'react';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
 import { Button } from '@heroui/button';
 import { IoMdSearch, IoMdCamera } from 'react-icons/io';
+import { useRouter } from 'next/navigation';
 import ProfileMenu from './ProfileMenu';
 
 export default function NavbarComponent() {
   const [active, setActive] = React.useState(0);
+  const router = useRouter();
+
+  const handleMenuClick = (index: number, menu: string) => {
+    setActive(index);
+
+    if (menu === 'Home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (menu === 'Gallery') {
+      const galleryElement = document.getElementById('gallery');
+      if (galleryElement) {
+        galleryElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        router.push('/');
+        setTimeout(() => {
+          const element = document.getElementById('gallery');
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
+      }
+    } else if (menu === 'Locations') {
+      router.push('/dashboard/locations');
+    } else if (menu === 'About') {
+      console.log('About clicked');
+    } else if (menu === 'Contact') {
+      console.log('Contact clicked');
+    }
+  };
 
   return (
     <Navbar
@@ -32,7 +61,7 @@ export default function NavbarComponent() {
               className={`${
                 active === index ? 'text-primary' : 'text-white/80'
               } hover:text-white px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide`}
-              onClick={() => setActive(index)}
+              onClick={() => handleMenuClick(index, menu)}
             >
               {menu}
             </Button>

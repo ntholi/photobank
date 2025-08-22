@@ -69,6 +69,7 @@ export default function ProfileMenu() {
       <DropdownTrigger>
         <Button
           isIconOnly
+          radius='full'
           variant='light'
           className='text-white/80 p-0 min-w-fit'
           aria-label={isAuthenticated ? 'User menu' : 'Sign in menu'}
@@ -77,7 +78,7 @@ export default function ProfileMenu() {
             <Avatar
               src={session.user.image}
               size='sm'
-              className='w-6 h-6 border-2 border-white/20'
+              className='border-2 dark:border-white/20 border-black/50'
               fallback={<IoMdPerson className='text-lg' />}
             />
           ) : (

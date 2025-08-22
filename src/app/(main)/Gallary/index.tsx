@@ -77,7 +77,7 @@ export default function Gallery() {
   }
 
   return (
-    <div className='w-full'>
+    <div id='gallery' className='w-full'>
       <Masonry
         items={allItems}
         renderItem={(item) => <GalleryItem item={item} />}
