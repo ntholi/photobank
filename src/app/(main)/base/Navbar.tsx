@@ -1,63 +1,67 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
+import { Button } from '@heroui/button';
 import { IoMdSearch, IoMdPerson, IoMdCamera } from 'react-icons/io';
-import { Logo } from '@/components/icons';
 
-export default function Navbar() {
+export default function NavbarComponent() {
   const [active, setActive] = React.useState(0);
 
   return (
-    <div className='absolute mt-5 flex w-full flex-wrap items-center justify-between gap-2 px-5 text-xs font-medium uppercase opacity-90 md:px-10 z-30'>
-      {/* Logo/Brand Section */}
-      <motion.div
-        className='flex items-center gap-2 font-medium tracking-[4px] text-white'
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.2 }}
-      >
+    <Navbar
+      className='absolute mt-5 bg-transparent border-none z-30'
+      classNames={{
+        base: 'px-5 md:px-10',
+        wrapper: 'max-w-full',
+      }}
+      isBlurred={false}
+      position='static'
+    >
+      <NavbarBrand className='gap-2 font-medium tracking-[4px] text-white'>
         <IoMdCamera className='text-xl text-primary' />
         <span className='text-sm md:text-base'>LEHAKOE</span>
-      </motion.div>
+      </NavbarBrand>
 
-      {/* Navigation Menu */}
-      <ul className='flex flex-wrap items-center gap-3 text-[11px] md:gap-10'>
-        {menus.map((menu, index) => {
-          return (
-            <motion.li
-              layout
-              key={index}
+      <NavbarContent className='hidden md:flex gap-10' justify='center'>
+        {menus.map((menu, index) => (
+          <NavbarItem key={index}>
+            <Button
+              variant='light'
               className={`${
-                active === index && 'border-b-2 border-b-primary'
-              } inline-block cursor-pointer border-b-primary transition duration-300 ease-in-out hover:border-b-2 hover:text-primary text-white`}
+                active === index ? 'border-b-2 border-primary' : ''
+              } text-white hover:text-primary hover:border-b-2 hover:border-primary transition-all duration-300 ease-in-out px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide`}
               onClick={() => setActive(index)}
-              whileHover={{ y: -2 }}
-              transition={{ duration: 0.2 }}
             >
               {menu}
-            </motion.li>
-          );
-        })}
+            </Button>
+          </NavbarItem>
+        ))}
+      </NavbarContent>
 
-        {/* Action Icons */}
-        <div className='flex items-center gap-6 ml-4'>
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            transition={{ duration: 0.2 }}
-            className='cursor-pointer'
+      <NavbarContent justify='end' className='gap-6'>
+        <NavbarItem>
+          <Button
+            isIconOnly
+            variant='light'
+            className='text-white hover:text-primary transition-colors p-0 min-w-fit'
+            aria-label='Search'
           >
-            <IoMdSearch className='text-lg text-white hover:text-primary transition-colors' />
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            transition={{ duration: 0.2 }}
-            className='cursor-pointer'
+            <IoMdSearch className='text-lg' />
+          </Button>
+        </NavbarItem>
+        <NavbarItem>
+          <Button
+            isIconOnly
+            variant='light'
+            className='text-white hover:text-primary transition-colors p-0 min-w-fit'
+            aria-label='Profile'
           >
-            <IoMdPerson className='text-lg text-white hover:text-primary transition-colors' />
-          </motion.div>
-        </div>
-      </ul>
-    </div>
+            <IoMdPerson className='text-lg' />
+          </Button>
+        </NavbarItem>
+      </NavbarContent>
+    </Navbar>
   );
 }
 
