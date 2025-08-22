@@ -1,4 +1,4 @@
-import { homeContent } from '@/db/schema';
+import { homeContent, content } from '@/db/schema';
 import HomeContentRepository from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
@@ -35,6 +35,31 @@ class HomeContentService {
 
   async count() {
     return withAuth(async () => this.repository.count(), []);
+  }
+
+  async getAllWithDetails() {
+    return withAuth(async () => this.repository.getAllWithDetails(), ['all']);
+  }
+
+  async addContentToHome(contentIds: string[]) {
+    return withAuth(async () => {
+      const result = await this.repository.addContentToHome(contentIds);
+      return result;
+    }, ['moderator', 'admin']);
+  }
+
+  async removeContentFromHome(contentId: string) {
+    return withAuth(async () => {
+      const result = await this.repository.removeContentFromHome(contentId);
+      return result;
+    }, ['moderator', 'admin']);
+  }
+
+  async updateOrder(items: { id: string; position: number }[]) {
+    return withAuth(async () => {
+      const result = await this.repository.updateOrder(items);
+      return result;
+    }, ['moderator', 'admin']);
   }
 }
 
