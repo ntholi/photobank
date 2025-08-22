@@ -19,7 +19,7 @@ class TagService {
   }
 
   async getAll(params: QueryOptions<typeof tags>) {
-    return withAuth(async () => this.repository.query(params), []);
+    return withAuth(async () => this.repository.query(params), ['all']);
   }
 
   async create(data: Tag) {

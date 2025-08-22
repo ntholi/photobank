@@ -32,7 +32,7 @@ class ContentTagService {
   }
 
   async getAll(params: QueryOptions<typeof contentTags>) {
-    return withAuth(async () => this.repository.query(params), []);
+    return withAuth(async () => this.repository.query(params), ['all']);
   }
 
   async create(data: ContentTag) {
