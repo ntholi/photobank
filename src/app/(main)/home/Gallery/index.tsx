@@ -8,7 +8,6 @@ import { Masonry } from './Masonry';
 import { GallerySkeleton } from './GallerySkeleton';
 import { getImageUrl } from '@/lib/utils';
 
-// Types for the gallery
 export interface GalleryContent {
   id: string;
   type: 'image' | 'video';

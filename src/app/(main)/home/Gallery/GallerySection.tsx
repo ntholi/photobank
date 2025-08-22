@@ -3,15 +3,14 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getAllTags } from '@/server/tags/actions';
-import Gallery from './Gallery';
-import SearchBar from './home/SearchBar';
-import TagsFilter from './home/TagsFilter';
+import Gallery from './index';
+import SearchBar from './SearchBar';
+import TagsFilter from './TagsFilter';
 
 export default function GallerySection() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
-  // Pre-fetch tags for better UX
   const { data: tags = [] } = useQuery({
     queryKey: ['all-tags'],
     queryFn: getAllTags,

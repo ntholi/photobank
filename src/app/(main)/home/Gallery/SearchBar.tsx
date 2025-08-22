@@ -82,7 +82,6 @@ export default function SearchBar({
           </Button>
         </form>
 
-        {/* Subtle glow effect */}
         <div className='absolute inset-0 bg-gradient-to-r from-primary/3 via-transparent to-primary/3 rounded-xl blur-lg -z-10 opacity-40' />
       </div>
     </div>
