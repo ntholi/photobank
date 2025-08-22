@@ -81,10 +81,15 @@ export async function getFilteredContent(options: ContentFilterOptions) {
   return service.getFilteredContent(options);
 }
 
-export async function getGalleryContent(page: number = 1, search?: string) {
+export async function getGalleryContent(
+  page: number = 1,
+  search?: string,
+  tagIds?: string[]
+) {
   return service.getFilteredContent({
     page,
     size: 30,
     search,
+    tagIds,
   });
 }

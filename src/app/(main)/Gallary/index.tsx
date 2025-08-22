@@ -30,7 +30,14 @@ export interface InfiniteGalleryResponse {
   pageParams: number[];
 }
 
-export default function Gallery() {
+interface GalleryProps {
+  search?: string;
+  tagIds?: string[];
+}
+
+export default function Gallery({ search, tagIds }: GalleryProps) {
+  const queryKey = ['gallery-content', search || '', tagIds || []];
+
   const {
     data,
     fetchNextPage,
@@ -40,8 +47,9 @@ export default function Gallery() {
     isError,
     error,
   } = useInfiniteQuery({
-    queryKey: ['gallery-content'],
-    queryFn: ({ pageParam = 1 }) => getGalleryContent(pageParam),
+    queryKey,
+    queryFn: ({ pageParam = 1 }) =>
+      getGalleryContent(pageParam, search, tagIds),
     getNextPageParam: (lastPage) => {
       if (lastPage.currentPage < lastPage.totalPages) {
         return lastPage.currentPage + 1;
