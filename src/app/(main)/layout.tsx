@@ -1,9 +1,8 @@
 import '@/styles/globals.css';
-import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
 
-import { Providers } from './providers';
 import { Jost } from 'next/font/google';
+import { Providers } from './providers';
 
 const font = Jost({ subsets: ['latin'] });
 

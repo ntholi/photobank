@@ -16,7 +16,7 @@ export default function Navbar() {
         whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.2 }}
       >
-        <IoMdCamera className='text-xl text-yellow-400' />
+        <IoMdCamera className='text-xl text-primary' />
         <span className='text-sm md:text-base'>LEHAKOE</span>
       </motion.div>
 
@@ -28,8 +28,8 @@ export default function Navbar() {
               layout
               key={index}
               className={`${
-                active === index && 'border-b-2 border-b-yellow-400'
-              } inline-block cursor-pointer border-b-yellow-400 transition duration-300 ease-in-out hover:border-b-2 hover:text-yellow-400 text-white`}
+                active === index && 'border-b-2 border-b-primary'
+              } inline-block cursor-pointer border-b-primary transition duration-300 ease-in-out hover:border-b-2 hover:text-primary text-white`}
               onClick={() => setActive(index)}
               whileHover={{ y: -2 }}
               transition={{ duration: 0.2 }}
@@ -42,18 +42,18 @@ export default function Navbar() {
         {/* Action Icons */}
         <div className='flex items-center gap-6 ml-4'>
           <motion.div
-            whileHover={{ scale: 1.1, color: '#fbbf24' }}
+            whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.2 }}
             className='cursor-pointer'
           >
-            <IoMdSearch className='text-lg text-white hover:text-yellow-400 transition-colors' />
+            <IoMdSearch className='text-lg text-white hover:text-primary transition-colors' />
           </motion.div>
           <motion.div
-            whileHover={{ scale: 1.1, color: '#fbbf24' }}
+            whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.2 }}
             className='cursor-pointer'
           >
-            <IoMdPerson className='text-lg text-white hover:text-yellow-400 transition-colors' />
+            <IoMdPerson className='text-lg text-white hover:text-primary transition-colors' />
           </motion.div>
         </div>
       </ul>
