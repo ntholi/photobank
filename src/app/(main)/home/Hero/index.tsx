@@ -7,6 +7,7 @@ import BackgroundImage from './BackgroundImage';
 import Slides from './Slides';
 import SlideInfo from './SlideInfo';
 import Controls from './Controls';
+import Navbar from '../../base/Navbar';
 
 type HomeContentData = Awaited<
   ReturnType<typeof getAllHomeContentWithDetails>
@@ -94,6 +95,9 @@ export default function Hero({ content }: Props) {
           currentSlideData={currentSlideData}
         />
         <div className='absolute z-20 h-full w-full'>
+          {/* Navbar */}
+          <Navbar />
+
           <div className='flex h-full w-full grid-cols-10 flex-col md:grid'>
             <div className='col-span-4 mb-3 flex h-full flex-1 flex-col justify-end px-5 md:mb-0 md:justify-center md:px-10'>
               <SlideInfo data={transitionData || currentSlideData} />
