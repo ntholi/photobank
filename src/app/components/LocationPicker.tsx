@@ -4,11 +4,7 @@ import { Autocomplete, AutocompleteProps, Loader } from '@mantine/core';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { IconCheck, IconAlertCircle } from '@tabler/icons-react';
-import {
-  getPlaceDetails,
-  searchPlaces,
-  upsertLocationByPlaceId,
-} from '@/server/locations/actions';
+import { getPlaceDetails, searchPlaces } from '@/server/locations/actions';
 
 type LocationState = 'idle' | 'searching' | 'selecting' | 'valid' | 'invalid';
 
@@ -16,7 +12,7 @@ type Props = Omit<AutocompleteProps, 'data' | 'onOptionSubmit' | 'onSelect'> & {
   value?: string | null;
   onChange?: (value: string) => void;
   onLocationSelect?: (selected: {
-    id: string;
+    placeId: string;
     name: string;
     address?: string | null;
   }) => void;
@@ -70,10 +66,9 @@ export default function LocationPicker({
   );
 
   const getDetails = useMutation({ mutationFn: getPlaceDetails });
-  const upsert = useMutation({ mutationFn: upsertLocationByPlaceId });
 
   const getRightSectionIcon = () => {
-    if (isSearching || getDetails.isPending || upsert.isPending) {
+    if (isSearching || getDetails.isPending) {
       return <Loader size='sm' />;
     }
     if (state === 'valid') {
@@ -114,11 +109,10 @@ export default function LocationPicker({
 
         try {
           const details = await getDetails.mutateAsync(match.placeId);
-          const saved = await upsert.mutateAsync(details);
           onLocationSelect?.({
-            id: saved.id,
-            name: saved.name,
-            address: saved.address ?? null,
+            placeId: details.placeId,
+            name: details.name,
+            address: details.address ?? null,
           });
         } catch (error) {
           setSelected(null);

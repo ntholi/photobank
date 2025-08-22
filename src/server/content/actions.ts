@@ -5,8 +5,17 @@ import { contentService as service } from './service';
 import { generatePresignedUrl } from '@/lib/aws';
 import { eq } from 'drizzle-orm';
 import { ContentFilterOptions } from './repository';
+import { upsertLocationByPlaceId } from '@/server/locations/actions';
 
 type Content = typeof content.$inferInsert;
+
+type CreateContentInput = Omit<Content, 'locationId'> & {
+  locationData?: {
+    placeId: string;
+    name: string;
+    address?: string | null;
+  };
+};
 
 export async function getContent(id: string) {
   return service.get(id);
@@ -24,8 +33,20 @@ export async function getContentList(page: number = 1, search = '') {
   return service.getAll({ page, search });
 }
 
-export async function createContent(content: Content) {
-  return service.create(content);
+export async function createContent(input: CreateContentInput) {
+  let locationId: string | undefined;
+
+  if (input.locationData) {
+    const location = await upsertLocationByPlaceId(input.locationData);
+    locationId = location.id;
+  }
+
+  const contentData: Content = {
+    ...input,
+    locationId: locationId,
+  };
+
+  return service.create(contentData);
 }
 
 export async function updateContent(id: string, content: Partial<Content>) {

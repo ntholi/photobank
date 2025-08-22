@@ -2,12 +2,13 @@ import { DetailsView, DetailsViewBody, FieldView } from '@/components/adease';
 import { formatDateTime } from '@/lib/utils';
 import { deleteContent, getContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
-import { Box, Fieldset, Text, Stack } from '@mantine/core';
+import { Box, Fieldset, Text, Stack, Anchor } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import { ContentDetailsHeader } from '../components/ContentDetailsHeader';
 import ContentDisplay from '../components/ContentDisplay';
 import { ContentLabels } from '../components/ContentLabels';
 import { ContentTags } from '../components/ContentTags';
+import Link from 'next/link';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -39,7 +40,18 @@ export default async function ContentDetailsPage({ params }: Props) {
       <DetailsViewBody>
         <Stack gap='xl'>
           <ContentDisplay content={content} />
-          <FieldView label='Location'>{location?.name ?? '-'}</FieldView>
+          <FieldView label='Location'>
+            {location ? (
+              <Anchor
+                component={Link}
+                href={`/dashboard/locations/${location.id}`}
+              >
+                {location.name}
+              </Anchor>
+            ) : (
+              '-'
+            )}
+          </FieldView>
           <FieldView label='Date Uploaded'>
             {formatDateTime(content.createdAt)}
           </FieldView>

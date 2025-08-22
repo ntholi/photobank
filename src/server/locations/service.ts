@@ -43,14 +43,7 @@ class LocationService {
     address?: string | null;
   }) {
     return withAuth(async () => {
-      const existing = await this.repository.findById(data.placeId);
-      if (existing) return existing;
-      const entity: Location = {
-        placeId: data.placeId,
-        name: data.name,
-        address: data.address ?? null,
-      };
-      return this.repository.create(entity);
+      return this.repository.upsertByPlaceId(data);
     }, ['contributor']);
   }
 }

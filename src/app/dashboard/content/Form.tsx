@@ -15,20 +15,16 @@ import ExistingContentDisplay from './components/ExistingContentDisplay';
 import FileUpload from './components/FileUpload';
 
 type Content = typeof content.$inferInsert;
-type FormContent = Omit<
-  Content,
-  | 's3Key'
-  | 'thumbnailKey'
-  | 'watermarkedKey'
-  | 'fileSize'
-  | 'fileName'
-  | 'id'
-  | 'createdAt'
-  | 'updatedAt'
->;
+type FormContent = Omit<Content, 'id' | 'createdAt' | 'updatedAt'> & {
+  locationData?: {
+    placeId: string;
+    name: string;
+    address?: string | null;
+  };
+};
 
 type Props = {
-  onSubmit: (values: Content) => Promise<Content>;
+  onSubmit: (values: FormContent) => Promise<Content>;
   defaultValues?: Content;
   onSuccess?: (value: Content) => void;
   onError?: (
@@ -48,6 +44,14 @@ export default function ContentForm({
   const [locationName, setLocationName] = useState<string>(
     initialLocationName ?? ''
   );
+  const [locationData, setLocationData] = useState<
+    | {
+        placeId: string;
+        name: string;
+        address?: string | null;
+      }
+    | undefined
+  >();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
@@ -60,7 +64,7 @@ export default function ContentForm({
 
         const uploadResult = await uploadContentFile(formData);
 
-        const contentData: Content = {
+        const contentData: FormContent = {
           ...values,
           fileName: uploadResult.fileName,
           s3Key: uploadResult.key,
@@ -68,6 +72,7 @@ export default function ContentForm({
           watermarkedKey: uploadResult.watermarkedKey,
           fileSize: uploadResult.fileSize,
           type: selectedFile.type.startsWith('image/') ? 'image' : 'video',
+          locationData: locationData,
         };
 
         const createdContent = await onSubmit(contentData);
@@ -131,7 +136,11 @@ export default function ContentForm({
         setUploading(false);
       }
     } else {
-      return await onSubmit(values as Content);
+      const formContentData: FormContent = {
+        ...values,
+        locationData: locationData,
+      };
+      return await onSubmit(formContentData);
     }
   };
 
@@ -181,7 +190,7 @@ export default function ContentForm({
             value={locationName}
             onChange={(v) => setLocationName(v)}
             onLocationSelect={(selected) => {
-              form.setFieldValue('locationId', selected.id);
+              setLocationData(selected);
               setLocationName(selected.name);
             }}
           />
