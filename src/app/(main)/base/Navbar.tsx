@@ -29,8 +29,8 @@ export default function NavbarComponent() {
             <Button
               variant='light'
               className={`${
-                active === index ? 'border-b-2 border-primary' : ''
-              } text-white hover:text-primary hover:border-b-2 hover:border-primary transition-all duration-300 ease-in-out px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide`}
+                active === index ? 'text-primary' : 'text-white/80'
+              } hover:text-white px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide`}
               onClick={() => setActive(index)}
             >
               {menu}
@@ -44,7 +44,7 @@ export default function NavbarComponent() {
           <Button
             isIconOnly
             variant='light'
-            className='text-white hover:text-primary transition-colors p-0 min-w-fit'
+            className='text-white/80 hover:text-white p-0 min-w-fit'
             aria-label='Search'
           >
             <IoMdSearch className='text-lg' />
@@ -54,7 +54,7 @@ export default function NavbarComponent() {
           <Button
             isIconOnly
             variant='light'
-            className='text-white hover:text-primary transition-colors p-0 min-w-fit'
+            className='text-white/80 hover:text-white p-0 min-w-fit'
             aria-label='Profile'
           >
             <IoMdPerson className='text-lg' />
