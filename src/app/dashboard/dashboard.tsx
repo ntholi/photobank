@@ -19,6 +19,7 @@ import {
   Icon,
   IconChevronRight,
   IconFile,
+  IconHome,
   IconLogout2,
   IconMapPin,
   IconPhoto,
@@ -56,15 +57,15 @@ export type NavItem = {
 
 const navigation: NavItem[] = [
   {
-    label: 'Users',
-    href: '/dashboard/users',
-    icon: IconUsers,
+    label: 'Home',
+    href: '/dashboard/home-content',
+    icon: IconHome,
     roles: ['admin'],
   },
   {
-    label: 'Home Content',
-    href: '/dashboard/home-content',
-    icon: IconPhoto,
+    label: 'Users',
+    href: '/dashboard/users',
+    icon: IconUsers,
     roles: ['admin'],
   },
   {
