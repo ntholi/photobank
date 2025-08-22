@@ -2,7 +2,9 @@
 
 import { getAllHomeContentWithDetails } from '@/server/home-contet/actions';
 import React from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Button } from '@heroui/button';
+import { IconChevronDown } from '@tabler/icons-react';
 import BackgroundImage from './BackgroundImage';
 import Slides from './Slides';
 import SlideInfo from './SlideInfo';
@@ -51,6 +53,13 @@ export default function Hero({ content }: Props) {
   const [currentSlideData, setCurrentSlideData] =
     React.useState<ContentData | null>(transformedContent[0] || null);
   const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  const handleScrollToGallery = () => {
+    const el = document.getElementById('gallery');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   const handlePrev = () => {
     if (!transitionData && !currentSlideData) return;
@@ -113,6 +122,27 @@ export default function Hero({ content }: Props) {
               onNext={handleNext}
             />
           </div>
+        </div>
+        <div className='absolute bottom-6 left-0 right-0 z-30 flex w-full justify-center'>
+          <Button
+            radius='full'
+            variant='light'
+            size='lg'
+            isIconOnly
+            onPress={handleScrollToGallery}
+            aria-label='Scroll to gallery'
+          >
+            <motion.span
+              animate={{ y: [0, 6, 0] }}
+              transition={{
+                duration: 1.6,
+                ease: 'easeInOut',
+                repeat: Infinity,
+              }}
+            >
+              <IconChevronDown className='text-gray-50' size={22} />
+            </motion.span>
+          </Button>
         </div>
       </div>
     </main>
