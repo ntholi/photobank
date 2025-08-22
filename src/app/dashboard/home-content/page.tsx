@@ -8,7 +8,6 @@ import { getImageUrl } from '@/lib/utils';
 import {
   addContentToHome,
   getAllHomeContentWithDetails,
-  removeContentFromHome,
   updateHomeContentOrder,
 } from '@/server/home-contet/actions';
 import {
@@ -53,6 +52,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
+import { removeContentFromHome } from '@/server/home-contet/actions';
 
 interface HomeContentItem {
   id: string;
@@ -69,13 +69,7 @@ interface HomeContentItem {
   };
 }
 
-function SortableItem({
-  item,
-  onRemove,
-}: {
-  item: HomeContentItem;
-  onRemove: (id: string) => () => Promise<void>;
-}) {
+function SortableItem({ item }: { item: HomeContentItem }) {
   const {
     attributes,
     listeners,
@@ -90,6 +84,10 @@ function SortableItem({
     transition,
     opacity: isDragging ? 0.5 : 1,
   };
+
+  const handleDeleteItem = useCallback(async () => {
+    await removeContentFromHome(item.contentId);
+  }, [item.contentId]);
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
@@ -133,7 +131,7 @@ function SortableItem({
           </Stack>
 
           <DeleteButton
-            handleDelete={onRemove(item.contentId)}
+            handleDelete={handleDeleteItem}
             message='Are you sure you want to remove this item from the home page?'
             queryKey={['home-content-with-details']}
             variant='subtle'
@@ -184,16 +182,61 @@ export default function HomeContentPage() {
 
   const orderMutation = useMutation({
     mutationFn: updateHomeContentOrder,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onMutate: async (updates: { id: string; position: number }[]) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({
         queryKey: ['home-content-with-details'],
       });
+
+      // Snapshot the previous value
+      const previousData = queryClient.getQueryData<HomeContentItem[]>([
+        'home-content-with-details',
+      ]);
+
+      // Optimistically update to the new value
+      if (previousData) {
+        const updatedData = [...previousData];
+        updates.forEach((update) => {
+          const itemIndex = updatedData.findIndex(
+            (item) => item.id === update.id
+          );
+          if (itemIndex !== -1) {
+            updatedData[itemIndex] = {
+              ...updatedData[itemIndex],
+              position: update.position,
+            };
+          }
+        });
+
+        updatedData.sort((a, b) => a.position - b.position);
+
+        queryClient.setQueryData<HomeContentItem[]>(
+          ['home-content-with-details'],
+          updatedData
+        );
+      }
+
+      // Return a context object with the snapshotted value
+      return { previousData };
     },
-    onError: () => {
+    onError: (err, updates, context) => {
+      // If the mutation fails, use the context returned from onMutate to roll back
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          ['home-content-with-details'],
+          context.previousData
+        );
+      }
       notifications.show({
         title: 'Error',
         message: 'Failed to update order',
         color: 'red',
+      });
+    },
+    onSuccess: () => {
+      // Optionally invalidate queries to ensure data consistency
+      queryClient.invalidateQueries({
+        queryKey: ['home-content-with-details'],
       });
     },
   });
@@ -223,13 +266,6 @@ export default function HomeContentPage() {
       setPickerOpened(false);
     },
     [addMutation]
-  );
-
-  const handleRemove = useCallback(
-    (contentId: string) => async () => {
-      await removeContentFromHome(contentId);
-    },
-    []
   );
 
   if (isLoading) {
@@ -284,11 +320,7 @@ export default function HomeContentPage() {
               >
                 <Stack gap='sm'>
                   {homeContent.map((item) => (
-                    <SortableItem
-                      key={item.id}
-                      item={item}
-                      onRemove={handleRemove}
-                    />
+                    <SortableItem key={item.id} item={item} />
                   ))}
                 </Stack>
               </SortableContext>
