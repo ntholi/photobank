@@ -45,7 +45,7 @@ export default async function ContentDetailsPage({ params }: Props) {
           </FieldView>
 
           <Fieldset legend='Description'>
-            <Text size='sm'>{content.description}</Text>
+            <Text size='sm'>{content.description || '-'}</Text>
           </Fieldset>
 
           <ContentTags contentId={content.id} />

@@ -51,7 +51,7 @@ import {
 } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { removeContentFromHome } from '@/server/home-contet/actions';
 
 interface HomeContentItem {
@@ -85,9 +85,9 @@ function SortableItem({ item }: { item: HomeContentItem }) {
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const handleDeleteItem = useCallback(async () => {
+  const handleDeleteItem = async () => {
     await removeContentFromHome(item.contentId);
-  }, [item.contentId]);
+  };
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
@@ -241,32 +241,26 @@ export default function HomeContentPage() {
     },
   });
 
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      const { active, over } = event;
-      if (active.id !== over?.id && homeContent) {
-        const oldIndex = homeContent.findIndex((item) => item.id === active.id);
-        const newIndex = homeContent.findIndex((item) => item.id === over?.id);
-        if (oldIndex !== -1 && newIndex !== -1) {
-          const newOrder = arrayMove(homeContent, oldIndex, newIndex);
-          const updates = newOrder.map((item, index) => ({
-            id: item.id,
-            position: index,
-          }));
-          orderMutation.mutate(updates);
-        }
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (active.id !== over?.id && homeContent) {
+      const oldIndex = homeContent.findIndex((item) => item.id === active.id);
+      const newIndex = homeContent.findIndex((item) => item.id === over?.id);
+      if (oldIndex !== -1 && newIndex !== -1) {
+        const newOrder = arrayMove(homeContent, oldIndex, newIndex);
+        const updates = newOrder.map((item, index) => ({
+          id: item.id,
+          position: index,
+        }));
+        orderMutation.mutate(updates);
       }
-    },
-    [homeContent, orderMutation]
-  );
+    }
+  };
 
-  const handleContentSelect = useCallback(
-    (item: { id: string }) => {
-      addMutation.mutate([item.id]);
-      setPickerOpened(false);
-    },
-    [addMutation]
-  );
+  const handleContentSelect = (item: { id: string }) => {
+    addMutation.mutate([item.id]);
+    setPickerOpened(false);
+  };
 
   if (isLoading) {
     return (
