@@ -77,6 +77,77 @@ interface HomeContentItem {
   };
 }
 
+function SortableItemContent({
+  item,
+  onRemove,
+  isDragging = false,
+  showGrip = true,
+  showRemove = true,
+}: {
+  item: HomeContentItem;
+  onRemove?: (id: string) => void;
+  isDragging?: boolean;
+  showGrip?: boolean;
+  showRemove?: boolean;
+}) {
+  const imageSize = 80;
+
+  return (
+    <Group gap='sm' wrap='nowrap' align='center'>
+      {showGrip && (
+        <ActionIcon
+          variant='subtle'
+          color='gray'
+          style={{
+            cursor: isDragging ? 'grabbing' : 'grab',
+          }}
+        >
+          <IconGripVertical size={18} />
+        </ActionIcon>
+      )}
+
+      <Indicator
+        label={item.position + 1}
+        size={20}
+        color='blue'
+        position='top-start'
+      >
+        <Image
+          src={getImageUrl(item.content.thumbnailKey)}
+          width={imageSize}
+          height={imageSize}
+          radius='sm'
+          fit='cover'
+          style={{ flexShrink: 0 }}
+          fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'
+        />
+      </Indicator>
+
+      <Stack gap={4} style={{ flex: 1 }}>
+        <Text size='sm' fw={500} truncate>
+          {item.content.fileName || 'Untitled'}
+        </Text>
+        <Group gap='xs'>
+          <ContentTypeBadge contentType={item.content.type} />
+          <StatusBadge status={item.content.status} variant='light' size='xs' />
+        </Group>
+      </Stack>
+
+      {showRemove && onRemove && (
+        <Tooltip label='Remove from home' withArrow>
+          <ActionIcon
+            variant='subtle'
+            color='red'
+            onClick={() => onRemove(item.contentId)}
+          >
+            <IconTrash size={18} />
+          </ActionIcon>
+        </Tooltip>
+      )}
+    </Group>
+  );
+}
+
 function SortableItem({
   item,
   onRemove,
@@ -109,7 +180,6 @@ function SortableItem({
     opacity: isDragging ? 0.5 : 1,
     width: '100%',
   };
-  const imageSize = 80;
 
   return (
     <div ref={setNodeRef} style={style}>
@@ -118,61 +188,16 @@ function SortableItem({
         radius='md'
         withBorder
         style={{
-          borderColor: isDragging ? 'var(--mantine-color-blue-6)' : undefined,
+          borderStyle: isDragging ? 'dashed' : 'solid',
         }}
       >
-        <Group gap='sm' wrap='nowrap' align='center'>
-          <ActionIcon
-            {...attributes}
-            {...listeners}
-            variant='subtle'
-            color='gray'
-            style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-          >
-            <IconGripVertical size={18} />
-          </ActionIcon>
-
-          <Indicator
-            label={item.position + 1}
-            size={20}
-            color='blue'
-            position='top-start'
-          >
-            <Image
-              src={getImageUrl(item.content.thumbnailKey)}
-              width={imageSize}
-              height={imageSize}
-              radius='sm'
-              fit='cover'
-              style={{ flexShrink: 0 }}
-              fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'
-            />
-          </Indicator>
-
-          <Stack gap={4} style={{ flex: 1 }}>
-            <Text size='sm' fw={500} truncate>
-              {item.content.fileName || 'Untitled'}
-            </Text>
-            <Group gap='xs'>
-              <ContentTypeBadge contentType={item.content.type} />
-              <StatusBadge
-                status={item.content.status}
-                variant='light'
-                size='xs'
-              />
-            </Group>
-          </Stack>
-
-          <Tooltip label='Remove from home' withArrow>
-            <ActionIcon
-              variant='subtle'
-              color='red'
-              onClick={() => onRemove(item.contentId)}
-            >
-              <IconTrash size={18} />
-            </ActionIcon>
-          </Tooltip>
-        </Group>
+        <div {...attributes} {...listeners}>
+          <SortableItemContent
+            item={item}
+            onRemove={onRemove}
+            isDragging={isDragging}
+          />
+        </div>
       </Card>
     </div>
   );
@@ -497,34 +522,21 @@ export default function HomeContentPage() {
                         (i) => i.id === activeId
                       );
                       if (!activeItem) return null;
-                      const imageSize = 80;
                       return (
-                        <Card padding='sm' radius='md' withBorder>
-                          <Group gap='sm' wrap='nowrap' align='center'>
-                            <Image
-                              src={getImageUrl(activeItem.content.thumbnailKey)}
-                              width={imageSize}
-                              height={imageSize}
-                              radius='sm'
-                              fit='cover'
-                              style={{ flexShrink: 0 }}
-                            />
-                            <Stack gap={4} style={{ flex: 1 }}>
-                              <Text size='sm' fw={500} truncate>
-                                {activeItem.content.fileName || 'Untitled'}
-                              </Text>
-                              <Group gap='xs'>
-                                <ContentTypeBadge
-                                  contentType={activeItem.content.type}
-                                />
-                                <StatusBadge
-                                  status={activeItem.content.status}
-                                  variant='light'
-                                  size='xs'
-                                />
-                              </Group>
-                            </Stack>
-                          </Group>
+                        <Card
+                          padding='sm'
+                          radius='md'
+                          withBorder
+                          shadow='md'
+                          style={{
+                            cursor: 'grabbing',
+                          }}
+                        >
+                          <SortableItemContent
+                            item={activeItem}
+                            isDragging={false}
+                            showRemove={false}
+                          />
                         </Card>
                       );
                     })()
