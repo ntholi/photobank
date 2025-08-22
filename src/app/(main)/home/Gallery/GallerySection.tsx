@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getAllTags } from '@/server/tags/actions';
-import Gallery from './Gallary';
+import Gallery from './Gallery';
 import SearchBar from './home/SearchBar';
 import TagsFilter from './home/TagsFilter';
 
