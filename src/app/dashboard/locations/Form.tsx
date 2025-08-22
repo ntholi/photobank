@@ -15,6 +15,8 @@ import {
   ActionIcon,
   Image,
   Alert,
+  Tooltip,
+  Paper,
 } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
@@ -127,6 +129,7 @@ export default function LocationForm({
         onSuccess={({ id }) => {
           router.push(`/dashboard/locations/${id}`);
         }}
+        p={'xs'}
       >
         {(form) => (
           <Tabs defaultValue='about' keepMounted={false}>
@@ -138,25 +141,24 @@ export default function LocationForm({
 
             <Tabs.Panel value='about' pt='xl'>
               <Stack gap='md'>
-                <Group justify='space-between' align='flex-start'>
-                  <Text size='sm' fw={500}>
-                    About Information
-                  </Text>
-                  <Button
-                    variant='light'
-                    size='sm'
-                    onClick={handleGeneratePromotion}
-                    loading={isGeneratingPromotion}
-                    leftSection={<IconSparkles size={16} />}
-                    disabled={!defaultValues?.name}
-                  >
-                    {isGeneratingPromotion
-                      ? 'Generating...'
-                      : 'Generate Tourism Content'}
-                  </Button>
-                </Group>
                 <RichTextField
-                  label=''
+                  label={
+                    <Group gap='lg'>
+                      <Text fw={500}>About {defaultValues?.name}</Text>
+                      <Tooltip label='Use AI to generate tourism promotion'>
+                        <ActionIcon
+                          variant='gradient'
+                          gradient={{ from: 'blue', to: 'green', deg: 90 }}
+                          size='sm'
+                          onClick={handleGeneratePromotion}
+                          loading={isGeneratingPromotion}
+                          disabled={!defaultValues?.name}
+                        >
+                          <IconSparkles size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                    </Group>
+                  }
                   value={aboutContent}
                   onChange={setAboutContent}
                   height={400}
@@ -166,7 +168,7 @@ export default function LocationForm({
 
             <Tabs.Panel value='content' pt='xl'>
               <Stack gap='md'>
-                <Card withBorder padding='md'>
+                <Paper withBorder p='md'>
                   <Group justify='space-between' mb='md'>
                     <Text size='lg' fw={500}>
                       Cover Content
@@ -230,7 +232,7 @@ export default function LocationForm({
                       </Stack>
                     </Card>
                   )}
-                </Card>
+                </Paper>
               </Stack>
             </Tabs.Panel>
 

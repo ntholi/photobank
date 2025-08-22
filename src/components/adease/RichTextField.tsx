@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 type Props = {
   height?: number;
   defaultValue?: string;
-  label?: string;
+  label?: React.ReactNode;
   value?: string;
   onChange?: (value: string) => void;
 } & InputProps;
@@ -65,8 +65,12 @@ export default function RichTextField(props: Props) {
         />
       </Modal>
 
-      <Group justify='space-between' align='end'>
-        <Text fw='bold'>{props.label}</Text>
+      <Group justify='space-between' align='end' mb='md'>
+        {typeof props.label === 'string' ? (
+          <Text fw='bold'>{props.label}</Text>
+        ) : (
+          props.label
+        )}
         <ActionIcon variant='default' onClick={open}>
           <IconMaximize size={'1rem'} />
         </ActionIcon>
