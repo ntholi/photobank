@@ -18,7 +18,6 @@ export default function Progress({ curIndex, length }: Props) {
         />
       </div>
       <span
-        key={curIndex}
         style={{
           overflow: 'hidden',
           display: 'inline-block',

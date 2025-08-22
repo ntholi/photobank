@@ -157,7 +157,7 @@ export function Navigation({ navigation }: { navigation: NavItem[] }) {
   return (
     <>
       {navigation.map((item, index) => (
-        <DisplayWithNotification key={index} item={item} />
+        <DisplayWithNotification key={`nav-${index}`} item={item} />
       ))}
     </>
   );
@@ -239,7 +239,7 @@ function ItemDisplay({ item }: { item: NavItem }) {
       opened={!!item.children}
     >
       {item.children?.map((child, index) => (
-        <DisplayWithNotification key={index} item={child} />
+        <DisplayWithNotification key={`child-${index}`} item={child} />
       ))}
     </NavLink>
   );

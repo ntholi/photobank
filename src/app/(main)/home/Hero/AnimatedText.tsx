@@ -25,7 +25,11 @@ export default function AnimatedText({ data, className }: Props) {
         display: 'inline-block',
       }}
     >
-      <motion.p className={className} variants={item} key={data}>
+      <motion.p
+        className={className}
+        variants={item}
+        key={data || 'animated-text'}
+      >
         {data}
       </motion.p>
     </span>

@@ -25,7 +25,7 @@ export default function NavbarComponent() {
 
       <NavbarContent className='hidden md:flex gap-10' justify='center'>
         {menus.map((menu, index) => (
-          <NavbarItem key={index}>
+          <NavbarItem key={menu}>
             <Button
               variant='light'
               className={`${

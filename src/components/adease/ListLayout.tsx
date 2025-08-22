@@ -107,7 +107,9 @@ export function ListLayout<T>({
                   <SearchField style={{ width: '100%' }} />
                 </Group>
                 {actionIcons?.map((component, index) => (
-                  <React.Fragment key={index}>{component}</React.Fragment>
+                  <React.Fragment key={`action-${index}`}>
+                    {component}
+                  </React.Fragment>
                 ))}
               </Flex>
             </Stack>
@@ -118,13 +120,13 @@ export function ListLayout<T>({
               {isLoading ? (
                 <Stack gap='sm'>
                   {Array.from({ length: 5 }).map((_, index) => (
-                    <Skeleton height={35} key={index} />
+                    <Skeleton height={35} key={`skeleton-${index}`} />
                   ))}
                 </Stack>
               ) : (
                 <Stack gap={3}>
                   {items.map((item: T, index: number) => (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={`item-${index}`}>
                       {renderListItem(item)}
                     </React.Fragment>
                   ))}
