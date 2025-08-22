@@ -12,7 +12,6 @@ import {
 import {
   Tabs,
   Stack,
-  Group,
   Text,
   Card,
   Image,
@@ -56,32 +55,27 @@ export default async function LocationDetails({ params }: Props) {
 
           <TabsPanel value='about' pt='xl'>
             <Stack gap='md'>
-              <Group align='flex-start' gap='lg' wrap='nowrap'>
-                {location.coverContent ? (
-                  <Card withBorder padding='xs' radius='md'>
-                    <Image
-                      src={getImageUrl(
-                        location.coverContent.thumbnailKey ||
-                          location.coverContent.s3Key
-                      )}
-                      height={180}
-                      width={180}
-                      fit='cover'
-                      radius='md'
-                      alt={location.coverContent.fileName || 'Cover content'}
-                    />
-                  </Card>
-                ) : null}
-                <Box style={{ flex: 1 }}>
-                  {location.about ? (
-                    <Box dangerouslySetInnerHTML={{ __html: location.about }} />
-                  ) : (
-                    <Text size='sm' c='dimmed'>
-                      No information available.
-                    </Text>
-                  )}
-                </Box>
-              </Group>
+              {location.coverContent ? (
+                <Card withBorder padding='xs' radius='md'>
+                  <Image
+                    src={getImageUrl(
+                      location.coverContent.thumbnailKey ||
+                        location.coverContent.s3Key
+                    )}
+                    height={220}
+                    fit='cover'
+                    radius='md'
+                    alt={location.coverContent.fileName || 'Cover content'}
+                  />
+                </Card>
+              ) : null}
+              {location.about ? (
+                <Box dangerouslySetInnerHTML={{ __html: location.about }} />
+              ) : (
+                <Text size='sm' c='dimmed'>
+                  No information available.
+                </Text>
+              )}
             </Stack>
           </TabsPanel>
 
