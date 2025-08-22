@@ -1,0 +1,1 @@
+ALTER TABLE "location_details" ADD COLUMN "about" text;

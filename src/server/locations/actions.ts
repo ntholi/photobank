@@ -49,11 +49,11 @@ export async function deleteLocation(id: string) {
   return service.delete(id);
 }
 
-export async function updateLocationCoverContent(
+export async function updateLocationDetails(
   locationId: string,
-  coverContentId: string | null
+  data: { coverContentId?: string | null; about?: string }
 ) {
-  return service.updateCoverContent(locationId, coverContentId);
+  return service.updateLocationDetails(locationId, data);
 }
 
 export async function getLocationWithCoverContent(id: string) {

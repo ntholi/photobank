@@ -47,9 +47,12 @@ class LocationService {
     }, ['contributor']);
   }
 
-  async updateCoverContent(locationId: string, coverContentId: string | null) {
+  async updateLocationDetails(
+    locationId: string,
+    data: { coverContentId?: string | null; about?: string }
+  ) {
     return withAuth(async () => {
-      return this.repository.updateCoverContent(locationId, coverContentId);
+      return this.repository.updateLocationDetails(locationId, data);
     }, ['contributor']);
   }
 

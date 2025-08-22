@@ -161,6 +161,7 @@ export const locationDetails = pgTable('location_details', {
   coverContentId: varchar({ length: 21 }).references(() => content.id, {
     onDelete: 'set null',
   }),
+  about: text(),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
   updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
 });

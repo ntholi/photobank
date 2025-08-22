@@ -17,7 +17,7 @@ export default async function LocationEdit({ params }: Props) {
     return notFound();
   }
 
-  const { coverContent, ...location } = locationData;
+  const { coverContent, about, ...location } = locationData;
 
   return (
     <Box p={'lg'}>
@@ -25,6 +25,7 @@ export default async function LocationEdit({ params }: Props) {
         title={'Edit Location'}
         defaultValues={location}
         defaultCoverContent={coverContent}
+        defaultAbout={about || undefined}
         onSubmit={async (value) => {
           'use server';
           return await updateLocation(id, value);

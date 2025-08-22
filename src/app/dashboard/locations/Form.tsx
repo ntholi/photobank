@@ -18,9 +18,10 @@ import {
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { ContentPicker } from '@/components/ContentPicker';
+import RichTextField from '@/components/adease/RichTextField';
 import { IconX, IconPhoto } from '@tabler/icons-react';
 import { getImageUrl } from '@/lib/utils';
-import { updateLocationCoverContent } from '@/server/locations/actions';
+import { updateLocationDetails } from '@/server/locations/actions';
 
 type Location = typeof locations.$inferInsert;
 type ContentItem = typeof content.$inferSelect;
@@ -29,6 +30,7 @@ type Props = {
   onSubmit: (values: Location) => Promise<Location>;
   defaultValues?: Location;
   defaultCoverContent?: ContentItem | null;
+  defaultAbout?: string;
   onSuccess?: (value: Location) => void;
   onError?: (
     error: Error | React.SyntheticEvent<HTMLDivElement, Event>
@@ -40,18 +42,26 @@ export default function LocationForm({
   onSubmit,
   defaultValues,
   defaultCoverContent,
+  defaultAbout,
   title,
 }: Props) {
   const router = useRouter();
   const [showContentPicker, setShowContentPicker] = useState(false);
   const [selectedCoverContent, setSelectedCoverContent] =
     useState<ContentItem | null>(null);
+  const [aboutContent, setAboutContent] = useState('');
 
   useEffect(() => {
     if (defaultCoverContent) {
       setSelectedCoverContent(defaultCoverContent);
     }
   }, [defaultCoverContent]);
+
+  useEffect(() => {
+    if (defaultAbout) {
+      setAboutContent(defaultAbout);
+    }
+  }, [defaultAbout]);
 
   const handleContentSelect = (item: ContentItem) => {
     setSelectedCoverContent(item);
@@ -66,10 +76,10 @@ export default function LocationForm({
     const location = await onSubmit(values);
 
     if (location?.id) {
-      await updateLocationCoverContent(
-        location.id,
-        selectedCoverContent?.id || null
-      );
+      await updateLocationDetails(location.id, {
+        coverContentId: selectedCoverContent?.id || null,
+        about: aboutContent,
+      });
     }
 
     return location;
@@ -92,6 +102,7 @@ export default function LocationForm({
             <Tabs.List>
               <Tabs.Tab value='details'>Location Details</Tabs.Tab>
               <Tabs.Tab value='content'>Cover Content</Tabs.Tab>
+              <Tabs.Tab value='about'>About</Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel value='details' pt='xl'>
@@ -172,6 +183,17 @@ export default function LocationForm({
                     </Card>
                   )}
                 </Card>
+              </Stack>
+            </Tabs.Panel>
+
+            <Tabs.Panel value='about' pt='xl'>
+              <Stack gap='md'>
+                <RichTextField
+                  label='About Information'
+                  value={aboutContent}
+                  onChange={setAboutContent}
+                  height={400}
+                />
               </Stack>
             </Tabs.Panel>
           </Tabs>

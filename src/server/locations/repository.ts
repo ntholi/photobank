@@ -35,16 +35,23 @@ export default class LocationRepository extends BaseRepository<
     return result[0];
   }
 
-  async updateCoverContent(locationId: string, coverContentId: string | null) {
+  async updateLocationDetails(
+    locationId: string,
+    data: { coverContentId?: string | null; about?: string }
+  ) {
     await db
       .insert(locationDetails)
       .values({
         locationId,
-        coverContentId,
+        coverContentId: data.coverContentId,
+        about: data.about,
       })
       .onConflictDoUpdate({
         target: locationDetails.locationId,
-        set: { coverContentId },
+        set: {
+          coverContentId: data.coverContentId,
+          about: data.about,
+        },
       });
 
     const result = await db
@@ -67,20 +74,24 @@ export default class LocationRepository extends BaseRepository<
       .limit(1)
       .then(([result]) => result || null);
 
-    if (!locationDetail || !locationDetail.coverContentId) {
-      return { ...location, coverContent: null };
+    if (!locationDetail) {
+      return { ...location, coverContent: null, about: null };
     }
 
-    const coverContent = await db
-      .select()
-      .from(content)
-      .where(eq(content.id, locationDetail.coverContentId))
-      .limit(1)
-      .then(([result]) => result || null);
+    let coverContent = null;
+    if (locationDetail.coverContentId) {
+      coverContent = await db
+        .select()
+        .from(content)
+        .where(eq(content.id, locationDetail.coverContentId))
+        .limit(1)
+        .then(([result]) => result || null);
+    }
 
     return {
       ...location,
       coverContent,
+      about: locationDetail.about || null,
     };
   }
 }
