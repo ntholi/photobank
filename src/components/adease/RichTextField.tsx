@@ -26,6 +26,12 @@ export default function RichTextField(props: Props) {
     props.value || props.defaultValue || ''
   );
 
+  useEffect(() => {
+    if (props.value !== undefined) {
+      setContent(props.value);
+    }
+  }, [props.value]);
+
   const handleContentChange = (newContent: string) => {
     setContent(newContent);
     props.onChange?.(newContent);

@@ -36,6 +36,14 @@ export async function generateTourismPromotion({
 
     const instruction = `You are a tourism marketing expert specializing in Lesotho tourism promotion. Your task is to create compelling promotional content for a location in Lesotho.
 
+CRITICAL ACCURACY REQUIREMENTS:
+- You MUST be 100% factually accurate in ALL statements
+- You MUST ONLY use verified, factual information about Lesotho and the specific location
+- If you are unsure about ANY fact, do NOT include it - rather provide less information than risk inaccuracy
+- Do NOT make assumptions or generalizations that could be misleading
+- Do NOT hallucinate or invent details about the location, culture, history, or activities
+- Base your content ONLY on what you can factually verify about Lesotho and the provided location details
+
 Location Details:
 - Name: ${locationName}
 ${locationAddress ? `- Address: ${locationAddress}` : ''}
@@ -43,15 +51,18 @@ ${locationDescription ? `- Description: ${locationDescription}` : ''}
 ${availableTags.length > 0 ? `- Available Tags: ${availableTags.join(', ')}` : ''}
 
 Instructions:
-1. Create engaging, professional promotional text (200-300 words) that would appeal to tourists visiting Lesotho
-2. Highlight unique aspects of Lesotho culture, nature, history, and experiences
-3. Focus on authentic experiences, natural beauty, cultural heritage, and adventure opportunities
-4. Include specific attractions, activities, or features that make this location special
-5. Use persuasive, inviting language that encourages tourism
+1. Create engaging, professional promotional text (200-300 words) based ONLY on factual information
+2. Only mention verified aspects of Lesotho culture, nature, history, and experiences
+3. Focus on authentic experiences, natural beauty, cultural heritage, and adventure opportunities that are factually accurate
+4. Only include specific attractions, activities, or features if they are verifiably true
+5. Use persuasive, inviting language while maintaining 100% factual accuracy
 6. Format as a cohesive promotional description suitable for a tourism website
 7. Do not mention pricing, booking, or commercial details
+8. If you cannot verify specific claims about the location, focus on general but accurate facts about Lesotho
 
-The response should be a single, well-structured paragraph that flows naturally and captures the essence of what makes this Lesotho location special for tourists.
+REMEMBER: Accuracy is more important than persuasiveness. Better to provide less information than inaccurate information.
+
+The response should be a single, well-structured paragraph that flows naturally and captures only the factually verified essence of what makes this Lesotho location special for tourists.
 
 Response:`;
 
