@@ -20,9 +20,15 @@ import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { ContentPicker } from '@/components/ContentPicker';
 import RichTextField from '@/components/adease/RichTextField';
-import { IconX, IconPhoto, IconAlertCircle } from '@tabler/icons-react';
+import {
+  IconX,
+  IconPhoto,
+  IconAlertCircle,
+  IconSparkles,
+} from '@tabler/icons-react';
 import { getImageUrl } from '@/lib/utils';
 import { updateLocationDetails } from '@/server/locations/actions';
+import { generateTourismPromotion } from '@/lib/titan';
 
 type Location = typeof locations.$inferInsert;
 type ContentItem = typeof content.$inferSelect;
@@ -51,6 +57,7 @@ export default function LocationForm({
   const [selectedCoverContent, setSelectedCoverContent] =
     useState<ContentItem | null>(null);
   const [aboutContent, setAboutContent] = useState('');
+  const [isGeneratingPromotion, setIsGeneratingPromotion] = useState(false);
 
   useEffect(() => {
     if (defaultCoverContent) {
@@ -71,6 +78,29 @@ export default function LocationForm({
 
   const handleRemoveCoverContent = () => {
     setSelectedCoverContent(null);
+  };
+
+  const handleGeneratePromotion = async () => {
+    if (!defaultValues?.name) {
+      return;
+    }
+
+    setIsGeneratingPromotion(true);
+    try {
+      const promotion = await generateTourismPromotion({
+        locationName: defaultValues.name,
+        locationAddress: defaultValues.address || undefined,
+        locationDescription: aboutContent,
+      });
+
+      console.log('Generated tourism promotion:', promotion);
+
+      setAboutContent(promotion);
+    } catch (error) {
+      console.error('Failed to generate tourism promotion:', error);
+    } finally {
+      setIsGeneratingPromotion(false);
+    }
   };
 
   const handleFormSubmit = async (values: Location) => {
@@ -108,8 +138,25 @@ export default function LocationForm({
 
             <Tabs.Panel value='about' pt='xl'>
               <Stack gap='md'>
+                <Group justify='space-between' align='flex-start'>
+                  <Text size='sm' fw={500}>
+                    About Information
+                  </Text>
+                  <Button
+                    variant='light'
+                    size='sm'
+                    onClick={handleGeneratePromotion}
+                    loading={isGeneratingPromotion}
+                    leftSection={<IconSparkles size={16} />}
+                    disabled={!defaultValues?.name}
+                  >
+                    {isGeneratingPromotion
+                      ? 'Generating...'
+                      : 'Generate Tourism Content'}
+                  </Button>
+                </Group>
                 <RichTextField
-                  label='About Information'
+                  label=''
                   value={aboutContent}
                   onChange={setAboutContent}
                   height={400}

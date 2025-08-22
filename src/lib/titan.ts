@@ -1,3 +1,4 @@
+'use server';
 import { InvokeModelCommand } from '@aws-sdk/client-bedrock-runtime';
 import { bedrockClient } from './aws';
 
@@ -13,6 +14,105 @@ export interface TagSelectionResponse {
     confidence: number;
   }>;
   reasoning?: string;
+}
+
+export interface TourismPromotionRequest {
+  locationName: string;
+  locationAddress?: string;
+  locationDescription?: string;
+  availableTags?: string[];
+}
+
+export async function generateTourismPromotion({
+  locationName,
+  locationAddress,
+  locationDescription,
+  availableTags = [],
+}: TourismPromotionRequest): Promise<string> {
+  try {
+    if (!locationName) {
+      throw new Error('Location name is required');
+    }
+
+    const instruction = `You are a tourism marketing expert specializing in Lesotho tourism promotion. Your task is to create compelling promotional content for a location in Lesotho.
+
+Location Details:
+- Name: ${locationName}
+${locationAddress ? `- Address: ${locationAddress}` : ''}
+${locationDescription ? `- Description: ${locationDescription}` : ''}
+${availableTags.length > 0 ? `- Available Tags: ${availableTags.join(', ')}` : ''}
+
+Instructions:
+1. Create engaging, professional promotional text (200-300 words) that would appeal to tourists visiting Lesotho
+2. Highlight unique aspects of Lesotho culture, nature, history, and experiences
+3. Focus on authentic experiences, natural beauty, cultural heritage, and adventure opportunities
+4. Include specific attractions, activities, or features that make this location special
+5. Use persuasive, inviting language that encourages tourism
+6. Format as a cohesive promotional description suitable for a tourism website
+7. Do not mention pricing, booking, or commercial details
+
+The response should be a single, well-structured paragraph that flows naturally and captures the essence of what makes this Lesotho location special for tourists.
+
+Response:`;
+
+    console.log('Sending tourism promotion request to Titan:', instruction);
+
+    const command = new InvokeModelCommand({
+      modelId: 'anthropic.claude-3-haiku-20240307-v1:0',
+      contentType: 'application/json',
+      accept: 'application/json',
+      body: JSON.stringify({
+        anthropic_version: 'bedrock-2023-05-31',
+        max_tokens: 500,
+        temperature: 0.7,
+        messages: [
+          {
+            role: 'user',
+            content: instruction,
+          },
+        ],
+      }),
+    });
+
+    const response = await bedrockClient.send(command);
+
+    if (!response.body) {
+      throw new Error('No response body from Titan text model');
+    }
+
+    const responseBody = JSON.parse(new TextDecoder().decode(response.body));
+    const generatedText = responseBody.content?.[0]?.text || '';
+
+    console.log('Titan tourism promotion response:', generatedText);
+
+    // Convert plain text to HTML for RichTextField compatibility
+    const htmlContent = convertPlainTextToHTML(generatedText.trim());
+
+    return htmlContent;
+  } catch (error) {
+    console.error('Error generating tourism promotion:', error);
+    throw new Error(
+      `Failed to generate tourism promotion: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
+  }
+}
+
+// Helper function to convert plain text to HTML for RichTextField
+function convertPlainTextToHTML(text: string): string {
+  if (!text) return '';
+
+  // Split text into paragraphs by double line breaks or single line breaks
+  const paragraphs = text.split(/\n\s*\n|\n/);
+
+  // Convert each paragraph to HTML, skipping empty ones
+  const htmlParagraphs = paragraphs
+    .map((paragraph) => {
+      const trimmed = paragraph.trim();
+      return trimmed ? `<p>${trimmed}</p>` : '';
+    })
+    .filter((html) => html.length > 0);
+
+  return htmlParagraphs.join('\n');
 }
 
 export async function selectTagsForContent(
