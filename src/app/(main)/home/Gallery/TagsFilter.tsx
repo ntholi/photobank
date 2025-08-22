@@ -5,14 +5,7 @@ import { Chip } from '@heroui/chip';
 import { useQuery } from '@tanstack/react-query';
 import { getAllTags } from '@/server/tags/actions';
 
-interface Tag {
-  id: string;
-  name: string;
-  slug: string;
-  createdAt: Date | null;
-}
-
-interface TagsFilterProps {
+interface Props {
   selectedTagIds: string[];
   onTagsChange: (tagIds: string[]) => void;
   isLoading?: boolean;
@@ -22,7 +15,7 @@ export default function TagsFilter({
   selectedTagIds,
   onTagsChange,
   isLoading = false,
-}: TagsFilterProps) {
+}: Props) {
   const [localSelectedTags, setLocalSelectedTags] =
     useState<string[]>(selectedTagIds);
 
