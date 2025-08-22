@@ -22,6 +22,7 @@ import {
 } from '@mantine/core';
 import { getImageUrl } from '@/lib/utils';
 import LocationContent from './LocationContent';
+import AboutSection from './AboutSection';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -38,14 +39,14 @@ export default async function LocationDetails({ params }: Props) {
   return (
     <DetailsView>
       <DetailsViewHeader
-        title={'Location'}
+        title={location.name}
         queryKey={['locations']}
         handleDelete={async () => {
           'use server';
           await deleteLocation(id);
         }}
       />
-      <DetailsViewBody>
+      <DetailsViewBody p={'xs'}>
         <Tabs defaultValue={'about'} keepMounted={false}>
           <TabsList>
             <TabsTab value='about'>About</TabsTab>
@@ -54,29 +55,10 @@ export default async function LocationDetails({ params }: Props) {
           </TabsList>
 
           <TabsPanel value='about' pt='xl'>
-            <Stack gap='md'>
-              {location.coverContent ? (
-                <Card withBorder padding='xs' radius='md'>
-                  <Image
-                    src={getImageUrl(
-                      location.coverContent.thumbnailKey ||
-                        location.coverContent.s3Key
-                    )}
-                    height={220}
-                    fit='cover'
-                    radius='md'
-                    alt={location.coverContent.fileName || 'Cover content'}
-                  />
-                </Card>
-              ) : null}
-              {location.about ? (
-                <Box dangerouslySetInnerHTML={{ __html: location.about }} />
-              ) : (
-                <Text size='sm' c='dimmed'>
-                  No information available.
-                </Text>
-              )}
-            </Stack>
+            <AboutSection
+              cover={location.coverContent}
+              aboutHtml={location.about}
+            />
           </TabsPanel>
 
           <TabsPanel value='details' pt='xl'>
