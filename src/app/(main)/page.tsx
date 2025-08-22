@@ -1,14 +1,16 @@
+import {
+  getAllHomeContentWithDetails,
+  getHomeContent,
+} from '@/server/home-contet/actions';
 import { Button } from '@heroui/button';
 import React from 'react';
+import Hero from './home/Hero';
 
-export default function page() {
+export default async function page() {
+  const homeContent = await getAllHomeContentWithDetails();
   return (
     <div>
-      <h1>
-        <Button variant='solid' color='primary'>
-          Click me
-        </Button>
-      </h1>
+      <Hero content={homeContent} />
     </div>
   );
 }
