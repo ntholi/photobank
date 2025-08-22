@@ -20,6 +20,7 @@ type FormContent = Omit<
   | 'thumbnailKey'
   | 'watermarkedKey'
   | 'fileSize'
+  | 'fileName'
   | 'id'
   | 'createdAt'
   | 'updatedAt'
@@ -147,6 +148,7 @@ export default function ContentForm({
           thumbnailKey: true,
           watermarkedKey: true,
           fileSize: true,
+          fileName: true,
           type: true,
           status: true,
         }) as any
@@ -168,15 +170,6 @@ export default function ContentForm({
               required
             />
           )}
-
-          <TextInput
-            label='File Name'
-            {...form.getInputProps('fileName')}
-            value={
-              selectedFile?.name || form.getInputProps('fileName').value || ''
-            }
-            readOnly={!!selectedFile}
-          />
 
           <input type='hidden' {...form.getInputProps('locationId')} />
           <LocationPicker
