@@ -5,6 +5,7 @@ import {
   getDefaultColors,
 } from '@/lib/colors';
 import { getImageUrl } from '@/lib/utils';
+import { Image } from '@heroui/image';
 import DetailsSection from './DetailsSection';
 
 type Content = typeof content.$inferSelect;
@@ -41,35 +42,34 @@ export async function ContentDisplay({
 
   return (
     <div
-      className='w-full min-h-screen'
+      className='w-full'
       style={{
         background: generateGradient(dominantColors, 0.15),
       }}
     >
       <div className='max-w-7xl mx-auto px-4 py-8'>
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-          <div className='lg:col-span-2'>
-            <div className='relative'>
-              <div className='relative rounded-xl overflow-hidden'>
-                {content.type === 'image' ? (
-                  <img
-                    src={imageUrl}
-                    alt={content.description || 'Content image'}
-                    className='w-full h-auto max-h-[80vh] object-contain'
-                    loading='eager'
-                  />
-                ) : (
-                  <video
-                    src={imageUrl}
-                    controls
-                    className='w-full h-auto max-h-[80vh] rounded-lg'
-                    poster={getImageUrl(content.thumbnailKey)}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-              </div>
-            </div>
+          <div className='lg:col-span-2 bg-background/40 rounded-xl p-0.5'>
+            {content.type === 'image' ? (
+              <Image
+                src={imageUrl}
+                alt={content.description || 'Content image'}
+                className='w-full h-auto max-h-[75vh] object-contain'
+                loading='eager'
+                radius='lg'
+                width={1000}
+                height={1000}
+              />
+            ) : (
+              <video
+                src={imageUrl}
+                controls
+                className='w-full h-auto max-h-[80vh] rounded-lg'
+                poster={getImageUrl(content.thumbnailKey)}
+              >
+                Your browser does not support the video tag.
+              </video>
+            )}
           </div>
 
           <div className='lg:col-span-1 space-y-6'>
