@@ -1,12 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import { formatDate } from '@/lib/utils';
+import NextLink from 'next/link';
+import { capitalize, formatDate } from '@/lib/utils';
 import { getContentWithDetails } from '@/server/content/actions';
 import { Card, CardBody } from '@heroui/card';
 import { User } from '@heroui/user';
 import { Chip } from '@heroui/chip';
 import { IoMdPerson } from 'react-icons/io';
+import { Link } from '@heroui/link';
 
 type Content = NonNullable<Awaited<ReturnType<typeof getContentWithDetails>>>;
 
@@ -24,7 +25,7 @@ export default function DetailsSection({ content }: Props) {
           </h3>
           <User
             name={content.user?.name || 'Anonymous Contributor'}
-            description={content.user?.email || 'Lesotho Photobank Community'}
+            description={capitalize(content.user?.role || 'user')}
             avatarProps={{
               src: content.user?.image || '',
               size: 'lg',
@@ -37,6 +38,7 @@ export default function DetailsSection({ content }: Props) {
             classNames={{
               name: 'text-sm font-medium text-gray-900',
               description: 'text-xs text-gray-500',
+              base: 'justify-start',
             }}
           />
           <p className='text-xs text-gray-400 mt-3'>
@@ -52,27 +54,25 @@ export default function DetailsSection({ content }: Props) {
           <div className='space-y-3'>
             <div className='space-y-2'>
               <span className='text-sm text-gray-600'>Location</span>
-              {content.location ? (
-                <Link href={`/locations/${content.location.id}`}>
-                  <div className='text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors cursor-pointer'>
-                    {content.location.name}
-                    {content.location.address && (
-                      <div className='text-xs text-gray-500 mt-1'>
-                        {content.location.address}
-                      </div>
-                    )}
+              <div>
+                {content.location ? (
+                  <Link
+                    as={NextLink}
+                    href={`/locations/${content.location.id}`}
+                  >
+                    <div>{content.location.name}</div>
+                  </Link>
+                ) : (
+                  <div className='text-sm text-gray-500 italic'>
+                    Location not set
                   </div>
-                </Link>
-              ) : (
-                <div className='text-sm text-gray-500 italic'>
-                  Location not set
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
             {content.createdAt && (
               <div className='flex items-center justify-between'>
-                <span className='text-sm text-gray-600'>Date</span>
+                <span className='text-sm text-gray-600'>Date Uploaded</span>
                 <span className='text-sm font-medium text-gray-900'>
                   {formatDate(content.createdAt)}
                 </span>
