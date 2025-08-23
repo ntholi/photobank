@@ -8,12 +8,10 @@ import {
   Card,
   Group,
   Text,
-  Select,
   MultiSelect,
   TextInput,
   Pagination,
   Stack,
-  Loader,
   Center,
   Badge,
   ActionIcon,
@@ -34,12 +32,26 @@ import { getAllTags } from '@/server/tags/actions';
 import { getImageUrl } from '@/lib/utils';
 import { content } from '@/db/schema';
 
-type ContentItem = typeof content.$inferSelect;
+export type PickerContentItem = Pick<
+  typeof content.$inferSelect,
+  | 'id'
+  | 'type'
+  | 'description'
+  | 'fileName'
+  | 's3Key'
+  | 'thumbnailKey'
+  | 'watermarkedKey'
+  | 'fileSize'
+  | 'locationId'
+  | 'status'
+  | 'createdAt'
+  | 'updatedAt'
+>;
 
 interface ContentPickerProps {
   opened: boolean;
   onClose: () => void;
-  onSelect: (item: ContentItem) => void;
+  onSelect: (item: PickerContentItem) => void;
   selectedId?: string;
   title?: string;
 }
@@ -110,7 +122,7 @@ export function ContentPicker({
     placeholderData: (previousData) => previousData,
   });
 
-  const handleSelectItem = useCallback((item: ContentItem) => {
+  const handleSelectItem = useCallback((item: PickerContentItem) => {
     if (item.type === 'image') {
       setSelected(item.id);
     }
@@ -119,7 +131,9 @@ export function ContentPicker({
   const handleConfirm = useCallback(() => {
     if (!contentData || !selected) return;
 
-    const selectedItem = contentData.items.find((item) => item.id === selected);
+    const selectedItem = contentData.items.find(
+      (item: PickerContentItem) => item.id === selected
+    );
     if (selectedItem) {
       onSelect(selectedItem);
       onClose();
@@ -269,16 +283,14 @@ export function ContentPicker({
                         cursor: isVideo ? 'not-allowed' : 'pointer',
                         opacity: isVideo ? 0.6 : 1,
                         borderColor: isSelected
-                          ? 'var(--mantine-color-blue-6)'
+                          ? 'var(--mantine-primary-color-filled)'
                           : undefined,
                         borderWidth: isSelected ? 2 : 1,
                         backgroundColor: isSelected
-                          ? 'var(--mantine-color-blue-0)'
+                          ? 'var(--mantine-primary-color-light)'
                           : undefined,
-                        transform: isSelected ? 'scale(0.98)' : 'scale(1)',
-                        transition: 'all 0.15s ease',
                         boxShadow: isSelected
-                          ? '0 4px 16px rgba(0, 0, 0, 0.1)'
+                          ? 'var(--mantine-shadow-sm)'
                           : undefined,
                       }}
                       onClick={() => !isVideo && handleSelectItem(item)}
@@ -298,7 +310,8 @@ export function ContentPicker({
                               top={8}
                               right={8}
                               style={{
-                                backgroundColor: 'var(--mantine-color-blue-6)',
+                                backgroundColor:
+                                  'var(--mantine-primary-color-filled)',
                                 borderRadius: '50%',
                                 padding: 2,
                               }}
@@ -313,7 +326,7 @@ export function ContentPicker({
                               left={8}
                               size='sm'
                               variant='filled'
-                              color='dark'
+                              color='gray'
                             >
                               Video (not selectable)
                             </Badge>
@@ -340,8 +353,8 @@ export function ContentPicker({
                   <IconPhoto
                     size={64}
                     style={{
-                      opacity: 0.3,
-                      color: 'var(--mantine-color-gray-6)',
+                      opacity: 0.35,
+                      color: 'var(--mantine-color-dimmed)',
                     }}
                   />
                 </Box>
