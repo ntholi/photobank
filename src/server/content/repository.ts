@@ -1,7 +1,7 @@
 import BaseRepository from '@/server/base/BaseRepository';
-import { content, contentTags } from '@/db/schema';
+import { content, contentLabels, contentTags } from '@/db/schema';
 import { db } from '@/db';
-import { eq, count, and, inArray, like, sql, desc } from 'drizzle-orm';
+import { eq, count, and, inArray, like, sql, desc, ne } from 'drizzle-orm';
 import { QueryOptions } from '../base/BaseRepository';
 
 export interface ContentFilterOptions {
@@ -151,6 +151,48 @@ export default class ContentRepository extends BaseRepository<
       totalItems,
       currentPage: page,
     };
+  }
+
+  async getSimilarContent(contentId: string, limit: number = 20) {
+    const baseSelect = {
+      id: content.id,
+      type: content.type,
+      description: content.description,
+      fileName: content.fileName,
+      s3Key: content.s3Key,
+      thumbnailKey: content.thumbnailKey,
+      watermarkedKey: content.watermarkedKey,
+      fileSize: content.fileSize,
+      locationId: content.locationId,
+      status: content.status,
+      createdAt: content.createdAt,
+      updatedAt: content.updatedAt,
+    };
+
+    const items = await db
+      .select({
+        ...baseSelect,
+        commonLabelsCount: sql<number>`count(*)`,
+      })
+      .from(content)
+      .innerJoin(contentLabels, eq(content.id, contentLabels.contentId))
+      .where(
+        and(
+          ne(content.id, contentId),
+          eq(content.status, 'published'),
+          sql`${contentLabels.name} IN (
+            SELECT ${contentLabels.name}
+            FROM ${contentLabels}
+            WHERE ${contentLabels.contentId} = ${contentId}
+          )`
+        )
+      )
+      .groupBy(content.id)
+      .having(sql`count(*) >= 4`)
+      .orderBy(sql`count(*) DESC`, desc(content.createdAt))
+      .limit(limit);
+
+    return items;
   }
 }
 

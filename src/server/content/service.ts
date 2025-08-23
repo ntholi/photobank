@@ -56,6 +56,13 @@ class ContentService {
       ['all']
     );
   }
+
+  async getSimilarContent(contentId: string, limit: number = 20) {
+    return withAuth(
+      async () => this.repository.getSimilarContent(contentId, limit),
+      ['all']
+    );
+  }
 }
 
 export const contentService = serviceWrapper(ContentService, 'Content');

@@ -93,3 +93,7 @@ export async function getGalleryContent(
     tagIds,
   });
 }
+
+export async function getSimilarContent(contentId: string, limit: number = 20) {
+  return service.getSimilarContent(contentId, limit);
+}
