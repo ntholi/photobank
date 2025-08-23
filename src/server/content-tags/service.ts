@@ -3,8 +3,6 @@ import ContentTagRepository from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import { serviceWrapper } from '../base/serviceWrapper';
-import { eq, and, inArray } from 'drizzle-orm';
-import { db } from '@/db';
 
 type ContentTag = typeof contentTags.$inferInsert;
 
@@ -17,17 +15,7 @@ class ContentTagService {
 
   async get(contentId: string, tagId: string) {
     return withAuth(async () => {
-      return db
-        .select()
-        .from(contentTags)
-        .where(
-          and(
-            eq(contentTags.contentId, contentId),
-            eq(contentTags.tagId, tagId)
-          )
-        )
-        .limit(1)
-        .then((results) => results[0] || null);
+      return this.repository.getById(contentId, tagId);
     }, []);
   }
 
@@ -41,35 +29,13 @@ class ContentTagService {
 
   async update(contentId: string, tagId: string, data: Partial<ContentTag>) {
     return withAuth(async () => {
-      const result = await db
-        .update(contentTags)
-        .set(data)
-        .where(
-          and(
-            eq(contentTags.contentId, contentId),
-            eq(contentTags.tagId, tagId)
-          )
-        )
-        .returning();
-
-      if (result.length === 0) {
-        throw new Error('ContentTag not found');
-      }
-
-      return result[0];
+      return this.repository.updateById(contentId, tagId, data);
     }, []);
   }
 
   async delete(contentId: string, tagId: string) {
     return withAuth(async () => {
-      await db
-        .delete(contentTags)
-        .where(
-          and(
-            eq(contentTags.contentId, contentId),
-            eq(contentTags.tagId, tagId)
-          )
-        );
+      return this.repository.deleteById(contentId, tagId);
     }, []);
   }
 
@@ -87,14 +53,7 @@ class ContentTagService {
       }
 
       const tagNames = selectedTags.map((item) => item.tag);
-      const tagRecords = await db
-        .select()
-        .from(tags)
-        .where(
-          tagNames.length === 1
-            ? eq(tags.name, tagNames[0])
-            : inArray(tags.name, tagNames)
-        );
+      const tagRecords = await this.repository.findTagsByNames(tagNames);
 
       if (tagRecords.length === 0) {
         console.log('No matching tags found in database for:', tagNames);
@@ -118,20 +77,9 @@ class ContentTagService {
     }, ['contributor']);
   }
 
-  async getContentTagsByContentId(contentId: string) {
+  async getContentTags(contentId: string) {
     return withAuth(async () => {
-      return db
-        .select({
-          contentId: contentTags.contentId,
-          tagId: contentTags.tagId,
-          confidence: contentTags.confidence,
-          createdAt: contentTags.createdAt,
-          tagName: tags.name,
-          tagSlug: tags.slug,
-        })
-        .from(contentTags)
-        .innerJoin(tags, eq(contentTags.tagId, tags.id))
-        .where(eq(contentTags.contentId, contentId));
+      return this.repository.getContentTags(contentId);
     }, []);
   }
 }

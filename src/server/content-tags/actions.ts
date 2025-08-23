@@ -12,8 +12,8 @@ export async function getContentTag(contentId: string, tagId: string) {
   return contentTagsService.get(contentId, tagId);
 }
 
-export async function getContentTagsByContentId(contentId: string) {
-  return contentTagsService.getContentTagsByContentId(contentId);
+export async function getContentTags(contentId: string) {
+  return contentTagsService.getContentTags(contentId);
 }
 
 export async function createContentTag(contentTag: ContentTag) {
