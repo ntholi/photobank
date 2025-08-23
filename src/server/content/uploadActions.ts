@@ -6,13 +6,12 @@ import {
   createWatermarkedImage,
   isImageFile,
 } from '@/lib/imageProcessor';
-import { detectLabelsFromBuffer, ContentLabel } from '@/lib/recognition';
+import { ContentLabel, detectLabelsFromBuffer } from '@/lib/recognition';
 import { selectTagsForContent } from '@/lib/titan';
 import withAuth from '@/server/base/withAuth';
+import { tagsService } from '@/server/tags/service';
 import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { nanoid } from 'nanoid';
-import { contentService } from './service';
-import { tagsService } from '@/server/tags/service';
 
 type UploadResult = {
   key: string;
@@ -64,7 +63,7 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
   if (isImageFile(file.type)) {
     try {
       const thumbnail = await createThumbnail(buffer);
-      thumbnailKey = `${baseKey}_thumb.webp`;
+      thumbnailKey = `${baseKey}_thumb.jpg`;
 
       await s3Client.send(
         new PutObjectCommand({

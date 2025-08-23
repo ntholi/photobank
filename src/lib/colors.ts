@@ -3,13 +3,13 @@ import { Vibrant } from 'node-vibrant/node';
 export async function extractDominantColors(
   imageUrl: string
 ): Promise<string[]> {
+  console.log('Extracting colors from url:', imageUrl);
   try {
     const vibrant = new Vibrant(imageUrl);
     const palette = await vibrant.getPalette();
 
     const colors: string[] = [];
 
-    // Extract colors in priority order from the palette
     const colorTypes = [
       palette.Vibrant,
       palette.LightVibrant,
@@ -19,18 +19,15 @@ export async function extractDominantColors(
       palette.DarkMuted,
     ];
 
-    // Add available colors up to 3
     for (const colorType of colorTypes) {
       if (colorType && colors.length < 3) {
         colors.push(colorType.hex);
       }
     }
 
-    console.log('\n\n\n************ Extracted colors', colors);
-
     return colors;
   } catch (error) {
-    console.warn('\n\n\n************ Vibrant color extraction failed:', error);
+    console.warn('Vibrant color extraction failed:', error);
     return getDefaultColors();
   }
 }
@@ -46,7 +43,7 @@ export function getDefaultColors(): string[] {
 export function hexToRgba(hex: string, alpha: number): string {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) {
-    return `rgba(100, 150, 255, ${alpha})`; // fallback to default blue
+    return `rgba(100, 150, 255, ${alpha})`;
   }
 
   const r = parseInt(result[1], 16);
@@ -69,7 +66,6 @@ export function generateGradient(
     .map((color, index) => {
       const percentage = Math.round(index * (100 / (baseColors.length - 1)));
 
-      // Handle both hex and rgb formats
       let rgbaColor: string;
       if (color.startsWith('#')) {
         rgbaColor = hexToRgba(color, opacity);
@@ -78,7 +74,7 @@ export function generateGradient(
           .replace('rgb(', 'rgba(')
           .replace(')', `, ${opacity})`);
       } else {
-        rgbaColor = `rgba(100, 150, 255, ${opacity})`; // fallback
+        rgbaColor = `rgba(100, 150, 255, ${opacity})`;
       }
 
       return `${rgbaColor} ${percentage}%`;

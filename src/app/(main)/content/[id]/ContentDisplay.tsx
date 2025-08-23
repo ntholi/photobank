@@ -1,10 +1,10 @@
 import { content, locations } from '@/db/schema';
-import { getImageUrl } from '@/lib/utils';
 import {
   extractDominantColors,
-  getDefaultColors,
   generateGradient,
+  getDefaultColors,
 } from '@/lib/colors';
+import { getImageUrl } from '@/lib/utils';
 import DetailsSection from './DetailsSection';
 
 type Content = typeof content.$inferSelect;
@@ -21,13 +21,9 @@ export async function ContentDisplay({
 }: ContentDisplayProps) {
   const imageUrl = getImageUrl(content.watermarkedKey);
 
-  // Server-side color extraction
   async function getDominantColors(): Promise<string[]> {
     try {
-      const url =
-        content.type === 'image'
-          ? imageUrl
-          : getImageUrl(content.thumbnailKey || '');
+      const url = getImageUrl(content.thumbnailKey || '');
 
       if (!url) {
         return getDefaultColors();
