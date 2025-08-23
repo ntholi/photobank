@@ -1,4 +1,8 @@
-import { getContent, getSimilarContent } from '@/server/content/actions';
+import {
+  getContent,
+  getContentWithDetails,
+  getSimilarContent,
+} from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
 import { notFound } from 'next/navigation';
 import { ContentDisplay } from './ContentDisplay';
@@ -14,23 +18,16 @@ export default async function ContentPage({ params }: Props) {
   const { id } = await params;
 
   try {
-    const content = await getContent(id);
+    const content = await getContentWithDetails(id);
 
     if (!content || content.status !== 'published') {
       notFound();
     }
 
-    let location = null;
-    if (content.locationId) {
-      location = await getLocation(content.locationId);
-    }
-
-    const similarContent = await getSimilarContent(id, 8);
-
     return (
       <div className='min-h-screen'>
-        <ContentDisplay content={content} location={location} />
-        <SimilarContent items={similarContent} />
+        <ContentDisplay content={content} />
+        <SimilarContent contentId={id} />
       </div>
     );
   } catch (error) {

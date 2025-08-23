@@ -7,19 +7,15 @@ import {
 import { getImageUrl } from '@/lib/utils';
 import { Image } from '@heroui/image';
 import DetailsSection from './DetailsSection';
+import { getContentWithDetails } from '@/server/content/actions';
 
-type Content = typeof content.$inferSelect;
-type Location = typeof locations.$inferSelect;
+type Content = NonNullable<Awaited<ReturnType<typeof getContentWithDetails>>>;
 
-interface ContentDisplayProps {
+interface Props {
   content: Content;
-  location: Location | null;
 }
 
-export async function ContentDisplay({
-  content,
-  location,
-}: ContentDisplayProps) {
+export async function ContentDisplay({ content }: Props) {
   const imageUrl = getImageUrl(content.watermarkedKey);
 
   async function getDominantColors(): Promise<string[]> {
@@ -73,7 +69,7 @@ export async function ContentDisplay({
           </div>
 
           <div className='lg:col-span-1 space-y-6'>
-            <DetailsSection content={content} location={location} />
+            <DetailsSection content={content} />
           </div>
         </div>
       </div>

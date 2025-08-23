@@ -1,21 +1,18 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { formatDate, getImageUrl } from '@/lib/utils';
-import { User } from '@heroui/user';
+import { formatDate } from '@/lib/utils';
+import { getContentWithDetails } from '@/server/content/actions';
 import { Card, CardBody } from '@heroui/card';
+import { User } from '@heroui/user';
 import { IoMdPerson } from 'react-icons/io';
-import { content, locations } from '@/db/schema';
 
-type Content = typeof content.$inferSelect;
-type Location = typeof locations.$inferSelect;
+type Content = NonNullable<Awaited<ReturnType<typeof getContentWithDetails>>>;
 
 type Props = {
   content: Content;
-  location: Location | null;
 };
 
-export default function DetailsSection({ content, location }: Props) {
+export default function DetailsSection({ content }: Props) {
   return (
     <>
       <Card className='shadow-none border border-gray-200'>
@@ -58,14 +55,14 @@ export default function DetailsSection({ content, location }: Props) {
               </span>
             </div>
 
-            {location && (
+            {content.location && (
               <div className='space-y-2'>
                 <span className='text-sm text-gray-600'>Location</span>
                 <div className='text-sm font-medium text-gray-900'>
-                  {location.name}
-                  {location.address && (
+                  {content.location.name}
+                  {content.location.address && (
                     <div className='text-xs text-gray-500 mt-1'>
-                      {location.address}
+                      {content.location.address}
                     </div>
                   )}
                 </div>
