@@ -1,9 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import { getContentWithDetails } from '@/server/content/actions';
 import { Card, CardBody } from '@heroui/card';
 import { User } from '@heroui/user';
+import { Chip } from '@heroui/chip';
 import { IoMdPerson } from 'react-icons/io';
 
 type Content = NonNullable<Awaited<ReturnType<typeof getContentWithDetails>>>;
@@ -21,10 +23,10 @@ export default function DetailsSection({ content }: Props) {
             Photographer
           </h3>
           <User
-            name='Anonymous Contributor'
-            description='Lesotho Photobank Community'
+            name={content.user?.name || 'Anonymous Contributor'}
+            description={content.user?.email || 'Lesotho Photobank Community'}
             avatarProps={{
-              src: '',
+              src: content.user?.image || '',
               size: 'lg',
               className: 'flex-shrink-0',
               fallback: <IoMdPerson className='text-2xl' />,
@@ -38,7 +40,7 @@ export default function DetailsSection({ content }: Props) {
             }}
           />
           <p className='text-xs text-gray-400 mt-3'>
-            Help preserve Lesotho's heritage through photography
+            {content.user?.bio || 'Bio not available'}
           </p>
         </CardBody>
       </Card>
@@ -48,26 +50,25 @@ export default function DetailsSection({ content }: Props) {
           <h3 className='text-lg font-semibold text-gray-900'>Details</h3>
 
           <div className='space-y-3'>
-            <div className='flex items-center justify-between'>
-              <span className='text-sm text-gray-600'>Type</span>
-              <span className='text-sm font-medium text-gray-900 capitalize px-3 py-1 bg-gray-100 rounded-full'>
-                {content.type}
-              </span>
-            </div>
-
-            {content.location && (
-              <div className='space-y-2'>
-                <span className='text-sm text-gray-600'>Location</span>
-                <div className='text-sm font-medium text-gray-900'>
-                  {content.location.name}
-                  {content.location.address && (
-                    <div className='text-xs text-gray-500 mt-1'>
-                      {content.location.address}
-                    </div>
-                  )}
+            <div className='space-y-2'>
+              <span className='text-sm text-gray-600'>Location</span>
+              {content.location ? (
+                <Link href={`/locations/${content.location.id}`}>
+                  <div className='text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors cursor-pointer'>
+                    {content.location.name}
+                    {content.location.address && (
+                      <div className='text-xs text-gray-500 mt-1'>
+                        {content.location.address}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ) : (
+                <div className='text-sm text-gray-500 italic'>
+                  Location not set
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
             {content.createdAt && (
               <div className='flex items-center justify-between'>
@@ -79,16 +80,33 @@ export default function DetailsSection({ content }: Props) {
             )}
           </div>
 
-          {content.description && (
+          {content.tags && content.tags.length > 0 && (
             <div className='pt-4 border-t border-gray-100'>
-              <h4 className='text-sm font-medium text-gray-900 mb-2'>
-                Description
-              </h4>
-              <p className='text-sm text-gray-700 leading-relaxed'>
-                {content.description}
-              </p>
+              <h4 className='text-sm font-medium text-gray-900 mb-2'>Tags</h4>
+              <div className='flex flex-wrap gap-2'>
+                {content.tags.map(({ tag }) => (
+                  <Link key={tag.id} href={`/tags/${tag.id}`}>
+                    <Chip
+                      size='sm'
+                      variant='flat'
+                      className='cursor-pointer hover:bg-blue-100 text-blue-600'
+                    >
+                      {tag.name}
+                    </Chip>
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
+
+          <div className='pt-4 border-t border-gray-100'>
+            <h4 className='text-sm font-medium text-gray-900 mb-2'>
+              Description
+            </h4>
+            <p className='text-sm text-gray-700 leading-relaxed'>
+              {content.description || 'Description not available'}
+            </p>
+          </div>
         </CardBody>
       </Card>
     </>

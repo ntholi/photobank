@@ -36,6 +36,13 @@
       "when": 1755957239995,
       "tag": "0004_rapid_supreme_intelligence",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1755959726186,
+      "tag": "0005_fantastic_radioactive_man",
+      "breakpoints": true
     }
   ]
 }
