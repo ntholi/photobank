@@ -207,7 +207,7 @@ export default class ContentRepository extends BaseRepository<
       with: {
         location: {
           with: {
-            locationDetails: true,
+            details: true,
           },
         },
         tags: {
