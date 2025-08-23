@@ -97,3 +97,7 @@ export async function getGalleryContent(
 export async function getSimilarContent(contentId: string, limit: number = 20) {
   return service.getSimilarContent(contentId, limit);
 }
+
+export async function getContentWithDetails(id: string) {
+  return service.getContentWithDetails(id);
+}

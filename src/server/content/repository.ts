@@ -1,6 +1,14 @@
 import BaseRepository from '@/server/base/BaseRepository';
-import { content, contentLabels, contentTags } from '@/db/schema';
+import {
+  content,
+  contentLabels,
+  contentTags,
+  locations,
+  locationDetails,
+  tags,
+} from '@/db/schema';
 import { db } from '@/db';
+import type { InferSelectModel } from 'drizzle-orm';
 import {
   eq,
   count,
@@ -191,6 +199,25 @@ export default class ContentRepository extends BaseRepository<
       .limit(limit);
 
     return items;
+  }
+
+  async getContentWithDetails(id: string) {
+    return await db.query.content.findFirst({
+      where: eq(content.id, id),
+      with: {
+        location: {
+          with: {
+            locationDetails: true,
+          },
+        },
+        tags: {
+          with: {
+            tag: true,
+          },
+        },
+        labels: true,
+      },
+    });
   }
 }
 

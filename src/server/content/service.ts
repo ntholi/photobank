@@ -63,6 +63,13 @@ class ContentService {
       ['all']
     );
   }
+
+  async getContentWithDetails(id: string) {
+    return withAuth(
+      async () => this.repository.getContentWithDetails(id),
+      ['all']
+    );
+  }
 }
 
 export const contentService = serviceWrapper(ContentService, 'Content');
