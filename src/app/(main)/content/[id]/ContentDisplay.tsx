@@ -40,7 +40,7 @@ export async function ContentDisplay({ content }: Props) {
     <div
       className='w-full'
       style={{
-        background: generateGradient(dominantColors, 0.15),
+        background: generateGradient(dominantColors, 0.2),
       }}
     >
       <div className='max-w-7xl mx-auto px-4 py-8'>
