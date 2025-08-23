@@ -49,7 +49,7 @@ export async function ContentDisplay({
     >
       <div className='max-w-7xl mx-auto px-4 py-8'>
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-          <div className='lg:col-span-2 bg-background/40 rounded-xl p-0.5'>
+          <div className='lg:col-span-2 rounded-xl p-0.5'>
             {content.type === 'image' ? (
               <Image
                 src={imageUrl}

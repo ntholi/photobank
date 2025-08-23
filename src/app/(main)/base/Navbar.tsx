@@ -3,6 +3,7 @@
 import React from 'react';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
 import { Button } from '@heroui/button';
+import { Link } from '@heroui/link';
 import { IoMdSearch, IoMdCamera } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import ProfileMenu from './ProfileMenu';
@@ -42,27 +43,21 @@ export default function NavbarComponent() {
       <NavbarContent className='hidden md:flex gap-10' justify='center'>
         {menus.map((menu, index) => (
           <NavbarItem key={menu}>
-            <Button
-              variant='light'
+            <Link
               className={`${
                 active === index ? 'text-primary' : 'text-gray-700'
-              } hover:text-primary px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide`}
+              } px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide cursor-pointer`}
               onClick={() => handleMenuClick(index, menu)}
             >
               {menu}
-            </Button>
+            </Link>
           </NavbarItem>
         ))}
       </NavbarContent>
 
       <NavbarContent justify='end' className='gap-6'>
         <NavbarItem>
-          <Button
-            isIconOnly
-            variant='light'
-            className='text-gray-700 hover:text-primary p-0 min-w-fit'
-            aria-label='Search'
-          >
+          <Button isIconOnly variant='light' radius='full' aria-label='Search'>
             <IoMdSearch className='text-lg' />
           </Button>
         </NavbarItem>
