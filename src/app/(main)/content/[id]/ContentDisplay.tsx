@@ -43,7 +43,7 @@ export async function ContentDisplay({
     <div
       className='w-full min-h-screen'
       style={{
-        background: generateGradient(dominantColors, 0.35),
+        background: generateGradient(dominantColors, 0.15),
       }}
     >
       <div className='max-w-7xl mx-auto px-4 py-8'>

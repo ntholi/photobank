@@ -33,17 +33,13 @@ export async function extractDominantColors(
 }
 
 export function getDefaultColors(): string[] {
-  return [
-    '#6496ff', // Blue
-    '#96c8ff', // Light blue
-    '#c864ff', // Purple
-  ];
+  return ['#6b7d8f', '#8f7d6b', '#7d8f6b'];
 }
 
 export function hexToRgba(hex: string, alpha: number): string {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) {
-    return `rgba(100, 150, 255, ${alpha})`;
+    return `rgba(107, 125, 143, ${alpha})`;
   }
 
   const r = parseInt(result[1], 16);
@@ -58,7 +54,7 @@ export function generateGradient(
   opacity: number = 0.25
 ): string {
   if (colors.length === 0) {
-    return `linear-gradient(135deg, ${hexToRgba('#6496ff', opacity)} 0%, ${hexToRgba('#c864ff', opacity)} 100%)`;
+    return `linear-gradient(135deg, ${hexToRgba('#6b7d8f', opacity)} 0%, ${hexToRgba('#7d8f6b', opacity)} 100%)`;
   }
 
   const baseColors = colors.slice(0, 3);
@@ -74,7 +70,7 @@ export function generateGradient(
           .replace('rgb(', 'rgba(')
           .replace(')', `, ${opacity})`);
       } else {
-        rgbaColor = `rgba(100, 150, 255, ${opacity})`;
+        rgbaColor = `rgba(107, 125, 143, ${opacity})`;
       }
 
       return `${rgbaColor} ${percentage}%`;
