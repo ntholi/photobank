@@ -11,8 +11,8 @@ import { notifications } from '@mantine/notifications';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import ExistingContentDisplay from './components/ExistingContentDisplay';
-import FileUpload from './components/FileUpload';
+import ExistingContentDisplay from '../components/ExistingContentDisplay';
+import FileUpload from '../components/FileUpload';
 
 type Content = typeof content.$inferInsert;
 type FormContent = Omit<Content, 'id' | 'createdAt' | 'updatedAt'> & {
