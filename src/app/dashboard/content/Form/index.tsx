@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ExistingContentDisplay from '../components/ExistingContentDisplay';
 import FileUpload from '../components/FileUpload';
+import TagInput from './TagInput';
 
 type Content = typeof content.$inferInsert;
 type FormContent = Omit<Content, 'id' | 'createdAt' | 'updatedAt'> & {
@@ -54,6 +55,7 @@ export default function ContentForm({
   >();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleFormSubmit = async (values: FormContent) => {
     if (selectedFile && !defaultValues) {
@@ -62,7 +64,10 @@ export default function ContentForm({
         const formData = new FormData();
         formData.append('file', selectedFile);
 
-        const uploadResult = await uploadContentFile(formData);
+        const uploadOptions =
+          selectedTags.length > 0 ? { manualTags: selectedTags } : {};
+
+        const uploadResult = await uploadContentFile(formData, uploadOptions);
 
         const contentData: FormContent = {
           ...values,
@@ -100,24 +105,30 @@ export default function ContentForm({
           }
         }
 
-        if (uploadResult.selectedTags && uploadResult.selectedTags.length > 0) {
+        // Handle tags - either manual or AI-selected
+        const tagsToSave =
+          selectedTags.length > 0
+            ? selectedTags.map((tag) => ({ tag, confidence: 100 }))
+            : uploadResult.selectedTags || [];
+
+        if (tagsToSave.length > 0) {
           try {
-            await createContentTags(
-              createdContent.id as string,
-              uploadResult.selectedTags
-            );
+            await createContentTags(createdContent.id as string, tagsToSave);
+            const tagSource =
+              selectedTags.length > 0 ? 'manual' : 'AI-selected';
             console.log(
-              `Saved ${uploadResult.selectedTags.length} content tags for content ${createdContent.id}:`,
-              uploadResult.selectedTags
+              `Saved ${tagsToSave.length} ${tagSource} tags for content ${createdContent.id}:`,
+              tagsToSave
                 .map((item) => `${item.tag}:${item.confidence}`)
                 .join(', ')
             );
           } catch (error) {
             console.error('Failed to save content tags:', error);
+            const tagSource =
+              selectedTags.length > 0 ? 'manual' : 'AI-selected';
             notifications.show({
               title: 'Warning',
-              message:
-                'Content uploaded successfully, but failed to save AI-selected tags',
+              message: `Content uploaded successfully, but failed to save ${tagSource} tags`,
               color: 'yellow',
             });
           }
@@ -202,6 +213,13 @@ export default function ContentForm({
             placeholder='Enter description'
             minRows={3}
             autosize
+          />
+
+          <TagInput
+            value={selectedTags}
+            onChange={setSelectedTags}
+            label='Tags'
+            placeholder='Select or type tags'
           />
         </Stack>
       )}

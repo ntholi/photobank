@@ -24,6 +24,10 @@ type UploadResult = {
   selectedTags?: Array<{ tag: string; confidence: number }>;
 };
 
+type UploadOptions = {
+  manualTags?: string[];
+};
+
 const ALLOWED_MIME_TYPES = [
   'image/jpeg',
   'image/png',
@@ -36,7 +40,11 @@ const ALLOWED_MIME_TYPES = [
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
-async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
+async function uploadFileToS3(
+  file: File,
+  key: string,
+  options: UploadOptions = {}
+): Promise<UploadResult> {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
@@ -105,7 +113,22 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
         contentLabels = recognitionResult.labels;
         console.log(`Detected ${contentLabels.length} labels for image ${key}`);
 
-        if (contentLabels.length > 0) {
+        const useManualTags =
+          options.manualTags && options.manualTags.length > 0;
+        const canUseAiTags = !useManualTags && contentLabels.length > 0;
+
+        if (useManualTags && options.manualTags) {
+          selectedTags = options.manualTags.map((tag) => ({
+            tag,
+            confidence: 100,
+          }));
+          console.log(
+            `Using manual tags for image ${key}:`,
+            selectedTags
+              .map((item) => `${item.tag}:${item.confidence}`)
+              .join(', ')
+          );
+        } else if (canUseAiTags) {
           try {
             const allTagsResult = await tagsService.getAll({});
             const availableTagNames = allTagsResult.items.map(
@@ -119,7 +142,7 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
               3
             );
             console.log(
-              `Selected ${selectedTags.length} tags for image ${key}:`,
+              `Selected ${selectedTags.length} AI tags for image ${key}:`,
               selectedTags
                 .map((item) => `${item.tag}:${item.confidence}`)
                 .join(', ')
@@ -158,7 +181,8 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
 }
 
 export async function uploadContentFile(
-  formData: FormData
+  formData: FormData,
+  options: UploadOptions = {}
 ): Promise<UploadResult> {
   return withAuth(async () => {
     const file = formData.get('file') as File;
@@ -180,7 +204,7 @@ export async function uploadContentFile(
     const fileExtension = file.name.split('.').pop();
     const key = `${nanoid()}.${fileExtension}`;
 
-    const uploadResult = await uploadFileToS3(file, key);
+    const uploadResult = await uploadFileToS3(file, key, options);
 
     return uploadResult;
   }, ['contributor']);
