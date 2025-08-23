@@ -1,8 +1,6 @@
-import React from 'react';
 import { getContent, getSimilarContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
 import { notFound } from 'next/navigation';
-import { getImageUrl } from '@/lib/utils';
 import { ContentDisplay } from './ContentDisplay';
 import { SimilarContent } from './SimilarContent';
 

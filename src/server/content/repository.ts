@@ -183,7 +183,7 @@ export default class ContentRepository extends BaseRepository<
         )
       )
       .groupBy(content.id)
-      .having(sql`count(DISTINCT ${contentLabels.name}) >= 4`)
+      .having(sql`count(DISTINCT ${contentLabels.name}) >= 5`)
       .orderBy(
         sql`count(DISTINCT ${contentLabels.name}) DESC`,
         desc(content.createdAt)

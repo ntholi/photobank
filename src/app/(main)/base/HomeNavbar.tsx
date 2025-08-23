@@ -7,7 +7,7 @@ import { IoMdSearch, IoMdCamera } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import ProfileMenu from './ProfileMenu';
 
-export default function NavbarComponent() {
+export default function HomeNavbar() {
   const [active, setActive] = React.useState(0);
   const router = useRouter();
 
@@ -15,9 +15,20 @@ export default function NavbarComponent() {
     setActive(index);
 
     if (menu === 'Home') {
-      router.push('/');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (menu === 'Gallery') {
-      router.push('/#gallery');
+      const galleryElement = document.getElementById('gallery');
+      if (galleryElement) {
+        galleryElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        router.push('/');
+        setTimeout(() => {
+          const element = document.getElementById('gallery');
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
+      }
     } else if (menu === 'Locations') {
       router.push('/dashboard/locations');
     } else if (menu === 'About') {
@@ -29,12 +40,15 @@ export default function NavbarComponent() {
 
   return (
     <Navbar
+      className='absolute mt-5 bg-transparent border-none z-30'
       classNames={{
         base: 'px-5 md:px-10',
         wrapper: 'max-w-full',
       }}
+      isBlurred={false}
+      position='static'
     >
-      <NavbarBrand className='gap-2 font-medium tracking-[4px] text-gray-900'>
+      <NavbarBrand className='gap-2 font-medium tracking-[4px] text-white'>
         <IoMdCamera className='text-xl text-primary' />
         <span className='text-sm md:text-base'>LEHAKOE</span>
       </NavbarBrand>
@@ -45,8 +59,8 @@ export default function NavbarComponent() {
             <Button
               variant='light'
               className={`${
-                active === index ? 'text-primary' : 'text-gray-700'
-              } hover:text-primary px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide`}
+                active === index ? 'text-primary' : 'text-white/80'
+              } hover:text-white px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide`}
               onClick={() => handleMenuClick(index, menu)}
             >
               {menu}
@@ -60,7 +74,7 @@ export default function NavbarComponent() {
           <Button
             isIconOnly
             variant='light'
-            className='text-gray-700 hover:text-primary p-0 min-w-fit'
+            className='text-white/80 hover:text-white p-0 min-w-fit'
             aria-label='Search'
           >
             <IoMdSearch className='text-lg' />
