@@ -22,7 +22,11 @@ class ContentService {
   }
 
   async create(data: Content) {
-    return withAuth(async () => this.repository.create(data), ['contributor']);
+    return withAuth(
+      async (session) =>
+        this.repository.create({ ...data, userId: session?.user.id as string }),
+      ['contributor']
+    );
   }
 
   async update(id: string, data: Partial<Content>) {

@@ -162,6 +162,7 @@ export default function ContentForm({
           type: true,
           status: true,
           locationId: true,
+          userId: true,
         }) as any
       }
       defaultValues={defaultValues}

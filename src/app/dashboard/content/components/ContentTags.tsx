@@ -14,7 +14,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
-import { getContentTagsByContentId } from '@/server/content-tags/actions';
+import { getContentTags } from '@/server/content-tags/actions';
 import Link from 'next/link';
 import { IconTag } from '@tabler/icons-react';
 
@@ -81,7 +81,7 @@ function TagBadge({ tag }: { tag: ContentTagItem }) {
 export function ContentTags({ contentId }: ContentTagsProps) {
   const { data, isLoading, error } = useQuery<ContentTagItem[]>({
     queryKey: ['contentTags', contentId],
-    queryFn: () => getContentTagsByContentId(contentId),
+    queryFn: () => getContentTags(contentId),
     staleTime: 5 * 60 * 1000,
   });
 
