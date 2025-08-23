@@ -1,9 +1,7 @@
-import React from 'react';
-import Link from 'next/link';
 import { getImageUrl } from '@/lib/utils';
-import { Card, CardBody } from '@heroui/card';
-import { Image } from '@heroui/image';
 import { getSimilarContent } from '@/server/content/actions';
+import { Image } from '@heroui/image';
+import Link from 'next/link';
 
 type ContentItem = {
   id: string;

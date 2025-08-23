@@ -1,13 +1,12 @@
-import { content, locations } from '@/db/schema';
 import {
   extractDominantColors,
   generateGradient,
   getDefaultColors,
 } from '@/lib/colors';
 import { getImageUrl } from '@/lib/utils';
+import { getContentWithDetails } from '@/server/content/actions';
 import { Image } from '@heroui/image';
 import DetailsSection from './DetailsSection';
-import { getContentWithDetails } from '@/server/content/actions';
 
 type Content = NonNullable<Awaited<ReturnType<typeof getContentWithDetails>>>;
 

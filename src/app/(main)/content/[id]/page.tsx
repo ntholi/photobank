@@ -1,9 +1,4 @@
-import {
-  getContent,
-  getContentWithDetails,
-  getSimilarContent,
-} from '@/server/content/actions';
-import { getLocation } from '@/server/locations/actions';
+import { getContentWithDetails } from '@/server/content/actions';
 import { notFound } from 'next/navigation';
 import { ContentDisplay } from './ContentDisplay';
 import { SimilarContent } from './SimilarContent';
