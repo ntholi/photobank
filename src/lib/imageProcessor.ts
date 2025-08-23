@@ -9,21 +9,21 @@ export interface ProcessedImage {
 
 export async function createThumbnail(
   imageBuffer: Buffer,
-  maxSize: number = 300
+  maxSize: number = 500
 ): Promise<ProcessedImage> {
   const processed = await sharp(imageBuffer)
     .resize(maxSize, maxSize, {
       fit: 'inside',
       withoutEnlargement: true,
     })
-    .webp({ quality: 85 })
+    .jpeg({ quality: 95, progressive: true })
     .toBuffer();
 
   const metadata = await sharp(processed).metadata();
 
   return {
     buffer: processed,
-    contentType: 'image/webp',
+    contentType: 'image/jpeg',
     width: metadata.width || maxSize,
     height: metadata.height || maxSize,
   };

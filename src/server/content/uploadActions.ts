@@ -63,7 +63,7 @@ async function uploadFileToS3(file: File, key: string): Promise<UploadResult> {
 
   if (isImageFile(file.type)) {
     try {
-      const thumbnail = await createThumbnail(buffer, 300);
+      const thumbnail = await createThumbnail(buffer);
       thumbnailKey = `${baseKey}_thumb.webp`;
 
       await s3Client.send(
