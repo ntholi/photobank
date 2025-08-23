@@ -205,6 +205,7 @@ export default class ContentRepository extends BaseRepository<
     return await db.query.content.findFirst({
       where: eq(content.id, id),
       with: {
+        user: true,
         location: true,
         tags: {
           with: {

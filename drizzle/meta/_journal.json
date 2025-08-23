@@ -29,6 +29,13 @@
       "when": 1755865369162,
       "tag": "0003_next_colleen_wing",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1755957239995,
+      "tag": "0004_rapid_supreme_intelligence",
+      "breakpoints": true
     }
   ]
 }

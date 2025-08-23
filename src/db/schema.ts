@@ -114,6 +114,9 @@ export const content = pgTable('content', {
   id: varchar({ length: 21 })
     .$defaultFn(() => nanoid())
     .primaryKey(),
+  userId: text()
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
   type: contentTypeEnum().notNull().default('image'),
   description: text(),
   fileName: text(),

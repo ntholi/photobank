@@ -17,6 +17,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
   authenticators: many(authenticators),
+  content: many(content),
 }));
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -41,6 +42,10 @@ export const authenticatorsRelations = relations(authenticators, ({ one }) => ({
 }));
 
 export const contentRelations = relations(content, ({ one, many }) => ({
+  user: one(users, {
+    fields: [content.userId],
+    references: [users.id],
+  }),
   location: one(locations, {
     fields: [content.locationId],
     references: [locations.id],
