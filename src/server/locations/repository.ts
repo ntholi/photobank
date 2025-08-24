@@ -15,6 +15,8 @@ export default class LocationRepository extends BaseRepository<
     placeId: string;
     name: string;
     address?: string | null;
+    latitude: number;
+    longitude: number;
   }) {
     const result = await db
       .insert(locations)
@@ -22,12 +24,16 @@ export default class LocationRepository extends BaseRepository<
         placeId: data.placeId,
         name: data.name,
         address: data.address ?? null,
+        latitude: data.latitude,
+        longitude: data.longitude,
       })
       .onConflictDoUpdate({
         target: locations.placeId,
         set: {
           name: data.name,
           address: data.address ?? null,
+          latitude: data.latitude,
+          longitude: data.longitude,
         },
       })
       .returning();
@@ -37,7 +43,7 @@ export default class LocationRepository extends BaseRepository<
 
   async updateLocationDetails(
     locationId: string,
-    data: { coverContentId?: string | null; about?: string }
+    data: { coverContentId?: string | null; about?: string },
   ) {
     await db
       .insert(locationDetails)

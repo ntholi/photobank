@@ -41,6 +41,8 @@ class LocationService {
     placeId: string;
     name: string;
     address?: string | null;
+    latitude: number;
+    longitude: number;
   }) {
     return withAuth(async () => {
       return this.repository.upsertByPlaceId(data);
@@ -49,7 +51,7 @@ class LocationService {
 
   async updateLocationDetails(
     locationId: string,
-    data: { coverContentId?: string | null; about?: string }
+    data: { coverContentId?: string | null; about?: string },
   ) {
     return withAuth(async () => {
       return this.repository.updateLocationDetails(locationId, data);

@@ -17,6 +17,7 @@ import {
   Alert,
   Tooltip,
   Paper,
+  NumberInput,
 } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'next/navigation';
@@ -42,7 +43,7 @@ type Props = {
   defaultAbout?: string;
   onSuccess?: (value: Location) => void;
   onError?: (
-    error: Error | React.SyntheticEvent<HTMLDivElement, Event>
+    error: Error | React.SyntheticEvent<HTMLDivElement, Event>,
   ) => void;
   title?: string;
 };
@@ -253,6 +254,22 @@ export default function LocationForm({
                 />
                 <TextInput label='Name' {...form.getInputProps('name')} />
                 <TextInput label='Address' {...form.getInputProps('address')} />
+                <Group grow>
+                  <NumberInput
+                    label='Latitude'
+                    {...form.getInputProps('latitude')}
+                    allowNegative
+                    decimalScale={6}
+                    required
+                  />
+                  <NumberInput
+                    label='Longitude'
+                    {...form.getInputProps('longitude')}
+                    allowNegative
+                    decimalScale={6}
+                    required
+                  />
+                </Group>
               </Stack>
             </Tabs.Panel>
           </Tabs>

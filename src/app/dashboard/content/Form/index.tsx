@@ -24,6 +24,8 @@ type FormContent = Omit<Content, 'id' | 'createdAt' | 'updatedAt'> & {
     placeId: string;
     name: string;
     address?: string | null;
+    latitude: number;
+    longitude: number;
   };
 };
 
@@ -39,7 +41,7 @@ type Props = {
   };
   onSuccess?: (value: Content) => void;
   onError?: (
-    error: Error | React.SyntheticEvent<HTMLDivElement, Event>
+    error: Error | React.SyntheticEvent<HTMLDivElement, Event>,
   ) => void;
   title?: string;
   initialLocationName?: string;
@@ -53,20 +55,22 @@ export default function ContentForm({
 }: Props) {
   const router = useRouter();
   const [locationName, setLocationName] = useState<string>(
-    initialLocationName ?? ''
+    initialLocationName ?? '',
   );
   const [locationData, setLocationData] = useState<
     | {
         placeId: string;
         name: string;
         address?: string | null;
+        latitude: number;
+        longitude: number;
       }
     | undefined
   >();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>(
-    defaultValues?.tags?.map((contentTag) => contentTag.tag.name) || []
+    defaultValues?.tags?.map((contentTag) => contentTag.tag.name) || [],
   );
 
   const handleFormSubmit = async (values: FormContent) => {
@@ -101,10 +105,10 @@ export default function ContentForm({
           try {
             await createContentLabels(
               createdContent.id as string,
-              uploadResult.contentLabels
+              uploadResult.contentLabels,
             );
             console.log(
-              `Saved ${uploadResult.contentLabels.length} content labels for content ${createdContent.id}`
+              `Saved ${uploadResult.contentLabels.length} content labels for content ${createdContent.id}`,
             );
           } catch (error) {
             console.error('Failed to save content labels:', error);
@@ -132,7 +136,7 @@ export default function ContentForm({
               `Saved ${tagsToSave.length} ${tagSource} tags for content ${createdContent.id}:`,
               tagsToSave
                 .map((item) => `${item.tag}:${item.confidence}`)
-                .join(', ')
+                .join(', '),
             );
           } catch (error) {
             console.error('Failed to save content tags:', error);
@@ -175,7 +179,7 @@ export default function ContentForm({
           await updateContentTags(updatedContent.id as string, tagsToSave);
           console.log(
             `Updated ${tagsToSave.length} tags for content ${updatedContent.id}:`,
-            tagsToSave.map((item) => item.tag).join(', ')
+            tagsToSave.map((item) => item.tag).join(', '),
           );
         } catch (error) {
           console.error('Failed to update content tags:', error);

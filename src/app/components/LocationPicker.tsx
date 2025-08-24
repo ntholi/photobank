@@ -15,6 +15,8 @@ type Props = Omit<AutocompleteProps, 'data' | 'onOptionSubmit' | 'onSelect'> & {
     placeId: string;
     name: string;
     address?: string | null;
+    latitude: number;
+    longitude: number;
   }) => void;
   required?: boolean;
 };
@@ -62,7 +64,7 @@ export default function LocationPicker({
         value: s.description,
         label: s.description,
       })),
-    [suggestions]
+    [suggestions],
   );
 
   const getDetails = useMutation({ mutationFn: getPlaceDetails });
@@ -98,7 +100,7 @@ export default function LocationPicker({
       }}
       onOptionSubmit={async (description) => {
         const match = (suggestions ?? []).find(
-          (o) => o.description === description
+          (o) => o.description === description,
         );
         if (!match) return;
 
@@ -113,6 +115,8 @@ export default function LocationPicker({
             placeId: details.placeId,
             name: details.name,
             address: details.address ?? null,
+            latitude: details.latitude ?? null,
+            longitude: details.longitude ?? null,
           });
         } catch (error) {
           setSelected(null);

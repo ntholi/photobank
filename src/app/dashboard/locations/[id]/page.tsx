@@ -66,6 +66,8 @@ export default async function LocationDetails({ params }: Props) {
               <FieldView label='Place Id'>{location.placeId}</FieldView>
               <FieldView label='Name'>{location.name}</FieldView>
               <FieldView label='Address'>{location.address}</FieldView>
+              <FieldView label='Latitude'>{location.latitude}</FieldView>
+              <FieldView label='Longitude'>{location.longitude}</FieldView>
             </Stack>
           </TabsPanel>
 

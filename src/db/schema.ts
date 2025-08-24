@@ -9,6 +9,7 @@ import {
   timestamp,
   uniqueIndex,
   varchar,
+  numeric,
 } from 'drizzle-orm/pg-core';
 import { nanoid } from 'nanoid';
 import type { AdapterAccountType } from 'next-auth/adapters';
@@ -55,7 +56,7 @@ export const accounts = pgTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
+  }),
 );
 
 export const sessions = pgTable('sessions', {
@@ -77,7 +78,7 @@ export const verificationTokens = pgTable(
     compositePk: primaryKey({
       columns: [verificationToken.identifier, verificationToken.token],
     }),
-  })
+  }),
 );
 
 export const authenticators = pgTable(
@@ -98,7 +99,7 @@ export const authenticators = pgTable(
     compositePK: primaryKey({
       columns: [authenticator.userId, authenticator.credentialID],
     }),
-  })
+  }),
 );
 
 export const contentTypeEnum = pgEnum('content_type', ['image', 'video']);
@@ -162,9 +163,9 @@ export const savedContent = pgTable(
   (table) => ({
     unique: uniqueIndex('unique_user_content').on(
       table.userId,
-      table.contentId
+      table.contentId,
     ),
-  })
+  }),
 );
 
 export const locations = pgTable('locations', {
@@ -174,6 +175,8 @@ export const locations = pgTable('locations', {
   placeId: text().unique().notNull(),
   name: text().notNull(),
   address: text(),
+  latitude: numeric({ precision: 9, scale: 6, mode: 'number' }).notNull(),
+  longitude: numeric({ precision: 9, scale: 6, mode: 'number' }).notNull(),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
   updatedAt: timestamp({ mode: 'date' }),
 });
@@ -217,7 +220,7 @@ export const contentTags = pgTable(
   },
   (table) => ({
     pk: primaryKey({ columns: [table.contentId, table.tagId] }),
-  })
+  }),
 );
 
 export const contentLabels = pgTable('content_labels', {

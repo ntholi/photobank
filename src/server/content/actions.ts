@@ -14,6 +14,8 @@ type CreateContentInput = Omit<Content, 'locationId'> & {
     placeId: string;
     name: string;
     address?: string | null;
+    latitude: number;
+    longitude: number;
   };
 };
 
@@ -24,7 +26,7 @@ export async function getContent(id: string) {
 export async function getContentByTag(
   tagId: string,
   page: number = 1,
-  size: number = 15
+  size: number = 15,
 ) {
   return service.getContentByTag(tagId, { page, size });
 }
@@ -68,7 +70,7 @@ export async function getFilteredContent(options: ContentFilterOptions) {
 export async function getGalleryContent(
   page: number = 1,
   search?: string,
-  tagIds?: string[]
+  tagIds?: string[],
 ) {
   return service.getFilteredContent({
     page,
@@ -89,7 +91,7 @@ export async function getContentWithDetails(id: string) {
 export async function getUserUploads(
   userId: string,
   page: number = 1,
-  size: number = 12
+  size: number = 12,
 ) {
   return service.getByUser(userId, page, size);
 }
