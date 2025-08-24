@@ -56,8 +56,8 @@ export async function updateLocationDetails(
   return service.updateLocationDetails(locationId, data);
 }
 
-export async function getLocationWithCoverContent(id: string) {
-  return service.getWithCoverContent(id);
+export async function getLocationWithCover(id: string) {
+  return service.getWithCover(id);
 }
 
 export async function searchPlaces(input: string): Promise<PlaceSuggestion[]> {
@@ -99,27 +99,5 @@ export async function getPlaceDetails(placeId: string): Promise<{
     placeId: r.place_id,
     name: r.name,
     address: r.formatted_address ?? null,
-  };
-}
-
-export async function getLocationWithContent(id: string) {
-  const location = await service.getWithCoverContent(id);
-
-  if (!location) {
-    return null;
-  }
-
-  // Get all published content for this location
-  const { getFilteredContent } = await import('@/server/content/actions');
-  const contentResult = await getFilteredContent({
-    locationId: id,
-    page: 1,
-    size: 100, // Get a lot of content, we can paginate later if needed
-  });
-
-  return {
-    ...location,
-    content: contentResult.items.filter((item) => item.status === 'published'),
-    totalContent: contentResult.totalItems,
   };
 }

@@ -56,9 +56,9 @@ class LocationService {
     }, ['contributor']);
   }
 
-  async getWithCoverContent(id: string) {
+  async getWithCover(id: string) {
     return withAuth(async () => {
-      return this.repository.findByIdWithCoverContent(id);
+      return this.repository.findByIdWithCover(id);
     }, []);
   }
 }

@@ -57,26 +57,6 @@ export async function deleteContent(id: string) {
   return service.delete(id);
 }
 
-export async function getContentPresignedUrl(contentId: string) {
-  const content = await service.get(contentId);
-
-  if (!content) {
-    throw new Error('Content not found');
-  }
-
-  if (!content.s3Key) {
-    throw new Error('No original file available for this content');
-  }
-
-  const url = await generatePresignedUrl(content.s3Key, 900);
-
-  return {
-    url,
-    expiresIn: 900,
-    fileName: content.fileName,
-  };
-}
-
 export async function getPresignedUrl(s3Key: string) {
   return generatePresignedUrl(s3Key, 900);
 }

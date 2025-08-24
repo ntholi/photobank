@@ -63,36 +63,14 @@ export default class LocationRepository extends BaseRepository<
     return result[0];
   }
 
-  async findByIdWithCoverContent(id: string) {
-    const location = await this.findById(id);
-    if (!location) return null;
-
-    const locationDetail = await db
-      .select()
-      .from(locationDetails)
-      .where(eq(locationDetails.locationId, id))
-      .limit(1)
-      .then(([result]) => result || null);
-
-    if (!locationDetail) {
-      return { ...location, coverContent: null, about: null };
-    }
-
-    let coverContent = null;
-    if (locationDetail.coverContentId) {
-      coverContent = await db
-        .select()
-        .from(content)
-        .where(eq(content.id, locationDetail.coverContentId))
-        .limit(1)
-        .then(([result]) => result || null);
-    }
-
-    return {
-      ...location,
-      coverContent,
-      about: locationDetail.about || null,
-    };
+  async findByIdWithCover(id: string) {
+    return db.query.locations.findFirst({
+      where: eq(locations.id, id),
+      with: {
+        content: true,
+        details: true,
+      },
+    });
   }
 }
 
