@@ -2,6 +2,7 @@
 
 import { locations } from '@/db/schema';
 import { locationsService as service } from './service';
+import { z } from 'zod';
 
 type Location = typeof locations.$inferInsert;
 
@@ -120,4 +121,9 @@ export async function getPlaceDetails(placeId: string): Promise<{
     latitude: lat,
     longitude: lng,
   };
+}
+
+export async function getTopLocationsByContentCount(limit: number = 20) {
+  const n = z.number().min(1).max(100).catch(20).parse(limit);
+  return service.getTopByContentCount(n);
 }

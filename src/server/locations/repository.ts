@@ -1,7 +1,7 @@
 import BaseRepository from '@/server/base/BaseRepository';
 import { locations, content, locationDetails } from '@/db/schema';
 import { db } from '@/db';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 export default class LocationRepository extends BaseRepository<
   typeof locations,
@@ -110,6 +110,30 @@ export default class LocationRepository extends BaseRepository<
       coverContent: result.details?.coverContent || null,
       about: result.details?.about || null,
     };
+  }
+
+  async getTopByContentCount(limit: number = 20) {
+    const rows = await db
+      .select({
+        id: locations.id,
+        name: locations.name,
+        latitude: locations.latitude,
+        longitude: locations.longitude,
+        count: sql<number>`count(*)`,
+      })
+      .from(content)
+      .innerJoin(locations, eq(content.locationId, locations.id))
+      .where(eq(content.status, 'published'))
+      .groupBy(
+        locations.id,
+        locations.name,
+        locations.latitude,
+        locations.longitude,
+      )
+      .orderBy(sql`count(*) DESC`)
+      .limit(limit);
+
+    return rows;
   }
 }
 

@@ -13,6 +13,7 @@
     "seed:tags": "tsx scripts/seed-tags.ts"
   },
   "dependencies": {
+    "react-simple-maps": "3.0.0",
     "@auth/drizzle-adapter": "^1.10.0",
     "@aws-sdk/client-bedrock-runtime": "^3.873.0",
     "@aws-sdk/client-rekognition": "^3.873.0",
@@ -112,6 +113,7 @@
     "zod": "^4.0.17"
   },
   "devDependencies": {
+    "@types/react-simple-maps": "3.0.3",
     "@next/eslint-plugin-next": "15.5.0",
     "@react-types/shared": "3.31.0",
     "@tailwindcss/postcss": "4.1.12",

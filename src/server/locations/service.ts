@@ -69,6 +69,13 @@ class LocationService {
       return this.repository.findByIdWithCoverContent(id);
     }, []);
   }
+
+  async getTopByContentCount(limit: number = 20) {
+    return withAuth(
+      async () => this.repository.getTopByContentCount(limit),
+      [],
+    );
+  }
 }
 
 export const locationsService = serviceWrapper(LocationService, 'Location');
