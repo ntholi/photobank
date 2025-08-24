@@ -108,7 +108,7 @@ export default function TagsFilter({ isLoading = false }: Props) {
           <Button
             isIconOnly
             size='sm'
-            variant='flat'
+            variant='solid'
             radius='full'
             onPress={handleScrollLeft}
             isDisabled={isLoading}
@@ -124,7 +124,7 @@ export default function TagsFilter({ isLoading = false }: Props) {
           <Button
             isIconOnly
             size='sm'
-            variant='flat'
+            variant='solid'
             radius='full'
             onPress={handleScrollRight}
             isDisabled={isLoading}
@@ -137,7 +137,7 @@ export default function TagsFilter({ isLoading = false }: Props) {
       )}
       <div
         ref={scrollRef}
-        className='w-full overflow-x-auto overflow-y-hidden px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
+        className='w-full overflow-x-auto rounded-3xl overflow-y-hidden px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
         onScroll={updateScrollState}
       >
         <div className='flex items-center gap-2 py-1'>
@@ -148,7 +148,6 @@ export default function TagsFilter({ isLoading = false }: Props) {
             onClick={() => setSelectedTagIds(null)}
             className='cursor-pointer flex-shrink-0'
             radius='full'
-            size='sm'
             aria-pressed={selectedTagIds.length === 0}
             isDisabled={isLoading}
           >
@@ -164,7 +163,6 @@ export default function TagsFilter({ isLoading = false }: Props) {
                 onClick={() => handleTagToggle(tag.id)}
                 className='cursor-pointer flex-shrink-0'
                 radius='full'
-                size='sm'
                 aria-pressed={selected}
                 isDisabled={isLoading}
               >
