@@ -8,6 +8,8 @@ import {
   ZoomableGroup,
 } from 'react-simple-maps';
 import React, { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { Tooltip } from '@heroui/tooltip';
 
 type TopLocation = {
   id: string;
@@ -18,6 +20,7 @@ type TopLocation = {
 };
 
 export default function MapView({ points }: { points: TopLocation[] }) {
+  const router = useRouter();
   const [minCount, maxCount] = useMemo(() => {
     if (points.length === 0) return [0, 0];
     const values = points.map((p) => p.count);
@@ -121,17 +124,39 @@ export default function MapView({ points }: { points: TopLocation[] }) {
           </Geographies>
 
           {points.map((p) => (
-            <Marker key={p.id} coordinates={[p.longitude, p.latitude]}>
-              <circle
-                r={radiusFor(p.count)}
-                fill='hsl(220 90% 56%)'
-                fillOpacity={0.6}
-                stroke='white'
-                strokeOpacity={0.5}
-                strokeWidth={0.75}
-              />
-              <title>{`${p.name} • ${p.count}`}</title>
-            </Marker>
+            <Tooltip
+              key={p.id}
+              content={
+                <div className='px-1 py-2'>
+                  <div className='text-small font-bold'>{p.name}</div>
+                  <div className='text-tiny'>{p.count} photos</div>
+                </div>
+              }
+            >
+              <Marker
+                coordinates={[p.longitude, p.latitude]}
+                onClick={() => router.push(`/locations/${p.id}`)}
+                onKeyDown={(e: React.KeyboardEvent<SVGGElement>) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    router.push(`/locations/${p.id}`);
+                  }
+                }}
+                role='button'
+                tabIndex={0}
+                aria-label={`${p.name} • ${p.count}`}
+                className='cursor-pointer'
+              >
+                <circle
+                  r={radiusFor(p.count)}
+                  fill='hsl(220 90% 56%)'
+                  fillOpacity={0.6}
+                  stroke='white'
+                  strokeOpacity={0.5}
+                  strokeWidth={0.75}
+                />
+              </Marker>
+            </Tooltip>
           ))}
         </ZoomableGroup>
       </ComposableMap>
