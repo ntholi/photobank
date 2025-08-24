@@ -6,7 +6,7 @@ export interface DetailsViewProps extends BoxProps {
 
 export function DetailsView({ children, ...props }: DetailsViewProps) {
   return (
-    <Box p={'xl'} {...props}>
+    <Box p={{ base: 'md', md: 'xl' }} {...props}>
       {children}
     </Box>
   );

@@ -15,7 +15,7 @@ export default async function UserEdit({ params }: Props) {
   }
 
   return (
-    <Box p={'lg'}>
+    <Box p={{ base: 'sm', md: 'lg' }}>
       <Form
         title={'Edit User'}
         defaultValues={user}

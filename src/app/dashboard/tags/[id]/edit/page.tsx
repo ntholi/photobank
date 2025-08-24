@@ -15,7 +15,7 @@ export default async function TagEdit({ params }: Props) {
   }
 
   return (
-    <Box p={'lg'}>
+    <Box p={{ base: 'sm', md: 'lg' }}>
       <Form
         title={'Edit Tag'}
         defaultValues={tag}

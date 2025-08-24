@@ -38,7 +38,7 @@ export default async function ContentDetailsPage({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <Stack gap='xl'>
+        <Stack gap='lg'>
           <ContentDisplay content={content} />
           <ContentID contentId={content.id} />
           <FieldView label='Location'>

@@ -16,11 +16,11 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { getContentByTag } from '@/server/content/actions';
 import { getImageUrl } from '@/lib/utils';
-import { content } from '@/db/schema';
 import { IconPhoto } from '@tabler/icons-react';
 import Link from 'next/link';
 
-type ContentItem = typeof content.$inferSelect;
+type TagContentResult = Awaited<ReturnType<typeof getContentByTag>>;
+type ContentItem = TagContentResult['items'][number];
 
 type Props = {
   tagId: string;
@@ -71,7 +71,10 @@ function PhotoCard({ item }: { item: ContentItem }) {
 
 function LoadingSkeleton() {
   return (
-    <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing='md'>
+    <SimpleGrid
+      cols={{ base: 2, sm: 3, md: 4, lg: 5 }}
+      spacing={{ base: 'sm', md: 'md' }}
+    >
       {Array.from({ length: 15 }).map((_, i) => (
         <Card key={i} padding={0} radius='md' withBorder>
           <AspectRatio ratio={1}>
@@ -91,11 +94,7 @@ export default function TagContent({ tagId }: Props) {
     data: contentResult,
     isLoading,
     error,
-  } = useQuery<{
-    items: ContentItem[];
-    totalPages: number;
-    totalItems: number;
-  }>({
+  } = useQuery<TagContentResult>({
     queryKey: ['tag-content', tagId],
     queryFn: () => getContentByTag(tagId, 1, 15),
     staleTime: 5 * 60 * 1000,
@@ -171,7 +170,10 @@ export default function TagContent({ tagId }: Props) {
         </Badge>
       </Group>
 
-      <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing='md'>
+      <SimpleGrid
+        cols={{ base: 2, sm: 3, md: 4, lg: 5 }}
+        spacing={{ base: 'sm', md: 'md' }}
+      >
         {photos.map((photo) => (
           <PhotoCard key={photo.id} item={photo} />
         ))}

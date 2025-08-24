@@ -188,7 +188,7 @@ export default function FileUpload({
         >
           <Group
             justify='center'
-            gap='xl'
+            gap='lg'
             mih={220}
             style={{ pointerEvents: 'none' }}
           >

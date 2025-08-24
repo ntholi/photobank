@@ -32,7 +32,7 @@ export default async function TagDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <Stack gap='xl'>
+        <Stack gap='lg'>
           <FieldView label='Name'>{tag.name}</FieldView>
           <FieldView label='Slug'>{tag.slug}</FieldView>
           <TagContent tagId={id} />

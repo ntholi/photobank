@@ -4,7 +4,7 @@ import { createUser } from '@/server/users/actions';
 
 export default async function NewPage() {
   return (
-    <Box p={'lg'}>
+    <Box p={{ base: 'sm', md: 'lg' }}>
       <Form title={'Create User'} onSubmit={createUser} />
     </Box>
   );

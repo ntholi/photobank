@@ -27,7 +27,10 @@ type Props = {
 
 function LoadingSkeleton() {
   return (
-    <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing='md'>
+    <SimpleGrid
+      cols={{ base: 2, sm: 3, md: 4, lg: 5 }}
+      spacing={{ base: 'sm', md: 'md' }}
+    >
       {Array.from({ length: 12 }).map((_, i) => (
         <Card key={i} padding={0} radius='md' withBorder>
           <AspectRatio ratio={1}>
@@ -80,7 +83,10 @@ export default function LocationContent({ locationId }: Props) {
         </Badge>
       </Group>
 
-      <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing='md'>
+      <SimpleGrid
+        cols={{ base: 2, sm: 3, md: 4, lg: 5 }}
+        spacing={{ base: 'sm', md: 'md' }}
+      >
         {items.map((item) => (
           <Card
             key={item.id}

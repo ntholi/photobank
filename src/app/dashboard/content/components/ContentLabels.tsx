@@ -94,7 +94,10 @@ function LabelCard({ label }: { label: ContentLabel }) {
 
 function LoadingSkeleton() {
   return (
-    <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing='md'>
+    <SimpleGrid
+      cols={{ base: 1, sm: 2, lg: 3 }}
+      spacing={{ base: 'sm', md: 'md' }}
+    >
       {Array.from({ length: 6 }).map((_, i) => (
         <Card key={i} padding='md' radius='md' withBorder>
           <Stack gap='sm'>
@@ -181,7 +184,10 @@ export function ContentLabels({ contentId }: ContentLabelsProps) {
         </Badge>
       </Group>
 
-      <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing='md'>
+      <SimpleGrid
+        cols={{ base: 1, sm: 2, lg: 3 }}
+        spacing={{ base: 'sm', md: 'md' }}
+      >
         {sortedLabels.map((label) => (
           <LabelCard key={label.id} label={label} />
         ))}

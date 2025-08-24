@@ -4,7 +4,7 @@ import { createContent } from '@/server/content/actions';
 
 export default async function NewPage() {
   return (
-    <Box p={'lg'}>
+    <Box p={{ base: 'sm', md: 'lg' }}>
       <Form title={'Create Content'} onSubmit={createContent} />
     </Box>
   );

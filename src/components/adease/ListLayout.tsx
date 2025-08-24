@@ -97,7 +97,7 @@ export function ListLayout<T>({
   }
 
   return (
-    <Grid columns={14} gutter='md'>
+    <Grid columns={14} gutter={{ base: 'xs', sm: 'sm', md: 'md' }}>
       <GridCol span={isMobile ? 14 : 4} pb={0}>
         <Paper withBorder h='88vh'>
           <Flex direction='column' h='100%'>

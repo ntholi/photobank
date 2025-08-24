@@ -46,7 +46,7 @@ export default async function LocationDetails({ params }: Props) {
           await deleteLocation(id);
         }}
       />
-      <DetailsViewBody p={'xs'}>
+      <DetailsViewBody>
         <Tabs defaultValue={'about'} keepMounted={false}>
           <TabsList>
             <TabsTab value='about'>About</TabsTab>

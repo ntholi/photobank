@@ -20,7 +20,7 @@ export default async function LocationEdit({ params }: Props) {
   const { coverContent, about, ...location } = locationData;
 
   return (
-    <Box p={'lg'}>
+    <Box p={{ base: 'sm', md: 'lg' }}>
       <Form
         title={'Edit Location'}
         defaultValues={location}

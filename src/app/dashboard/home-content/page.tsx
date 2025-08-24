@@ -175,7 +175,7 @@ export default function HomeContentPage() {
   }
 
   return (
-    <Container size='lg' py='xl'>
+    <Container size='lg' py={{ base: 'md', md: 'xl' }}>
       <Stack gap='lg'>
         <Group justify='space-between'>
           <Title order={2}>Home Content Management</Title>

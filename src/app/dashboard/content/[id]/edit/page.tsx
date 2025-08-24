@@ -19,7 +19,7 @@ export default async function ContentEdit({ params }: Props) {
     : null;
 
   return (
-    <Box p={'lg'}>
+    <Box p={{ base: 'sm', md: 'lg' }}>
       <Form
         title={'Edit Content'}
         defaultValues={content}
