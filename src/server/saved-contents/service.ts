@@ -61,6 +61,13 @@ class SavedContentService {
       ['auth']
     );
   }
+
+  async getByUser(userId: string, page: number = 1, size: number = 12) {
+    return withAuth(
+      async () => this.repository.getByUserWithContent(userId, page, size),
+      ['all']
+    );
+  }
 }
 
 export const savedContentsService = serviceWrapper(

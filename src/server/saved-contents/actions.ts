@@ -38,3 +38,11 @@ export async function toggleSaveContent(contentId: string) {
   revalidatePath('/');
   return result;
 }
+
+export async function getSavedByUser(
+  userId: string,
+  page: number = 1,
+  size: number = 12
+) {
+  return service.getByUser(userId, page, size);
+}

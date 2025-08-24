@@ -85,3 +85,11 @@ export async function getSimilarContent(contentId: string, limit: number = 20) {
 export async function getContentWithDetails(id: string) {
   return service.getContentWithDetails(id);
 }
+
+export async function getUserUploads(
+  userId: string,
+  page: number = 1,
+  size: number = 12
+) {
+  return service.getByUser(userId, page, size);
+}

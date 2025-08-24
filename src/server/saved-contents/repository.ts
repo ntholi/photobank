@@ -1,7 +1,7 @@
 import BaseRepository from '@/server/base/BaseRepository';
 import { db } from '@/db';
-import { savedContent } from '@/db/schema';
-import { and, eq, sql } from 'drizzle-orm';
+import { content, savedContent } from '@/db/schema';
+import { and, desc, eq, sql } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 
 export default class SavedContentRepository extends BaseRepository<
@@ -59,6 +59,48 @@ export default class SavedContentRepository extends BaseRepository<
     const row = Array.isArray(result?.rows) ? result.rows[0] : result[0];
     const inserted = Number(row?.inserted ?? 0);
     return { saved: inserted > 0 } as const;
+  }
+
+  async getByUserWithContent(
+    userId: string,
+    page: number = 1,
+    size: number = 12
+  ) {
+    const offset = (page - 1) * size;
+    const items = await db
+      .select({
+        id: content.id,
+        type: content.type,
+        description: content.description,
+        fileName: content.fileName,
+        thumbnailKey: content.thumbnailKey,
+        createdAt: content.createdAt,
+      })
+      .from(savedContent)
+      .innerJoin(content, eq(savedContent.contentId, content.id))
+      .where(
+        and(eq(savedContent.userId, userId), eq(content.status, 'published'))
+      )
+      .orderBy(desc(savedContent.createdAt))
+      .limit(size)
+      .offset(offset);
+
+    const countResult = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(savedContent)
+      .innerJoin(content, eq(savedContent.contentId, content.id))
+      .where(
+        and(eq(savedContent.userId, userId), eq(content.status, 'published'))
+      );
+
+    const totalItems = countResult[0]?.count ?? 0;
+
+    return {
+      items,
+      totalPages: Math.ceil(totalItems / size),
+      totalItems,
+      currentPage: page,
+    };
   }
 }
 

@@ -38,6 +38,38 @@ export default class ContentRepository extends BaseRepository<
     super(content, content.id);
   }
 
+  async getByUser(userId: string, page: number = 1, size: number = 12) {
+    const offset = (page - 1) * size;
+    const items = await db
+      .select({
+        id: content.id,
+        type: content.type,
+        description: content.description,
+        fileName: content.fileName,
+        thumbnailKey: content.thumbnailKey,
+        createdAt: content.createdAt,
+      })
+      .from(content)
+      .where(and(eq(content.userId, userId), eq(content.status, 'published')))
+      .orderBy(desc(content.createdAt))
+      .limit(size)
+      .offset(offset);
+
+    const countResult = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(content)
+      .where(and(eq(content.userId, userId), eq(content.status, 'published')));
+
+    const totalItems = countResult[0]?.count ?? 0;
+
+    return {
+      items,
+      totalPages: Math.ceil(totalItems / size),
+      totalItems,
+      currentPage: page,
+    };
+  }
+
   async getContentByTag(
     tagId: string,
     options: QueryOptions<typeof content> = {}

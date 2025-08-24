@@ -74,6 +74,13 @@ class ContentService {
       ['all']
     );
   }
+
+  async getByUser(userId: string, page: number = 1, size: number = 12) {
+    return withAuth(
+      async () => this.repository.getByUser(userId, page, size),
+      ['all']
+    );
+  }
 }
 
 export const contentService = serviceWrapper(ContentService, 'Content');
