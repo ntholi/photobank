@@ -36,11 +36,11 @@ export default function SlideInfo({ data }: Props) {
       <motion.div initial='hidden' animate='visible' className='flex flex-col'>
         <AnimatedText
           className='spacing overflow-hidden text-[#D5D5D6]'
-          data={data.content.fileName || 'Untitled'}
+          data={data.content.fileName || 'Lesotho'}
         />
         <AnimatedText
           className='my-1 text-4xl font-semibold md:my-3 md:text-8xl md:leading-[100px]'
-          data={data.content.type === 'image' ? 'Photo' : 'Video'}
+          data={'Lehakoe'}
         />
         <AnimatedText
           className='text-xs text-[#D5D5D6]'
