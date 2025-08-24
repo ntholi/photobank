@@ -43,6 +43,20 @@
       "when": 1755959726186,
       "tag": "0005_fantastic_radioactive_man",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1756026081733,
+      "tag": "0006_amusing_scourge",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1756026241451,
+      "tag": "0007_crazy_electro",
+      "breakpoints": true
     }
   ]
 }

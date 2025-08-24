@@ -1,17 +1,17 @@
 import {
-  timestamp,
-  pgTable,
-  text,
-  primaryKey,
-  integer,
   boolean,
-  varchar,
-  pgEnum,
+  integer,
   jsonb,
-  serial,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uniqueIndex,
+  varchar,
 } from 'drizzle-orm/pg-core';
-import type { AdapterAccountType } from 'next-auth/adapters';
 import { nanoid } from 'nanoid';
+import type { AdapterAccountType } from 'next-auth/adapters';
 
 export const userRoleEnum = pgEnum('user_role', [
   'user',
@@ -22,7 +22,7 @@ export const userRoleEnum = pgEnum('user_role', [
 export type UserRole = (typeof userRoleEnum.enumValues)[number];
 
 export const users = pgTable('users', {
-  id: text()
+  id: varchar({ length: 21 })
     .primaryKey()
     .$defaultFn(() => nanoid()),
   name: text(),
@@ -36,7 +36,7 @@ export const users = pgTable('users', {
 export const accounts = pgTable(
   'accounts',
   {
-    userId: text()
+    userId: varchar({ length: 21 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     type: text().$type<AdapterAccountType>().notNull(),
@@ -59,7 +59,7 @@ export const accounts = pgTable(
 
 export const sessions = pgTable('sessions', {
   sessionToken: text().primaryKey(),
-  userId: text()
+  userId: varchar({ length: 21 })
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   expires: timestamp({ mode: 'date' }).notNull(),
@@ -83,7 +83,7 @@ export const authenticators = pgTable(
   'authenticators',
   {
     credentialID: text().notNull().unique(),
-    userId: text()
+    userId: varchar({ length: 21 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     providerAccountId: text().notNull(),
@@ -115,7 +115,7 @@ export const content = pgTable('content', {
   id: varchar({ length: 21 })
     .$defaultFn(() => nanoid())
     .primaryKey(),
-  userId: text()
+  userId: varchar({ length: 21 })
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   type: contentTypeEnum().notNull().default('image'),
@@ -142,6 +142,29 @@ export const homeContent = pgTable('home_content', {
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
   updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
 });
+
+export const savedContent = pgTable(
+  'saved_contents',
+  {
+    id: varchar({ length: 21 })
+      .$defaultFn(() => nanoid())
+      .primaryKey(),
+    contentId: varchar({ length: 21 })
+      .notNull()
+      .references(() => content.id, { onDelete: 'cascade' }),
+    userId: varchar({ length: 21 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    createdAt: timestamp({ mode: 'date' }).defaultNow(),
+    updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
+  },
+  (table) => ({
+    unique: uniqueIndex('unique_user_content').on(
+      table.userId,
+      table.contentId
+    ),
+  })
+);
 
 export const locations = pgTable('locations', {
   id: varchar({ length: 21 })
