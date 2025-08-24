@@ -1,5 +1,5 @@
 import BaseRepository from '@/server/base/BaseRepository';
-import { homeContent, content } from '@/db/schema';
+import { homeContent, content, locations } from '@/db/schema';
 import { db } from '@/db';
 import { eq, asc } from 'drizzle-orm';
 
@@ -13,26 +13,36 @@ export default class HomeContentRepository extends BaseRepository<
 
   async getAllWithDetails() {
     const items = await db
-      .select({
-        id: homeContent.id,
-        position: homeContent.position,
-        contentId: homeContent.contentId,
-        createdAt: homeContent.createdAt,
-        content: {
-          id: content.id,
-          fileName: content.fileName,
-          s3Key: content.s3Key,
-          thumbnailKey: content.thumbnailKey,
-          watermarkedKey: content.watermarkedKey,
-          type: content.type,
-          status: content.status,
-        },
-      })
+      .select()
       .from(homeContent)
       .innerJoin(content, eq(homeContent.contentId, content.id))
+      .leftJoin(locations, eq(content.locationId, locations.id))
       .orderBy(asc(homeContent.position));
 
-    return items;
+    return items.map((item) => ({
+      id: item.home_content.id,
+      position: item.home_content.position,
+      contentId: item.home_content.contentId,
+      createdAt: item.home_content.createdAt,
+      content: {
+        id: item.content.id,
+        fileName: item.content.fileName,
+        description: item.content.description,
+        s3Key: item.content.s3Key,
+        thumbnailKey: item.content.thumbnailKey,
+        watermarkedKey: item.content.watermarkedKey,
+        type: item.content.type,
+        status: item.content.status,
+        locationId: item.content.locationId,
+        location: item.locations
+          ? {
+              id: item.locations.id,
+              name: item.locations.name,
+              address: item.locations.address,
+            }
+          : null,
+      },
+    }));
   }
 
   async addContentToHome(contentIds: string[]) {

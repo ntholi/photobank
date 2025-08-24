@@ -55,7 +55,7 @@ export default function BackgroundImage({
             opacity: { ease: 'linear' },
             layout: { duration: 0.6 },
           }}
-          className='absolute left-0 top-0 z-10 h-full w-full object-cover brightness-50'
+          className='absolute left-0 top-0 z-10 h-full w-full object-cover brightness-60'
           src={transitionUrl}
         />
       )}
@@ -64,7 +64,7 @@ export default function BackgroundImage({
           alt='Current Image'
           key={currentSlideData.content.s3Key + 'transition'}
           src={currentUrl}
-          className='absolute left-0 top-0 h-full w-full object-cover brightness-50'
+          className='absolute left-0 top-0 h-full w-full object-cover brightness-60'
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = '/photo_session.svg';

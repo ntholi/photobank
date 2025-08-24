@@ -11,9 +11,27 @@ import SlideInfo from './SlideInfo';
 import Controls from './Controls';
 import HomeNavbar from '../../base/HomeNavbar';
 
-type HomeContentData = Awaited<
-  ReturnType<typeof getAllHomeContentWithDetails>
->[0];
+type HomeContentData = {
+  id: string;
+  position: number;
+  contentId: string;
+  createdAt: Date;
+  content: {
+    id: string;
+    fileName: string | null;
+    description: string | null;
+    s3Key: string;
+    thumbnailKey: string;
+    watermarkedKey: string | null;
+    type: 'image' | 'video';
+    status: string;
+    location: {
+      id: string;
+      name: string;
+      address: string | null;
+    } | null;
+  };
+};
 
 type ContentData = {
   id: string;
@@ -21,14 +39,20 @@ type ContentData = {
   content: {
     id: string;
     fileName: string | null;
+    description: string | null;
     s3Key: string;
     thumbnailKey: string;
     type: 'image' | 'video';
+    location: {
+      id: string;
+      name: string;
+      address: string | null;
+    } | null;
   };
 };
 
 type Props = {
-  content: Awaited<ReturnType<typeof getAllHomeContentWithDetails>>;
+  content: HomeContentData[];
 };
 
 export default function Hero({ content }: Props) {
@@ -39,9 +63,11 @@ export default function Hero({ content }: Props) {
     content: {
       id: item.content.id,
       fileName: item.content.fileName,
+      description: item.content.description,
       s3Key: item.content.s3Key,
       thumbnailKey: item.content.thumbnailKey,
       type: item.content.type,
+      location: item.content.location,
     },
   });
 

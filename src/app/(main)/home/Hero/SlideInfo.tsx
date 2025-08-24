@@ -9,9 +9,15 @@ type ContentData = {
   content: {
     id: string;
     fileName: string | null;
+    description: string | null;
     s3Key: string;
     thumbnailKey: string;
     type: 'image' | 'video';
+    location: {
+      id: string;
+      name: string;
+      address: string | null;
+    } | null;
   };
 };
 
@@ -36,7 +42,7 @@ export default function SlideInfo({ data }: Props) {
       <motion.div initial='hidden' animate='visible' className='flex flex-col'>
         <AnimatedText
           className='spacing overflow-hidden text-[#D5D5D6]'
-          data={data.content.fileName || 'Lesotho'}
+          data={data.content.location?.name || 'Lesotho'}
         />
         <AnimatedText
           className='my-1 text-4xl font-semibold md:my-3 md:text-8xl md:leading-[100px]'
@@ -44,7 +50,13 @@ export default function SlideInfo({ data }: Props) {
         />
         <AnimatedText
           className='text-xs text-[#D5D5D6]'
-          data={`Beautiful ${data.content.type} from Lesotho`}
+          data={
+            data.content.description
+              ? data.content.description.length > 75
+                ? `${data.content.description.substring(0, 75)}...`
+                : data.content.description
+              : `Beautiful ${data.content.type} from Lesotho`
+          }
         />
       </motion.div>
       <motion.div layout className='mt-5 flex items-center gap-3'>
