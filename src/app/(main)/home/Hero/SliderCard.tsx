@@ -11,6 +11,11 @@ type ContentData = {
     s3Key: string;
     thumbnailKey: string;
     type: 'image' | 'video';
+    location: {
+      id: string;
+      name: string;
+      address: string | null;
+    } | null;
   };
 };
 
@@ -56,18 +61,18 @@ export default function SliderCard({ data }: Props) {
             layout
             className='mb-2 h-[2px] w-3 rounded-full bg-white'
           />
-          <motion.p
+          {/* <motion.p
             layoutId={`filename-${data.content.id}`}
             className='text-xs text-[#D5D5D6]'
           >
             {data.content.fileName || 'Untitled'}
-          </motion.p>
-          <motion.h1
-            layoutId={`type-${data.content.id}`}
-            className='text-xl leading-6 text-white'
+          </motion.p> */}
+          <motion.h2
+            layoutId={`location-${data.content.id}`}
+            className='text-lg leading-6 text-white'
           >
-            {data.content.type === 'image' ? 'Photo' : 'Video'}
-          </motion.h1>
+            {data.content.location?.name || 'Unknown Location'}
+          </motion.h2>
         </motion.div>
       </motion.div>
     </motion.div>
