@@ -2,12 +2,12 @@
 
 import { useMemo } from 'react';
 import { Button } from '@heroui/button';
-import { HeartFilledIcon } from '@/components/icons';
 import {
   isContentSaved,
   toggleSaveContent,
 } from '@/server/saved-contents/actions';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { IoMdHeart } from 'react-icons/io';
 
 type Props = {
   contentId: string;
@@ -42,7 +42,7 @@ export default function SaveContentButton({ contentId }: Props) {
     <Button
       variant={query.data ? 'solid' : 'flat'}
       color={query.data ? 'danger' : 'default'}
-      startContent={<HeartFilledIcon size={18} />}
+      startContent={<IoMdHeart size={18} />}
       isLoading={query.isLoading || mutation.isPending}
       onPress={() => mutation.mutate()}
       radius='sm'

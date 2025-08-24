@@ -4,7 +4,7 @@ import React from 'react';
 import { Tabs, Tab } from '@heroui/tabs';
 import MyUploadsContent from './MyUploadsContent';
 import MySavedContent from './MySavedContent';
-import { GridIcon, BookmarkIcon } from '@/components/icons';
+import { IoMdBookmark, IoMdCloudUpload } from 'react-icons/io';
 
 type Props = {
   userId: string;
@@ -30,8 +30,8 @@ export default function ProfileTabs({ userId }: Props) {
           key='uploads'
           title={
             <div className='flex items-center gap-2 text-xs tracking-wide uppercase'>
-              <GridIcon size={16} />
-              <span>Posts</span>
+              <IoMdCloudUpload size={16} />
+              <span>My Uploads</span>
             </div>
           }
         >
@@ -41,7 +41,7 @@ export default function ProfileTabs({ userId }: Props) {
           key='saved'
           title={
             <div className='flex items-center gap-2 text-xs tracking-wide uppercase'>
-              <BookmarkIcon size={16} />
+              <IoMdBookmark size={16} />
               <span>Saved</span>
             </div>
           }

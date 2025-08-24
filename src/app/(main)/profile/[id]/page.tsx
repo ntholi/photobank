@@ -31,19 +31,11 @@ export default async function ProfilePage({ params }: Props) {
         />
 
         <div className='flex-1'>
-          <div className='flex items-center gap-4 mb-4'>
+          <div className='flex flex-col gap-0 mb-4'>
             <h1 className='text-2xl font-medium'>{user.name}</h1>
             <Chip variant='flat' color='primary' size='sm'>
               {user.role}
             </Chip>
-            <div className='ml-auto flex items-center gap-3'>
-              <Button size='sm' variant='flat'>
-                Follow
-              </Button>
-              <Button size='sm' variant='bordered'>
-                Message
-              </Button>
-            </div>
           </div>
 
           <div className='flex items-center gap-8 mb-4 text-sm'>
@@ -56,7 +48,6 @@ export default async function ProfilePage({ params }: Props) {
           </div>
 
           <div className='space-y-1'>
-            {user.name && <div className='font-semibold'>{user.name}</div>}
             {user.bio ? (
               <p className='text-default-600 whitespace-pre-wrap'>{user.bio}</p>
             ) : (
