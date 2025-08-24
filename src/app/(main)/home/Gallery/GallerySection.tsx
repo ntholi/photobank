@@ -1,17 +1,14 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useQueryState, parseAsString, parseAsArrayOf } from 'nuqs';
+import { useQueryState, parseAsString } from 'nuqs';
 import Gallery from './index';
 import SearchBar from './SearchBar';
 import TagsFilter from './TagsFilter';
 
 export default function GallerySection() {
   const [searchQuery] = useQueryState('q', parseAsString.withDefault(''));
-  const [selectedTagIds] = useQueryState(
-    'tags',
-    parseAsArrayOf(parseAsString).withDefault([])
-  );
+  const [selectedTagId] = useQueryState('tags', parseAsString.withDefault(''));
 
   useEffect(() => {
     if (window.location.hash === '#gallery') {
@@ -20,7 +17,7 @@ export default function GallerySection() {
         galleryElement.scrollIntoView({ behavior: 'smooth' });
       }
     }
-  }, [selectedTagIds]);
+  }, [selectedTagId]);
 
   function clearFilters() {
     window.history.pushState({}, '', window.location.pathname);
@@ -52,7 +49,10 @@ export default function GallerySection() {
         </div>
 
         <div className='mt-8'>
-          <Gallery search={searchQuery} tagIds={selectedTagIds} />
+          <Gallery
+            search={searchQuery}
+            tagIds={selectedTagId ? [selectedTagId] : []}
+          />
         </div>
       </div>
     </section>

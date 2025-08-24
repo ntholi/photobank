@@ -5,7 +5,7 @@ import { Chip } from '@heroui/chip';
 import { Button } from '@heroui/button';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
-import { useQueryState, parseAsArrayOf, parseAsString } from 'nuqs';
+import { useQueryState, parseAsString } from 'nuqs';
 import { getAllTags } from '@/server/tags/actions';
 
 interface Props {
@@ -13,9 +13,9 @@ interface Props {
 }
 
 export default function TagsFilter({ isLoading = false }: Props) {
-  const [selectedTagIds, setSelectedTagIds] = useQueryState(
+  const [selectedTagId, setSelectedTagId] = useQueryState(
     'tags',
-    parseAsArrayOf(parseAsString).withDefault([])
+    parseAsString.withDefault('')
   );
 
   const { data: tags = [], isLoading: tagsLoading } = useQuery({
@@ -74,12 +74,8 @@ export default function TagsFilter({ isLoading = false }: Props) {
     [sortedTags.length]
   );
 
-  function handleTagToggle(tagId: string) {
-    const newSelectedTags = selectedTagIds.includes(tagId)
-      ? selectedTagIds.filter((id) => id !== tagId)
-      : [...selectedTagIds, tagId];
-
-    setSelectedTagIds(newSelectedTags.length > 0 ? newSelectedTags : null);
+  function handleTagSelect(tagId: string) {
+    setSelectedTagId(selectedTagId === tagId ? '' : tagId);
   }
 
   if (tagsLoading) {
@@ -143,24 +139,24 @@ export default function TagsFilter({ isLoading = false }: Props) {
         <div className='flex items-center gap-2 py-1'>
           <Chip
             key='all-tags'
-            variant={selectedTagIds.length === 0 ? 'solid' : 'flat'}
-            color={selectedTagIds.length === 0 ? 'primary' : 'default'}
-            onClick={() => setSelectedTagIds(null)}
+            variant={!selectedTagId ? 'solid' : 'flat'}
+            color={!selectedTagId ? 'primary' : 'default'}
+            onClick={() => setSelectedTagId('')}
             className='cursor-pointer flex-shrink-0'
             radius='full'
-            aria-pressed={selectedTagIds.length === 0}
+            aria-pressed={!selectedTagId}
             isDisabled={isLoading}
           >
             All
           </Chip>
           {sortedTags.map((tag) => {
-            const selected = selectedTagIds.includes(tag.id);
+            const selected = selectedTagId === tag.id;
             return (
               <Chip
                 key={tag.id}
                 variant={selected ? 'solid' : 'flat'}
                 color={selected ? 'primary' : 'default'}
-                onClick={() => handleTagToggle(tag.id)}
+                onClick={() => handleTagSelect(tag.id)}
                 className='cursor-pointer flex-shrink-0'
                 radius='full'
                 aria-pressed={selected}
