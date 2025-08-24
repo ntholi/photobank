@@ -49,9 +49,11 @@ export default function HomeNavbar() {
       isBlurred={false}
       position='static'
     >
-      <NavbarBrand className='gap-2 font-medium tracking-[4px] text-white'>
-        <IoMdCamera className='text-xl text-primary' />
-        <span className='text-sm md:text-base'>LEHAKOE</span>
+      <NavbarBrand className='gap-2 font-medium tracking-[4px]'>
+        <Link href='/' className='flex items-center gap-2 text-white'>
+          <IoMdCamera className='text-2xl' />
+          <span className='text-sm md:text-base'>LEHAKOE</span>
+        </Link>
       </NavbarBrand>
 
       <NavbarContent className='hidden md:flex gap-10' justify='center'>
