@@ -13,6 +13,10 @@ type ContentData = {
     s3Key: string;
     thumbnailKey: string;
     type: 'image' | 'video';
+    user: {
+      id: string;
+      name: string | null;
+    } | null;
     location: {
       id: string;
       name: string;
@@ -49,14 +53,8 @@ export default function SlideInfo({ data }: Props) {
           data={'Lehakoe'}
         />
         <AnimatedText
-          className='text-xs text-[#D5D5D6]'
-          data={
-            data.content.description
-              ? data.content.description.length > 75
-                ? `${data.content.description.substring(0, 75)}...`
-                : data.content.description
-              : `Beautiful ${data.content.type} from Lesotho`
-          }
+          className='text-[#D5D5D6]'
+          data={`Photo by ${data.content.user?.name || 'Anonymous'}`}
         />
       </motion.div>
       <motion.div layout className='mt-5 flex items-center gap-3'>

@@ -1,5 +1,5 @@
 import BaseRepository from '@/server/base/BaseRepository';
-import { homeContent, content, locations } from '@/db/schema';
+import { homeContent, content, locations, users } from '@/db/schema';
 import { db } from '@/db';
 import { eq, asc } from 'drizzle-orm';
 
@@ -12,18 +12,34 @@ export default class HomeContentRepository extends BaseRepository<
   }
 
   async getAllWithDetails() {
-    const items = await db
-      .select()
-      .from(homeContent)
-      .innerJoin(content, eq(homeContent.contentId, content.id))
-      .leftJoin(locations, eq(content.locationId, locations.id))
-      .orderBy(asc(homeContent.position));
+    const items = await db.query.homeContent.findMany({
+      orderBy: [asc(homeContent.position)],
+      with: {
+        content: {
+          with: {
+            user: {
+              columns: {
+                id: true,
+                name: true,
+              },
+            },
+            location: {
+              columns: {
+                id: true,
+                name: true,
+                address: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
     return items.map((item) => ({
-      id: item.home_content.id,
-      position: item.home_content.position,
-      contentId: item.home_content.contentId,
-      createdAt: item.home_content.createdAt,
+      id: item.id,
+      position: item.position,
+      contentId: item.contentId,
+      createdAt: item.createdAt || new Date(),
       content: {
         id: item.content.id,
         fileName: item.content.fileName,
@@ -34,11 +50,17 @@ export default class HomeContentRepository extends BaseRepository<
         type: item.content.type,
         status: item.content.status,
         locationId: item.content.locationId,
-        location: item.locations
+        user: item.content.user
           ? {
-              id: item.locations.id,
-              name: item.locations.name,
-              address: item.locations.address,
+              id: item.content.user.id,
+              name: item.content.user.name,
+            }
+          : null,
+        location: item.content.location
+          ? {
+              id: item.content.location.id,
+              name: item.content.location.name,
+              address: item.content.location.address,
             }
           : null,
       },

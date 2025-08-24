@@ -25,6 +25,11 @@ type HomeContentData = {
     watermarkedKey: string | null;
     type: 'image' | 'video';
     status: string;
+    locationId: string | null;
+    user: {
+      id: string;
+      name: string | null;
+    } | null;
     location: {
       id: string;
       name: string;
@@ -43,6 +48,10 @@ type ContentData = {
     s3Key: string;
     thumbnailKey: string;
     type: 'image' | 'video';
+    user: {
+      id: string;
+      name: string | null;
+    } | null;
     location: {
       id: string;
       name: string;
@@ -67,6 +76,7 @@ export default function Hero({ content }: Props) {
       s3Key: item.content.s3Key,
       thumbnailKey: item.content.thumbnailKey,
       type: item.content.type,
+      user: item.content.user,
       location: item.content.location,
     },
   });
