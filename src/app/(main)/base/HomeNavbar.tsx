@@ -72,7 +72,7 @@ export default function HomeNavbar() {
       <NavbarContent justify='end' className='gap-6'>
         <NavbarItem>
           <Button isIconOnly variant='light' radius='full' aria-label='Search'>
-            <IoMdSearch className='text-lg' />
+            <IoMdSearch className='text-lg text-white' />
           </Button>
         </NavbarItem>
         <NavbarItem>

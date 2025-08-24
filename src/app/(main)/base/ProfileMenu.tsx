@@ -55,11 +55,11 @@ export default function ProfileMenu() {
       <Button
         isIconOnly
         variant='light'
-        className='text-white/80 p-0 min-w-fit'
+        className='text-foreground/80 p-0 min-w-fit'
         aria-label='Loading profile'
         disabled
       >
-        <div className='w-4 h-4 animate-pulse bg-white/20 rounded-full' />
+        <div className='w-4 h-4 animate-pulse bg-foreground/20 rounded-full' />
       </Button>
     );
   }
@@ -71,14 +71,14 @@ export default function ProfileMenu() {
           isIconOnly
           radius='full'
           variant='light'
-          className='text-white/80 p-0 min-w-fit'
+          className='text-foreground/80 p-0 min-w-fit'
           aria-label={isAuthenticated ? 'User menu' : 'Sign in menu'}
         >
           {isAuthenticated && session.user?.image ? (
             <Avatar
               src={session.user.image}
               size='sm'
-              className='border-2 dark:border-white/20 border-black/50'
+              className='border-2 border-default-300'
               fallback={<IoMdPerson className='text-lg' />}
             />
           ) : (

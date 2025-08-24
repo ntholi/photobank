@@ -35,7 +35,7 @@ export default function NavbarComponent() {
         wrapper: 'max-w-full',
       }}
     >
-      <NavbarBrand className='gap-2 font-medium tracking-[4px] text-gray-900'>
+      <NavbarBrand className='gap-2 font-medium tracking-[4px] text-foreground'>
         <IoMdCamera className='text-xl text-primary' />
         <span className='text-sm md:text-base'>LEHAKOE</span>
       </NavbarBrand>
@@ -45,7 +45,7 @@ export default function NavbarComponent() {
           <NavbarItem key={menu}>
             <Link
               className={`${
-                active === index ? 'text-primary' : 'text-gray-700'
+                active === index ? 'text-primary' : 'text-foreground/80'
               } px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide cursor-pointer`}
               onClick={() => handleMenuClick(index, menu)}
             >
@@ -58,7 +58,7 @@ export default function NavbarComponent() {
       <NavbarContent justify='end' className='gap-6'>
         <NavbarItem>
           <Button isIconOnly variant='light' radius='full' aria-label='Search'>
-            <IoMdSearch className='text-lg' />
+            <IoMdSearch className='text-lg text-foreground' />
           </Button>
         </NavbarItem>
         <NavbarItem>
