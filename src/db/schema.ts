@@ -202,6 +202,7 @@ export const virtualTours = pgTable('virtual_tours', {
   id: varchar({ length: 21 })
     .$defaultFn(() => nanoid())
     .primaryKey(),
+  name: text().notNull(),
   locationId: varchar({ length: 21 })
     .notNull()
     .references(() => locations.id, { onDelete: 'cascade' })

@@ -1,0 +1,1 @@
+ALTER TABLE "virtual_tours" ADD COLUMN "name" text NOT NULL;
