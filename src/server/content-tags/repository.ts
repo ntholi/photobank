@@ -37,7 +37,7 @@ export default class ContentTagRepository extends BaseRepository<
       .then((results) => results[0] || null);
   }
 
-  async updateById(
+  async updateByCompositeId(
     contentId: string,
     tagId: string,
     data: Partial<typeof contentTags.$inferInsert>
@@ -57,7 +57,7 @@ export default class ContentTagRepository extends BaseRepository<
     return result[0];
   }
 
-  async deleteById(contentId: string, tagId: string) {
+  async deleteByCompositeId(contentId: string, tagId: string) {
     await db
       .delete(contentTags)
       .where(

@@ -29,13 +29,13 @@ class ContentTagService {
 
   async update(contentId: string, tagId: string, data: Partial<ContentTag>) {
     return withAuth(async () => {
-      return this.repository.updateById(contentId, tagId, data);
+      return this.repository.updateByCompositeId(contentId, tagId, data);
     }, []);
   }
 
   async delete(contentId: string, tagId: string) {
     return withAuth(async () => {
-      return this.repository.deleteById(contentId, tagId);
+      return this.repository.deleteByCompositeId(contentId, tagId);
     }, []);
   }
 
