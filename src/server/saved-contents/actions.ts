@@ -2,6 +2,7 @@
 
 import { savedContent } from '@/db/schema';
 import { savedContentsService as service } from './service';
+import { revalidatePath } from 'next/cache';
 
 type SavedContent = typeof savedContent.$inferInsert;
 
@@ -26,4 +27,14 @@ export async function updateSavedContent(
 
 export async function deleteSavedContent(id: string) {
   return service.delete(id);
+}
+
+export async function isContentSaved(contentId: string) {
+  return service.isSaved(contentId);
+}
+
+export async function toggleSaveContent(contentId: string) {
+  const result = await service.toggle(contentId);
+  revalidatePath('/');
+  return result;
 }

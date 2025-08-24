@@ -7,6 +7,7 @@ import { getImageUrl } from '@/lib/utils';
 import { getContentWithDetails } from '@/server/content/actions';
 import { Image } from '@heroui/image';
 import DetailsSection from './DetailsSection';
+import SaveContentButton from './SaveContentButton';
 
 type Content = NonNullable<Awaited<ReturnType<typeof getContentWithDetails>>>;
 
@@ -68,6 +69,7 @@ export async function ContentDisplay({ content }: Props) {
           </div>
 
           <div className='lg:col-span-1 space-y-6'>
+            <SaveContentButton contentId={content.id} />
             <DetailsSection content={content} />
           </div>
         </div>

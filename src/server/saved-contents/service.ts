@@ -36,6 +36,31 @@ class SavedContentService {
   async count() {
     return withAuth(async () => this.repository.count(), []);
   }
+
+  async isSaved(contentId: string) {
+    return withAuth(
+      async (session) => {
+        const userId = session?.user.id as string | undefined;
+        if (!userId) return false;
+        const existing = await this.repository.findByUserAndContent(
+          userId,
+          contentId
+        );
+        return Boolean(existing);
+      },
+      ['all']
+    );
+  }
+
+  async toggle(contentId: string) {
+    return withAuth(
+      async (session) => {
+        const userId = session?.user.id as string;
+        return this.repository.toggleByUserAndContent(userId, contentId);
+      },
+      ['auth']
+    );
+  }
 }
 
 export const savedContentsService = serviceWrapper(

@@ -285,6 +285,7 @@ Only when Drizzle can't express the query cleanly or for performance-critical ag
 - Never Creating API route handlers for functionality available via server actions. always prefer server actions over route handlers
 - Inline role or permission checks inside UI components—delegate to service or access-check function passed through action.
 - Duplicating existing pagination, search, or list item components.
+- By all means avoid multiple calls to the database use transactions in the database where possible, or find ways to avoid multiple database interaction where possible
 
 ## 13. Development Commands
 
