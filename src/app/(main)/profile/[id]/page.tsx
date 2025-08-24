@@ -2,9 +2,9 @@ import { getUser, getUserStats } from '@/server/users/actions';
 import { notFound } from 'next/navigation';
 import ProfileTabs from './ProfileTabs';
 import { Avatar } from '@heroui/avatar';
-import { Chip } from '@heroui/chip';
 import { largeProfilePic } from '@/lib/utils';
 import { Button } from '@heroui/button';
+import RoleBadge from '@/app/components/RoleBadge';
 
 type Props = {
   params: Promise<{
@@ -31,11 +31,9 @@ export default async function ProfilePage({ params }: Props) {
         />
 
         <div className='flex-1'>
-          <div className='flex flex-col gap-0 mb-4'>
+          <div className='flex items-center gap-2 mb-4'>
             <h1 className='text-2xl font-medium'>{user.name}</h1>
-            <Chip variant='flat' color='primary' size='sm'>
-              {user.role}
-            </Chip>
+            <RoleBadge role={user.role} />
           </div>
 
           <div className='flex items-center gap-8 mb-4 text-sm'>
