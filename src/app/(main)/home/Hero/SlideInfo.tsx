@@ -1,8 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { IoMdBookmark } from 'react-icons/io';
-import AnimatedText from './AnimatedText';
 import { Button } from '@heroui/button';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import AnimatedText from './AnimatedText';
 
 type ContentData = {
   id: string;
@@ -59,7 +58,13 @@ export default function SlideInfo({ data }: Props) {
         />
       </motion.div>
       <motion.div layout className='mt-5 flex items-center gap-3'>
-        <Button variant='ghost' radius='full' className='text-white border-1'>
+        <Button
+          as={Link}
+          href={`/content/${data.id}`}
+          variant='ghost'
+          radius='full'
+          className='text-white border-1'
+        >
           View Details
         </Button>
       </motion.div>

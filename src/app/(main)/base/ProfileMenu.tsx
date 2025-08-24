@@ -21,9 +21,12 @@ import {
 } from 'react-icons/io';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { ThemeSwitch } from '@/components/theme-switch';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 export default function ProfileMenu() {
   const { data: session, status } = useSession();
+  const path = usePathname();
   const isLoading = status === 'loading';
   const isAuthenticated = !!session?.user;
 
@@ -82,7 +85,9 @@ export default function ProfileMenu() {
               fallback={<IoMdPerson className='text-lg' />}
             />
           ) : (
-            <IoMdPerson className='text-lg' />
+            <IoMdPerson
+              className={cn('text-lg', path === '/' && 'text-white')}
+            />
           )}
         </Button>
       </DropdownTrigger>
