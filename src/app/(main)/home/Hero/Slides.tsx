@@ -10,6 +10,11 @@ type ContentData = {
     s3Key: string;
     thumbnailKey: string;
     type: 'image' | 'video';
+    location: {
+      id: string;
+      name: string;
+      address: string | null;
+    } | null;
   };
 };
 

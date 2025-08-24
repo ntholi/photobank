@@ -64,13 +64,46 @@ export default class LocationRepository extends BaseRepository<
   }
 
   async findByIdWithCover(id: string) {
-    return db.query.locations.findFirst({
+    const result = await db.query.locations.findFirst({
       where: eq(locations.id, id),
       with: {
         content: true,
-        details: true,
+        details: {
+          with: {
+            coverContent: true,
+          },
+        },
       },
     });
+
+    if (!result) return null;
+
+    return {
+      ...result,
+      coverContent: result.details?.coverContent || null,
+      about: result.details?.about || null,
+    };
+  }
+
+  async findByIdWithCoverContent(id: string) {
+    const result = await db.query.locations.findFirst({
+      where: eq(locations.id, id),
+      with: {
+        details: {
+          with: {
+            coverContent: true,
+          },
+        },
+      },
+    });
+
+    if (!result) return null;
+
+    return {
+      ...result,
+      coverContent: result.details?.coverContent || null,
+      about: result.details?.about || null,
+    };
   }
 }
 

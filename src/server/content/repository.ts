@@ -141,6 +141,7 @@ export default class ContentRepository extends BaseRepository<
 
     const baseSelect = {
       id: content.id,
+      userId: content.userId,
       type: content.type,
       description: content.description,
       fileName: content.fileName,

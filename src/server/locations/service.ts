@@ -61,6 +61,12 @@ class LocationService {
       return this.repository.findByIdWithCover(id);
     }, []);
   }
+
+  async getWithCoverContent(id: string) {
+    return withAuth(async () => {
+      return this.repository.findByIdWithCoverContent(id);
+    }, []);
+  }
 }
 
 export const locationsService = serviceWrapper(LocationService, 'Location');

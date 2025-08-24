@@ -1,7 +1,7 @@
-import BaseRepository from '@/server/base/BaseRepository';
-import { homeContent, content, locations, users } from '@/db/schema';
 import { db } from '@/db';
-import { eq, asc } from 'drizzle-orm';
+import { homeContent } from '@/db/schema';
+import BaseRepository from '@/server/base/BaseRepository';
+import { asc, eq } from 'drizzle-orm';
 
 export default class HomeContentRepository extends BaseRepository<
   typeof homeContent,

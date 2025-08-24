@@ -35,6 +35,7 @@ import { content } from '@/db/schema';
 export type PickerContentItem = Pick<
   typeof content.$inferSelect,
   | 'id'
+  | 'userId'
   | 'type'
   | 'description'
   | 'fileName'

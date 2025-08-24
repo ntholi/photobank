@@ -60,6 +60,10 @@ export async function getLocationWithCover(id: string) {
   return service.getWithCover(id);
 }
 
+export async function getLocationWithCoverContent(id: string) {
+  return service.getWithCoverContent(id);
+}
+
 export async function searchPlaces(input: string): Promise<PlaceSuggestion[]> {
   const key = process.env.GOOGLE_MAPS_API_KEY as string;
   if (!key) return [];
