@@ -9,6 +9,12 @@ interface GallerySkeletonProps {
 
 export function GallerySkeleton({ itemCount = 30 }: GallerySkeletonProps) {
   const [columns, setColumns] = useState(1);
+  const [skeletonItems, setSkeletonItems] = useState(
+    Array.from({ length: itemCount }, (_, index) => ({
+      id: `skeleton-${index}`,
+      height: 300,
+    }))
+  );
 
   useEffect(() => {
     const updateColumns = () => {
@@ -22,13 +28,16 @@ export function GallerySkeleton({ itemCount = 30 }: GallerySkeletonProps) {
 
     updateColumns();
     window.addEventListener('resize', updateColumns);
-    return () => window.removeEventListener('resize', updateColumns);
-  }, []);
 
-  const skeletonItems = Array.from({ length: itemCount }, (_, index) => ({
-    id: `skeleton-${index}`,
-    height: 200 + Math.random() * 200,
-  }));
+    setSkeletonItems(
+      Array.from({ length: itemCount }, (_, index) => ({
+        id: `skeleton-${index}`,
+        height: 200 + Math.random() * 200,
+      }))
+    );
+
+    return () => window.removeEventListener('resize', updateColumns);
+  }, [itemCount]);
 
   const columnItems = Array.from({ length: columns }, (_, colIndex) => {
     return skeletonItems.filter((_, index) => index % columns === colIndex);
