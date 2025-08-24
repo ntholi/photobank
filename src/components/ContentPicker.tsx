@@ -28,7 +28,7 @@ import { IconSearch, IconCheck, IconX, IconPhoto } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { getFilteredContent } from '@/server/content/actions';
 import { getAllLocations } from '@/server/locations/actions';
-import { getAllTags } from '@/server/tags/actions';
+import { getPopularTags } from '@/server/tags/actions';
 import { getImageUrl } from '@/lib/utils';
 import { content } from '@/db/schema';
 
@@ -97,15 +97,15 @@ export function ContentPicker({
     setSelected(selectedId);
   }, [selectedId]);
 
-  const { data: locationsData } = useQuery({
+  const { data: locations = [] } = useQuery({
     queryKey: ['locations-picker', debouncedLocationSearch],
     queryFn: () => getAllLocations(debouncedLocationSearch, 50),
     staleTime: 5 * 60 * 1000,
   });
 
-  const { data: tagsData } = useQuery({
-    queryKey: ['tags-picker'],
-    queryFn: getAllTags,
+  const { data: tags = [] } = useQuery({
+    queryKey: ['popular-tags'],
+    queryFn: getPopularTags,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -148,10 +148,7 @@ export function ContentPicker({
     setPage(1);
   };
 
-  const locations = locationsData || [];
-  const tags = tagsData || [];
-
-  const locationOptions = locations.map((loc) => (
+  const locationOptions = locations?.map((loc) => (
     <Combobox.Option value={loc.id} key={loc.id}>
       {loc.name}
     </Combobox.Option>
@@ -191,7 +188,7 @@ export function ContentPicker({
                 placeholder='Filter by location'
                 value={
                   locationId
-                    ? locations.find((l) => l.id === locationId)?.name || ''
+                    ? locations?.find((l) => l.id === locationId)?.name || ''
                     : locationSearch
                 }
                 onChange={(event) => {
@@ -226,7 +223,7 @@ export function ContentPicker({
             </Combobox.Target>
             <Combobox.Dropdown>
               <Combobox.Options>
-                {locationOptions.length > 0 ? (
+                {locations?.length > 0 ? (
                   locationOptions
                 ) : (
                   <Combobox.Empty>No locations found</Combobox.Empty>

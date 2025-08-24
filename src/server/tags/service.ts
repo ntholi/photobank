@@ -40,6 +40,10 @@ class TagService {
   async count() {
     return withAuth(async () => this.repository.count(), []);
   }
+
+  async getPopularTags() {
+    return withAuth(async () => this.repository.getPopularTags(), ['all']);
+  }
 }
 
 export const tagsService = serviceWrapper(TagService, 'Tag');

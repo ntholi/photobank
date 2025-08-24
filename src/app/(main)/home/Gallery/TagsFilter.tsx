@@ -6,7 +6,7 @@ import { Button } from '@heroui/button';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useQueryState, parseAsString } from 'nuqs';
-import { getAllTags } from '@/server/tags/actions';
+import { getPopularTags } from '@/server/tags/actions';
 
 interface Props {
   isLoading?: boolean;
@@ -19,15 +19,10 @@ export default function TagsFilter({ isLoading = false }: Props) {
   );
 
   const { data: tags = [], isLoading: tagsLoading } = useQuery({
-    queryKey: ['all-tags'],
-    queryFn: getAllTags,
+    queryKey: ['popular-tags'],
+    queryFn: getPopularTags,
     staleTime: 10 * 60 * 1000, // 10 minutes
   });
-
-  const sortedTags = useMemo(
-    () => [...tags].sort((a, b) => a.name.localeCompare(b.name)),
-    [tags]
-  );
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -71,7 +66,7 @@ export default function TagsFilter({ isLoading = false }: Props) {
         window.removeEventListener('resize', onResize);
       };
     },
-    [sortedTags.length]
+    [tags.length]
   );
 
   function handleTagSelect(tagId: string) {
@@ -149,7 +144,7 @@ export default function TagsFilter({ isLoading = false }: Props) {
           >
             All
           </Chip>
-          {sortedTags.map((tag) => {
+          {tags.map((tag) => {
             const selected = selectedTagId === tag.id;
             return (
               <Chip

@@ -18,8 +18,12 @@ export async function getTags(
 }
 
 export async function getAllTags() {
-  const result = await service.getAll({ page: 1, size: 100 });
+  const result = await service.getAll({ page: 1, size: 1000 });
   return result.items || [];
+}
+
+export async function getPopularTags() {
+  return service.getPopularTags();
 }
 
 export async function createTag(tag: Tag) {

@@ -2,7 +2,7 @@
 
 import { TagsInput, Stack } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import { getAllTags } from '@/server/tags/actions';
+import { getPopularTags } from '@/server/tags/actions';
 import { useState } from 'react';
 
 interface TagInputProps {
@@ -23,8 +23,8 @@ export default function TagInput({
   const [search, setSearch] = useState('');
 
   const { data: availableTags, isLoading } = useQuery({
-    queryKey: ['tags'],
-    queryFn: getAllTags,
+    queryKey: ['popular-tags'],
+    queryFn: getPopularTags,
   });
 
   const tagNames =
