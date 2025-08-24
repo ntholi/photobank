@@ -26,7 +26,14 @@ type FormContent = Omit<Content, 'id' | 'createdAt' | 'updatedAt'> & {
 
 type Props = {
   onSubmit: (values: FormContent) => Promise<Content>;
-  defaultValues?: Content;
+  defaultValues?: Content & {
+    tags?: Array<{
+      tag: {
+        name: string;
+        id: string;
+      };
+    }>;
+  };
   onSuccess?: (value: Content) => void;
   onError?: (
     error: Error | React.SyntheticEvent<HTMLDivElement, Event>
@@ -55,7 +62,9 @@ export default function ContentForm({
   >();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    defaultValues?.tags?.map((contentTag) => contentTag.tag.name) || []
+  );
 
   const handleFormSubmit = async (values: FormContent) => {
     if (selectedFile && !defaultValues) {

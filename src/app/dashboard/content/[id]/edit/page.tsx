@@ -1,7 +1,7 @@
 import { Box } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import Form from '../../Form';
-import { getContent, updateContent } from '@/server/content/actions';
+import { getContentWithDetails, updateContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 
 export default async function ContentEdit({ params }: Props) {
   const { id } = await params;
-  const content = await getContent(id);
+  const content = await getContentWithDetails(id);
   if (!content) {
     return notFound();
   }
