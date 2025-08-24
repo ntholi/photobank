@@ -19,8 +19,8 @@ export function GallerySkeleton({ itemCount = 30 }: GallerySkeletonProps) {
   useEffect(() => {
     const updateColumns = () => {
       const width = window.innerWidth;
-      if (width >= 1536) setColumns(5);
-      else if (width >= 1024) setColumns(4);
+      if (width >= 1600) setColumns(5);
+      else if (width >= 1200) setColumns(4);
       else if (width >= 768) setColumns(3);
       else if (width >= 640) setColumns(2);
       else setColumns(1);
