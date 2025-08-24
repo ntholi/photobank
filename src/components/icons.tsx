@@ -89,6 +89,43 @@ export const GithubIcon: React.FC<IconSvgProps> = ({
   );
 };
 
+export function GridIcon({ size = 24, width, height, ...props }: IconSvgProps) {
+  return (
+    <svg
+      height={size || height}
+      viewBox='0 0 24 24'
+      width={size || width}
+      {...props}
+    >
+      <path
+        d='M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm11 0h7v7h-7v-7z'
+        fill='currentColor'
+      />
+    </svg>
+  );
+}
+
+export function BookmarkIcon({
+  size = 24,
+  width,
+  height,
+  ...props
+}: IconSvgProps) {
+  return (
+    <svg
+      height={size || height}
+      viewBox='0 0 24 24'
+      width={size || width}
+      {...props}
+    >
+      <path
+        d='M6 2h12a2 2 0 0 1 2 2v18l-8-4-8 4V4a2 2 0 0 1 2-2z'
+        fill='currentColor'
+      />
+    </svg>
+  );
+}
+
 export const MoonFilledIcon = ({
   size = 24,
   width,

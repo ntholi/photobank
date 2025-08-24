@@ -24,3 +24,15 @@ export async function updateUser(id: string, user: Partial<User>) {
 export async function deleteUser(id: string) {
   return service.delete(id);
 }
+
+export async function getUserStats(userId: string) {
+  const [uploadCount, savedCount] = await Promise.all([
+    service.getUserUploadCount(userId),
+    service.getUserSavedCount(userId),
+  ]);
+
+  return {
+    uploads: uploadCount,
+    saved: savedCount,
+  };
+}

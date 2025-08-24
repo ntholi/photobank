@@ -36,6 +36,20 @@ class UserService {
   async count() {
     return withAuth(async () => this.repository.count(), []);
   }
+
+  async getUserUploadCount(userId: string) {
+    return withAuth(
+      async () => this.repository.getUserUploadCount(userId),
+      ['all']
+    );
+  }
+
+  async getUserSavedCount(userId: string) {
+    return withAuth(
+      async () => this.repository.getUserSavedCount(userId),
+      ['all']
+    );
+  }
 }
 
 export const usersService = serviceWrapper(UserService, 'User');

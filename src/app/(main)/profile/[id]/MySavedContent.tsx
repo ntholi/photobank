@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getSavedByUser } from '@/server/saved-contents/actions';
 import PhotosDisplay from './PhotosDisplay';
+import { Button } from '@heroui/button';
 
 type Props = {
   userId: string;
@@ -68,13 +69,14 @@ function LoadMore({
   if (!hasMore) return null;
   return (
     <div className='flex justify-center py-6'>
-      <button
-        onClick={onLoadMore}
-        disabled={loading}
-        className='px-4 py-2 text-sm rounded-md bg-white/10 hover:bg-white/15 disabled:opacity-50'
+      <Button
+        onPress={onLoadMore}
+        isDisabled={loading}
+        variant='flat'
+        size='sm'
       >
         {loading ? 'Loading...' : 'Load more'}
-      </button>
+      </Button>
     </div>
   );
 }
