@@ -10,7 +10,9 @@ export default function Layout({ children }: PropsWithChildren) {
       path={'/dashboard/virtual-tours'}
       queryKey={['virtual-tours']}
       getData={getVirtualTours}
-      actionIcons={[<NewLink key={'new-link'} href='/admin/virtual-tours/new' />]}
+      actionIcons={[
+        <NewLink key={'new-link'} href='/dashboard/virtual-tours/new' />,
+      ]}
       renderItem={(it) => <ListItem id={it.id} label={it.id} />}
     >
       {children}

@@ -8,6 +8,9 @@ import {
   homeContent,
   locationDetails,
   locations,
+  savedContent,
+  virtualTours,
+  verificationTokens,
   sessions,
   tags,
   users,
@@ -18,6 +21,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
   authenticators: many(authenticators),
   content: many(content),
+  savedContents: many(savedContent),
 }));
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -53,6 +57,7 @@ export const contentRelations = relations(content, ({ one, many }) => ({
   tags: many(contentTags),
   labels: many(contentLabels),
   homeContent: many(homeContent),
+  savedContents: many(savedContent),
   coverForLocationDetails: many(locationDetails, {
     relationName: 'coverContent',
   }),
@@ -87,7 +92,7 @@ export const locationDetailsRelations = relations(
       references: [content.id],
       relationName: 'coverContent',
     }),
-  })
+  }),
 );
 
 export const tagsRelations = relations(tags, ({ many }) => ({
@@ -111,3 +116,27 @@ export const contentLabelsRelations = relations(contentLabels, ({ one }) => ({
     references: [content.id],
   }),
 }));
+
+export const savedContentRelations = relations(savedContent, ({ one }) => ({
+  content: one(content, {
+    fields: [savedContent.contentId],
+    references: [content.id],
+  }),
+  user: one(users, {
+    fields: [savedContent.userId],
+    references: [users.id],
+  }),
+}));
+
+export const virtualToursRelations = relations(virtualTours, ({ one }) => ({
+  location: one(locations, {
+    fields: [virtualTours.locationId],
+    references: [locations.id],
+    relationName: 'virtual_tours',
+  }),
+}));
+
+export const verificationTokensRelations = relations(
+  verificationTokens,
+  () => ({}),
+);

@@ -14,7 +14,7 @@ class VirtualTourService {
   }
 
   async get(id: string) {
-    return withAuth(async () => this.repository.findById(id), []);
+    return withAuth(async () => this.repository.findWithLocation(id), ['all']);
   }
 
   async getAll(params: QueryOptions<typeof virtualTours>) {

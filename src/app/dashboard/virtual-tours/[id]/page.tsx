@@ -5,7 +5,12 @@ import {
   DetailsViewBody,
 } from '@/components/adease';
 import { notFound } from 'next/navigation';
-import { getVirtualTour, deleteVirtualTour } from '@/server/virtual-tours/actions';
+import {
+  getVirtualTour,
+  deleteVirtualTour,
+} from '@/server/virtual-tours/actions';
+import Link from 'next/link';
+import { Anchor } from '@mantine/core';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -14,15 +19,15 @@ type Props = {
 export default async function VirtualTourDetails({ params }: Props) {
   const { id } = await params;
   const virtualTour = await getVirtualTour(id);
-  
+
   if (!virtualTour) {
     return notFound();
   }
 
   return (
     <DetailsView>
-      <DetailsViewHeader 
-        title={'Virtual Tour'} 
+      <DetailsViewHeader
+        title={'Virtual Tour'}
         queryKey={['virtual-tours']}
         handleDelete={async () => {
           'use server';
@@ -30,7 +35,24 @@ export default async function VirtualTourDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <FieldView label='Url'>{virtualTour.url}</FieldView>
+        <FieldView label='Url'>
+          <Anchor
+            size='sm'
+            component={Link}
+            href={virtualTour.url}
+            target='_blank'
+          >
+            {virtualTour.url}
+          </Anchor>
+        </FieldView>
+        <FieldView label='Location'>
+          <Anchor
+            component={Link}
+            href={`/dashboard/locations/${virtualTour.location?.id}`}
+          >
+            {virtualTour.location?.name}
+          </Anchor>
+        </FieldView>
       </DetailsViewBody>
     </DetailsView>
   );
