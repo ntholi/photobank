@@ -21,6 +21,7 @@ export default class HomeContentRepository extends BaseRepository<
         content: {
           id: content.id,
           fileName: content.fileName,
+          s3Key: content.s3Key,
           thumbnailKey: content.thumbnailKey,
           watermarkedKey: content.watermarkedKey,
           type: content.type,

@@ -9,6 +9,7 @@ type ContentData = {
   content: {
     id: string;
     fileName: string | null;
+    s3Key: string;
     thumbnailKey: string;
     type: 'image' | 'video';
   };

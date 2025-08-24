@@ -21,6 +21,7 @@ type ContentData = {
   content: {
     id: string;
     fileName: string | null;
+    s3Key: string;
     thumbnailKey: string;
     type: 'image' | 'video';
   };
@@ -38,6 +39,7 @@ export default function Hero({ content }: Props) {
     content: {
       id: item.content.id,
       fileName: item.content.fileName,
+      s3Key: item.content.s3Key,
       thumbnailKey: item.content.thumbnailKey,
       type: item.content.type,
     },

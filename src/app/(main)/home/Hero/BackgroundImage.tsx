@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { getImageUrl } from '@/lib/utils';
+import { usePresignedUrl } from '@/hooks/usePresignedUrl';
 
 type ContentData = {
   id: string;
@@ -8,6 +9,7 @@ type ContentData = {
   content: {
     id: string;
     fileName: string | null;
+    s3Key: string;
     thumbnailKey: string;
     type: 'image' | 'video';
   };
@@ -22,19 +24,32 @@ export default function BackgroundImage({
   transitionData,
   currentSlideData,
 }: Props) {
-  const transitionUrl = transitionData
-    ? getImageUrl(transitionData.content.thumbnailKey)
-    : '';
-  const currentUrl = currentSlideData
-    ? getImageUrl(currentSlideData.content.thumbnailKey)
-    : '';
+  const { url: transitionPresignedUrl } = usePresignedUrl(
+    transitionData?.content.s3Key || '',
+    Boolean(transitionData?.content.s3Key)
+  );
+
+  const { url: currentPresignedUrl } = usePresignedUrl(
+    currentSlideData?.content.s3Key || '',
+    Boolean(currentSlideData?.content.s3Key)
+  );
+
+  const transitionUrl =
+    transitionPresignedUrl ||
+    (transitionData ? getImageUrl(transitionData.content.thumbnailKey) : '');
+
+  const currentUrl =
+    currentPresignedUrl ||
+    (currentSlideData
+      ? getImageUrl(currentSlideData.content.thumbnailKey)
+      : '');
 
   return (
     <>
       {transitionData && transitionUrl && (
         <motion.img
-          key={transitionData.content.thumbnailKey}
-          layoutId={transitionData.content.thumbnailKey}
+          key={transitionData.content.s3Key}
+          layoutId={transitionData.content.s3Key}
           alt='Transition Image'
           transition={{
             opacity: { ease: 'linear' },
@@ -47,7 +62,7 @@ export default function BackgroundImage({
       {currentSlideData && currentUrl && (
         <motion.img
           alt='Current Image'
-          key={currentSlideData.content.thumbnailKey + 'transition'}
+          key={currentSlideData.content.s3Key + 'transition'}
           src={currentUrl}
           className='absolute left-0 top-0 h-full w-full object-cover brightness-50'
           onError={(e) => {
