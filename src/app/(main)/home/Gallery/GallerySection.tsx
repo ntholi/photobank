@@ -1,32 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getAllTags } from '@/server/tags/actions';
+import React, { useEffect } from 'react';
+import { useQueryState, parseAsString, parseAsArrayOf } from 'nuqs';
 import Gallery from './index';
 import SearchBar from './SearchBar';
 import TagsFilter from './TagsFilter';
 
 export default function GallerySection() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
+  const [searchQuery] = useQueryState('q', parseAsString.withDefault(''));
+  const [selectedTagIds] = useQueryState(
+    'tags',
+    parseAsArrayOf(parseAsString).withDefault([])
+  );
 
-  const { data: tags = [] } = useQuery({
-    queryKey: ['all-tags'],
-    queryFn: getAllTags,
-    staleTime: 10 * 60 * 1000, // 10 minutes
-  });
+  useEffect(() => {
+    if (window.location.hash === '#gallery') {
+      const galleryElement = document.getElementById('gallery');
+      if (galleryElement) {
+        galleryElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [selectedTagIds]);
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-
-  const handleTagsChange = (tagIds: string[]) => {
-    setSelectedTagIds(tagIds);
-  };
+  function clearFilters() {
+    window.history.pushState({}, '', window.location.pathname);
+  }
 
   return (
-    <section className='py-8 bg-gradient-to-br from-background via-default-50/10 to-primary-50/5 relative overflow-hidden'>
+    <section
+      id='gallery'
+      className='py-8 bg-gradient-to-br from-background via-default-50/10 to-primary-50/5 relative overflow-hidden'
+    >
       {/* Background decoration */}
       <div className='absolute inset-0 bg-grid-pattern opacity-3' />
       <div className='absolute top-0 left-1/4 w-64 h-64 bg-primary/3 rounded-full blur-2xl' />
@@ -47,18 +51,10 @@ export default function GallerySection() {
         {/* Compact Search and Filter Controls */}
         <div className='space-y-6 mb-8'>
           {/* Search Bar */}
-          <SearchBar
-            onSearch={handleSearch}
-            isLoading={false}
-            placeholder='Search photos...'
-          />
+          <SearchBar isLoading={false} placeholder='Search photos...' />
 
           {/* Tags Filter */}
-          <TagsFilter
-            selectedTagIds={selectedTagIds}
-            onTagsChange={handleTagsChange}
-            isLoading={false}
-          />
+          <TagsFilter isLoading={false} />
 
           {/* Compact Results Summary */}
           {(searchQuery || selectedTagIds.length > 0) && (
@@ -81,10 +77,7 @@ export default function GallerySection() {
                   )}
                 </div>
                 <button
-                  onClick={() => {
-                    setSearchQuery('');
-                    setSelectedTagIds([]);
-                  }}
+                  onClick={clearFilters}
                   className='text-default-500 hover:text-default-700 dark:text-default-400 dark:hover:text-default-200 text-xs underline underline-offset-2 transition-colors duration-200'
                 >
                   Clear

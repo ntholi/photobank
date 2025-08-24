@@ -1,24 +1,21 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Chip } from '@heroui/chip';
 import { ScrollShadow } from '@heroui/scroll-shadow';
 import { useQuery } from '@tanstack/react-query';
+import { useQueryState, parseAsArrayOf, parseAsString } from 'nuqs';
 import { getAllTags } from '@/server/tags/actions';
 
 interface Props {
-  selectedTagIds: string[];
-  onTagsChange: (tagIds: string[]) => void;
   isLoading?: boolean;
 }
 
-export default function TagsFilter({
-  selectedTagIds,
-  onTagsChange,
-  isLoading = false,
-}: Props) {
-  const [localSelectedTags, setLocalSelectedTags] =
-    useState<string[]>(selectedTagIds);
+export default function TagsFilter({ isLoading = false }: Props) {
+  const [selectedTagIds, setSelectedTagIds] = useQueryState(
+    'tags',
+    parseAsArrayOf(parseAsString).withDefault([])
+  );
 
   const { data: tags = [], isLoading: tagsLoading } = useQuery({
     queryKey: ['all-tags'],
@@ -26,18 +23,13 @@ export default function TagsFilter({
     staleTime: 10 * 60 * 1000, // 10 minutes
   });
 
-  useEffect(() => {
-    setLocalSelectedTags(selectedTagIds);
-  }, [selectedTagIds]);
+  function handleTagToggle(tagId: string) {
+    const newSelectedTags = selectedTagIds.includes(tagId)
+      ? selectedTagIds.filter((id) => id !== tagId)
+      : [...selectedTagIds, tagId];
 
-  const handleTagToggle = (tagId: string) => {
-    const newSelectedTags = localSelectedTags.includes(tagId)
-      ? localSelectedTags.filter((id) => id !== tagId)
-      : [...localSelectedTags, tagId];
-
-    setLocalSelectedTags(newSelectedTags);
-    onTagsChange(newSelectedTags);
-  };
+    setSelectedTagIds(newSelectedTags.length > 0 ? newSelectedTags : null);
+  }
 
   if (tagsLoading) {
     return (
@@ -65,10 +57,8 @@ export default function TagsFilter({
           {tags.map((tag) => (
             <Chip
               key={tag.id}
-              variant={
-                localSelectedTags.includes(tag.id) ? 'solid' : 'bordered'
-              }
-              color={localSelectedTags.includes(tag.id) ? 'primary' : 'default'}
+              variant={selectedTagIds.includes(tag.id) ? 'solid' : 'bordered'}
+              color={selectedTagIds.includes(tag.id) ? 'primary' : 'default'}
               onClick={() => handleTagToggle(tag.id)}
               className='cursor-pointer flex-shrink-0'
               isDisabled={isLoading}

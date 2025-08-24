@@ -85,7 +85,10 @@ export default function DetailsSection({ content }: Props) {
               <h4 className='text-sm font-medium text-foreground mb-2'>Tags</h4>
               <div className='flex flex-wrap gap-2'>
                 {content.tags.map(({ tag }) => (
-                  <Link key={tag.id} href={`/tags/${tag.id}`}>
+                  <Link
+                    key={tag.id}
+                    href={`/?tags=${encodeURIComponent(tag.id)}#gallery`}
+                  >
                     <Chip
                       size='sm'
                       variant='flat'

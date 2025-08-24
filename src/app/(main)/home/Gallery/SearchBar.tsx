@@ -1,32 +1,24 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Input } from '@heroui/input';
 import { SearchIcon } from '@heroui/shared-icons';
-import { useDebounce } from '@/hooks/useDebounce';
+import { useQueryState, parseAsString } from 'nuqs';
 
 interface SearchBarProps {
-  onSearch: (query: string) => void;
   isLoading?: boolean;
   placeholder?: string;
 }
 
 export default function SearchBar({
-  onSearch,
   isLoading = false,
   placeholder = 'Search photos and videos...',
 }: SearchBarProps) {
-  const [query, setQuery] = useState('');
-  const debouncedQuery = useDebounce(query.trim(), 300);
+  const [query, setQuery] = useQueryState('q', parseAsString.withDefault(''));
 
-  useEffect(() => {
-    onSearch(debouncedQuery);
-  }, [debouncedQuery, onSearch]);
-
-  const handleClear = () => {
-    setQuery('');
-    onSearch('');
-  };
+  function handleClear() {
+    setQuery(null);
+  }
 
   return (
     <div className='w-full max-w-2xl mx-auto'>
