@@ -17,6 +17,7 @@ import {
 import { modals } from '@mantine/modals';
 import {
   Icon,
+  IconCardboards,
   IconChevronRight,
   IconFile,
   IconHome,
@@ -84,6 +85,12 @@ const navigation: NavItem[] = [
     label: 'Locations',
     href: '/dashboard/locations',
     icon: IconMapPin,
+    roles: ['moderator', 'admin'],
+  },
+  {
+    label: 'Virtual Tours',
+    href: '/dashboard/virtual-tours',
+    icon: IconCardboards,
     roles: ['moderator', 'admin'],
   },
 ];

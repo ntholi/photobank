@@ -11,6 +11,7 @@ import {
   varchar,
   numeric,
 } from 'drizzle-orm/pg-core';
+import { url } from 'inspector';
 import { nanoid } from 'nanoid';
 import type { AdapterAccountType } from 'next-auth/adapters';
 
@@ -193,6 +194,19 @@ export const locationDetails = pgTable('location_details', {
     onDelete: 'set null',
   }),
   about: text(),
+  createdAt: timestamp({ mode: 'date' }).defaultNow(),
+  updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
+});
+
+export const virtualTours = pgTable('virtual_tours', {
+  id: varchar({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  locationId: varchar({ length: 21 })
+    .notNull()
+    .references(() => locations.id, { onDelete: 'cascade' })
+    .unique(),
+  url: text().notNull(),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
   updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
 });
