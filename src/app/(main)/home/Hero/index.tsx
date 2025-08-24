@@ -197,7 +197,7 @@ export default function Hero({ content }: Props) {
                 repeat: Infinity,
               }}
             >
-              <IconChevronDown className='text-gray-50' size={22} />
+              <IconChevronDown className='text-gray-50' size={'2.5rem'} />
             </motion.span>
           </Button>
         </div>

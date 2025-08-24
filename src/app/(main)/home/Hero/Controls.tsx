@@ -1,6 +1,7 @@
 import React from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import Progress from './Progress';
+import { Button } from '@heroui/button';
 
 type ContentData = {
   id: string;
@@ -48,11 +49,14 @@ const SliderButton = ({
   onClick: () => void;
 }) => {
   return (
-    <button
-      className='flex h-14 w-14 items-center justify-center rounded-full border-[1px] border-[#fdfdfd5f] transition duration-300 ease-in-out hover:bg-white hover:text-black'
-      onClick={onClick}
+    <Button
+      isIconOnly
+      variant='light'
+      radius='full'
+      onPress={onClick}
+      className='border-1 text-gray-300/90 border-gray-300/90 hover:text-black'
     >
       {children}
-    </button>
+    </Button>
   );
 };
