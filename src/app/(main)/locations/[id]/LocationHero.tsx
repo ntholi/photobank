@@ -8,6 +8,7 @@ import {
   generateGradient,
   getDefaultColors,
 } from '@/lib/colors';
+import AboutDrawer from './AboutDrawer';
 
 type Location = typeof locations.$inferSelect;
 type Content = typeof contentSchema.$inferSelect;
@@ -41,20 +42,20 @@ export async function LocationHero({ location }: LocationHeroProps) {
 
   return (
     <div
-      className='w-full relative overflow-hidden'
+      className='relative w-full overflow-hidden'
       style={{
         background: generateGradient(dominantColors, 0.2),
       }}
     >
-      <div className='max-w-7xl mx-auto px-4 py-12'>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'>
+      <div className='mx-auto max-w-7xl px-4 py-12'>
+        <div className='grid grid-cols-1 items-center gap-12 lg:grid-cols-2'>
           <div className='lg:col-span-1'>
             {hasCoverContent && location.coverContent ? (
               <div className='rounded-xl p-0.5 shadow-lg'>
                 <Image
                   src={getImageUrl(location.coverContent.watermarkedKey)}
                   alt={`${location.name} - Cover photo`}
-                  className='w-full h-auto max-h-[60vh] object-contain'
+                  className='h-auto max-h-[60vh] w-full object-contain'
                   loading='eager'
                   radius='lg'
                   width={800}
@@ -62,10 +63,10 @@ export async function LocationHero({ location }: LocationHeroProps) {
                 />
               </div>
             ) : (
-              <Card className='h-64 flex items-center justify-center bg-gray-50 border-2 border-dashed border-gray-300'>
+              <Card className='flex h-64 items-center justify-center border-2 border-dashed border-gray-300 bg-gray-50'>
                 <CardBody className='text-center'>
-                  <div className='text-6xl mb-4'>📍</div>
-                  <p className='text-gray-600 text-lg'>
+                  <div className='mb-4 text-6xl'>📍</div>
+                  <p className='text-lg text-gray-600'>
                     No cover photo available
                   </p>
                 </CardBody>
@@ -73,16 +74,16 @@ export async function LocationHero({ location }: LocationHeroProps) {
             )}
           </div>
 
-          <div className='lg:col-span-1 space-y-6'>
+          <div className='space-y-6 lg:col-span-1'>
             <div className='space-y-4'>
-              <h1 className='text-4xl md:text-5xl font-bold text-gray-900 leading-tight'>
+              <h1 className='text-4xl leading-tight font-bold text-gray-900 md:text-5xl'>
                 {location.name}
               </h1>
 
               {location.address && (
                 <div className='flex items-start space-x-3'>
                   <svg
-                    className='w-5 h-5 text-gray-500 mt-1 flex-shrink-0'
+                    className='mt-1 h-5 w-5 flex-shrink-0 text-gray-500'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -100,20 +101,21 @@ export async function LocationHero({ location }: LocationHeroProps) {
                       d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'
                     />
                   </svg>
-                  <p className='text-lg text-gray-700 leading-relaxed'>
+                  <p className='text-lg leading-relaxed text-gray-700'>
                     {location.address}
                   </p>
                 </div>
               )}
 
               {location.about && (
-                <div className='pt-4 border-t border-gray-200'>
-                  <h2 className='text-xl font-semibold text-gray-900 mb-3'>
+                <div className='border-t border-gray-200 pt-4'>
+                  <h2 className='mb-3 text-xl font-semibold text-gray-900'>
                     About this location
                   </h2>
-                  <p className='text-gray-700 leading-relaxed text-lg'>
-                    {location.about}
-                  </p>
+                  <AboutDrawer
+                    rawHtml={location.about}
+                    title={`About ${location.name}`}
+                  />
                 </div>
               )}
             </div>
