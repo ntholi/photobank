@@ -26,6 +26,8 @@ export default function DetailsSection({ content }: Props) {
           </h3>
           <User
             name={content.user?.name || 'Anonymous Contributor'}
+            as={Link}
+            href={`/profile/${content.user.id}`}
             description={capitalize(content.user?.role || 'user')}
             avatarProps={{
               src: content.user?.image || '',
