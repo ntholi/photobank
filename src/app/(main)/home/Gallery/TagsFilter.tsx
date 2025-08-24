@@ -102,7 +102,7 @@ export default function TagsFilter({ isLoading = false }: Props) {
   }
 
   return (
-    <div className='w-full max-w-3xl mx-auto relative'>
+    <div className='w-full max-w-5xl mx-auto relative'>
       {canScrollLeft && (
         <div className='absolute left-0 top-1/2 -translate-y-1/2 z-10'>
           <Button
