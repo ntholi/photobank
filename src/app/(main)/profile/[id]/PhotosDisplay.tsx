@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { getImageUrl } from '@/lib/utils';
+import { Image } from '@heroui/image';
 
 type GridItem = {
   id: string;
@@ -16,33 +17,28 @@ type Props = {
 };
 
 export default function PhotosDisplay({ items }: Props) {
-  const router = useRouter();
-
-  function open(id: string) {
-    router.push(`/content/${id}`);
-  }
-
   return (
     <div className='w-full'>
       <div className='grid grid-cols-3 gap-1 sm:gap-1 md:gap-1 lg:gap-1'>
         {items.map((item) => (
-          <button
+          <Link
             key={item.id}
-            onClick={() => open(item.id)}
-            className='relative group aspect-square overflow-hidden focus:outline-none'
+            href={`/content/${item.id}`}
+            className='relative group aspect-square overflow-hidden focus:outline-none block'
             aria-label='Open content'
           >
-            <img
+            <Image
               src={getImageUrl(item.thumbnailKey)}
               alt={item.description || item.fileName || 'Photo'}
-              className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
+              className='h-full w-full object-cover'
               loading='lazy'
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = '/photo_session.svg';
-              }}
+              fallbackSrc='/photo_session.svg'
+              isZoomed
+              radius='none'
+              width={400}
+              height={400}
             />
-          </button>
+          </Link>
         ))}
       </div>
     </div>
