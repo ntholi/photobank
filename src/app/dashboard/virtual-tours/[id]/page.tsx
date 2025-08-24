@@ -11,6 +11,7 @@ import {
 } from '@/server/virtual-tours/actions';
 import Link from 'next/link';
 import { Anchor } from '@mantine/core';
+import VirtualTourPreview from './VirtualTourPreview';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -35,15 +36,8 @@ export default async function VirtualTourDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <FieldView label='Url'>
-          <Anchor
-            size='sm'
-            component={Link}
-            href={virtualTour.url}
-            target='_blank'
-          >
-            {virtualTour.url}
-          </Anchor>
+        <FieldView label='Preview'>
+          <VirtualTourPreview url={virtualTour.url} />
         </FieldView>
         <FieldView label='Location'>
           <Anchor
