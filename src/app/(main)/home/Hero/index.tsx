@@ -180,26 +180,30 @@ export default function Hero({ content }: Props) {
             />
           </div>
         </div>
-        <div className='absolute bottom-6 left-0 right-0 z-30 flex w-full justify-center'>
-          <Button
-            radius='full'
-            variant='light'
-            size='lg'
-            isIconOnly
-            onPress={handleScrollToGallery}
-            aria-label='Scroll to gallery'
+        <div className='absolute bottom-6 left-0 right-0 z-30 flex w-full justify-center md:-translate-x-14'>
+          <motion.span
+            animate={{ y: [0, 6, 0] }}
+            transition={{
+              duration: 1.6,
+              ease: 'easeInOut',
+              repeat: Infinity,
+            }}
           >
-            <motion.span
-              animate={{ y: [0, 6, 0] }}
-              transition={{
-                duration: 1.6,
-                ease: 'easeInOut',
-                repeat: Infinity,
-              }}
+            <Button
+              radius='full'
+              variant='light'
+              size='lg'
+              isIconOnly
+              onPress={handleScrollToGallery}
+              aria-label='Scroll to gallery'
             >
-              <IconChevronDown className='text-gray-50' size={'2.5rem'} />
-            </motion.span>
-          </Button>
+              <IconChevronDown
+                stroke={1}
+                className='text-gray-50'
+                size={'3rem'}
+              />
+            </Button>
+          </motion.span>
         </div>
       </div>
     </main>
