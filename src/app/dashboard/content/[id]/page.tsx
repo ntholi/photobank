@@ -2,13 +2,14 @@ import { DetailsView, DetailsViewBody, FieldView } from '@/components/adease';
 import { formatDateTime } from '@/lib/utils';
 import { deleteContent, getContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
-import { Box, Fieldset, Text, Stack, Anchor } from '@mantine/core';
+import { Anchor, Fieldset, Stack, Text } from '@mantine/core';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ContentDetailsHeader } from '../components/ContentDetailsHeader';
 import ContentDisplay from '../components/ContentDisplay';
 import { ContentLabels } from '../components/ContentLabels';
 import { ContentTags } from '../components/ContentTags';
-import Link from 'next/link';
+import ContentID from './ContentID';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -40,6 +41,7 @@ export default async function ContentDetailsPage({ params }: Props) {
       <DetailsViewBody>
         <Stack gap='xl'>
           <ContentDisplay content={content} />
+          <ContentID contentId={content.id} />
           <FieldView label='Location'>
             {location ? (
               <Anchor
