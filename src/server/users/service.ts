@@ -26,7 +26,13 @@ class UserService {
   }
 
   async update(id: string, data: User) {
-    return withAuth(async () => this.repository.update(id, data), []);
+    return withAuth(
+      async () => this.repository.update(id, data),
+      ['auth'],
+      async (session) => {
+        return session.user.id === id || session.user.role === 'admin';
+      }
+    );
   }
 
   async delete(id: string) {

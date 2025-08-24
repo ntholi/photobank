@@ -4,7 +4,9 @@ import ProfileTabs from './ProfileTabs';
 import { Avatar } from '@heroui/avatar';
 import { largeProfilePic } from '@/lib/utils';
 import { Button } from '@heroui/button';
+import { Link } from '@heroui/link';
 import RoleBadge from '@/app/components/RoleBadge';
+import { IoLink } from 'react-icons/io5';
 
 type Props = {
   params: Promise<{
@@ -31,12 +33,21 @@ export default async function ProfilePage({ params }: Props) {
         />
 
         <div className='flex-1'>
-          <div className='flex items-center gap-2 mb-4'>
+          <div className='flex items-center gap-2 mb-2'>
             <h1 className='text-2xl font-medium'>{user.name}</h1>
             <RoleBadge role={user.role} />
+            <Button
+              as='a'
+              href={`/profile/${id}/edit`}
+              variant='flat'
+              size='sm'
+              className='ml-auto'
+            >
+              Edit Profile
+            </Button>
           </div>
 
-          <div className='flex items-center gap-8 mb-4 text-sm'>
+          <div className='flex items-center gap-8 mb-2 text-sm'>
             <div>
               <span className='font-semibold'>{stats.uploads}</span> posts
             </div>
@@ -45,11 +56,27 @@ export default async function ProfilePage({ params }: Props) {
             </div>
           </div>
 
-          <div className='space-y-1'>
+          <div className='space-y-2'>
             {user.bio ? (
               <p className='text-default-600 whitespace-pre-wrap'>{user.bio}</p>
             ) : (
-              <p className='text-default-400 italic'>This user has no bio</p>
+              <p className='text-default-500 italic text-sm'>
+                This user has no bio
+              </p>
+            )}
+
+            {user.website && (
+              <div className='flex items-center gap-1'>
+                <IoLink size={16} className='text-default-500' />
+                <Link
+                  href={user.website}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-sm text-primary hover:underline'
+                >
+                  {user.website}
+                </Link>
+              </div>
             )}
           </div>
         </div>
