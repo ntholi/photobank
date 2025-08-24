@@ -69,7 +69,6 @@ export async function ContentDisplay({ content }: Props) {
           </div>
 
           <div className='lg:col-span-1 space-y-6'>
-            <SaveContentButton contentId={content.id} />
             <DetailsSection content={content} />
           </div>
         </div>

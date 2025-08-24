@@ -8,6 +8,7 @@ import { User } from '@heroui/user';
 import { Chip } from '@heroui/chip';
 import { IoMdPerson } from 'react-icons/io';
 import { Link } from '@heroui/link';
+import ActionBar from './ActionBar';
 
 type Content = NonNullable<Awaited<ReturnType<typeof getContentWithDetails>>>;
 
@@ -46,7 +47,7 @@ export default function DetailsSection({ content }: Props) {
           </p>
         </CardBody>
       </Card>
-
+      <ActionBar contentId={content.id} />
       <Card className='shadow-none border border-default-200'>
         <CardBody className='p-6 space-y-4'>
           <h3 className='text-lg font-semibold text-foreground'>Details</h3>
