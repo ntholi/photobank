@@ -21,6 +21,8 @@ export default function NavbarComponent() {
       router.push('/#gallery');
     } else if (menu === 'Locations') {
       router.push('/dashboard/locations');
+    } else if (menu === 'Map') {
+      router.push('/map');
     } else if (menu === 'About') {
       console.log('About clicked');
     } else if (menu === 'Contact') {
@@ -36,19 +38,19 @@ export default function NavbarComponent() {
       }}
     >
       <NavbarBrand className='font-medium tracking-[4px]'>
-        <Link href='/' className='flex items-center gap-2 text-foreground'>
+        <Link href='/' className='text-foreground flex items-center gap-2'>
           <IoMdCamera className='text-2xl' />
           <span className='text-sm md:text-base'>LEHAKOE</span>
         </Link>
       </NavbarBrand>
 
-      <NavbarContent className='hidden md:flex gap-10' justify='center'>
+      <NavbarContent className='hidden gap-10 md:flex' justify='center'>
         {menus.map((menu, index) => (
           <NavbarItem key={menu}>
             <Link
               className={`${
                 active === index ? 'text-primary' : 'text-foreground/80'
-              } px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide cursor-pointer`}
+              } h-auto min-w-fit cursor-pointer px-0 text-xs font-medium tracking-wide uppercase`}
               onClick={() => handleMenuClick(index, menu)}
             >
               {menu}
@@ -60,7 +62,7 @@ export default function NavbarComponent() {
       <NavbarContent justify='end' className='gap-6'>
         <NavbarItem>
           <Button isIconOnly variant='light' radius='full' aria-label='Search'>
-            <IoMdSearch className='text-lg text-foreground' />
+            <IoMdSearch className='text-foreground text-lg' />
           </Button>
         </NavbarItem>
         <NavbarItem>
@@ -71,4 +73,4 @@ export default function NavbarComponent() {
   );
 }
 
-const menus = ['Home', 'Gallery', 'Locations', 'About', 'Contact'];
+const menus = ['Home', 'Gallery', 'Map', 'Locations', 'About', 'Contact'];
