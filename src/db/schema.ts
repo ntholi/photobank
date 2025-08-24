@@ -28,6 +28,7 @@ export const users = pgTable('users', {
   name: text(),
   role: userRoleEnum().notNull().default('user'),
   bio: text(),
+  website: text(),
   email: text().unique(),
   emailVerified: timestamp({ mode: 'date' }),
   image: text(),

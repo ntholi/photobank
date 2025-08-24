@@ -57,6 +57,13 @@
       "when": 1756026241451,
       "tag": "0007_crazy_electro",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1756034218849,
+      "tag": "0008_lively_white_queen",
+      "breakpoints": true
     }
   ]
 }
