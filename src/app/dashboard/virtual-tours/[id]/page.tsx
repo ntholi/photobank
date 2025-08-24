@@ -28,7 +28,7 @@ export default async function VirtualTourDetails({ params }: Props) {
   return (
     <DetailsView>
       <DetailsViewHeader
-        title={'Virtual Tour'}
+        title={virtualTour.name}
         queryKey={['virtual-tours']}
         handleDelete={async () => {
           'use server';
@@ -36,9 +36,6 @@ export default async function VirtualTourDetails({ params }: Props) {
         }}
       />
       <DetailsViewBody>
-        <FieldView label='Preview'>
-          <VirtualTourPreview url={virtualTour.url} />
-        </FieldView>
         <FieldView label='Location'>
           <Anchor
             component={Link}
@@ -47,6 +44,7 @@ export default async function VirtualTourDetails({ params }: Props) {
             {virtualTour.location?.name}
           </Anchor>
         </FieldView>
+        <VirtualTourPreview url={virtualTour.url} />
       </DetailsViewBody>
     </DetailsView>
   );

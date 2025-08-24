@@ -44,6 +44,7 @@ export default function VirtualTourForm({
     >
       {(form) => (
         <>
+          <TextInput label='Name' required {...form.getInputProps('name')} />
           <input type='hidden' {...form.getInputProps('locationId')} />
           <LocationPicker
             label='Location'

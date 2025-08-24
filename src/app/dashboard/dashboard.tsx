@@ -76,6 +76,12 @@ const navigation: NavItem[] = [
     roles: ['moderator', 'admin'],
   },
   {
+    label: 'Virtual Tours',
+    href: '/dashboard/virtual-tours',
+    icon: IconCardboards,
+    roles: ['admin'],
+  },
+  {
     label: 'Tags',
     href: '/dashboard/tags',
     icon: IconTags,
@@ -85,12 +91,6 @@ const navigation: NavItem[] = [
     label: 'Locations',
     href: '/dashboard/locations',
     icon: IconMapPin,
-    roles: ['moderator', 'admin'],
-  },
-  {
-    label: 'Virtual Tours',
-    href: '/dashboard/virtual-tours',
-    icon: IconCardboards,
     roles: ['moderator', 'admin'],
   },
 ];
