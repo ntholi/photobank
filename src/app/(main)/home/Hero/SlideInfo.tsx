@@ -63,7 +63,7 @@ export default function SlideInfo({ data }: Props) {
           href={`/content/${data.id}`}
           variant='ghost'
           radius='full'
-          className='text-white border-1'
+          className='border-1 text-white hover:text-black'
         >
           View Details
         </Button>
