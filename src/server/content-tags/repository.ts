@@ -75,6 +75,10 @@ export default class ContentTagRepository extends BaseRepository<
           : inArray(tags.name, tagNames)
       );
   }
+
+  async deleteAllByContentId(contentId: string) {
+    await db.delete(contentTags).where(eq(contentTags.contentId, contentId));
+  }
 }
 
 export const contentTagsRepository = new ContentTagRepository();

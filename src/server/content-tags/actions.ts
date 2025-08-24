@@ -38,3 +38,10 @@ export async function updateContentTag(
 export async function deleteContentTag(contentId: string, tagId: string) {
   return contentTagsService.delete(contentId, tagId);
 }
+
+export async function updateContentTags(
+  contentId: string,
+  selectedTags: Array<{ tag: string; confidence: number }>
+) {
+  return contentTagsService.updateContentTags(contentId, selectedTags);
+}

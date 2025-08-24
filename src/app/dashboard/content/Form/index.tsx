@@ -4,7 +4,10 @@ import LocationPicker from '@/app/components/LocationPicker';
 import { Form } from '@/components/adease';
 import { content } from '@/db/schema';
 import { createContentLabels } from '@/server/content-labels/actions';
-import { createContentTags } from '@/server/content-tags/actions';
+import {
+  createContentTags,
+  updateContentTags,
+} from '@/server/content-tags/actions';
 import { uploadContentFile } from '@/server/content/uploadActions';
 import { Stack, Textarea } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -160,7 +163,31 @@ export default function ContentForm({
         ...values,
         locationData: locationData,
       };
-      return await onSubmit(formContentData);
+      const updatedContent = await onSubmit(formContentData);
+
+      if (selectedTags.length > 0 || defaultValues?.tags?.length) {
+        const tagsToSave = selectedTags.map((tag) => ({
+          tag,
+          confidence: 100,
+        }));
+
+        try {
+          await updateContentTags(updatedContent.id as string, tagsToSave);
+          console.log(
+            `Updated ${tagsToSave.length} tags for content ${updatedContent.id}:`,
+            tagsToSave.map((item) => item.tag).join(', ')
+          );
+        } catch (error) {
+          console.error('Failed to update content tags:', error);
+          notifications.show({
+            title: 'Warning',
+            message: 'Content updated successfully, but failed to update tags',
+            color: 'yellow',
+          });
+        }
+      }
+
+      return updatedContent;
     }
   };
 
