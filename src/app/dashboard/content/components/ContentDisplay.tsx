@@ -2,7 +2,7 @@
 
 import { content } from '@/db/schema';
 import { usePresignedUrl } from '@/hooks/usePresignedUrl';
-import { getImageUrl } from '@/lib/utils';
+import { formatDateTime, getImageUrl } from '@/lib/utils';
 import {
   AspectRatio,
   Box,
@@ -11,6 +11,7 @@ import {
   Image,
   Loader,
   Paper,
+  Stack,
   Tabs,
   Text,
 } from '@mantine/core';
@@ -120,6 +121,14 @@ export default function ContentDisplay({ content }: Props) {
               </Text>
             )}
           </Box>
+          <Stack gap={0} align='flex-end'>
+            <Text size='sm' fw={500}>
+              {formatDateTime(content.createdAt)}
+            </Text>
+            <Text size='xs' c='dimmed'>
+              Uploaded
+            </Text>
+          </Stack>
         </Flex>
       </Paper>
     );

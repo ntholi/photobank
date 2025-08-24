@@ -1,5 +1,4 @@
 import { DetailsView, DetailsViewBody, FieldView } from '@/components/adease';
-import { formatDateTime } from '@/lib/utils';
 import { deleteContent, getContent } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
 import { Anchor, Fieldset, Stack, Text } from '@mantine/core';
@@ -53,9 +52,6 @@ export default async function ContentDetailsPage({ params }: Props) {
             ) : (
               '-'
             )}
-          </FieldView>
-          <FieldView label='Date Uploaded'>
-            {formatDateTime(content.createdAt)}
           </FieldView>
 
           <Fieldset legend='Description'>

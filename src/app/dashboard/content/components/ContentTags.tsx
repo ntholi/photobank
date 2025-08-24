@@ -82,7 +82,6 @@ export function ContentTags({ contentId }: ContentTagsProps) {
   const { data, isLoading, error } = useQuery<ContentTagItem[]>({
     queryKey: ['contentTags', contentId],
     queryFn: () => getContentTags(contentId),
-    staleTime: 5 * 60 * 1000,
   });
 
   if (error) {
