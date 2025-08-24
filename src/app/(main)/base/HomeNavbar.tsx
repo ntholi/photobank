@@ -31,7 +31,7 @@ export default function HomeNavbar() {
         }, 100);
       }
     } else if (menu === 'Locations') {
-      router.push('/dashboard/locations');
+      router.push('/locations');
     } else if (menu === 'About') {
       console.log('About clicked');
     } else if (menu === 'Contact') {
@@ -41,7 +41,7 @@ export default function HomeNavbar() {
 
   return (
     <Navbar
-      className='absolute mt-5 bg-transparent border-none z-30'
+      className='absolute z-30 mt-5 border-none bg-transparent'
       classNames={{
         base: 'px-5 md:px-10',
         wrapper: 'max-w-full',
@@ -56,13 +56,13 @@ export default function HomeNavbar() {
         </Link>
       </NavbarBrand>
 
-      <NavbarContent className='hidden md:flex gap-10' justify='center'>
+      <NavbarContent className='hidden gap-10 md:flex' justify='center'>
         {menus.map((menu, index) => (
           <NavbarItem key={menu}>
             <Link
               className={`${
                 active === index ? 'text-primary' : 'text-white/80'
-              } px-0 min-w-fit h-auto font-medium text-xs uppercase tracking-wide cursor-pointer`}
+              } h-auto min-w-fit cursor-pointer px-0 text-xs font-medium tracking-wide uppercase`}
               onClick={() => handleMenuClick(index, menu)}
             >
               {menu}

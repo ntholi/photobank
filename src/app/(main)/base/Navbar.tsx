@@ -20,9 +20,7 @@ export default function NavbarComponent() {
     } else if (menu === 'Gallery') {
       router.push('/#gallery');
     } else if (menu === 'Locations') {
-      router.push('/dashboard/locations');
-    } else if (menu === 'Map') {
-      router.push('/map');
+      router.push('/locations');
     } else if (menu === 'About') {
       console.log('About clicked');
     } else if (menu === 'Contact') {
@@ -73,4 +71,4 @@ export default function NavbarComponent() {
   );
 }
 
-const menus = ['Home', 'Gallery', 'Map', 'Locations', 'About', 'Contact'];
+const menus = ['Home', 'Gallery', 'Locations', 'About', 'Contact'];
