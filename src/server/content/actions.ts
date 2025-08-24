@@ -77,6 +77,10 @@ export async function getContentPresignedUrl(contentId: string) {
   };
 }
 
+export async function getPresignedUrl(s3Key: string) {
+  return generatePresignedUrl(s3Key, 900);
+}
+
 export async function getFilteredContent(options: ContentFilterOptions) {
   return service.getFilteredContent(options);
 }

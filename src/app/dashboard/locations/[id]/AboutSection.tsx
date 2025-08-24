@@ -18,7 +18,7 @@ type Props = {
 };
 
 export default function AboutSection({ cover, aboutHtml }: Props) {
-  const { data } = usePresignedUrl(cover?.id || '', Boolean(cover?.id));
+  const { url } = usePresignedUrl(cover?.s3Key || '', Boolean(cover?.s3Key));
 
   const fallback = cover?.watermarkedKey
     ? getImageUrl(cover.watermarkedKey)
@@ -26,7 +26,7 @@ export default function AboutSection({ cover, aboutHtml }: Props) {
       ? getImageUrl(cover.thumbnailKey)
       : undefined;
 
-  const src = data?.url || fallback;
+  const src = url || fallback;
 
   return (
     <Stack gap='md'>

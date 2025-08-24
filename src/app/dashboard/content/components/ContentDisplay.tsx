@@ -1,11 +1,10 @@
 'use client';
 
 import { content } from '@/db/schema';
-import { formatDateTime, getImageUrl } from '@/lib/utils';
 import { usePresignedUrl } from '@/hooks/usePresignedUrl';
+import { getImageUrl } from '@/lib/utils';
 import {
   AspectRatio,
-  Badge,
   Box,
   Center,
   Flex,
@@ -28,8 +27,10 @@ export default function ContentDisplay({ content }: Props) {
     content;
   const [activeTab, setActiveTab] = useState('preview');
 
-  const { data: presignedData, isLoading: isLoadingPresigned } =
-    usePresignedUrl(id, activeTab === 'original');
+  const { url, isLoading: isLoadingPresigned } = usePresignedUrl(
+    s3Key,
+    activeTab === 'original'
+  );
 
   const handleTabChange = (value: string | null) => {
     if (value) {
@@ -38,7 +39,7 @@ export default function ContentDisplay({ content }: Props) {
   };
 
   const urls = {
-    original: presignedData?.url || '',
+    original: url,
     thumbnail: getImageUrl(thumbnailKey),
     watermarked: getImageUrl(watermarkedKey),
   };

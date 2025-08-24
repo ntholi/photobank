@@ -48,9 +48,8 @@ export async function LocationHero({ location }: LocationHeroProps) {
     >
       <div className='max-w-7xl mx-auto px-4 py-12'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'>
-          {/* Cover Content */}
           <div className='lg:col-span-1'>
-            {hasCoverContent ? (
+            {hasCoverContent && location.coverContent ? (
               <div className='rounded-xl p-0.5 shadow-lg'>
                 <Image
                   src={getImageUrl(location.coverContent.watermarkedKey)}
@@ -74,7 +73,6 @@ export async function LocationHero({ location }: LocationHeroProps) {
             )}
           </div>
 
-          {/* Location Details */}
           <div className='lg:col-span-1 space-y-6'>
             <div className='space-y-4'>
               <h1 className='text-4xl md:text-5xl font-bold text-gray-900 leading-tight'>
