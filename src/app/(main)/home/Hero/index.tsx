@@ -91,6 +91,7 @@ export default function Hero({ content }: Props) {
   const [currentSlideData, setCurrentSlideData] =
     React.useState<ContentData | null>(transformedContent[0] || null);
   const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [isPaused, setIsPaused] = React.useState(false);
 
   const handleScrollToGallery = () => {
     const el = document.getElementById('gallery');
@@ -99,22 +100,36 @@ export default function Hero({ content }: Props) {
     }
   };
 
+  React.useEffect(() => {
+    if (transformedContent.length <= 1 || isPaused) return;
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [transformedContent.length, isPaused, currentIndex]);
+
   const handlePrev = () => {
     if (!transitionData && !currentSlideData) return;
     setData((prevData) => [
       transitionData || currentSlideData!,
       ...prevData.slice(0, prevData.length - 1),
     ]);
-    setCurrentIndex((prev) => Math.max(0, prev - 1));
+    setCurrentIndex((prev) => {
+      const newIndex = prev - 1;
+      return newIndex < 0 ? transformedContent.length - 1 : newIndex;
+    });
     setTransitionData(data[data.length - 1]);
   };
 
   const handleNext = () => {
     if (!transitionData && !currentSlideData) return;
     setData((prev) => prev.slice(1));
-    setCurrentIndex((prev) =>
-      Math.min(transformedContent.length - 1, prev + 1)
-    );
+    setCurrentIndex((prev) => {
+      const newIndex = prev + 1;
+      return newIndex >= transformedContent.length ? 0 : newIndex;
+    });
     setTransitionData(data[0]);
     setTimeout(() => {
       setData((newData) => [...newData, transitionData || currentSlideData!]);
@@ -135,7 +150,11 @@ export default function Hero({ content }: Props) {
   }
 
   return (
-    <main className='relative min-h-screen select-none overflow-hidden text-white antialiased'>
+    <main
+      className='relative min-h-screen select-none overflow-hidden text-white antialiased'
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <AnimatePresence>
         <BackgroundImage
           key='background'
