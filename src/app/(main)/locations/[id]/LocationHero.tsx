@@ -5,10 +5,9 @@ import {
   getDefaultColors,
 } from '@/lib/colors';
 import { getImageUrl } from '@/lib/utils';
-import { Card, CardBody } from '@heroui/card';
-import { Image } from '@heroui/image';
 import { MdLocationOn } from 'react-icons/md';
 import LocationTabs from './LocationTabs';
+import CoverCarousel from './CoverCarousel';
 
 type Location = typeof locations.$inferSelect;
 type Content = typeof contentSchema.$inferSelect;
@@ -16,21 +15,27 @@ type Content = typeof contentSchema.$inferSelect;
 interface LocationHeroProps {
   location: Location & {
     coverContent: Content | null;
+    coverContents?: Content[];
     about: string | null;
     virtualTourUrl?: string | null;
   };
 }
 
 export async function LocationHero({ location }: LocationHeroProps) {
-  const hasCoverContent = location.coverContent !== null;
+  const hasCoverContent =
+    (location.coverContents && location.coverContents.length > 0) ||
+    location.coverContent !== null;
 
   async function getDominantColors(): Promise<string[]> {
     try {
-      if (!hasCoverContent || !location.coverContent?.thumbnailKey) {
+      const first =
+        (location.coverContents && location.coverContents[0]) ||
+        location.coverContent;
+      if (!first || !first.thumbnailKey) {
         return getDefaultColors();
       }
 
-      const url = getImageUrl(location.coverContent.thumbnailKey);
+      const url = getImageUrl(first.thumbnailKey);
       const colors = await extractDominantColors(url);
       return colors;
     } catch (error) {
@@ -51,32 +56,13 @@ export async function LocationHero({ location }: LocationHeroProps) {
       <div className='mx-auto max-w-7xl px-4 py-12'>
         <div className='grid grid-cols-1 gap-12 lg:grid-cols-2'>
           <div className='lg:col-span-1'>
-            <Card className='shadow-lg' radius='sm'>
-              <CardBody className='p-5'>
-                {hasCoverContent && location.coverContent ? (
-                  <Image
-                    src={getImageUrl(location.coverContent.watermarkedKey)}
-                    alt={`${location.name} - Cover photo`}
-                    className='h-auto max-h-[60vh] w-full object-contain'
-                    loading='eager'
-                    radius='lg'
-                    width={800}
-                    height={600}
-                  />
-                ) : (
-                  <div className='flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50'>
-                    <div className='text-center'>
-                      <div className='mb-4'>
-                        <MdLocationOn className='mx-auto h-12 w-12 text-gray-500' />
-                      </div>
-                      <p className='text-lg text-gray-600'>
-                        No cover photo available
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </CardBody>
-            </Card>
+            <CoverCarousel
+              items={
+                location.coverContents ??
+                (location.coverContent ? [location.coverContent] : [])
+              }
+              locationName={location.name}
+            />
           </div>
 
           <div className='space-y-3 lg:col-span-1'>
