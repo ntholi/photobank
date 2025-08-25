@@ -45,6 +45,14 @@ export default async function ProfilePage({ params }: Props) {
             >
               Edit Profile
             </Button>
+            <Button
+              as='a'
+              href={`/profile/${id}/uploads`}
+              color='primary'
+              size='sm'
+            >
+              Upload Photo
+            </Button>
           </div>
 
           <div className='mb-2 flex items-center gap-8 text-sm'>
