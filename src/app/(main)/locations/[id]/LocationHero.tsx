@@ -91,15 +91,7 @@ export async function LocationHero({ location }: LocationHeroProps) {
               </div>
             )}
 
-            <LocationTabs
-              name={location.name}
-              about={location.about}
-              address={location.address}
-              latitude={location.latitude}
-              longitude={location.longitude}
-              placeId={location.placeId}
-              virtualTourUrl={location.virtualTourUrl ?? null}
-            />
+            <LocationTabs location={location} />
           </div>
         </div>
       </div>

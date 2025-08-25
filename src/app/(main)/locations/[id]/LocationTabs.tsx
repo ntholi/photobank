@@ -6,26 +6,20 @@ import { MdDirections, Md360 } from 'react-icons/md';
 import AboutTab from '@/app/(main)/locations/[id]/tabs/AboutTab';
 import DirectionTab from '@/app/(main)/locations/[id]/tabs/DirectionTab';
 import VirtualTourTab from '@/app/(main)/locations/[id]/tabs/VirtualTourTab';
+import { locations, content as contentSchema } from '@/db/schema';
+
+type Location = typeof locations.$inferSelect;
+type Content = typeof contentSchema.$inferSelect;
 
 type Props = {
-  name: string;
-  about?: string | null;
-  address?: string | null;
-  latitude: number;
-  longitude: number;
-  placeId?: string;
-  virtualTourUrl?: string | null;
+  location: Location & {
+    coverContent: Content | null;
+    about: string | null;
+    virtualTourUrl?: string | null;
+  };
 };
 
-export default function LocationTabs({
-  name,
-  about,
-  address,
-  latitude,
-  longitude,
-  placeId,
-  virtualTourUrl,
-}: Props) {
+export default function LocationTabs({ location }: Props) {
   return (
     <div className='w-full'>
       <Tabs
@@ -50,7 +44,7 @@ export default function LocationTabs({
             </div>
           }
         >
-          <AboutTab name={name} about={about} />
+          <AboutTab location={location} />
         </Tab>
         <Tab
           key='directions'
@@ -61,14 +55,9 @@ export default function LocationTabs({
             </div>
           }
         >
-          <DirectionTab
-            address={address}
-            latitude={latitude}
-            longitude={longitude}
-            placeId={placeId}
-          />
+          <DirectionTab location={location} />
         </Tab>
-        {virtualTourUrl ? (
+        {location.virtualTourUrl ? (
           <Tab
             key='virtual-tour'
             title={
@@ -78,7 +67,7 @@ export default function LocationTabs({
               </div>
             }
           >
-            <VirtualTourTab url={virtualTourUrl} name={name} />
+            <VirtualTourTab location={location} />
           </Tab>
         ) : null}
       </Tabs>
