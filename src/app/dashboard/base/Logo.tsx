@@ -1,7 +1,12 @@
 'use client';
-import { Image, MantineSize, useComputedColorScheme } from '@mantine/core';
-import NextImage from 'next/image';
+import {
+  Text,
+  Group,
+  MantineSize,
+  useComputedColorScheme,
+} from '@mantine/core';
 import Link from 'next/link';
+import { IoMdCamera } from 'react-icons/io';
 
 type Props = {
   size?: MantineSize;
@@ -11,28 +16,31 @@ export default function Logo({ size = 'xs' }: Props) {
   const colorScheme = useComputedColorScheme('light', {
     getInitialValueInEffect: true,
   });
-  const logo =
-    colorScheme === 'dark' ? '/logo/white.png' : '/logo/transparent.png';
-
-  const sizeMap = {
-    xs: 30,
-    sm: 40,
-    md: 60,
-    lg: 80,
-    xl: 100,
+  const sizeMap: Record<MantineSize, number> = {
+    xs: 14,
+    sm: 18,
+    md: 26,
+    lg: 40,
+    xl: 48,
   };
 
   return (
-    <Link href='/dashboard'>
-      <Image
-        h={sizeMap[size]}
-        component={NextImage}
-        w={'auto'}
-        width={sizeMap[size] * 7}
-        height={sizeMap[size] * 7}
-        src={logo}
-        alt='Logo'
-      />
+    <Link
+      href='/dashboard'
+      aria-label='Lehakoe dashboard'
+      style={{ textDecoration: 'none' }}
+    >
+      <Group
+        component='span'
+        align='center'
+        gap={'xs'}
+        c={colorScheme === 'dark' ? 'white' : 'black'}
+      >
+        <IoMdCamera size={sizeMap[size]} />
+        <Text fw={500} size='xs' lts={2}>
+          LEHAKOE
+        </Text>
+      </Group>
     </Link>
   );
 }
