@@ -17,14 +17,17 @@ export default async function LocationEdit({ params }: Props) {
     return notFound();
   }
 
-  const { coverContent, about, ...location } = locationData;
+  const { coverContent, about, ...rest } = locationData as any;
+  const coverContents =
+    (locationData as any).coverContents || (coverContent ? [coverContent] : []);
+  const location = rest;
 
   return (
     <Box p={{ base: 'sm', md: 'lg' }}>
       <Form
         title={'Edit Location'}
         defaultValues={location}
-        defaultCoverContent={coverContent}
+        defaultCoverContents={coverContents}
         defaultAbout={about || undefined}
         onSubmit={async (value) => {
           'use server';

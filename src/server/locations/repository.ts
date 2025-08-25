@@ -1,7 +1,12 @@
 import BaseRepository from '@/server/base/BaseRepository';
-import { locations, content, locationDetails } from '@/db/schema';
+import {
+  locations,
+  content,
+  locationDetails,
+  locationCoverContents,
+} from '@/db/schema';
 import { db } from '@/db';
-import { eq, sql } from 'drizzle-orm';
+import { asc, eq, sql } from 'drizzle-orm';
 
 export default class LocationRepository extends BaseRepository<
   typeof locations,
@@ -43,30 +48,47 @@ export default class LocationRepository extends BaseRepository<
 
   async updateLocationDetails(
     locationId: string,
-    data: { coverContentId?: string | null; about?: string },
+    data: { coverContentIds?: string[]; about?: string },
   ) {
     await db
       .insert(locationDetails)
       .values({
         locationId,
-        coverContentId: data.coverContentId,
         about: data.about,
       })
       .onConflictDoUpdate({
         target: locationDetails.locationId,
         set: {
-          coverContentId: data.coverContentId,
           about: data.about,
         },
       });
 
-    const result = await db
-      .select()
-      .from(locationDetails)
-      .where(eq(locationDetails.locationId, locationId))
-      .limit(1);
+    if (data.coverContentIds) {
+      await db
+        .delete(locationCoverContents)
+        .where(eq(locationCoverContents.locationId, locationId));
 
-    return result[0];
+      if (data.coverContentIds.length > 0) {
+        const rows = data.coverContentIds.map((contentId, index) => ({
+          locationId,
+          contentId,
+          position: index,
+        }));
+        await db.insert(locationCoverContents).values(rows);
+      }
+    }
+
+    const details = await db.query.locationDetails.findFirst({
+      where: eq(locationDetails.locationId, locationId),
+    });
+
+    const covers = await db.query.locationCoverContents.findMany({
+      where: eq(locationCoverContents.locationId, locationId),
+      with: { content: true },
+      orderBy: asc(locationCoverContents.position),
+    });
+
+    return { ...details, coverContents: covers.map((c) => c.content) } as const;
   }
 
   async findByIdWithCover(id: string) {
@@ -74,46 +96,50 @@ export default class LocationRepository extends BaseRepository<
       where: eq(locations.id, id),
       with: {
         content: true,
-        details: {
-          with: {
-            coverContent: true,
-          },
-        },
+        details: true,
         virtualTour: true,
+        coverContents: {
+          with: { content: true },
+          orderBy: asc(locationCoverContents.position),
+        },
       },
     });
 
     if (!result) return null;
+    const coverContents = (result.coverContents || []).map((r) => r.content);
 
     return {
       ...result,
-      coverContent: result.details?.coverContent || null,
+      coverContent: coverContents[0] || null,
+      coverContents,
       about: result.details?.about || null,
       virtualTourUrl: result.virtualTour?.url || null,
-    };
+    } as const;
   }
 
   async findByIdWithCoverContent(id: string) {
     const result = await db.query.locations.findFirst({
       where: eq(locations.id, id),
       with: {
-        details: {
-          with: {
-            coverContent: true,
-          },
-        },
+        details: true,
         virtualTour: true,
+        coverContents: {
+          with: { content: true },
+          orderBy: asc(locationCoverContents.position),
+        },
       },
     });
 
     if (!result) return null;
+    const coverContents = (result.coverContents || []).map((r) => r.content);
 
     return {
       ...result,
-      coverContent: result.details?.coverContent || null,
+      coverContent: coverContents[0] || null,
+      coverContents,
       about: result.details?.about || null,
       virtualTourUrl: result.virtualTour?.url || null,
-    };
+    } as const;
   }
 
   async getTopByContentCount(limit: number = 20) {

@@ -6,6 +6,7 @@ import {
   contentLabels,
   contentTags,
   homeContent,
+  locationCoverContents,
   locationDetails,
   locations,
   savedContent,
@@ -58,7 +59,7 @@ export const contentRelations = relations(content, ({ one, many }) => ({
   labels: many(contentLabels),
   homeContent: many(homeContent),
   savedContents: many(savedContent),
-  coverForLocationDetails: many(locationDetails, {
+  coverForLocations: many(locationCoverContents, {
     relationName: 'coverContent',
   }),
 }));
@@ -77,6 +78,9 @@ export const locationsRelations = relations(locations, ({ many, one }) => ({
     references: [locationDetails.locationId],
     relationName: 'location_details',
   }),
+  coverContents: many(locationCoverContents, {
+    relationName: 'location_cover_contents',
+  }),
   virtualTour: one(virtualTours, {
     fields: [locations.id],
     references: [virtualTours.locationId],
@@ -92,8 +96,19 @@ export const locationDetailsRelations = relations(
       references: [locations.id],
       relationName: 'location_details',
     }),
-    coverContent: one(content, {
-      fields: [locationDetails.coverContentId],
+  }),
+);
+
+export const locationCoverContentsRelations = relations(
+  locationCoverContents,
+  ({ one }) => ({
+    location: one(locations, {
+      fields: [locationCoverContents.locationId],
+      references: [locations.id],
+      relationName: 'location_cover_contents',
+    }),
+    content: one(content, {
+      fields: [locationCoverContents.contentId],
       references: [content.id],
       relationName: 'coverContent',
     }),

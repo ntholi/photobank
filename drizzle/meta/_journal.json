@@ -85,6 +85,13 @@
       "when": 1756058607517,
       "tag": "0011_broken_ink",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1756110116905,
+      "tag": "0012_sturdy_hydra",
+      "breakpoints": true
     }
   ]
 }

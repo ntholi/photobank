@@ -51,7 +51,7 @@ class LocationService {
 
   async updateLocationDetails(
     locationId: string,
-    data: { coverContentId?: string | null; about?: string },
+    data: { coverContentIds?: string[]; about?: string },
   ) {
     return withAuth(async () => {
       return this.repository.updateLocationDetails(locationId, data);

@@ -190,10 +190,22 @@ export const locationDetails = pgTable('location_details', {
     .notNull()
     .references(() => locations.id, { onDelete: 'cascade' })
     .unique(),
-  coverContentId: varchar({ length: 21 }).references(() => content.id, {
-    onDelete: 'set null',
-  }),
   about: text(),
+  createdAt: timestamp({ mode: 'date' }).defaultNow(),
+  updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
+});
+
+export const locationCoverContents = pgTable('location_cover_contents', {
+  id: varchar({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  locationId: varchar({ length: 21 })
+    .notNull()
+    .references(() => locations.id, { onDelete: 'cascade' }),
+  contentId: varchar({ length: 21 })
+    .notNull()
+    .references(() => content.id, { onDelete: 'cascade' }),
+  position: integer().notNull().default(0),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
   updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
 });

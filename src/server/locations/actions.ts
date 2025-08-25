@@ -54,7 +54,7 @@ export async function deleteLocation(id: string) {
 
 export async function updateLocationDetails(
   locationId: string,
-  data: { coverContentId?: string | null; about?: string },
+  data: { coverContentIds?: string[]; about?: string },
 ) {
   return service.updateLocationDetails(locationId, data);
 }

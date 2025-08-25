@@ -39,7 +39,7 @@ type ContentItem = typeof content.$inferSelect;
 type Props = {
   onSubmit: (values: Location) => Promise<Location>;
   defaultValues?: Location;
-  defaultCoverContent?: ContentItem | null;
+  defaultCoverContents?: ContentItem[] | null;
   defaultAbout?: string;
   onSuccess?: (value: Location) => void;
   onError?: (
@@ -51,22 +51,23 @@ type Props = {
 export default function LocationForm({
   onSubmit,
   defaultValues,
-  defaultCoverContent,
+  defaultCoverContents,
   defaultAbout,
   title,
 }: Props) {
   const router = useRouter();
   const [showContentPicker, setShowContentPicker] = useState(false);
-  const [selectedCoverContent, setSelectedCoverContent] =
-    useState<ContentItem | null>(null);
+  const [selectedCoverContents, setSelectedCoverContents] = useState<
+    ContentItem[]
+  >([]);
   const [aboutContent, setAboutContent] = useState('');
   const [isGeneratingPromotion, setIsGeneratingPromotion] = useState(false);
 
   useEffect(() => {
-    if (defaultCoverContent) {
-      setSelectedCoverContent(defaultCoverContent);
+    if (defaultCoverContents && defaultCoverContents.length > 0) {
+      setSelectedCoverContents(defaultCoverContents);
     }
-  }, [defaultCoverContent]);
+  }, [defaultCoverContents]);
 
   useEffect(() => {
     if (defaultAbout) {
@@ -75,12 +76,15 @@ export default function LocationForm({
   }, [defaultAbout]);
 
   const handleContentSelect = (item: ContentItem) => {
-    setSelectedCoverContent(item);
+    setSelectedCoverContents((prev) => {
+      if (prev.some((c) => c.id === item.id)) return prev;
+      return [...prev, item];
+    });
     setShowContentPicker(false);
   };
 
-  const handleRemoveCoverContent = () => {
-    setSelectedCoverContent(null);
+  const handleRemoveCoverContent = (id: string) => {
+    setSelectedCoverContents((prev) => prev.filter((c) => c.id !== id));
   };
 
   const handleGeneratePromotion = async () => {
@@ -111,7 +115,7 @@ export default function LocationForm({
 
     if (location?.id) {
       await updateLocationDetails(location.id, {
-        coverContentId: selectedCoverContent?.id || null,
+        coverContentIds: selectedCoverContents.map((c) => c.id),
         about: aboutContent,
       });
     }
@@ -136,7 +140,7 @@ export default function LocationForm({
           <Tabs defaultValue='about' keepMounted={false}>
             <Tabs.List>
               <Tabs.Tab value='about'>About</Tabs.Tab>
-              <Tabs.Tab value='content'>Cover</Tabs.Tab>
+              <Tabs.Tab value='content'>Covers</Tabs.Tab>
               <Tabs.Tab value='details'>Details</Tabs.Tab>
             </Tabs.List>
 
@@ -172,53 +176,55 @@ export default function LocationForm({
                 <Paper withBorder p='md'>
                   <Group justify='space-between' mb='md'>
                     <Text size='lg' fw={500}>
-                      Cover Content
+                      Cover Contents
                     </Text>
                     <Button
                       variant='light'
                       onClick={() => setShowContentPicker(true)}
                       leftSection={<IconPhoto size={16} />}
                     >
-                      {selectedCoverContent ? 'Change Cover' : 'Select Cover'}
+                      Add Cover
                     </Button>
                   </Group>
 
-                  {selectedCoverContent ? (
-                    <Card withBorder padding='xs' radius='md'>
-                      <Group wrap='nowrap'>
-                        <Box pos='relative'>
-                          <Image
-                            src={getImageUrl(selectedCoverContent.thumbnailKey)}
-                            height={80}
-                            width={80}
-                            fit='cover'
-                            radius='md'
-                            alt={
-                              selectedCoverContent.fileName || 'Cover content'
-                            }
-                          />
-                        </Box>
-                        <Box style={{ flex: 1 }}>
-                          <Text size='sm' fw={500} lineClamp={1}>
-                            {selectedCoverContent.fileName || 'Untitled'}
-                          </Text>
-                          <Text size='xs' c='dimmed' mt={4}>
-                            Type: {selectedCoverContent.type}
-                          </Text>
-                          <Text size='xs' c='dimmed'>
-                            Status: {selectedCoverContent.status}
-                          </Text>
-                        </Box>
-                        <ActionIcon
-                          variant='subtle'
-                          color='red'
-                          onClick={handleRemoveCoverContent}
-                          size='sm'
-                        >
-                          <IconX size={16} />
-                        </ActionIcon>
-                      </Group>
-                    </Card>
+                  {selectedCoverContents.length > 0 ? (
+                    <Stack gap='sm'>
+                      {selectedCoverContents.map((c) => (
+                        <Card key={c.id} withBorder padding='xs' radius='md'>
+                          <Group wrap='nowrap'>
+                            <Box pos='relative'>
+                              <Image
+                                src={getImageUrl(c.thumbnailKey)}
+                                height={80}
+                                width={80}
+                                fit='cover'
+                                radius='md'
+                                alt={c.fileName || 'Cover content'}
+                              />
+                            </Box>
+                            <Box style={{ flex: 1 }}>
+                              <Text size='sm' fw={500} lineClamp={1}>
+                                {c.fileName || 'Untitled'}
+                              </Text>
+                              <Text size='xs' c='dimmed' mt={4}>
+                                Type: {c.type}
+                              </Text>
+                              <Text size='xs' c='dimmed'>
+                                Status: {c.status}
+                              </Text>
+                            </Box>
+                            <ActionIcon
+                              variant='subtle'
+                              color='red'
+                              onClick={() => handleRemoveCoverContent(c.id)}
+                              size='sm'
+                            >
+                              <IconX size={16} />
+                            </ActionIcon>
+                          </Group>
+                        </Card>
+                      ))}
+                    </Stack>
                   ) : (
                     <Card withBorder padding='xl' radius='md'>
                       <Stack align='center' gap='sm'>
@@ -227,7 +233,7 @@ export default function LocationForm({
                           No cover content selected
                         </Text>
                         <Text size='sm' c='dimmed' ta='center'>
-                          Select an image or video to use as cover content for
+                          Select one or more images to use as cover content for
                           this location
                         </Text>
                       </Stack>

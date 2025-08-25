@@ -56,7 +56,10 @@ export default async function LocationDetails({ params }: Props) {
 
           <TabsPanel value='about' pt='xl'>
             <AboutSection
-              cover={location.coverContent}
+              covers={
+                (location as any).coverContents ||
+                (location.coverContent ? [location.coverContent] : [])
+              }
               aboutHtml={location.about}
             />
           </TabsPanel>
