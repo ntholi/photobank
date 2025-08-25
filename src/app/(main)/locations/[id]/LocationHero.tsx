@@ -8,7 +8,7 @@ import { getImageUrl } from '@/lib/utils';
 import { Card, CardBody } from '@heroui/card';
 import { Image } from '@heroui/image';
 import { MdLocationOn } from 'react-icons/md';
-import AboutDrawer from './AboutDrawer';
+import LocationTabs from './LocationTabs';
 
 type Location = typeof locations.$inferSelect;
 type Content = typeof contentSchema.$inferSelect;
@@ -17,6 +17,7 @@ interface LocationHeroProps {
   location: Location & {
     coverContent: Content | null;
     about: string | null;
+    virtualTourUrl?: string | null;
   };
 }
 
@@ -90,17 +91,15 @@ export async function LocationHero({ location }: LocationHeroProps) {
               </div>
             )}
 
-            {location.about && (
-              <div className='border-t border-gray-200 pt-4'>
-                <h2 className='mb-3 flex items-center space-x-2 text-xl font-semibold text-gray-900'>
-                  <span>About this location</span>
-                </h2>
-                <AboutDrawer
-                  rawHtml={location.about}
-                  title={`About ${location.name}`}
-                />
-              </div>
-            )}
+            <LocationTabs
+              name={location.name}
+              about={location.about}
+              address={location.address}
+              latitude={location.latitude}
+              longitude={location.longitude}
+              placeId={location.placeId}
+              virtualTourUrl={location.virtualTourUrl ?? null}
+            />
           </div>
         </div>
       </div>

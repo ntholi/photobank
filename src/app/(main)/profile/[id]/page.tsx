@@ -23,17 +23,17 @@ export default async function ProfilePage({ params }: Props) {
   const image = largeProfilePic(user.image || '');
 
   return (
-    <div className='min-h-screen max-w-4xl mx-auto px-4 py-8'>
-      <div className='flex items-start gap-10 mb-10'>
+    <div className='mx-auto min-h-screen max-w-4xl px-4 py-8'>
+      <div className='mb-10 flex items-start gap-10'>
         <Avatar
           src={image || '/profile.png'}
           name={user.name || ''}
-          className='w-28 h-28 sm:w-36 sm:h-36 text-large'
+          className='text-large h-28 w-28 sm:h-36 sm:w-36'
           radius='full'
         />
 
         <div className='flex-1'>
-          <div className='flex items-center gap-2 mb-2'>
+          <div className='mb-2 flex items-center gap-2'>
             <h1 className='text-2xl font-medium'>{user.name}</h1>
             <RoleBadge role={user.role} />
             <Button
@@ -47,9 +47,9 @@ export default async function ProfilePage({ params }: Props) {
             </Button>
           </div>
 
-          <div className='flex items-center gap-8 mb-2 text-sm'>
+          <div className='mb-2 flex items-center gap-8 text-sm'>
             <div>
-              <span className='font-semibold'>{stats.uploads}</span> posts
+              <span className='font-semibold'>{stats.uploads}</span> uploads
             </div>
             <div>
               <span className='font-semibold'>{stats.saved}</span> saved
@@ -60,7 +60,7 @@ export default async function ProfilePage({ params }: Props) {
             {user.bio ? (
               <p className='text-default-600 whitespace-pre-wrap'>{user.bio}</p>
             ) : (
-              <p className='text-default-500 italic text-sm'>
+              <p className='text-default-500 text-sm italic'>
                 This user has no bio
               </p>
             )}
@@ -72,7 +72,7 @@ export default async function ProfilePage({ params }: Props) {
                   href={user.website}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='text-sm text-primary hover:underline'
+                  className='text-primary text-sm hover:underline'
                 >
                   {user.website}
                 </Link>

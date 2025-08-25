@@ -77,6 +77,11 @@ export const locationsRelations = relations(locations, ({ many, one }) => ({
     references: [locationDetails.locationId],
     relationName: 'location_details',
   }),
+  virtualTour: one(virtualTours, {
+    fields: [locations.id],
+    references: [virtualTours.locationId],
+    relationName: 'virtual_tours',
+  }),
 }));
 
 export const locationDetailsRelations = relations(

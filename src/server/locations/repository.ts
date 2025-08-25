@@ -79,6 +79,7 @@ export default class LocationRepository extends BaseRepository<
             coverContent: true,
           },
         },
+        virtualTour: true,
       },
     });
 
@@ -88,6 +89,7 @@ export default class LocationRepository extends BaseRepository<
       ...result,
       coverContent: result.details?.coverContent || null,
       about: result.details?.about || null,
+      virtualTourUrl: result.virtualTour?.url || null,
     };
   }
 
@@ -100,6 +102,7 @@ export default class LocationRepository extends BaseRepository<
             coverContent: true,
           },
         },
+        virtualTour: true,
       },
     });
 
@@ -109,6 +112,7 @@ export default class LocationRepository extends BaseRepository<
       ...result,
       coverContent: result.details?.coverContent || null,
       about: result.details?.about || null,
+      virtualTourUrl: result.virtualTour?.url || null,
     };
   }
 
