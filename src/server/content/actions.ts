@@ -1,11 +1,13 @@
 'use server';
 
-import { content, contentTags } from '@/db/schema';
+import { content } from '@/db/schema';
 import { contentService as service } from './service';
 import { generatePresignedUrl } from '@/lib/aws';
-import { eq } from 'drizzle-orm';
 import { ContentFilterOptions } from './repository';
 import { upsertLocationByPlaceId } from '@/server/locations/actions';
+import { contentLabelsService } from '@/server/content-labels/service';
+import { ContentLabel as RecognitionContentLabel } from '@/lib/recognition';
+import { contentTagsService } from '@/server/content-tags/service';
 
 type Content = typeof content.$inferInsert;
 
@@ -17,6 +19,8 @@ type CreateContentInput = Omit<Content, 'locationId'> & {
     latitude: number;
     longitude: number;
   };
+  contentLabels?: RecognitionContentLabel[];
+  selectedTags?: Array<{ tag: string; confidence: number }>;
 };
 
 export async function getContent(id: string) {
@@ -36,23 +40,79 @@ export async function getContentList(page: number = 1, search = '') {
 }
 
 export async function createContent(input: CreateContentInput) {
-  let locationId: string | undefined;
+  const { locationData, contentLabels, selectedTags, ...rest } = input;
 
-  if (input.locationData) {
-    const location = await upsertLocationByPlaceId(input.locationData);
+  let locationId: string | undefined;
+  if (locationData) {
+    const location = await upsertLocationByPlaceId(locationData);
     locationId = location.id;
   }
 
   const contentData: Content = {
-    ...input,
-    locationId: locationId,
+    ...(rest as Content),
+    locationId,
   };
 
-  return service.create(contentData);
+  const created = await service.create(contentData);
+
+  if (created?.id) {
+    if (contentLabels && contentLabels.length > 0) {
+      try {
+        await contentLabelsService.createMany(
+          created.id as string,
+          contentLabels,
+        );
+      } catch (err) {
+        console.error('Failed to save content labels', err);
+      }
+    }
+
+    if (selectedTags && selectedTags.length > 0) {
+      try {
+        await contentTagsService.createContentTags(
+          created.id as string,
+          selectedTags,
+        );
+      } catch (err) {
+        console.error('Failed to save content tags', err);
+      }
+    }
+  }
+
+  return created;
 }
 
-export async function updateContent(id: string, content: Partial<Content>) {
-  return service.update(id, content);
+type UpdateContentInput = Partial<Content> & {
+  locationData?: {
+    placeId: string;
+    name: string;
+    address?: string | null;
+    latitude: number;
+    longitude: number;
+  };
+  selectedTags?: Array<{ tag: string; confidence: number }>;
+};
+
+export async function updateContent(id: string, input: UpdateContentInput) {
+  const { locationData, selectedTags, ...rest } = input;
+
+  let patch: Partial<Content> = { ...rest };
+  if (locationData) {
+    const location = await upsertLocationByPlaceId(locationData);
+    patch.locationId = location.id;
+  }
+
+  const updated = await service.update(id, patch);
+
+  if (selectedTags) {
+    try {
+      await contentTagsService.updateContentTags(id, selectedTags);
+    } catch (err) {
+      console.error('Failed to update content tags', err);
+    }
+  }
+
+  return updated;
 }
 
 export async function deleteContent(id: string) {

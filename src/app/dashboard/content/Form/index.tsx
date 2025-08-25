@@ -3,12 +3,8 @@
 import LocationPicker from '@/app/components/LocationPicker';
 import { Form } from '@/components/adease';
 import { content } from '@/db/schema';
-import { createContentLabels } from '@/server/content-labels/actions';
-import {
-  createContentTags,
-  updateContentTags,
-} from '@/server/content-tags/actions';
 import { uploadContentFile } from '@/server/content/uploadActions';
+import type { ContentLabel as RecognitionContentLabel } from '@/lib/recognition';
 import { Stack, Textarea } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { createInsertSchema } from 'drizzle-zod';
@@ -27,6 +23,8 @@ type FormContent = Omit<Content, 'id' | 'createdAt' | 'updatedAt'> & {
     latitude: number;
     longitude: number;
   };
+  contentLabels?: RecognitionContentLabel[];
+  selectedTags?: Array<{ tag: string; confidence: number }>;
 };
 
 type Props = {
@@ -94,61 +92,14 @@ export default function ContentForm({
           fileSize: uploadResult.fileSize,
           type: selectedFile.type.startsWith('image/') ? 'image' : 'video',
           locationData: locationData,
+          contentLabels: uploadResult.contentLabels,
+          selectedTags:
+            selectedTags.length > 0
+              ? selectedTags.map((tag) => ({ tag, confidence: 100 }))
+              : uploadResult.selectedTags,
         };
 
         const createdContent = await onSubmit(contentData);
-
-        if (
-          uploadResult.contentLabels &&
-          uploadResult.contentLabels.length > 0
-        ) {
-          try {
-            await createContentLabels(
-              createdContent.id as string,
-              uploadResult.contentLabels,
-            );
-            console.log(
-              `Saved ${uploadResult.contentLabels.length} content labels for content ${createdContent.id}`,
-            );
-          } catch (error) {
-            console.error('Failed to save content labels:', error);
-            notifications.show({
-              title: 'Warning',
-              message:
-                'Content uploaded successfully, but failed to save content labels',
-              color: 'yellow',
-            });
-          }
-        }
-
-        // Handle tags - either manual or AI-selected
-        const tagsToSave =
-          selectedTags.length > 0
-            ? selectedTags.map((tag) => ({ tag, confidence: 100 }))
-            : uploadResult.selectedTags || [];
-
-        if (tagsToSave.length > 0) {
-          try {
-            await createContentTags(createdContent.id as string, tagsToSave);
-            const tagSource =
-              selectedTags.length > 0 ? 'manual' : 'AI-selected';
-            console.log(
-              `Saved ${tagsToSave.length} ${tagSource} tags for content ${createdContent.id}:`,
-              tagsToSave
-                .map((item) => `${item.tag}:${item.confidence}`)
-                .join(', '),
-            );
-          } catch (error) {
-            console.error('Failed to save content tags:', error);
-            const tagSource =
-              selectedTags.length > 0 ? 'manual' : 'AI-selected';
-            notifications.show({
-              title: 'Warning',
-              message: `Content uploaded successfully, but failed to save ${tagSource} tags`,
-              color: 'yellow',
-            });
-          }
-        }
 
         return createdContent;
       } catch (error) {
@@ -166,30 +117,9 @@ export default function ContentForm({
       const formContentData: FormContent = {
         ...values,
         locationData: locationData,
+        selectedTags: selectedTags.map((tag) => ({ tag, confidence: 100 })),
       };
       const updatedContent = await onSubmit(formContentData);
-
-      if (selectedTags.length > 0 || defaultValues?.tags?.length) {
-        const tagsToSave = selectedTags.map((tag) => ({
-          tag,
-          confidence: 100,
-        }));
-
-        try {
-          await updateContentTags(updatedContent.id as string, tagsToSave);
-          console.log(
-            `Updated ${tagsToSave.length} tags for content ${updatedContent.id}:`,
-            tagsToSave.map((item) => item.tag).join(', '),
-          );
-        } catch (error) {
-          console.error('Failed to update content tags:', error);
-          notifications.show({
-            title: 'Warning',
-            message: 'Content updated successfully, but failed to update tags',
-            color: 'yellow',
-          });
-        }
-      }
 
       return updatedContent;
     }
