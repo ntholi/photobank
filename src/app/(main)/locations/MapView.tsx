@@ -28,10 +28,13 @@ export default function MapView({ points }: { points: TopLocation[] }) {
   }, [points]);
 
   const radiusFor = (c: number) => {
-    if (maxCount === minCount) return 6;
-    const t = Math.max(0, Math.min(1, (c - minCount) / (maxCount - minCount)));
-    const eased = Math.sqrt(t);
-    return 3 + eased * 9;
+    const rMin = 2.5;
+    const rMax = 8;
+    if (maxCount === minCount) return (rMin + rMax) / 2;
+    const denom = Math.max(1, maxCount - minCount);
+    const norm = Math.log1p(Math.max(0, c - minCount)) / Math.log1p(denom);
+    const t = Math.max(0, Math.min(1, norm));
+    return rMin + t * (rMax - rMin);
   };
 
   const getName = (g: unknown): string | undefined => {
@@ -150,10 +153,10 @@ export default function MapView({ points }: { points: TopLocation[] }) {
                 <circle
                   r={radiusFor(p.count)}
                   fill='hsl(220 90% 56%)'
-                  fillOpacity={0.6}
+                  fillOpacity={0.5}
                   stroke='white'
-                  strokeOpacity={0.5}
-                  strokeWidth={0.75}
+                  strokeOpacity={0.55}
+                  strokeWidth={0.6}
                 />
               </Marker>
             </Tooltip>
