@@ -49,32 +49,34 @@ export async function LocationHero({ location }: LocationHeroProps) {
       }}
     >
       <div className='mx-auto max-w-7xl px-4 py-12'>
-        <div className='grid grid-cols-1 items-center gap-12 lg:grid-cols-2'>
+        <div className='grid grid-cols-1 gap-12 lg:grid-cols-2'>
           <div className='lg:col-span-1'>
-            {hasCoverContent && location.coverContent ? (
-              <div className='rounded-xl p-0.5 shadow-lg'>
-                <Image
-                  src={getImageUrl(location.coverContent.watermarkedKey)}
-                  alt={`${location.name} - Cover photo`}
-                  className='h-auto max-h-[60vh] w-full object-contain'
-                  loading='eager'
-                  radius='lg'
-                  width={800}
-                  height={600}
-                />
-              </div>
-            ) : (
-              <Card className='flex h-64 items-center justify-center border-2 border-dashed border-gray-300 bg-gray-50'>
-                <CardBody className='text-center'>
-                  <div className='mb-4 text-6xl'>
-                    <MdLocationOn className='mx-auto h-12 w-12 text-gray-500' />
+            <Card className='shadow-lg' radius='sm'>
+              <CardBody className='p-5'>
+                {hasCoverContent && location.coverContent ? (
+                  <Image
+                    src={getImageUrl(location.coverContent.watermarkedKey)}
+                    alt={`${location.name} - Cover photo`}
+                    className='h-auto max-h-[60vh] w-full object-contain'
+                    loading='eager'
+                    radius='lg'
+                    width={800}
+                    height={600}
+                  />
+                ) : (
+                  <div className='flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50'>
+                    <div className='text-center'>
+                      <div className='mb-4'>
+                        <MdLocationOn className='mx-auto h-12 w-12 text-gray-500' />
+                      </div>
+                      <p className='text-lg text-gray-600'>
+                        No cover photo available
+                      </p>
+                    </div>
                   </div>
-                  <p className='text-lg text-gray-600'>
-                    No cover photo available
-                  </p>
-                </CardBody>
-              </Card>
-            )}
+                )}
+              </CardBody>
+            </Card>
           </div>
 
           <div className='space-y-3 lg:col-span-1'>
