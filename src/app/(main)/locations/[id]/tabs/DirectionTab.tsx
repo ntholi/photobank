@@ -34,7 +34,7 @@ export default function DirectionTab({ location }: Props) {
 
   return (
     <div className='space-y-6'>
-      <div className='border-default-200 bg-default-100 aspect-[18/9] w-full overflow-hidden rounded-lg border'>
+      <div className='border-default-200 bg-default-100 aspect-[17/9] w-full overflow-hidden rounded-lg border'>
         <LoadScript googleMapsApiKey={apiKey}>
           <GoogleMap
             mapContainerStyle={mapStyles}
