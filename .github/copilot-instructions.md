@@ -1,4 +1,4 @@
-```instructions
+````instructions
 # Photobank Coding Instructions
 
 Lesotho tourism photobank "Lehakoe" - Next.js 15, TypeScript strict, PostgreSQL/Drizzle.
@@ -69,4 +69,21 @@ NextAuth (Google) + roles: `user`, `contributor`, `moderator`, `admin`
 **Commands**: `pnpm dev`, `pnpm db:generate`, `pnpm db:migrate`, `pnpm db:studio`
 
 **Zone routing**: `(main)` → HeroUI, `dashboard` → Mantine
-```
+
+## Additional Guidelines
+
+- Never use API route handlers; call server code via `actions.ts` only.
+- Define types from schema as:
+
+	```ts
+	type TableName = typeof tableName.$inferSelect;
+	```
+- Write Drizzle queries using `db.query` and select only the needed columns (use explicit column selection).
+- In client components, fetch via TanStack Query, invoking `actions.ts` methods exclusively; avoid using `useEffect` for data fetching.
+- For modals, co-locate the trigger (button/action-icon) with the modal component to avoid prop drilling.
+- Place new components alongside their parent unless they are shared; shared components belong in `src/app/components`.
+- Create UI components that look excellent in dark mode and are optimized for both dark and light themes.
+- Never add comments in generated code.
+- Always remove duplicate code and prefer reusable abstractions to keep the codebase maintainable.
+- Store all server code in `src/server` using the pattern: 1) `actions.ts` (handles requests), 2) `service.ts` (business logic, use `withAuth` and instantiate via `serviceWrapper`), 3) `repository.ts` (direct DB calls using Drizzle).
+````
