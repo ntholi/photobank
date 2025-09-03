@@ -3,9 +3,11 @@
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect, useState } from 'react';
 import { content as contentSchema } from '@/db/schema';
-import CoverContentCard from './CoverContentCard';
 import { Button } from '@heroui/button';
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { Card, CardBody } from '@heroui/card';
+import { Image } from '@heroui/image';
+import { MdChevronLeft, MdChevronRight, MdLocationOn } from 'react-icons/md';
+import { getImageUrl } from '@/lib/utils';
 
 type Content = typeof contentSchema.$inferSelect;
 
@@ -54,30 +56,45 @@ export default function DynamicCoverCarousel({
 
   return (
     <div className='relative'>
-      <div className='overflow-hidden' ref={emblaRef}>
-        <div className='flex'>
-          {contents.length === 0 ? (
-            <div className='min-w-0 flex-[0_0_100%] px-1'>
-              <CoverContentCard
-                content={null}
-                alt={`${locationName} - Cover photo`}
-              />
+      <Card className='shadow-lg' radius='sm'>
+        <CardBody className='p-5'>
+          <div className='overflow-hidden select-none' ref={emblaRef}>
+            <div className='flex touch-pan-y'>
+              {contents.length === 0 ? (
+                <div className='min-w-0 flex-[0_0_100%]'>
+                  <div className='flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50'>
+                    <div className='text-center'>
+                      <div className='mb-4'>
+                        <MdLocationOn className='mx-auto h-12 w-12 text-gray-500' />
+                      </div>
+                      <p className='text-lg text-gray-600'>
+                        No cover photo available
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                contents.map((item, index) => (
+                  <div
+                    key={item.id || index}
+                    className='min-w-0 flex-[0_0_100%]'
+                  >
+                    <Image
+                      src={getImageUrl(item.watermarkedKey)}
+                      alt={`${locationName} - Cover photo`}
+                      className='h-auto max-h-[60vh] w-full object-contain'
+                      loading='eager'
+                      radius='lg'
+                      width={800}
+                      height={600}
+                    />
+                  </div>
+                ))
+              )}
             </div>
-          ) : (
-            contents.map((item, index) => (
-              <div
-                key={item.id || index}
-                className='min-w-0 flex-[0_0_100%] px-1'
-              >
-                <CoverContentCard
-                  content={item}
-                  alt={`${locationName} - Cover photo`}
-                />
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+          </div>
+        </CardBody>
+      </Card>
 
       {images.length > 1 && (
         <div className='pointer-events-none absolute inset-y-1/2 right-0 left-0 -translate-y-1/2 transform px-2'>
