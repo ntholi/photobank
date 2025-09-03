@@ -14,7 +14,7 @@ class LocationService {
   }
 
   async get(id: string) {
-    return withAuth(async () => this.repository.findById(id), []);
+    return withAuth(async () => this.repository.findById(id), ['all']);
   }
 
   async getAll(params: QueryOptions<typeof locations>) {
@@ -46,7 +46,7 @@ class LocationService {
   }) {
     return withAuth(async () => {
       return this.repository.upsertByPlaceId(data);
-    }, ['contributor']);
+    }, ['moderator']);
   }
 
   async updateLocationDetails(
@@ -55,25 +55,25 @@ class LocationService {
   ) {
     return withAuth(async () => {
       return this.repository.updateLocationDetails(locationId, data);
-    }, ['contributor']);
+    }, ['moderator']);
   }
 
   async getWithCover(id: string) {
     return withAuth(async () => {
       return this.repository.findByIdWithCover(id);
-    }, []);
+    }, ['all']);
   }
 
   async getWithCoverContent(id: string) {
     return withAuth(async () => {
       return this.repository.findByIdWithCoverContent(id);
-    }, []);
+    }, ['all']);
   }
 
   async getTopByContentCount(limit: number = 20) {
     return withAuth(
       async () => this.repository.getTopByContentCount(limit),
-      [],
+      ['all'],
     );
   }
 }

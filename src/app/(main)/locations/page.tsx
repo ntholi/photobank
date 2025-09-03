@@ -1,20 +1,20 @@
 import { getTopLocationsByContentCount } from '@/server/locations/actions';
-import { Card, CardBody } from '@heroui/card';
 import { Button, ButtonGroup } from '@heroui/button';
-import { Badge } from '@heroui/badge';
+import { Card, CardBody } from '@heroui/card';
 import Link from 'next/link';
 import MapView from './MapView';
+import { createLoader, parseAsInteger, type SearchParams } from 'nuqs/server';
 
-export default async function MapPage({
-  searchParams,
-}: {
-  searchParams?: { limit?: string };
-}) {
-  const rawLimit =
-    typeof searchParams?.limit === 'string'
-      ? parseInt(searchParams!.limit, 10)
-      : 20;
-  const limit = Number.isFinite(rawLimit) ? rawLimit : 20;
+const loadSearchParams = createLoader({
+  limit: parseAsInteger.withDefault(20),
+});
+
+type Props = {
+  searchParams: Promise<SearchParams>;
+};
+
+export default async function MapPage({ searchParams }: Props) {
+  const { limit } = await loadSearchParams(searchParams);
   const points = await getTopLocationsByContentCount(limit);
   const options = [10, 20, 50, 100];
 
@@ -34,7 +34,7 @@ export default async function MapPage({
             {options.map((n) => (
               <Button
                 as={Link}
-                href={n === 20 ? '/map' : `/map?limit=${n}`}
+                href={n === 20 ? '/locations' : `/locations?limit=${n}`}
                 key={n}
                 color={n === limit ? 'primary' : 'default'}
                 variant={n === limit ? 'solid' : 'flat'}
