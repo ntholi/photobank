@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Card, CardBody, CardHeader } from '@heroui/card';
+import { Spinner } from '@heroui/spinner';
+import { Link } from '@heroui/link';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter, useParams } from 'next/navigation';
 import { uploadContentFile } from '@/server/content/uploadActions';
@@ -16,6 +18,12 @@ export default function UploadsPage() {
   const createMutation = useMutation({
     mutationFn: createContent,
   });
+
+  const errorMessage = createMutation.isError
+    ? createMutation.error instanceof Error
+      ? createMutation.error.message
+      : 'Something went wrong while creating your post.'
+    : null;
 
   const handleSubmit = async (values: {
     description?: string | null;
@@ -53,9 +61,37 @@ export default function UploadsPage() {
 
   return (
     <div className='mx-auto max-w-2xl px-4 py-8'>
-      <Card shadow='sm' className='border-default-200 border'>
-        <CardHeader className='text-lg font-medium'>Upload a Photo</CardHeader>
+      <div className='mb-5'>
+        <Link href={`/profile/${userId}`} size='sm' color='foreground'>
+          ← Back to profile
+        </Link>
+        <h1 className='mt-2 text-2xl font-semibold tracking-tight'>
+          Upload a photo
+        </h1>
+        <p className='text-default-500 mt-1 text-sm'>
+          Share a high‑quality image that showcases Lesotho. Supported: images
+          or video. A watermark preview will be generated.
+        </p>
+      </div>
+
+      <Card shadow='sm' className='border-default-200 relative border'>
+        {createMutation.isPending && (
+          <div className='bg-background/70 absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 backdrop-blur-sm'>
+            <Spinner size='lg' color='primary' />
+            <p className='text-default-600 text-sm'>
+              Uploading and processing…
+            </p>
+          </div>
+        )}
+
+        <CardHeader className='text-lg font-medium'>Upload</CardHeader>
         <CardBody>
+          {errorMessage && (
+            <p role='alert' className='text-danger mb-3 text-sm'>
+              {errorMessage}
+            </p>
+          )}
+
           <UploadForm
             onSubmit={handleSubmit}
             submitting={createMutation.isPending}
