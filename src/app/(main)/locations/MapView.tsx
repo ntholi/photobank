@@ -148,7 +148,7 @@ export default function MapView({ points }: { points: TopLocation[] }) {
                 role='button'
                 tabIndex={0}
                 aria-label={`${p.name} • ${p.count}`}
-                className='cursor-pointer'
+                className='cursor-pointer focus:outline-none'
               >
                 <circle
                   r={radiusFor(p.count)}
@@ -157,6 +157,10 @@ export default function MapView({ points }: { points: TopLocation[] }) {
                   stroke='white'
                   strokeOpacity={0.55}
                   strokeWidth={0.6}
+                  className='hover:fill-opacity-70 transition-all duration-200 focus:stroke-blue-400 focus:stroke-2'
+                  style={{
+                    outline: 'none',
+                  }}
                 />
               </Marker>
             </Tooltip>
