@@ -1,16 +1,27 @@
 'use client';
 
-import React from 'react';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
 import { Button } from '@heroui/button';
 import { Link } from '@heroui/link';
-import { IoMdSearch, IoMdCamera } from 'react-icons/io';
-import { useRouter } from 'next/navigation';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
+import { usePathname, useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { IoMdCamera, IoMdSearch } from 'react-icons/io';
 import ProfileMenu from './ProfileMenu';
+
+const menus = ['Home', 'Gallery', 'Locations', 'About', 'Contact'];
 
 export default function NavbarComponent() {
   const [active, setActive] = React.useState(0);
   const router = useRouter();
+  const path = usePathname();
+
+  useEffect(() => {
+    menus.forEach((menu, index) => {
+      if (path.toLowerCase().includes(menu.toLowerCase())) {
+        setActive(index);
+      }
+    });
+  }, [path]);
 
   const handleMenuClick = (index: number, menu: string) => {
     setActive(index);
@@ -70,5 +81,3 @@ export default function NavbarComponent() {
     </Navbar>
   );
 }
-
-const menus = ['Home', 'Gallery', 'Locations', 'About', 'Contact'];
