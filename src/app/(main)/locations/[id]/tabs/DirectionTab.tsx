@@ -1,8 +1,6 @@
 'use client';
-import Link from 'next/link';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { MdDirections } from 'react-icons/md';
-import { locations, content as contentSchema } from '@/db/schema';
+import { content as contentSchema, locations } from '@/db/schema';
+import { GoogleMap, Marker } from '@react-google-maps/api';
 
 type Location = typeof locations.$inferSelect;
 type Content = typeof contentSchema.$inferSelect;
@@ -16,8 +14,6 @@ type Props = {
 };
 
 export default function DirectionTab({ location }: Props) {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
-
   const mapStyles = {
     height: '100%',
     width: '100%',
@@ -35,15 +31,13 @@ export default function DirectionTab({ location }: Props) {
   return (
     <div className='space-y-6'>
       <div className='border-default-200 bg-default-100 aspect-[17/9] w-full overflow-hidden rounded-lg border'>
-        <LoadScript googleMapsApiKey={apiKey}>
-          <GoogleMap
-            mapContainerStyle={mapStyles}
-            zoom={15}
-            center={defaultCenter}
-          >
-            <Marker position={defaultCenter} />
-          </GoogleMap>
-        </LoadScript>
+        <GoogleMap
+          mapContainerStyle={mapStyles}
+          zoom={15}
+          center={defaultCenter}
+        >
+          <Marker position={defaultCenter} />
+        </GoogleMap>
       </div>
     </div>
   );
