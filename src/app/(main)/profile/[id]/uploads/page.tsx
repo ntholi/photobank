@@ -74,7 +74,7 @@ export default function UploadsPage() {
         </p>
       </div>
 
-      <Card shadow='sm' className='border-default-200 relative border'>
+      <Card className='relative'>
         {createMutation.isPending && (
           <div className='bg-background/70 absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 backdrop-blur-sm'>
             <Spinner size='lg' color='primary' />
@@ -83,8 +83,6 @@ export default function UploadsPage() {
             </p>
           </div>
         )}
-
-        <CardHeader className='text-lg font-medium'>Upload</CardHeader>
         <CardBody>
           {errorMessage && (
             <p role='alert' className='text-danger mb-3 text-sm'>
