@@ -226,14 +226,7 @@ export default function UploadPreview({ value, onChange }: Props) {
               Choose file
             </Button>
           ) : (
-            <div className='text-default-500 flex items-center gap-2 text-xs'>
-              <span className='rounded-medium bg-default-100 px-2 py-1'>
-                {(value.type || 'unknown').split('/')[1] || 'file'}
-              </span>
-              <span className='rounded-medium bg-default-100 px-2 py-1'>
-                {(value.size / (1024 * 1024)).toFixed(1)} MB
-              </span>
-            </div>
+            <div></div>
           )}
           {error && (
             <span className='text-danger ml-auto truncate text-xs'>
