@@ -12,7 +12,7 @@ const menus = [
   { name: 'Home', href: '/' },
   { name: 'Gallery', href: '/#gallery' },
   { name: 'Locations', href: '/locations' },
-  { name: 'About', href: '#' },
+  { name: 'Virtual Tours', href: '/virtual-tours' },
 ];
 
 export default function NavbarComponent() {
@@ -21,7 +21,7 @@ export default function NavbarComponent() {
 
   useEffect(() => {
     menus.forEach((menu, index) => {
-      if (path.toLowerCase().includes(menu.name.toLowerCase())) {
+      if (path.toLowerCase().includes(menu.href.toLowerCase())) {
         setActive(index);
       }
     });

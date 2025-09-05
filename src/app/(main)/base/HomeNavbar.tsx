@@ -36,6 +36,8 @@ export default function HomeNavbar() {
       console.log('About clicked');
     } else if (menu === 'Contact') {
       console.log('Contact clicked');
+    } else if (menu === 'Virtual Tours') {
+      router.push('/virtual-tours');
     }
   };
 
@@ -85,4 +87,4 @@ export default function HomeNavbar() {
   );
 }
 
-const menus = ['Home', 'Gallery', 'Locations', 'About', 'Contact'];
+const menus = ['Home', 'Gallery', 'Locations', 'Virtual Tours'];

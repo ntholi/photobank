@@ -117,6 +117,7 @@ export default function UploadForm({ onSubmit, submitting }: Props) {
         placeholder='Describe your photo (optional)'
       />
 
+      {submitting && <Progress aria-label='Uploading' isIndeterminate />}
       <div className='flex items-center gap-3'>
         <Button
           variant='flat'
@@ -140,8 +141,6 @@ export default function UploadForm({ onSubmit, submitting }: Props) {
           {submitting ? 'Uploading…' : 'Upload'}
         </Button>
       </div>
-
-      {submitting && <Progress aria-label='Uploading' isIndeterminate />}
     </form>
   );
 }
