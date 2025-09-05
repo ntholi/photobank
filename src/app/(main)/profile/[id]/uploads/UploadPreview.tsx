@@ -6,7 +6,13 @@ import { Button } from '@heroui/button';
 import { Progress } from '@heroui/progress';
 import { Tooltip } from '@heroui/tooltip';
 import { Image } from '@heroui/image';
-import { MdCloudUpload, MdDelete, MdEdit } from 'react-icons/md';
+import {
+  MdCloudUpload,
+  MdDelete,
+  MdRotate90DegreesCcw,
+  MdRotateLeft,
+  MdRotateRight,
+} from 'react-icons/md';
 
 const MAX_MB = 25;
 
@@ -23,6 +29,7 @@ export default function UploadPreview({ value, onChange }: Props) {
   const [loading, setLoading] = React.useState(false);
   const [isFocused, setIsFocused] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [rotation, setRotation] = React.useState<number>(0);
 
   React.useEffect(() => {
     if (value) {
@@ -31,6 +38,7 @@ export default function UploadPreview({ value, onChange }: Props) {
       const isVid = value.type.startsWith('video/');
       setPreviewUrl(url);
       setIsVideo(isVid);
+      setRotation(0); // Reset rotation for new files
       const t = setTimeout(() => setLoading(false), 200);
       return () => {
         clearTimeout(t);
@@ -39,6 +47,7 @@ export default function UploadPreview({ value, onChange }: Props) {
     } else {
       setPreviewUrl(null);
       setIsVideo(false);
+      setRotation(0);
     }
   }, [value]);
 
@@ -66,6 +75,10 @@ export default function UploadPreview({ value, onChange }: Props) {
     }
     setError(null);
     onChange(f);
+  };
+
+  const handleRotate = () => {
+    setRotation((prev) => (prev + 90) % 360);
   };
 
   const onDrop = (e: React.DragEvent) => {
@@ -109,16 +122,18 @@ export default function UploadPreview({ value, onChange }: Props) {
               {value.name}
             </span>
             <div className='flex items-center gap-1'>
-              <Tooltip content='Replace'>
-                <Button
-                  isIconOnly
-                  variant='light'
-                  size='sm'
-                  onPress={() => inputRef.current?.click()}
-                >
-                  <MdEdit />
-                </Button>
-              </Tooltip>
+              {!isVideo && (
+                <Tooltip content='Rotate'>
+                  <Button
+                    isIconOnly
+                    variant='light'
+                    size='sm'
+                    onPress={handleRotate}
+                  >
+                    <MdRotateRight size={'1rem'} />
+                  </Button>
+                </Tooltip>
+              )}
               <Tooltip content='Remove'>
                 <Button
                   isIconOnly
@@ -127,7 +142,7 @@ export default function UploadPreview({ value, onChange }: Props) {
                   size='sm'
                   onPress={() => onChange(null)}
                 >
-                  <MdDelete />
+                  <MdDelete size={'1rem'} />
                 </Button>
               </Tooltip>
             </div>
@@ -165,7 +180,10 @@ export default function UploadPreview({ value, onChange }: Props) {
                   removeWrapper
                   src={previewUrl}
                   alt='Preview'
-                  className='h-full w-full object-cover'
+                  className='h-full w-full object-cover transition-transform duration-300'
+                  style={{
+                    transform: `rotate(${rotation}deg)`,
+                  }}
                 />
               )
             ) : (

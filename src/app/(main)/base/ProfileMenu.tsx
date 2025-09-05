@@ -88,7 +88,6 @@ export default function ProfileMenu() {
               <DropdownItem
                 key='profile'
                 className='h-auto py-3'
-                textValue='Profile'
                 as={Link}
                 href={`/profile/${session.user?.id}`}
               >
