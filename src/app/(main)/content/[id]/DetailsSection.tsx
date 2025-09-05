@@ -19,9 +19,9 @@ type Props = {
 export default function DetailsSection({ content }: Props) {
   return (
     <>
-      <Card className='shadow-none border border-default-200'>
+      <Card className='border-default-200 border shadow-none'>
         <CardBody className='p-6'>
-          <h3 className='text-lg font-semibold text-foreground mb-4'>
+          <h3 className='text-foreground mb-4 text-lg font-semibold'>
             Photographer
           </h3>
           <User
@@ -44,19 +44,15 @@ export default function DetailsSection({ content }: Props) {
               base: 'justify-start',
             }}
           />
-          <p className='text-xs text-default-400 mt-3'>
-            {content.user?.bio || 'Bio not available'}
-          </p>
         </CardBody>
       </Card>
       <ActionBar contentId={content.id} />
-      <Card className='shadow-none border border-default-200'>
-        <CardBody className='p-6 space-y-4'>
-          <h3 className='text-lg font-semibold text-foreground'>Details</h3>
-
+      <Card className='border-default-200 border shadow-none'>
+        <CardBody className='space-y-4 p-6'>
+          <h3 className='text-foreground text-lg font-semibold'>Details</h3>
           <div className='space-y-3'>
             <div className='space-y-2'>
-              <span className='text-sm text-default-600'>Location</span>
+              <span className='text-default-600 text-sm'>Location</span>
               <div>
                 {content.location ? (
                   <Link
@@ -66,7 +62,7 @@ export default function DetailsSection({ content }: Props) {
                     <div>{content.location.name}</div>
                   </Link>
                 ) : (
-                  <div className='text-sm text-default-500 italic'>
+                  <div className='text-default-500 text-sm italic'>
                     Location not set
                   </div>
                 )}
@@ -75,8 +71,8 @@ export default function DetailsSection({ content }: Props) {
 
             {content.createdAt && (
               <div className='flex items-center justify-between'>
-                <span className='text-sm text-default-600'>Date Uploaded</span>
-                <span className='text-sm font-medium text-foreground'>
+                <span className='text-default-600 text-sm'>Date Uploaded</span>
+                <span className='text-foreground text-sm font-medium'>
                   {formatDate(content.createdAt)}
                 </span>
               </div>
@@ -84,8 +80,8 @@ export default function DetailsSection({ content }: Props) {
           </div>
 
           {content.tags && content.tags.length > 0 && (
-            <div className='pt-4 border-t border-default-100'>
-              <h4 className='text-sm font-medium text-foreground mb-2'>Tags</h4>
+            <div className='border-default-100 border-t pt-4'>
+              <h4 className='text-foreground mb-2 text-sm font-medium'>Tags</h4>
               <div className='flex flex-wrap gap-2'>
                 {content.tags.map(({ tag }) => (
                   <Link
@@ -95,7 +91,7 @@ export default function DetailsSection({ content }: Props) {
                     <Chip
                       size='sm'
                       variant='flat'
-                      className='cursor-pointer hover:bg-primary/10 text-primary'
+                      className='hover:bg-primary/10 text-primary cursor-pointer'
                     >
                       {tag.name}
                     </Chip>
@@ -105,11 +101,11 @@ export default function DetailsSection({ content }: Props) {
             </div>
           )}
 
-          <div className='pt-4 border-t border-default-100'>
-            <h4 className='text-sm font-medium text-foreground mb-2'>
+          <div className='border-default-100 border-t pt-4'>
+            <h4 className='text-foreground mb-2 text-sm font-medium'>
               Description
             </h4>
-            <p className='text-sm text-default-700 leading-relaxed'>
+            <p className='text-default-700 text-sm leading-relaxed'>
               {content.description || 'Description not available'}
             </p>
           </div>

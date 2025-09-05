@@ -43,14 +43,14 @@ export async function ContentDisplay({ content }: Props) {
         background: generateGradient(dominantColors, 0.2),
       }}
     >
-      <div className='max-w-7xl mx-auto px-4 py-8'>
-        <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-          <div className='lg:col-span-2 rounded-xl p-0.5'>
+      <div className='mx-auto max-w-7xl px-4 py-8'>
+        <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
+          <div className='rounded-xl p-0.5 lg:col-span-2'>
             {content.type === 'image' ? (
               <Image
                 src={imageUrl}
                 alt={content.description || 'Content image'}
-                className='w-full h-auto max-h-[75vh] object-contain'
+                className='h-auto max-h-[75vh] w-full object-contain'
                 loading='eager'
                 radius='lg'
                 width={1000}
@@ -60,7 +60,7 @@ export async function ContentDisplay({ content }: Props) {
               <video
                 src={imageUrl}
                 controls
-                className='w-full h-auto max-h-[80vh] rounded-lg'
+                className='h-auto max-h-[80vh] w-full rounded-lg'
                 poster={getImageUrl(content.thumbnailKey)}
               >
                 Your browser does not support the video tag.
@@ -68,7 +68,7 @@ export async function ContentDisplay({ content }: Props) {
             )}
           </div>
 
-          <div className='lg:col-span-1 space-y-6'>
+          <div className='space-y-4 lg:col-span-1'>
             <DetailsSection content={content} />
           </div>
         </div>
