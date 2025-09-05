@@ -8,6 +8,8 @@ import { Tooltip } from '@heroui/tooltip';
 import { Image } from '@heroui/image';
 import { MdCloudUpload, MdDelete, MdEdit } from 'react-icons/md';
 
+const MAX_MB = 25;
+
 type Props = {
   value: File | null;
   onChange: (file: File | null) => void;
@@ -19,6 +21,8 @@ export default function UploadPreview({ value, onChange }: Props) {
   const [isVideo, setIsVideo] = React.useState<boolean>(false);
   const [dragging, setDragging] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [isFocused, setIsFocused] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     if (value) {
@@ -38,8 +42,29 @@ export default function UploadPreview({ value, onChange }: Props) {
     }
   }, [value]);
 
+  const validateFile = (f: File | null) => {
+    if (!f) return { ok: true } as const;
+    const maxBytes = MAX_MB * 1024 * 1024;
+    const isAllowedType =
+      f.type.startsWith('image/') || f.type.startsWith('video/');
+    if (!isAllowedType) {
+      return { ok: false, msg: 'Unsupported file type' } as const;
+    }
+    if (f.size > maxBytes) {
+      return { ok: false, msg: `File is larger than ${MAX_MB}MB` } as const;
+    }
+    return { ok: true } as const;
+  };
+
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] || null;
+    const res = validateFile(f);
+    if (!res.ok) {
+      setError(res.msg);
+      onChange(null);
+      return;
+    }
+    setError(null);
     onChange(f);
   };
 
@@ -47,6 +72,13 @@ export default function UploadPreview({ value, onChange }: Props) {
     e.preventDefault();
     setDragging(false);
     const f = e.dataTransfer.files?.[0] ?? null;
+    const res = validateFile(f);
+    if (!res.ok) {
+      setError(res.msg);
+      onChange(null);
+      return;
+    }
+    setError(null);
     onChange(f);
   };
 
@@ -61,8 +93,8 @@ export default function UploadPreview({ value, onChange }: Props) {
       />
       <Card
         className={
-          'group ring-default-200 border ring-1 transition-colors ' +
-          (dragging ? 'bg-primary/10 ring-primary' : '')
+          'group ring-default-200 relative transition-colors ' +
+          (dragging ? 'bg-primary/10 ring-primary' : 'bg-content1/30')
         }
         onDragOver={(e) => {
           e.preventDefault();
@@ -103,10 +135,23 @@ export default function UploadPreview({ value, onChange }: Props) {
         )}
         <CardBody className='relative overflow-hidden p-0'>
           <div
-            className='flex aspect-video items-center justify-center overflow-hidden'
+            className={
+              'flex aspect-video items-center justify-center overflow-hidden outline-none ' +
+              (value
+                ? 'cursor-pointer'
+                : 'border-default-200 hover:border-default-400 cursor-pointer border-2 border-dashed transition-colors')
+            }
             onClick={() => inputRef.current?.click()}
             role='button'
             tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                inputRef.current?.click();
+              }
+            }}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
           >
             {previewUrl ? (
               isVideo ? (
@@ -132,7 +177,7 @@ export default function UploadPreview({ value, onChange }: Props) {
                   Drag & drop or click to upload
                 </div>
                 <div className='text-default-500 text-xs'>
-                  JPG, PNG, WEBP, or MP4/MOV/AVI up to 100MB
+                  JPG, PNG, WEBP, or MP4/MOV/AVI up to {MAX_MB}MB
                 </div>
               </div>
             )}
@@ -146,19 +191,38 @@ export default function UploadPreview({ value, onChange }: Props) {
                 />
               </div>
             )}
+
+            {(dragging || isFocused) && !previewUrl && (
+              <div className='border-primary/60 pointer-events-none absolute inset-0 rounded-lg border-2 border-dashed' />
+            )}
           </div>
         </CardBody>
-        {!value && (
-          <CardFooter className='justify-center py-3'>
+        <CardFooter className='flex items-center justify-between gap-2 py-2'>
+          {!value ? (
             <Button
               color='primary'
               variant='flat'
               onPress={() => inputRef.current?.click()}
+              className='min-w-24'
             >
               Choose file
             </Button>
-          </CardFooter>
-        )}
+          ) : (
+            <div className='text-default-500 flex items-center gap-2 text-xs'>
+              <span className='rounded-medium bg-default-100 px-2 py-1'>
+                {(value.type || 'unknown').split('/')[1] || 'file'}
+              </span>
+              <span className='rounded-medium bg-default-100 px-2 py-1'>
+                {(value.size / (1024 * 1024)).toFixed(1)} MB
+              </span>
+            </div>
+          )}
+          {error && (
+            <span className='text-danger ml-auto truncate text-xs'>
+              {error}
+            </span>
+          )}
+        </CardFooter>
       </Card>
     </div>
   );
