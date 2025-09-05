@@ -7,6 +7,7 @@ import { Button } from '@heroui/button';
 import { Link } from '@heroui/link';
 import RoleBadge from '@/app/components/RoleBadge';
 import { IoLink } from 'react-icons/io5';
+import { auth } from '@/auth';
 
 type Props = {
   params: Promise<{
@@ -16,6 +17,7 @@ type Props = {
 
 export default async function ProfilePage({ params }: Props) {
   const { id } = await params;
+  const session = await auth();
   const [user, stats] = await Promise.all([getUser(id), getUserStats(id)]);
 
   if (!user) notFound();
@@ -33,26 +35,35 @@ export default async function ProfilePage({ params }: Props) {
         />
 
         <div className='flex-1'>
-          <div className='mb-2 flex items-center gap-2'>
-            <h1 className='text-2xl font-medium'>{user.name}</h1>
-            <RoleBadge role={user.role} />
-            <Button
-              as='a'
-              href={`/profile/${id}/edit`}
-              variant='flat'
-              size='sm'
-              className='ml-auto'
-            >
-              Edit Profile
-            </Button>
-            <Button
-              as='a'
-              href={`/profile/${id}/uploads`}
-              color='primary'
-              size='sm'
-            >
-              Upload Photo
-            </Button>
+          <div className='mb-2 flex items-center justify-between'>
+            <div className='flex items-center'>
+              <h1 className='text-2xl font-medium'>{user.name}</h1>
+              <RoleBadge role={user.role} />
+            </div>
+            {session?.user.id === user.id && (
+              <div className='flex gap-3'>
+                <Button
+                  as='a'
+                  href={`/profile/${id}/edit`}
+                  variant='flat'
+                  size='sm'
+                >
+                  Edit Profile
+                </Button>
+                {['contributor', 'moderator', 'admin'].includes(
+                  session.user.role,
+                ) && (
+                  <Button
+                    as='a'
+                    href={`/profile/${id}/uploads`}
+                    color='primary'
+                    size='sm'
+                  >
+                    Upload Photo
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
 
           <div className='mb-2 flex items-center gap-8 text-sm'>

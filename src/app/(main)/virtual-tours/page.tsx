@@ -26,7 +26,7 @@ export default async function VirtualToursPage({ searchParams }: Props) {
 
   return (
     <div className='mx-auto w-full max-w-6xl px-4 py-10'>
-      <div className='mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between'>
+      <div className='mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between'>
         <div>
           <h1 className='text-xl font-semibold tracking-tight md:text-4xl'>
             Virtual Tours
@@ -64,7 +64,7 @@ export default async function VirtualToursPage({ searchParams }: Props) {
           <div className='text-foreground-500 mb-3 text-xs'>
             Showing {items.length} of {totalItems} tours
           </div>
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
             {items.map((t) => (
               <TourCard key={t.id} tour={t} />
             ))}

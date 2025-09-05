@@ -14,7 +14,7 @@ class UserService {
   }
 
   async get(id: string) {
-    return withAuth(async () => this.repository.findById(id), []);
+    return withAuth(async () => this.repository.findById(id), ['all']);
   }
 
   async getAll(params: QueryOptions<typeof users>) {
@@ -31,7 +31,7 @@ class UserService {
       ['auth'],
       async (session) => {
         return session.user.id === id || session.user.role === 'admin';
-      }
+      },
     );
   }
 
@@ -46,14 +46,14 @@ class UserService {
   async getUserUploadCount(userId: string) {
     return withAuth(
       async () => this.repository.getUserUploadCount(userId),
-      ['all']
+      ['all'],
     );
   }
 
   async getUserSavedCount(userId: string) {
     return withAuth(
       async () => this.repository.getUserSavedCount(userId),
-      ['all']
+      ['all'],
     );
   }
 }
