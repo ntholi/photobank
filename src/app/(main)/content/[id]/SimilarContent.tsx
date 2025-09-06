@@ -1,62 +1,9 @@
-import { getImageUrl } from '@/lib/utils';
 import { getSimilarContent } from '@/server/content/actions';
-import { Image } from '@heroui/image';
-import Link from 'next/link';
+import ContentItemCard from './ContentItemCard';
 
-type ContentItem = {
-  id: string;
-  type: 'image' | 'video';
-  description: string | null;
-  fileName: string | null;
-  s3Key: string;
-  thumbnailKey: string;
-  watermarkedKey: string;
-  fileSize: number | null;
-  locationId: string | null;
-  status: string;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-  commonLabelsCount?: number;
-};
-
-type Props = {
+export type Props = {
   contentId: string;
 };
-
-function ContentItemCard({ item }: { item: ContentItem }) {
-  return (
-    <Link href={`/content/${item.id}`}>
-      <div className='aspect-square overflow-hidden rounded-t-lg relative'>
-        <Image
-          src={getImageUrl(item.thumbnailKey)}
-          alt={item.description || `${item.type} content`}
-          className='w-full h-full object-cover'
-          loading='lazy'
-          isZoomed
-          fallbackSrc='/photo_session.svg'
-        />
-
-        {item.type === 'video' && (
-          <div className='absolute inset-0 flex items-center justify-center'>
-            <div className='w-8 h-8 bg-black/60 rounded-full flex items-center justify-center'>
-              <svg
-                className='w-4 h-4 text-white ml-0.5'
-                fill='currentColor'
-                viewBox='0 0 20 20'
-              >
-                <path
-                  fillRule='evenodd'
-                  d='M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z'
-                  clipRule='evenodd'
-                />
-              </svg>
-            </div>
-          </div>
-        )}
-      </div>
-    </Link>
-  );
-}
 
 export async function SimilarContent({ contentId }: Props) {
   const data = await getSimilarContent(contentId, 8);
@@ -64,16 +11,16 @@ export async function SimilarContent({ contentId }: Props) {
   if (!data || data.length === 0) {
     return (
       <div className='w-full py-12'>
-        <div className='max-w-7xl mx-auto px-4'>
+        <div className='mx-auto max-w-7xl px-4'>
           <div className='mb-8'>
-            <h2 className='text-2xl font-bold text-default-900 mb-2'>
+            <h2 className='text-default-900 mb-2 text-2xl font-bold'>
               Similar Content
             </h2>
             <p className='text-default-600'>
               Discover more content you might like
             </p>
           </div>
-          <div className='text-center py-8'>
+          <div className='py-8 text-center'>
             <p className='text-default-600'>
               No similar content found. Check back later!
             </p>
@@ -85,9 +32,9 @@ export async function SimilarContent({ contentId }: Props) {
 
   return (
     <div className='w-full py-12'>
-      <div className='max-w-7xl mx-auto px-4'>
+      <div className='mx-auto max-w-7xl px-4'>
         <div className='mb-8'>
-          <h2 className='text-2xl font-bold text-default-900 mb-2'>
+          <h2 className='text-default-900 mb-2 text-2xl font-bold'>
             Similar Content
           </h2>
           <p className='text-default-600'>
@@ -95,7 +42,7 @@ export async function SimilarContent({ contentId }: Props) {
           </p>
         </div>
 
-        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4'>
+        <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4'>
           {data.map((item) => (
             <ContentItemCard key={item.id} item={item} />
           ))}
