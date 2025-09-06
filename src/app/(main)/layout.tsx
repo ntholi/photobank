@@ -1,5 +1,6 @@
 import '@/styles/globals.css';
 import { Metadata, Viewport } from 'next';
+import { siteConfig } from '@/config/site';
 
 import { Jost } from 'next/font/google';
 import { Providers } from './providers';
@@ -7,8 +8,8 @@ import { Providers } from './providers';
 const font = Jost({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Lehakoe',
-  description: "Lehakoe, Lesotho's photo bank",
+  title: siteConfig.name,
+  description: siteConfig.description,
 };
 
 export const viewport: Viewport = {

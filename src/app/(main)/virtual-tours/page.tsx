@@ -10,6 +10,13 @@ import {
   parseAsString,
   type SearchParams,
 } from 'nuqs/server';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Virtual Tours',
+  description:
+    'Explore immersive 360° virtual tours across Lesotho. Experience the beauty of the kingdom from anywhere.',
+};
 
 const loadSearchParams = createLoader({
   page: parseAsInteger.withDefault(1),

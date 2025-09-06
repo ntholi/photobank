@@ -4,6 +4,13 @@ import { Card, CardBody } from '@heroui/card';
 import Link from 'next/link';
 import MapView from './MapView';
 import { createLoader, parseAsInteger, type SearchParams } from 'nuqs/server';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Explore Locations',
+  description:
+    'Discover beautiful locations across Lesotho with interactive map and photo collections.',
+};
 
 const loadSearchParams = createLoader({
   limit: parseAsInteger.withDefault(20),

@@ -8,12 +8,42 @@ import { Link } from '@heroui/link';
 import RoleBadge from '@/app/components/RoleBadge';
 import { IoLink } from 'react-icons/io5';
 import { auth } from '@/auth';
+import type { Metadata } from 'next';
+import { siteConfig } from '@/config/site';
 
 type Props = {
   params: Promise<{
     id: string;
   }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const user = await getUser(id);
+    if (!user) {
+      return {
+        title: 'Profile not found',
+        robots: { index: false, follow: false },
+      };
+    }
+
+    const title = `${user.name} - Profile`;
+    const description = `View ${user.name}'s profile on Lehakoe Photobank. ${user.bio ? user.bio.slice(0, 100) + '...' : 'Explore their uploaded content and saved photos from Lesotho.'}`;
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        type: 'profile',
+      },
+    };
+  } catch {
+    return { title: siteConfig.name };
+  }
+}
 
 export default async function ProfilePage({ params }: Props) {
   const { id } = await params;
