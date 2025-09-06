@@ -9,6 +9,10 @@ export async function getUser(id: string) {
   return service.get(id);
 }
 
+export async function getUserWithStats(id: string) {
+  return service.getUserWithStats(id);
+}
+
 export async function getUsers(page: number = 1, search = '') {
   return service.getAll({ page, search, searchColumns: ['name', 'email'] });
 }
@@ -23,16 +27,4 @@ export async function updateUser(id: string, user: Partial<User>) {
 
 export async function deleteUser(id: string) {
   return service.delete(id);
-}
-
-export async function getUserStats(userId: string) {
-  const [uploadCount, savedCount] = await Promise.all([
-    service.getUserUploadCount(userId),
-    service.getUserSavedCount(userId),
-  ]);
-
-  return {
-    uploads: uploadCount,
-    saved: savedCount,
-  };
 }

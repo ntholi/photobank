@@ -1,4 +1,4 @@
-import { getUser, getUserStats } from '@/server/users/actions';
+import { getUserWithStats } from '@/server/users/actions';
 import { notFound } from 'next/navigation';
 import ProfileTabs from './ProfileTabs';
 import { Avatar } from '@heroui/avatar';
@@ -20,16 +20,16 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   try {
-    const user = await getUser(id);
-    if (!user) {
+    const userWithStats = await getUserWithStats(id);
+    if (!userWithStats) {
       return {
         title: 'Profile not found',
         robots: { index: false, follow: false },
       };
     }
 
-    const title = `${user.name} - Profile`;
-    const description = `View ${user.name}'s profile on Lehakoe Photobank. ${user.bio ? user.bio.slice(0, 100) + '...' : 'Explore their uploaded content and saved photos from Lesotho.'}`;
+    const title = `${userWithStats.name} - Profile`;
+    const description = `View ${userWithStats.name}'s profile on Lehakoe Photobank. ${userWithStats.bio ? userWithStats.bio.slice(0, 100) + '...' : 'Explore their uploaded content and saved photos from Lesotho.'}`;
 
     return {
       title,
@@ -48,10 +48,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProfilePage({ params }: Props) {
   const { id } = await params;
   const session = await auth();
-  const [user, stats] = await Promise.all([getUser(id), getUserStats(id)]);
+  const userWithStats = await getUserWithStats(id);
 
-  if (!user) notFound();
+  if (!userWithStats) notFound();
 
+  const { stats, ...user } = userWithStats;
   const image = largeProfilePic(user.image || '');
 
   return (
@@ -81,7 +82,7 @@ export default async function ProfilePage({ params }: Props) {
                   Edit Profile
                 </Button>
                 {['contributor', 'moderator', 'admin'].includes(
-                  session.user.role,
+                  session?.user?.role || '',
                 ) && (
                   <Button
                     as='a'

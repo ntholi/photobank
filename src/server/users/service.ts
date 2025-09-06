@@ -17,6 +17,10 @@ class UserService {
     return withAuth(async () => this.repository.findById(id), ['all']);
   }
 
+  async getUserWithStats(id: string) {
+    return withAuth(async () => this.repository.getUserWithStats(id), ['all']);
+  }
+
   async getAll(params: QueryOptions<typeof users>) {
     return withAuth(async () => this.repository.query(params), []);
   }
