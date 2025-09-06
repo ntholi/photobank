@@ -45,7 +45,6 @@ export default function DynamicCoverCarousel({
     setCanScrollPrev(emblaApi.canScrollPrev());
     setCanScrollNext(emblaApi.canScrollNext());
 
-    // Notify parent component about slide change
     onSlideChange(index);
   }, [emblaApi, onSlideChange]);
 

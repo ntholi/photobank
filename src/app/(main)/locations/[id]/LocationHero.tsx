@@ -66,28 +66,5 @@ export async function LocationHero({ location }: Props) {
     contents.map((content) => getImageWithColors(content)),
   );
 
-  if (images.length === 0) {
-    const defaultColors = getDefaultColors();
-    images.push({
-      content: {
-        id: 'placeholder',
-        userId: '',
-        type: 'image' as const,
-        description: null,
-        fileName: null,
-        s3Key: '',
-        thumbnailKey: '',
-        watermarkedKey: '',
-        fileSize: null,
-        locationId: location.id,
-        status: 'published' as const,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      dominantColors: defaultColors,
-      gradient: generateGradient(defaultColors, 0.2),
-    });
-  }
-
   return <LocationHeroDisplay images={images} location={location} />;
 }

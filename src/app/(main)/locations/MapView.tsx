@@ -156,7 +156,7 @@ export default function MapView({ points }: { points: TopLocation[] }) {
                   fillOpacity={0.5}
                   stroke='white'
                   strokeOpacity={0.55}
-                  strokeWidth={0.6}
+                  strokeWidth={0.1}
                   className='hover:fill-opacity-70 transition-all duration-200 focus:stroke-blue-400 focus:stroke-2'
                   style={{
                     outline: 'none',

@@ -67,7 +67,7 @@ export default function LocationHeroDisplay({
             />
           </div>
 
-          <div className='space-y-3 lg:col-span-1'>
+          <div className='lg:col-span-1'>
             <h1 className='text-4xl leading-tight font-bold text-gray-900 md:text-5xl'>
               {location.name}
             </h1>
