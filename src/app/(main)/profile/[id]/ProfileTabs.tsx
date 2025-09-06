@@ -31,7 +31,7 @@ export default function ProfileTabs({ userId }: Props) {
           title={
             <div className='flex items-center gap-2 text-xs tracking-wide uppercase'>
               <IoMdCloudUpload size={16} />
-              <span>My Uploads</span>
+              <span>Uploads</span>
             </div>
           }
         >

@@ -27,10 +27,10 @@ export function LocationContentGrid({
       <div className='w-full py-16'>
         <div className='mx-auto max-w-7xl px-4 text-center'>
           <div className='mb-6 text-6xl'>📷</div>
-          <h3 className='mb-2 text-2xl font-semibold text-gray-900'>
+          <h3 className='text-foreground mb-2 text-2xl font-semibold'>
             No photos available
           </h3>
-          <p className='text-lg text-gray-600'>
+          <p className='text-foreground/70 text-lg'>
             There are currently no published photos from {locationName}.
           </p>
         </div>
@@ -42,10 +42,10 @@ export function LocationContentGrid({
     <div className='w-full py-12'>
       <div className='mx-auto max-w-7xl px-4'>
         <div className='mb-8'>
-          <h2 className='mb-2 text-2xl font-bold text-gray-900'>
+          <h2 className='text-foreground mb-2 text-2xl font-bold'>
             Photos from {locationName}
           </h2>
-          <p className='text-gray-600'>
+          <p className='text-foreground/70'>
             {content.length} photo{content.length !== 1 ? 's' : ''} available
           </p>
         </div>

@@ -47,7 +47,7 @@ export default async function LocationPage({ params }: Props) {
   }
 
   return (
-    <div className='min-h-screen'>
+    <div className='bg-background min-h-screen'>
       <LocationHero location={data} />
       <LocationContentGrid content={data.content} locationName={data.name} />
     </div>

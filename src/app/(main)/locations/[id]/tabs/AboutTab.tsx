@@ -16,8 +16,8 @@ type Props = {
 export default function AboutTab({ location }: Props) {
   if (!location.about) return null;
   return (
-    <div className='border-t border-gray-200 pt-4'>
-      <h2 className='mb-3 flex items-center space-x-2 text-xl font-semibold text-gray-900'>
+    <div className='border-divider border-t pt-4'>
+      <h2 className='text-foreground mb-3 flex items-center space-x-2 text-xl font-semibold'>
         <span>About this location</span>
       </h2>
       <AboutDrawer rawHtml={location.about} title={`About ${location.name}`} />

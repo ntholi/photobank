@@ -68,14 +68,14 @@ export default function LocationHeroDisplay({
           </div>
 
           <div className='lg:col-span-1'>
-            <h1 className='text-4xl leading-tight font-bold text-gray-900 md:text-5xl'>
+            <h1 className='text-foreground text-4xl leading-tight font-bold md:text-5xl'>
               {location.name}
             </h1>
 
             {location.address && (
               <div className='flex items-start space-x-3'>
-                <MdLocationOn className='mt-1 h-5 w-5 flex-shrink-0 text-gray-500' />
-                <p className='text-lg leading-relaxed text-gray-700'>
+                <MdLocationOn className='text-foreground/60 mt-1 h-5 w-5 flex-shrink-0' />
+                <p className='text-foreground/80 text-lg leading-relaxed'>
                   {location.address}
                 </p>
               </div>

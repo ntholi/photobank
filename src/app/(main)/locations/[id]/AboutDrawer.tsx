@@ -37,7 +37,9 @@ export default function AboutDrawer({
 
   return (
     <div className='space-y-2'>
-      <div className='text-lg leading-relaxed text-gray-700'>{preview}</div>
+      <div className='text-foreground/80 text-lg leading-relaxed'>
+        {preview}
+      </div>
       {showReadMore && (
         <Button
           color='primary'

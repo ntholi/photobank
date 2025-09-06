@@ -21,9 +21,9 @@ export default function ContentItemCard({ item }: { item: ContentItem }) {
 
       {item.type === 'video' && (
         <div className='absolute inset-0 flex items-center justify-center'>
-          <div className='flex h-8 w-8 items-center justify-center rounded-full bg-black/60'>
+          <div className='bg-background/80 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm'>
             <svg
-              className='ml-0.5 h-4 w-4 text-white'
+              className='text-foreground ml-0.5 h-4 w-4'
               fill='currentColor'
               viewBox='0 0 20 20'
             >
