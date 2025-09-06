@@ -11,7 +11,6 @@ import {
   varchar,
   numeric,
 } from 'drizzle-orm/pg-core';
-import { url } from 'inspector';
 import { nanoid } from 'nanoid';
 import type { AdapterAccountType } from 'next-auth/adapters';
 

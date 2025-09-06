@@ -1,8 +1,8 @@
 'use client';
 
-import { users } from '@/db/schema';
+import { userRoleEnum, users } from '@/db/schema';
 import { Form } from '@/components/adease';
-import { TextInput } from '@mantine/core';
+import { Select, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 import { useRouter } from 'nextjs-toploader/app';
 
@@ -13,7 +13,7 @@ type Props = {
   defaultValues?: User;
   onSuccess?: (value: User) => void;
   onError?: (
-    error: Error | React.SyntheticEvent<HTMLDivElement, Event>
+    error: Error | React.SyntheticEvent<HTMLDivElement, Event>,
   ) => void;
   title?: string;
 };
@@ -35,8 +35,14 @@ export default function UserForm({ onSubmit, defaultValues, title }: Props) {
       {(form) => (
         <>
           <TextInput label='Name' {...form.getInputProps('name')} />
-          <TextInput label='Age' {...form.getInputProps('age')} />
-          <TextInput label='Email' {...form.getInputProps('email')} />
+          <Select
+            label='Role'
+            {...form.getInputProps('role')}
+            data={userRoleEnum.enumValues.map((role) => ({
+              value: role,
+              label: role,
+            }))}
+          />
         </>
       )}
     </Form>
