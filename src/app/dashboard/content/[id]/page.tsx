@@ -1,5 +1,9 @@
 import { DetailsView, DetailsViewBody, FieldView } from '@/components/adease';
-import { deleteContent, getContent } from '@/server/content/actions';
+import {
+  deleteContent,
+  getContent,
+  getContentWithDetails,
+} from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
 import { Anchor, Fieldset, Stack, Text } from '@mantine/core';
 import Link from 'next/link';
@@ -16,7 +20,7 @@ type Props = {
 
 export default async function ContentDetailsPage({ params }: Props) {
   const { id } = await params;
-  const content = await getContent(id);
+  const content = await getContentWithDetails(id);
 
   if (!content) {
     return notFound();
@@ -53,13 +57,21 @@ export default async function ContentDetailsPage({ params }: Props) {
               '-'
             )}
           </FieldView>
+          <FieldView label='Contributor'>
+            <Anchor
+              component={Link}
+              href={`/dashboard/users/${content.userId}`}
+            >
+              {content.user.name}
+            </Anchor>
+          </FieldView>
 
           <Fieldset legend='Description'>
             <Text size='sm'>{content.description || '-'}</Text>
           </Fieldset>
 
-          <ContentTags contentId={content.id} />
-          <ContentLabels contentId={content.id} />
+          <ContentTags tags={content.tags} />
+          <ContentLabels labels={content.labels} />
         </Stack>
       </DetailsViewBody>
     </DetailsView>

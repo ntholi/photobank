@@ -1,122 +1,29 @@
 'use client';
 
+import { getContentWithDetails } from '@/server/content/actions';
 import {
   Badge,
   Card,
   Group,
-  Skeleton,
+  Paper,
+  Popover,
   Stack,
   Text,
   Title,
-  Popover,
-  Box,
-  Paper,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useQuery } from '@tanstack/react-query';
-import { getContentTags } from '@/server/content-tags/actions';
-import Link from 'next/link';
 import { IconTag } from '@tabler/icons-react';
+import Link from 'next/link';
 
-type ContentTagItem = {
-  contentId: string;
-  tagId: string;
-  confidence: number | null;
-  createdAt: Date | null;
-  tagName: string;
-  tagSlug: string;
+type ContentTag = NonNullable<
+  Awaited<ReturnType<typeof getContentWithDetails>>
+>['tags'][number];
+
+type Props = {
+  tags: ContentTag[];
 };
 
-type ContentTagsProps = {
-  contentId: string;
-};
-
-function LoadingSkeleton() {
-  return (
-    <Group gap={8}>
-      {Array.from({ length: 6 }).map((_, i) => (
-        <Skeleton key={i} height={28} width={80} radius='sm' />
-      ))}
-    </Group>
-  );
-}
-
-function TagBadge({ tag }: { tag: ContentTagItem }) {
-  const [opened, { close, open }] = useDisclosure(false);
-
-  const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 90) return 'green';
-    if (confidence >= 75) return 'blue';
-    if (confidence >= 60) return 'yellow';
-    return 'orange';
-  };
-
-  const confidence = tag.confidence || 100;
-  const confidencePercent = Math.round(confidence);
-
-  return (
-    <Popover position='top' withArrow shadow='md' opened={opened}>
-      <Popover.Target>
-        <Badge
-          style={{ cursor: 'pointer' }}
-          component={Link}
-          href={`/dashboard/tags/${tag.tagId}`}
-          variant='transparent'
-          color={getConfidenceColor(confidencePercent)}
-          size='md'
-          onMouseEnter={open}
-          onMouseLeave={close}
-          leftSection={<IconTag size={12} />}
-        >
-          {tag.tagName}
-        </Badge>
-      </Popover.Target>
-      <Popover.Dropdown style={{ pointerEvents: 'none' }}>
-        <Text size='sm'>Confidence: {confidencePercent}%</Text>
-      </Popover.Dropdown>
-    </Popover>
-  );
-}
-
-export function ContentTags({ contentId }: ContentTagsProps) {
-  const { data, isLoading, error } = useQuery<ContentTagItem[]>({
-    queryKey: ['contentTags', contentId],
-    queryFn: () => getContentTags(contentId),
-  });
-
-  if (error) {
-    return (
-      <Stack gap='md'>
-        <Group align='center' gap='xs'>
-          <IconTag size={18} />
-          <Title order={4} size='md'>
-            Tags
-          </Title>
-        </Group>
-        <Card padding='md' radius='md' withBorder>
-          <Text size='sm' c='red'>
-            Failed to load tags
-          </Text>
-        </Card>
-      </Stack>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <Stack gap='md'>
-        <Group align='center' gap='xs'>
-          <IconTag size={18} />
-          <Title order={4} size='md'>
-            Tags
-          </Title>
-        </Group>
-        <LoadingSkeleton />
-      </Stack>
-    );
-  }
-
-  const tags = data || [];
+export function ContentTags({ tags }: Props) {
   const sortedTags =
     tags.length > 0
       ? [...tags].sort((a, b) => {
@@ -166,5 +73,42 @@ export function ContentTags({ contentId }: ContentTagsProps) {
         </Group>
       </Paper>
     </Stack>
+  );
+}
+
+function TagBadge({ tag }: { tag: ContentTag }) {
+  const [opened, { close, open }] = useDisclosure(false);
+
+  const getConfidenceColor = (confidence: number) => {
+    if (confidence >= 90) return 'green';
+    if (confidence >= 75) return 'blue';
+    if (confidence >= 60) return 'yellow';
+    return 'orange';
+  };
+
+  const confidence = tag.confidence || 100;
+  const confidencePercent = Math.round(confidence);
+
+  return (
+    <Popover position='top' withArrow shadow='md' opened={opened}>
+      <Popover.Target>
+        <Badge
+          style={{ cursor: 'pointer' }}
+          component={Link}
+          href={`/dashboard/tags/${tag.tagId}`}
+          variant='transparent'
+          color={getConfidenceColor(confidencePercent)}
+          size='md'
+          onMouseEnter={open}
+          onMouseLeave={close}
+          leftSection={<IconTag size={12} />}
+        >
+          {tag.tag.name}
+        </Badge>
+      </Popover.Target>
+      <Popover.Dropdown style={{ pointerEvents: 'none' }}>
+        <Text size='sm'>Confidence: {confidencePercent}%</Text>
+      </Popover.Dropdown>
+    </Popover>
   );
 }

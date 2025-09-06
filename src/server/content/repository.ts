@@ -1,24 +1,16 @@
+import { db } from '@/db';
+import { content, contentLabels, contentTags } from '@/db/schema';
 import BaseRepository from '@/server/base/BaseRepository';
 import {
-  content,
-  contentLabels,
-  contentTags,
-  locations,
-  locationDetails,
-  tags,
-} from '@/db/schema';
-import { db } from '@/db';
-import type { InferSelectModel } from 'drizzle-orm';
-import {
-  eq,
-  count,
   and,
+  count,
+  desc,
+  eq,
+  getTableColumns,
   inArray,
   like,
-  sql,
-  desc,
   ne,
-  getTableColumns,
+  sql,
 } from 'drizzle-orm';
 import { QueryOptions } from '../base/BaseRepository';
 
@@ -72,7 +64,7 @@ export default class ContentRepository extends BaseRepository<
 
   async getContentByTag(
     tagId: string,
-    options: QueryOptions<typeof content> = {}
+    options: QueryOptions<typeof content> = {},
   ) {
     const {
       page = 1,
@@ -220,14 +212,14 @@ export default class ContentRepository extends BaseRepository<
             SELECT cl.name
             FROM ${contentLabels} cl
             WHERE cl.content_id = ${contentId}
-          )`
-        )
+          )`,
+        ),
       )
       .groupBy(content.id)
       .having(sql`count(DISTINCT ${contentLabels.name}) >= 5`)
       .orderBy(
         sql`count(DISTINCT ${contentLabels.name}) DESC`,
-        desc(content.createdAt)
+        desc(content.createdAt),
       )
       .limit(limit);
 
