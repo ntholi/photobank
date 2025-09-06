@@ -1,11 +1,8 @@
 'use client';
 
-import React from 'react';
 import { content as contentSchema } from '@/db/schema';
-import { getImageUrl } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
-import { Card, CardBody } from '@heroui/card';
 import { Button } from '@heroui/button';
+import { useRouter } from 'next/navigation';
 import ContentItemCard from '../../content/[id]/ContentItemCard';
 
 type Content = typeof contentSchema.$inferSelect;
