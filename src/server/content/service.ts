@@ -25,14 +25,19 @@ class ContentService {
     return withAuth(
       async (session) =>
         this.repository.create({ ...data, userId: session?.user.id as string }),
-      ['contributor']
+      ['contributor'],
     );
   }
 
   async update(id: string, data: Partial<Content>) {
     return withAuth(
       async () => this.repository.update(id, data),
-      ['contributor', 'moderator']
+      async (session) => {
+        if (['moderator', 'admin'].includes(session.user.role)) {
+          return true;
+        }
+        return data?.userId === session.user.id;
+      },
     );
   }
 
@@ -46,39 +51,39 @@ class ContentService {
 
   async getContentByTag(
     tagId: string,
-    params: QueryOptions<typeof content> = {}
+    params: QueryOptions<typeof content> = {},
   ) {
     return withAuth(
       async () => this.repository.getContentByTag(tagId, params),
-      ['all']
+      ['all'],
     );
   }
 
   async getFilteredContent(options: ContentFilterOptions) {
     return withAuth(
       async () => this.repository.getFilteredContent(options),
-      ['all']
+      ['all'],
     );
   }
 
   async getSimilarContent(contentId: string, limit: number = 20) {
     return withAuth(
       async () => this.repository.getSimilarContent(contentId, limit),
-      ['all']
+      ['all'],
     );
   }
 
   async getContentWithDetails(id: string) {
     return withAuth(
       async () => this.repository.getContentWithDetails(id),
-      ['all']
+      ['all'],
     );
   }
 
   async getByUser(userId: string, page: number = 1, size: number = 12) {
     return withAuth(
       async () => this.repository.getByUser(userId, page, size),
-      ['all']
+      ['all'],
     );
   }
 }

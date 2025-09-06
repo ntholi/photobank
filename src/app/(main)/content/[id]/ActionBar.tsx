@@ -1,15 +1,14 @@
 'use client';
 
-import { useMemo, useState, useEffect } from 'react';
-import { Button } from '@heroui/button';
-import { Tooltip } from '@heroui/tooltip';
-import { Card, CardBody } from '@heroui/card';
 import {
   isContentSaved,
   toggleSaveContent,
 } from '@/server/saved-contents/actions';
+import { Button } from '@heroui/button';
+import { Card, CardBody } from '@heroui/card';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { IoMdHeart, IoMdShare, IoMdCheckmark } from 'react-icons/io';
+import { useEffect, useMemo, useState } from 'react';
+import { IoMdCheckmark, IoMdHeart, IoMdShare } from 'react-icons/io';
 
 type Props = {
   contentId: string;
@@ -41,7 +40,7 @@ export default function ActionBar({ contentId }: Props) {
   });
 
   const [shareStatus, setShareStatus] = useState<'idle' | 'copied' | 'error'>(
-    'idle'
+    'idle',
   );
 
   async function handleShare() {
@@ -68,7 +67,7 @@ export default function ActionBar({ contentId }: Props) {
   }, [shareStatus]);
 
   return (
-    <Card className='shadow-none border border-default-200'>
+    <Card className='border-default-200 border shadow-none'>
       <CardBody className='p-6'>
         <div className='flex gap-2'>
           <Button
