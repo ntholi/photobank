@@ -128,8 +128,27 @@ export default function ProfileMenu() {
                     </span>
                   </div>
                 </DropdownItem>
+                {['moderator', 'admin'].includes(session.user.role) ? (
+                  <DropdownItem
+                    key='dashboard'
+                    as={Link}
+                    href={`/dashboard`}
+                    startContent={
+                      <IoMdSettings className='text-default-500 text-lg' />
+                    }
+                    className='py-2'
+                  >
+                    <div className='flex flex-col'>
+                      <span className='text-sm'>Dashboard</span>
+                      <span className='text-default-400 text-xs'>
+                        Go to dashboard
+                      </span>
+                    </div>
+                  </DropdownItem>
+                ) : null}
               </DropdownSection>
             )}
+
             <DropdownSection>
               <DropdownItem key='theme-toggle' isReadOnly className='py-2'>
                 <div className='flex w-full items-center justify-between'>
