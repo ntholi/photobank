@@ -12,6 +12,8 @@ export default function ContentItemCard({ item }: { item: ContentItem }) {
         src={getImageUrl(item.thumbnailKey)}
         alt={item.description || `${item.type} content`}
         className='h-full w-full object-cover'
+        height={200}
+        width={600}
         loading='lazy'
         isZoomed
         fallbackSrc='/photo_session.svg'
