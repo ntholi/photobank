@@ -13,6 +13,7 @@ import {
   sql,
 } from 'drizzle-orm';
 import { QueryOptions } from '../base/BaseRepository';
+import { contentUpdateLogRepository } from '../content-update-logs/repository';
 
 export interface ContentFilterOptions {
   page?: number;
@@ -240,6 +241,67 @@ export default class ContentRepository extends BaseRepository<
         labels: true,
       },
     });
+  }
+
+  async updateWithAuditLog(
+    id: string,
+    updateData: Partial<typeof content.$inferInsert>,
+    userId: string,
+  ) {
+    // Get the current record before updating
+    const currentRecord = await this.findById(id);
+    if (!currentRecord) {
+      throw new Error('Content not found');
+    }
+
+    // Perform the update
+    const updatedRecord = await this.update(id, updateData);
+
+    // Create audit log
+    const oldValues: Record<string, unknown> = {};
+    const newValues: Record<string, unknown> = {};
+
+    // Compare only the fields that were updated
+    Object.keys(updateData).forEach((key) => {
+      const fieldKey = key as keyof typeof currentRecord;
+      if (currentRecord[fieldKey] !== updateData[fieldKey]) {
+        oldValues[key] = currentRecord[fieldKey];
+        newValues[key] = updateData[fieldKey];
+      }
+    });
+
+    // Only log if there were actual changes
+    if (Object.keys(oldValues).length > 0) {
+      await contentUpdateLogRepository.create({
+        contentId: id,
+        userId,
+        action: 'update',
+        oldValues,
+        newValues,
+      });
+    }
+
+    return updatedRecord;
+  }
+
+  async deleteWithAuditLog(id: string, userId: string) {
+    // Get the current record before deleting
+    const currentRecord = await this.findById(id);
+    if (!currentRecord) {
+      throw new Error('Content not found');
+    }
+
+    // Create audit log before deletion
+    await contentUpdateLogRepository.create({
+      contentId: id,
+      userId,
+      action: 'delete',
+      oldValues: currentRecord as Record<string, unknown>,
+      newValues: null,
+    });
+
+    // Perform the deletion
+    await this.delete(id);
   }
 }
 

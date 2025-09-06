@@ -265,3 +265,24 @@ export const contentLabels = pgTable('content_labels', {
   categories: jsonb().$type<string[]>(),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
 });
+
+export const contentUpdateActionEnum = pgEnum('content_update_action', [
+  'update',
+  'delete',
+]);
+export type ContentUpdateAction =
+  (typeof contentUpdateActionEnum.enumValues)[number];
+
+export const contentUpdateLogs = pgTable('content_update_logs', {
+  id: varchar({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  contentId: varchar({ length: 21 }).notNull(),
+  userId: varchar({ length: 21 })
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  action: contentUpdateActionEnum().notNull(),
+  oldValues: jsonb().$type<Record<string, unknown>>(),
+  newValues: jsonb().$type<Record<string, unknown>>(),
+  createdAt: timestamp({ mode: 'date' }).defaultNow(),
+});

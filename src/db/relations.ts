@@ -5,6 +5,7 @@ import {
   content,
   contentLabels,
   contentTags,
+  contentUpdateLogs,
   homeContent,
   locationCoverContents,
   locationDetails,
@@ -23,6 +24,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   authenticators: many(authenticators),
   content: many(content),
   savedContents: many(savedContent),
+  contentUpdateLogs: many(contentUpdateLogs),
 }));
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -62,6 +64,7 @@ export const contentRelations = relations(content, ({ one, many }) => ({
   coverForLocations: many(locationCoverContents, {
     relationName: 'coverContent',
   }),
+  updateLogs: many(contentUpdateLogs),
 }));
 
 export const homeContentRelations = relations(homeContent, ({ one }) => ({
@@ -159,4 +162,14 @@ export const virtualToursRelations = relations(virtualTours, ({ one }) => ({
 export const verificationTokensRelations = relations(
   verificationTokens,
   () => ({}),
+);
+
+export const contentUpdateLogsRelations = relations(
+  contentUpdateLogs,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [contentUpdateLogs.userId],
+      references: [users.id],
+    }),
+  }),
 );

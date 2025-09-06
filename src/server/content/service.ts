@@ -31,7 +31,12 @@ class ContentService {
 
   async update(id: string, data: Partial<Content>) {
     return withAuth(
-      async () => this.repository.update(id, data),
+      async (session) => {
+        if (!session?.user?.id) {
+          throw new Error('User session required for content update');
+        }
+        return this.repository.updateWithAuditLog(id, data, session.user.id);
+      },
       async (session) => {
         if (['moderator', 'admin'].includes(session.user.role)) {
           return true;
@@ -42,7 +47,15 @@ class ContentService {
   }
 
   async delete(id: string) {
-    return withAuth(async () => this.repository.delete(id), ['admin']);
+    return withAuth(
+      async (session) => {
+        if (!session?.user?.id) {
+          throw new Error('User session required for content deletion');
+        }
+        return this.repository.deleteWithAuditLog(id, session.user.id);
+      },
+      ['admin'],
+    );
   }
 
   async count() {
