@@ -1,9 +1,8 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
 import { getImageUrl } from '@/lib/utils';
 import { Image } from '@heroui/image';
+import Link from 'next/link';
 
 type GridItem = {
   id: string;
@@ -24,15 +23,13 @@ export default function PhotosDisplay({ items }: Props) {
           <Link
             key={item.id}
             href={`/content/${item.id}`}
-            className='relative group aspect-square overflow-hidden focus:outline-none block'
+            className='group relative block aspect-square overflow-hidden focus:outline-none'
             aria-label='Open content'
           >
             <Image
               src={getImageUrl(item.thumbnailKey)}
               alt={item.description || item.fileName || 'Photo'}
               className='h-full w-full object-cover'
-              loading='lazy'
-              fallbackSrc='/photo_session.svg'
               isZoomed
               radius='none'
               width={400}
