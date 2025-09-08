@@ -255,7 +255,7 @@ export default class ContentRepository extends BaseRepository<
 
     const updatedRecord = await this.update(id, updateData);
 
-    const trackedFields = ['description', 'locationId'] as const;
+    const trackedFields = ['description', 'locationId', 'status'] as const;
     const oldValues: Record<string, unknown> = {};
     const newValues: Record<string, unknown> = {};
 

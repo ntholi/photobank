@@ -170,13 +170,65 @@ export default function NotificationItem({
             {notification.payload && (
               <div className='bg-default-50 mt-2 rounded-lg p-2'>
                 <p className='text-default-600 text-xs'>
-                  {notification.type === 'content_updated' &&
-                    (notification.payload as any).changedFields && (
-                      <>
-                        Fields updated:{' '}
-                        {(notification.payload as any).changedFields.join(', ')}
-                      </>
-                    )}
+                  {notification.type === 'content_updated' && (
+                    <>
+                      {(notification.payload as any).changeType === 'tags' && (
+                        <>
+                          {(notification.payload as any).addedTags?.length >
+                            0 && (
+                            <div className='mb-1'>
+                              <span className='text-success font-medium'>
+                                Added tags:
+                              </span>{' '}
+                              {(notification.payload as any).addedTags.join(
+                                ', ',
+                              )}
+                            </div>
+                          )}
+                          {(notification.payload as any).removedTags?.length >
+                            0 && (
+                            <div>
+                              <span className='text-danger font-medium'>
+                                Removed tags:
+                              </span>{' '}
+                              {(notification.payload as any).removedTags.join(
+                                ', ',
+                              )}
+                            </div>
+                          )}
+                        </>
+                      )}
+                      {(notification.payload as any).changeType ===
+                        'content_fields' && (
+                        <>
+                          <span className='font-medium'>Fields updated:</span>{' '}
+                          {(notification.payload as any).changedFields
+                            ?.map((field: string) => {
+                              switch (field) {
+                                case 'description':
+                                  return 'Description';
+                                case 'locationId':
+                                  return 'Location';
+                                case 'status':
+                                  return 'Status';
+                                default:
+                                  return field;
+                              }
+                            })
+                            .join(', ')}
+                        </>
+                      )}
+                      {!(notification.payload as any).changeType &&
+                        (notification.payload as any).changedFields && (
+                          <>
+                            Fields updated:{' '}
+                            {(notification.payload as any).changedFields.join(
+                              ', ',
+                            )}
+                          </>
+                        )}
+                    </>
+                  )}
                   {notification.type === 'content_status_change' &&
                     (notification.payload as any).newStatus && (
                       <>

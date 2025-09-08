@@ -1,51 +1,23 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { useDebounce } from '@/hooks/useDebounce';
 import {
   useUnreadNotificationsCount,
   useMarkAllNotificationsAsRead,
 } from '@/hooks/useNotifications';
-import NotificationFilters from './NotificationFilters';
 import NotificationsList from './NotificationsList';
-import NotificationTester from './NotificationTester';
+import { Button } from '@heroui/button';
+import { Chip } from '@heroui/chip';
+import { IoMdCheckmarkCircle } from 'react-icons/io';
 
 export default function NotificationsPage() {
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [status, setStatus] = useState<'all' | 'unread' | 'read' | 'archived'>(
-    'all',
-  );
-  const [type, setType] = useState('');
-  const [showTester, setShowTester] = useState(false);
-
-  // Debounce search to avoid too many API calls
-  const debouncedSearch = useDebounce(search, 300);
 
   // Get unread count for header
   const { data: unreadCount = 0 } = useUnreadNotificationsCount();
 
   // Mark all as read mutation
   const markAllAsReadMutation = useMarkAllNotificationsAsRead();
-
-  // Reset page when filters change
-  const handleSearchChange = useCallback((newSearch: string) => {
-    setSearch(newSearch);
-    setPage(1);
-  }, []);
-
-  const handleStatusChange = useCallback(
-    (newStatus: 'all' | 'unread' | 'read' | 'archived') => {
-      setStatus(newStatus);
-      setPage(1);
-    },
-    [],
-  );
-
-  const handleTypeChange = useCallback((newType: string) => {
-    setType(newType);
-    setPage(1);
-  }, []);
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
@@ -59,44 +31,44 @@ export default function NotificationsPage() {
 
   return (
     <div className='container mx-auto max-w-4xl space-y-6 p-6'>
-      {/* Filters Section */}
-      <NotificationFilters
-        search={search}
-        onSearchChange={handleSearchChange}
-        status={status}
-        onStatusChange={handleStatusChange}
-        type={type}
-        onTypeChange={handleTypeChange}
-        unreadCount={unreadCount}
-        onMarkAllAsRead={handleMarkAllAsRead}
-        isMarkingAllAsRead={markAllAsReadMutation.isPending}
-      />
-
-      {/* Development Tester */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className='flex justify-end'>
-          <button
-            onClick={() => setShowTester(!showTester)}
-            className='text-default-500 hover:text-default-700 text-xs underline'
-          >
-            {showTester ? 'Hide' : 'Show'} Notification Tester
-          </button>
+      {/* Header Section */}
+      <div className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'>
+        <div className='space-y-1'>
+          <h1 className='text-foreground text-2xl font-bold'>Notifications</h1>
+          <p className='text-default-600 text-sm'>
+            Stay updated with your content and system activities
+          </p>
         </div>
-      )}
-
-      {showTester && process.env.NODE_ENV === 'development' && (
-        <div className='flex justify-center'>
-          <NotificationTester />
+        <div className='flex items-center gap-2'>
+          {unreadCount > 0 && (
+            <Chip color='danger' size='sm'>
+              {unreadCount} unread
+            </Chip>
+          )}
+          {unreadCount > 0 && (
+            <Button
+              color='primary'
+              variant='flat'
+              size='sm'
+              onPress={handleMarkAllAsRead}
+              isLoading={markAllAsReadMutation.isPending}
+              startContent={
+                !markAllAsReadMutation.isPending && <IoMdCheckmarkCircle />
+              }
+            >
+              Mark all as read
+            </Button>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Notifications List */}
       <NotificationsList
         page={page}
         onPageChange={handlePageChange}
-        search={debouncedSearch}
-        status={status}
-        type={type}
+        search=''
+        status='all'
+        type=''
       />
     </div>
   );

@@ -1,9 +1,12 @@
-import { contentTags, tags } from '@/db/schema';
+import { contentTags, tags, notifications, content } from '@/db/schema';
 import ContentTagRepository from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import { serviceWrapper } from '../base/serviceWrapper';
 import { contentUpdateLogRepository } from '../content-update-logs/repository';
+import { notificationsService } from '@/server/notifications/service';
+import { db } from '@/db';
+import { eq } from 'drizzle-orm';
 
 type ContentTag = typeof contentTags.$inferInsert;
 
@@ -155,6 +158,55 @@ class ContentTagService {
             oldTags,
             newTags,
           );
+
+          // Create notification for tag changes
+          try {
+            // Get content record to find the owner
+            const contentRecord = await db.query.content.findFirst({
+              where: eq(content.id, contentId),
+              columns: { userId: true },
+            });
+
+            if (
+              contentRecord?.userId &&
+              contentRecord.userId !== session.user.id
+            ) {
+              const addedTags = newTags.filter(
+                (newTag) =>
+                  !oldTags.some((oldTag) => oldTag.name === newTag.name),
+              );
+              const removedTags = oldTags.filter(
+                (oldTag) =>
+                  !newTags.some((newTag) => newTag.name === oldTag.name),
+              );
+
+              let body = '';
+              if (addedTags.length > 0 && removedTags.length > 0) {
+                body = `Tags updated: Added ${addedTags.map((t) => t.name).join(', ')} | Removed ${removedTags.map((t) => t.name).join(', ')}`;
+              } else if (addedTags.length > 0) {
+                body = `Tags added: ${addedTags.map((t) => t.name).join(', ')}`;
+              } else if (removedTags.length > 0) {
+                body = `Tags removed: ${removedTags.map((t) => t.name).join(', ')}`;
+              } else {
+                body = 'Tags updated';
+              }
+
+              await notificationsService.create({
+                recipientUserId: contentRecord.userId,
+                type: 'content_updated',
+                title: 'Your content tags were updated',
+                body,
+                payload: {
+                  contentId,
+                  changeType: 'tags',
+                  addedTags: addedTags.map((t) => t.name),
+                  removedTags: removedTags.map((t) => t.name),
+                },
+              } as typeof notifications.$inferInsert);
+            }
+          } catch (e) {
+            console.error('Failed to create tag update notification', e);
+          }
         }
 
         return result;

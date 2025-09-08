@@ -37,6 +37,13 @@ class ContentService {
         if (!session?.user?.id) {
           throw new Error('User session required for content update');
         }
+
+        // Get current record to check for changes
+        const currentRecord = await this.repository.findById(id);
+        if (!currentRecord) {
+          throw new Error('Content not found');
+        }
+
         const updated = await this.repository.updateWithAuditLog(
           id,
           data,
@@ -46,20 +53,45 @@ class ContentService {
         if (updated) {
           try {
             const ownerId = (updated as any).userId as string | undefined;
-            if (ownerId) {
-              const changedFields = Object.keys(data || {});
-              const title = 'Your content was updated';
-              const body =
-                changedFields.length > 0
-                  ? `Fields changed: ${changedFields.join(', ')}`
-                  : 'Your content item has new updates.';
-              await notificationsService.create({
-                recipientUserId: ownerId,
-                type: 'content_updated',
-                title,
-                body,
-                payload: { contentId: id, changedFields },
-              } as typeof notifications.$inferInsert);
+            if (ownerId && ownerId !== session.user.id) {
+              // Only notify for tracked fields that actually changed
+              const trackedFields = ['description', 'locationId', 'status'];
+              const changedTrackedFields = trackedFields.filter(
+                (field) =>
+                  field in data &&
+                  currentRecord[field as keyof typeof currentRecord] !==
+                    data[field as keyof typeof data],
+              );
+
+              if (changedTrackedFields.length > 0) {
+                const title = 'Your content was updated';
+                const body = `Updated: ${changedTrackedFields
+                  .map((field) => {
+                    switch (field) {
+                      case 'description':
+                        return 'Description';
+                      case 'locationId':
+                        return 'Location';
+                      case 'status':
+                        return 'Status';
+                      default:
+                        return field;
+                    }
+                  })
+                  .join(', ')}`;
+
+                await notificationsService.create({
+                  recipientUserId: ownerId,
+                  type: 'content_updated',
+                  title,
+                  body,
+                  payload: {
+                    contentId: id,
+                    changedFields: changedTrackedFields,
+                    changeType: 'content_fields',
+                  },
+                } as typeof notifications.$inferInsert);
+              }
             }
           } catch (e) {
             console.error('Failed to create update notification', e);
