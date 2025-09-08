@@ -3,6 +3,8 @@ import ContentRepository, { ContentFilterOptions } from './repository';
 import withAuth from '@/server/base/withAuth';
 import { QueryOptions } from '../base/BaseRepository';
 import { serviceWrapper } from '../base/serviceWrapper';
+import { notificationsService } from '@/server/notifications/service';
+import { notifications } from '@/db/schema';
 
 type Content = typeof content.$inferInsert;
 
@@ -35,7 +37,35 @@ class ContentService {
         if (!session?.user?.id) {
           throw new Error('User session required for content update');
         }
-        return this.repository.updateWithAuditLog(id, data, session.user.id);
+        const updated = await this.repository.updateWithAuditLog(
+          id,
+          data,
+          session.user.id,
+        );
+
+        if (updated) {
+          try {
+            const ownerId = (updated as any).userId as string | undefined;
+            if (ownerId) {
+              const changedFields = Object.keys(data || {});
+              const title = 'Your content was updated';
+              const body =
+                changedFields.length > 0
+                  ? `Fields changed: ${changedFields.join(', ')}`
+                  : 'Your content item has new updates.';
+              await notificationsService.create({
+                recipientUserId: ownerId,
+                type: 'content_updated',
+                title,
+                body,
+                payload: { contentId: id, changedFields },
+              } as typeof notifications.$inferInsert);
+            }
+          } catch (e) {
+            console.error('Failed to create update notification', e);
+          }
+        }
+        return updated;
       },
       async (session) => {
         if (['moderator', 'admin'].includes(session.user.role)) {
