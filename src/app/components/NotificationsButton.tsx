@@ -47,7 +47,6 @@ export default function NotificationsButton() {
       markAsReadMutation.mutate(notification.id);
     }
 
-    // Navigate based on notification type and payload
     if (notification.type === 'content_updated' && notification.payload) {
       const contentId = (notification.payload as any).contentId;
       if (contentId) {
@@ -56,7 +55,6 @@ export default function NotificationsButton() {
       }
     }
 
-    // Default to notifications page
     router.push('/notifications');
   };
 

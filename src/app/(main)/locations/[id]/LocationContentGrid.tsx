@@ -56,7 +56,6 @@ export function LocationContentGrid({
           ))}
         </div>
 
-        {/* Show more button if we have many photos */}
         {content.length >= 20 && (
           <div className='mt-8 text-center'>
             <Button

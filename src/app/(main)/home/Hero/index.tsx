@@ -65,7 +65,6 @@ type Props = {
 };
 
 export default function Hero({ content }: Props) {
-  // Transform the content data to match our ContentData type
   const transformContent = (item: HomeContentData): ContentData => ({
     id: item.id,
     contentId: item.contentId,
@@ -84,7 +83,7 @@ export default function Hero({ content }: Props) {
   const transformedContent = content.map(transformContent);
 
   const [data, setData] = React.useState<ContentData[]>(
-    transformedContent.slice(1)
+    transformedContent.slice(1),
   );
   const [transitionData, setTransitionData] =
     React.useState<ContentData | null>(transformedContent[0] || null);
@@ -138,9 +137,9 @@ export default function Hero({ content }: Props) {
 
   if (transformedContent.length === 0) {
     return (
-      <div className='relative min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center'>
+      <div className='relative flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800'>
         <div className='text-center text-white'>
-          <h1 className='text-4xl font-bold mb-4'>Welcome to Lehakoe</h1>
+          <h1 className='mb-4 text-4xl font-bold'>Welcome to Lehakoe</h1>
           <p className='text-xl opacity-80'>
             Discover the beauty of Lesotho through our curated collection
           </p>
@@ -151,7 +150,7 @@ export default function Hero({ content }: Props) {
 
   return (
     <main
-      className='relative min-h-screen select-none overflow-hidden text-white antialiased'
+      className='relative min-h-screen overflow-hidden text-white antialiased select-none'
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -163,7 +162,6 @@ export default function Hero({ content }: Props) {
         />
       </AnimatePresence>
       <div className='absolute z-20 h-full w-full'>
-        {/* Navbar */}
         <HomeNavbar />
 
         <div className='flex h-full w-full grid-cols-10 flex-col md:grid'>
@@ -180,7 +178,7 @@ export default function Hero({ content }: Props) {
             />
           </div>
         </div>
-        <div className='absolute bottom-6 left-0 right-0 z-30 flex w-full justify-center md:-translate-x-14'>
+        <div className='absolute right-0 bottom-6 left-0 z-30 flex w-full justify-center md:-translate-x-14'>
           <motion.span
             animate={{ y: [0, 6, 0] }}
             transition={{

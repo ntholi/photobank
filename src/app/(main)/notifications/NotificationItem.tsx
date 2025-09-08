@@ -132,7 +132,6 @@ export default function NotificationItem({
     >
       <CardBody className='p-4'>
         <div className='flex items-start gap-4'>
-          {/* Avatar or Icon */}
           <div className='flex-shrink-0'>
             {notification.recipient?.image ? (
               <Avatar
@@ -147,7 +146,6 @@ export default function NotificationItem({
             )}
           </div>
 
-          {/* Content */}
           <div className='min-w-0 flex-1'>
             <div className='mb-2 flex items-start justify-between'>
               <div className='flex flex-wrap items-center gap-2'>
@@ -188,7 +186,6 @@ export default function NotificationItem({
               </p>
             )}
 
-            {/* Metadata */}
             <div className='text-default-500 flex items-center justify-between text-xs'>
               <div className='flex items-center gap-1'>
                 <IoMdTime />
@@ -196,7 +193,6 @@ export default function NotificationItem({
               </div>
             </div>
 
-            {/* Payload info if available */}
             {notification.payload && (
               <div className='bg-default-50 mt-2 rounded-lg p-2'>
                 <p className='text-default-600 text-xs'>

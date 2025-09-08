@@ -13,15 +13,13 @@ import { IoMdCheckmarkCircle } from 'react-icons/io';
 export default function NotificationsPage() {
   const [page, setPage] = useState(1);
 
-  // Get unread count for header
   const { data: unreadCount = 0 } = useUnreadNotificationsCount();
 
-  // Mark all as read mutation
   const markAllAsReadMutation = useMarkAllNotificationsAsRead();
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
-    // Smooth scroll to top when page changes
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
@@ -31,7 +29,6 @@ export default function NotificationsPage() {
 
   return (
     <div className='container mx-auto max-w-4xl space-y-6 p-6'>
-      {/* Header Section */}
       <div className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'>
         <div className='space-y-1'>
           <h1 className='text-foreground text-2xl font-bold'>Notifications</h1>
@@ -62,7 +59,6 @@ export default function NotificationsPage() {
         </div>
       </div>
 
-      {/* Notifications List */}
       <NotificationsList
         page={page}
         onPageChange={handlePageChange}

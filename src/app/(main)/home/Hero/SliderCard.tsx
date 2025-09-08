@@ -61,12 +61,7 @@ export default function SliderCard({ data }: Props) {
             layout
             className='mb-2 h-[2px] w-3 rounded-full bg-white'
           />
-          {/* <motion.p
-            layoutId={`filename-${data.content.id}`}
-            className='text-xs text-[#D5D5D6]'
-          >
-            {data.content.fileName || 'Untitled'}
-          </motion.p> */}
+
           <motion.h2
             layoutId={`location-${data.content.id}`}
             className='text-lg leading-6 text-white'

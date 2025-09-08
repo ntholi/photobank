@@ -44,7 +44,6 @@ export default function NotificationsList({
     });
 
   const handleNotificationNavigate = (notification: Notification) => {
-    // Navigate based on notification type and payload
     if (notification.type === 'content_updated' && notification.payload) {
       const contentId = (notification.payload as any).contentId;
       if (contentId) {
@@ -60,8 +59,6 @@ export default function NotificationsList({
         return;
       }
     }
-
-    // For other types, stay on notifications page
   };
 
   if (isLoading) {
@@ -135,7 +132,6 @@ export default function NotificationsList({
 
   return (
     <div className='space-y-6'>
-      {/* Results info */}
       <div className='flex items-center justify-between'>
         <p className='text-default-600 text-sm'>
           Showing {data.data.length} of {data.pagination.total} notifications
@@ -153,7 +149,6 @@ export default function NotificationsList({
         </Button>
       </div>
 
-      {/* Notifications list */}
       <div className='space-y-4'>
         {data.data.map((notification) => (
           <NotificationItem
@@ -164,7 +159,6 @@ export default function NotificationsList({
         ))}
       </div>
 
-      {/* Pagination */}
       {data.pagination.totalPages > 1 && (
         <div className='flex justify-center pt-4'>
           <Pagination
@@ -179,7 +173,6 @@ export default function NotificationsList({
         </div>
       )}
 
-      {/* Load more info */}
       {data.pagination.page < data.pagination.totalPages && (
         <div className='py-4 text-center'>
           <p className='text-default-500 text-sm'>
