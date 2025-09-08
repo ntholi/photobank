@@ -10,6 +10,26 @@ import { notifications } from '@/db/schema';
 import { formatDistanceToNow } from 'date-fns';
 import { useOptimisticMarkAsRead } from '@/hooks/useNotifications';
 
+interface ContentUpdatedPayload {
+  changeType: 'tags' | 'content_fields';
+  addedTags?: string[];
+  removedTags?: string[];
+  changedFields?: string[];
+}
+
+interface ContentStatusChangePayload {
+  newStatus: string;
+}
+
+interface SystemPayload {
+  [key: string]: unknown;
+}
+
+type NotificationPayload =
+  | ContentUpdatedPayload
+  | ContentStatusChangePayload
+  | SystemPayload;
+
 type Notification = typeof notifications.$inferSelect & {
   recipient: {
     id: string;
@@ -28,6 +48,30 @@ export default function NotificationItem({
   onNavigate,
 }: NotificationItemProps) {
   const markAsReadMutation = useOptimisticMarkAsRead();
+
+  const isContentUpdatedPayload = (
+    payload: unknown,
+  ): payload is ContentUpdatedPayload => {
+    return (
+      typeof payload === 'object' &&
+      payload !== null &&
+      ('changeType' in payload ||
+        'changedFields' in payload ||
+        'addedTags' in payload ||
+        'removedTags' in payload)
+    );
+  };
+
+  const isContentStatusChangePayload = (
+    payload: unknown,
+  ): payload is ContentStatusChangePayload => {
+    return (
+      typeof payload === 'object' &&
+      payload !== null &&
+      'newStatus' in payload &&
+      typeof (payload as ContentStatusChangePayload).newStatus === 'string'
+    );
+  };
 
   const handleMarkAsRead = () => {
     if (notification.status === 'unread') {
@@ -78,7 +122,7 @@ export default function NotificationItem({
 
   return (
     <Card
-      className={`w-full cursor-pointer transition-all duration-200 hover:scale-[1.02] ${
+      className={`w-full cursor-pointer shadow-sm ${
         notification.status === 'unread'
           ? 'bg-primary/5 border-primary border-l-4 shadow-md'
           : 'hover:shadow-md'
@@ -132,9 +176,6 @@ export default function NotificationItem({
                       ? 'Mark as read'
                       : 'Already read'
                   }
-                  className={
-                    notification.status === 'read' ? 'text-success' : ''
-                  }
                 >
                   <IoMdCheckmarkCircle />
                 </Button>
@@ -153,88 +194,69 @@ export default function NotificationItem({
                 <IoMdTime />
                 <span>{formatNotificationTime(notification.createdAt)}</span>
               </div>
-              {notification.readAt && (
-                <div className='text-success flex items-center gap-1'>
-                  <IoMdOpen />
-                  <span>
-                    Read{' '}
-                    {formatDistanceToNow(new Date(notification.readAt), {
-                      addSuffix: true,
-                    })}
-                  </span>
-                </div>
-              )}
             </div>
 
             {/* Payload info if available */}
             {notification.payload && (
               <div className='bg-default-50 mt-2 rounded-lg p-2'>
                 <p className='text-default-600 text-xs'>
-                  {notification.type === 'content_updated' && (
-                    <>
-                      {(notification.payload as any).changeType === 'tags' && (
-                        <>
-                          {(notification.payload as any).addedTags?.length >
-                            0 && (
-                            <div className='mb-1'>
-                              <span className='text-success font-medium'>
-                                Added tags:
-                              </span>{' '}
-                              {(notification.payload as any).addedTags.join(
-                                ', ',
-                              )}
-                            </div>
-                          )}
-                          {(notification.payload as any).removedTags?.length >
-                            0 && (
-                            <div>
-                              <span className='text-danger font-medium'>
-                                Removed tags:
-                              </span>{' '}
-                              {(notification.payload as any).removedTags.join(
-                                ', ',
-                              )}
-                            </div>
-                          )}
-                        </>
-                      )}
-                      {(notification.payload as any).changeType ===
-                        'content_fields' && (
-                        <>
-                          <span className='font-medium'>Fields updated:</span>{' '}
-                          {(notification.payload as any).changedFields
-                            ?.map((field: string) => {
-                              switch (field) {
-                                case 'description':
-                                  return 'Description';
-                                case 'locationId':
-                                  return 'Location';
-                                case 'status':
-                                  return 'Status';
-                                default:
-                                  return field;
-                              }
-                            })
-                            .join(', ')}
-                        </>
-                      )}
-                      {!(notification.payload as any).changeType &&
-                        (notification.payload as any).changedFields && (
+                  {notification.type === 'content_updated' &&
+                    isContentUpdatedPayload(notification.payload) && (
+                      <>
+                        {notification.payload.changeType === 'tags' && (
                           <>
-                            Fields updated:{' '}
-                            {(notification.payload as any).changedFields.join(
-                              ', ',
-                            )}
+                            {notification.payload.addedTags &&
+                              notification.payload.addedTags.length > 0 && (
+                                <div className='mb-1'>
+                                  <span className='text-success font-medium'>
+                                    Added tags:
+                                  </span>{' '}
+                                  {notification.payload.addedTags.join(', ')}
+                                </div>
+                              )}
+                            {notification.payload.removedTags &&
+                              notification.payload.removedTags.length > 0 && (
+                                <div>
+                                  <span className='text-danger font-medium'>
+                                    Removed tags:
+                                  </span>{' '}
+                                  {notification.payload.removedTags.join(', ')}
+                                </div>
+                              )}
                           </>
                         )}
-                    </>
-                  )}
-                  {notification.type === 'content_status_change' &&
-                    (notification.payload as any).newStatus && (
-                      <>
-                        Status changed to:{' '}
-                        {(notification.payload as any).newStatus}
+                        {notification.payload.changeType ===
+                          'content_fields' && (
+                          <>
+                            <span className='font-medium'>Fields updated:</span>{' '}
+                            {notification.payload.changedFields
+                              ?.map((field: string) => {
+                                switch (field) {
+                                  case 'description':
+                                    return 'Description';
+                                  case 'locationId':
+                                    return 'Location';
+                                  case 'status':
+                                    return 'Status';
+                                  default:
+                                    return field;
+                                }
+                              })
+                              .join(', ')}
+                          </>
+                        )}
+                        {!notification.payload.changeType &&
+                          notification.payload.changedFields && (
+                            <>
+                              Fields updated:{' '}
+                              {notification.payload.changedFields.join(', ')}
+                            </>
+                          )}
                       </>
+                    )}
+                  {notification.type === 'content_status_change' &&
+                    isContentStatusChangePayload(notification.payload) && (
+                      <>Status changed to: {notification.payload.newStatus}</>
                     )}
                 </p>
               </div>
