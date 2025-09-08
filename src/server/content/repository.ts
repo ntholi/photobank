@@ -257,20 +257,20 @@ export default class ContentRepository extends BaseRepository<
     // Perform the update
     const updatedRecord = await this.update(id, updateData);
 
-    // Create audit log
+    // Only track specific fields for audit logging
+    const trackedFields = ['description', 'locationId'] as const;
     const oldValues: Record<string, unknown> = {};
     const newValues: Record<string, unknown> = {};
 
-    // Compare only the fields that were updated
-    Object.keys(updateData).forEach((key) => {
-      const fieldKey = key as keyof typeof currentRecord;
-      if (currentRecord[fieldKey] !== updateData[fieldKey]) {
-        oldValues[key] = currentRecord[fieldKey];
-        newValues[key] = updateData[fieldKey];
+    // Compare only the tracked fields that were updated
+    trackedFields.forEach((field) => {
+      if (field in updateData && currentRecord[field] !== updateData[field]) {
+        oldValues[field] = currentRecord[field];
+        newValues[field] = updateData[field];
       }
     });
 
-    // Only log if there were actual changes
+    // Only log if there were actual changes to tracked fields
     if (Object.keys(oldValues).length > 0) {
       await contentUpdateLogRepository.create({
         contentId: id,

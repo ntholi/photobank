@@ -24,6 +24,17 @@ class ContentUpdateLogService {
     );
   }
 
+  async getByContentIdWithUser(
+    contentId: string,
+    page: number = 1,
+    size: number = 20,
+  ) {
+    return withAuth(
+      async () => this.repository.getByContentIdWithUser(contentId, page, size),
+      ['moderator'],
+    );
+  }
+
   async getByUserId(userId: string, page: number = 1, size: number = 20) {
     return withAuth(
       async () => this.repository.getByUserId(userId, page, size),

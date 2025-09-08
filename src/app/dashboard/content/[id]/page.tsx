@@ -12,6 +12,7 @@ import { ContentDetailsHeader } from '../components/ContentDetailsHeader';
 import ContentDisplay from '../components/ContentDisplay';
 import { ContentLabels } from '../components/ContentLabels';
 import { ContentTags } from '../components/ContentTags';
+import { ContentAuditLog } from '../components/ContentAuditLog';
 import ContentID from './ContentID';
 
 type Props = {
@@ -72,6 +73,7 @@ export default async function ContentDetailsPage({ params }: Props) {
 
           <ContentTags tags={content.tags} />
           <ContentLabels labels={content.labels} />
+          <ContentAuditLog contentId={content.id} />
         </Stack>
       </DetailsViewBody>
     </DetailsView>

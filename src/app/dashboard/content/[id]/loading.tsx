@@ -131,6 +131,30 @@ function LabelsSkeleton() {
   );
 }
 
+function AuditLogSkeleton() {
+  return (
+    <Stack gap='md'>
+      <Group justify='space-between' align='center'>
+        <Skeleton height={24} width={120} />
+        <Skeleton height={20} width={60} />
+      </Group>
+      <Stack gap='sm'>
+        {Array.from({ length: 3 }).map((_, index) => (
+          <Card key={index} padding='md' radius='md' withBorder>
+            <Group gap='sm' wrap='nowrap'>
+              <Skeleton height={40} circle />
+              <Stack gap='xs' style={{ flex: 1 }}>
+                <Skeleton height={20} width='60%' />
+                <Skeleton height={16} width='40%' />
+              </Stack>
+            </Group>
+          </Card>
+        ))}
+      </Stack>
+    </Stack>
+  );
+}
+
 export default function Loading() {
   return (
     <DetailsView>
@@ -147,6 +171,7 @@ export default function Loading() {
           <DescriptionSkeleton />
           <TagsSkeleton />
           <LabelsSkeleton />
+          <AuditLogSkeleton />
         </Stack>
       </DetailsViewBody>
     </DetailsView>

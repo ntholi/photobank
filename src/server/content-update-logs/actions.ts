@@ -20,6 +20,14 @@ export async function getContentUpdateLogsByContentId(
   return service.getByContentId(contentId, page, size);
 }
 
+export async function getContentUpdateLogsByContentIdWithUser(
+  contentId: string,
+  page: number = 1,
+  size: number = 20,
+) {
+  return service.getByContentIdWithUser(contentId, page, size);
+}
+
 export async function getContentUpdateLogsByUserId(
   userId: string,
   page: number = 1,
