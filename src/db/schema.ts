@@ -316,7 +316,7 @@ export const notifications = pgTable('notifications', {
   title: text(),
   body: text(),
   payload: jsonb().$type<Record<string, unknown>>(),
-  createdAt: timestamp({ mode: 'date' }).defaultNow(),
+  createdAt: timestamp({ mode: 'date' }).notNull().defaultNow(),
   readAt: timestamp({ mode: 'date' }),
   updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
 });
