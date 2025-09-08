@@ -248,21 +248,17 @@ export default class ContentRepository extends BaseRepository<
     updateData: Partial<typeof content.$inferInsert>,
     userId: string,
   ) {
-    // Get the current record before updating
     const currentRecord = await this.findById(id);
     if (!currentRecord) {
       throw new Error('Content not found');
     }
 
-    // Perform the update
     const updatedRecord = await this.update(id, updateData);
 
-    // Only track specific fields for audit logging
     const trackedFields = ['description', 'locationId'] as const;
     const oldValues: Record<string, unknown> = {};
     const newValues: Record<string, unknown> = {};
 
-    // Compare only the tracked fields that were updated
     trackedFields.forEach((field) => {
       if (field in updateData && currentRecord[field] !== updateData[field]) {
         oldValues[field] = currentRecord[field];
@@ -270,7 +266,6 @@ export default class ContentRepository extends BaseRepository<
       }
     });
 
-    // Only log if there were actual changes to tracked fields
     if (Object.keys(oldValues).length > 0) {
       await contentUpdateLogRepository.create({
         contentId: id,
@@ -285,13 +280,11 @@ export default class ContentRepository extends BaseRepository<
   }
 
   async deleteWithAuditLog(id: string, userId: string) {
-    // Get the current record before deleting
     const currentRecord = await this.findById(id);
     if (!currentRecord) {
       throw new Error('Content not found');
     }
 
-    // Create audit log before deletion
     await contentUpdateLogRepository.create({
       contentId: id,
       userId,
@@ -300,7 +293,6 @@ export default class ContentRepository extends BaseRepository<
       newValues: null,
     });
 
-    // Perform the deletion
     await this.delete(id);
   }
 }

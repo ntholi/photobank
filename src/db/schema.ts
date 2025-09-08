@@ -286,3 +286,37 @@ export const contentUpdateLogs = pgTable('content_update_logs', {
   newValues: jsonb().$type<Record<string, unknown>>(),
   createdAt: timestamp({ mode: 'date' }).defaultNow(),
 });
+
+export const notificationTypeEnum = pgEnum('notification_type', [
+  'content_status_change',
+  'content_updated',
+  'content_rejected',
+  'content_published',
+  'system',
+]);
+export type NotificationType = (typeof notificationTypeEnum.enumValues)[number];
+
+export const notificationStatusEnum = pgEnum('notification_status', [
+  'unread',
+  'read',
+  'archived',
+]);
+export type NotificationStatus =
+  (typeof notificationStatusEnum.enumValues)[number];
+
+export const notifications = pgTable('notifications', {
+  id: varchar({ length: 21 })
+    .$defaultFn(() => nanoid())
+    .primaryKey(),
+  recipientUserId: varchar({ length: 21 })
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  type: notificationTypeEnum().notNull().default('system'),
+  status: notificationStatusEnum().notNull().default('unread'),
+  title: text(),
+  body: text(),
+  payload: jsonb().$type<Record<string, unknown>>(),
+  createdAt: timestamp({ mode: 'date' }).defaultNow(),
+  readAt: timestamp({ mode: 'date' }),
+  updatedAt: timestamp({ mode: 'date' }).$onUpdate(() => new Date()),
+});

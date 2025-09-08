@@ -16,6 +16,7 @@ import {
   sessions,
   tags,
   users,
+  notifications,
 } from './schema';
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -173,3 +174,10 @@ export const contentUpdateLogsRelations = relations(
     }),
   }),
 );
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  recipient: one(users, {
+    fields: [notifications.recipientUserId],
+    references: [users.id],
+  }),
+}));

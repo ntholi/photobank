@@ -23,6 +23,7 @@ import {
   IconHome,
   IconLogout2,
   IconMapPin,
+  IconNotification,
   IconPhoto,
   IconTags,
   IconUsers,
@@ -92,6 +93,12 @@ const navigation: NavItem[] = [
     href: '/dashboard/locations',
     icon: IconMapPin,
     roles: ['moderator', 'admin'],
+  },
+  {
+    label: 'Notifications',
+    href: '/dashboard/notifications',
+    icon: IconNotification,
+    roles: ['admin'],
   },
 ];
 
