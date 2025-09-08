@@ -8,36 +8,36 @@ import {
   Box,
   Center,
   Flex,
+  Group,
   Image,
   Loader,
   Paper,
+  SegmentedControl,
   Stack,
-  Tabs,
   Text,
 } from '@mantine/core';
-import { IconDownload, IconEye, IconVideo } from '@tabler/icons-react';
+import { IconVideo } from '@tabler/icons-react';
 import { useState } from 'react';
 import { ContentTypeBadge } from './ContentTypeBadge';
 
-type Props = {
-  content: typeof content.$inferSelect;
-};
+type Props = { content: typeof content.$inferSelect };
 
 export default function ContentDisplay({ content }: Props) {
-  const { id, fileName, s3Key, thumbnailKey, watermarkedKey, type, fileSize } =
-    content;
-  const [activeTab, setActiveTab] = useState('preview');
+  const {
+    fileName,
+    s3Key,
+    thumbnailKey,
+    watermarkedKey,
+    type,
+    fileSize,
+    createdAt,
+  } = content;
+  const [activeVersion, setActiveVersion] = useState('preview');
 
   const { url, isLoading: isLoadingPresigned } = usePresignedUrl(
     s3Key,
-    activeTab === 'original'
+    activeVersion === 'original',
   );
-
-  const handleTabChange = (value: string | null) => {
-    if (value) {
-      setActiveTab(value);
-    }
-  };
 
   const urls = {
     original: url,
@@ -47,7 +47,7 @@ export default function ContentDisplay({ content }: Props) {
 
   if (type === 'image') {
     const getImageSrc = () => {
-      switch (activeTab) {
+      switch (activeVersion) {
         case 'thumbnail':
           return urls.thumbnail;
         case 'preview':
@@ -59,57 +59,55 @@ export default function ContentDisplay({ content }: Props) {
       }
     };
 
-    const isOriginalDisabled = activeTab === 'original' && isLoadingPresigned;
+    const isOriginalLoading =
+      activeVersion === 'original' && isLoadingPresigned;
 
     return (
       <Paper p='md' withBorder>
-        <Tabs value={activeTab} onChange={handleTabChange} pos={'relative'}>
-          <Tabs.List>
-            {urls.thumbnail && (
-              <Tabs.Tab value='thumbnail' leftSection={<IconEye size={14} />}>
-                Thumbnail
-              </Tabs.Tab>
-            )}
-            {urls.watermarked && (
-              <Tabs.Tab value='preview' leftSection={<IconEye size={14} />}>
-                Preview
-              </Tabs.Tab>
-            )}
-            <Tabs.Tab value='original' leftSection={<IconDownload size={14} />}>
-              Original
-            </Tabs.Tab>
-            <ContentTypeBadge
-              contentType={type}
-              top={5}
-              right={0}
-              pos='absolute'
+        <Flex justify='space-between' mb='sm' align='flex-start'>
+          <SegmentedControl
+            value={activeVersion}
+            onChange={setActiveVersion}
+            size='sm'
+            data={[
+              ...(urls.thumbnail
+                ? [{ label: 'Thumb', value: 'thumbnail' }]
+                : []),
+              ...(urls.watermarked
+                ? [{ label: 'Preview', value: 'preview' }]
+                : []),
+              { label: 'Original', value: 'original' },
+            ]}
+            styles={() => ({
+              root: {
+                backgroundColor: 'transparent',
+                border: '1px solid var(--mantine-color-default-border)',
+              },
+              indicator: { transition: 'transform 150ms ease' },
+            })}
+          />
+          <ContentTypeBadge contentType={type} />
+        </Flex>
+        <AspectRatio ratio={16 / 9} maw={800} mx='auto'>
+          {isOriginalLoading ? (
+            <Center h='100%'>
+              <Box ta='center'>
+                <Loader size='md' />
+                <Text size='sm' c='dimmed' mt='xs'>
+                  Loading original content...
+                </Text>
+              </Box>
+            </Center>
+          ) : (
+            <Image
+              src={getImageSrc()}
+              alt={fileName || 'Content image'}
+              radius='md'
+              fit='contain'
+              fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgTm90IEZvdW5kPC90ZXh0Pjwvc3ZnPg=='
             />
-          </Tabs.List>
-
-          <Tabs.Panel value={activeTab} mt='md'>
-            <AspectRatio ratio={16 / 9} maw={800}>
-              {isOriginalDisabled ? (
-                <Center h='100%'>
-                  <Box ta='center'>
-                    <Loader size='md' />
-                    <Text size='sm' c='dimmed' mt='xs'>
-                      Loading original content...
-                    </Text>
-                  </Box>
-                </Center>
-              ) : (
-                <Image
-                  src={getImageSrc()}
-                  alt={fileName || 'Content image'}
-                  radius='md'
-                  fit='contain'
-                  fallbackSrc='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjYWRiNWJkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgTm90IEZvdW5kPC90ZXh0Pjwvc3ZnPg=='
-                />
-              )}
-            </AspectRatio>
-          </Tabs.Panel>
-        </Tabs>
-
+          )}
+        </AspectRatio>
         <Flex mt='md' justify='space-between'>
           <Box>
             <Text size='sm' fw={500}>
@@ -123,7 +121,7 @@ export default function ContentDisplay({ content }: Props) {
           </Box>
           <Stack gap={0} align='flex-end'>
             <Text size='sm' fw={500}>
-              {formatDateTime(content.createdAt)}
+              {formatDateTime(createdAt)}
             </Text>
             <Text size='xs' c='dimmed'>
               Uploaded
@@ -136,7 +134,7 @@ export default function ContentDisplay({ content }: Props) {
 
   if (type === 'video') {
     const getVideoSrc = () => {
-      switch (activeTab) {
+      switch (activeVersion) {
         case 'preview':
           return urls.watermarked;
         case 'original':
@@ -146,61 +144,63 @@ export default function ContentDisplay({ content }: Props) {
       }
     };
 
-    const isOriginalDisabled = activeTab === 'original' && isLoadingPresigned;
+    const isOriginalLoading =
+      activeVersion === 'original' && isLoadingPresigned;
 
     return (
       <Paper p='md' withBorder>
-        <Tabs value={activeTab} onChange={handleTabChange}>
-          <Tabs.List>
-            {urls.watermarked && (
-              <Tabs.Tab value='preview' leftSection={<IconEye size={14} />}>
-                Preview
-              </Tabs.Tab>
-            )}
-            <Tabs.Tab value='original' leftSection={<IconDownload size={14} />}>
-              Original
-            </Tabs.Tab>
-            <ContentTypeBadge contentType={type} top={5} right={0} />
-          </Tabs.List>
-
-          <Tabs.Panel value={activeTab} mt='md'>
-            <AspectRatio ratio={16 / 9} maw={800}>
-              {isOriginalDisabled ? (
-                <Center h='100%'>
-                  <Box ta='center'>
-                    <Loader size='md' />
-                    <Text size='sm' c='dimmed' mt='xs'>
-                      Loading original content...
-                    </Text>
-                  </Box>
-                </Center>
-              ) : (
-                <video
-                  controls
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: 'var(--mantine-radius-md)',
-                  }}
-                >
-                  <source src={getVideoSrc()} />
-                  <Center h='100%'>
-                    <Box ta='center'>
-                      <IconVideo
-                        size={48}
-                        color='var(--mantine-color-gray-5)'
-                      />
-                      <Text size='sm' c='dimmed' mt='xs'>
-                        Video cannot be played in this browser
-                      </Text>
-                    </Box>
-                  </Center>
-                </video>
-              )}
-            </AspectRatio>
-          </Tabs.Panel>
-        </Tabs>
-
+        <Group justify='space-between' mb='sm' align='flex-start'>
+          <SegmentedControl
+            value={activeVersion}
+            onChange={setActiveVersion}
+            size='xs'
+            data={[
+              ...(urls.watermarked
+                ? [{ label: 'Preview', value: 'preview' }]
+                : []),
+              { label: 'Original', value: 'original' },
+            ]}
+            styles={() => ({
+              root: {
+                backgroundColor: 'transparent',
+                border: '1px solid var(--mantine-color-default-border)',
+              },
+              indicator: { transition: 'transform 150ms ease' },
+            })}
+          />
+          <ContentTypeBadge contentType={type} />
+        </Group>
+        <AspectRatio ratio={16 / 9} maw={800} mx='auto'>
+          {isOriginalLoading ? (
+            <Center h='100%'>
+              <Box ta='center'>
+                <Loader size='md' />
+                <Text size='sm' c='dimmed' mt='xs'>
+                  Loading original content...
+                </Text>
+              </Box>
+            </Center>
+          ) : (
+            <video
+              controls
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: 'var(--mantine-radius-md)',
+              }}
+            >
+              <source src={getVideoSrc()} />
+              <Center h='100%'>
+                <Box ta='center'>
+                  <IconVideo size={48} color='var(--mantine-color-gray-5)' />
+                  <Text size='sm' c='dimmed' mt='xs'>
+                    Video cannot be played in this browser
+                  </Text>
+                </Box>
+              </Center>
+            </video>
+          )}
+        </AspectRatio>
         {fileName && (
           <Box mt='sm'>
             <Text size='sm' fw={500}>

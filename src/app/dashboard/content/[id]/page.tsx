@@ -1,11 +1,23 @@
 import { DetailsView, DetailsViewBody, FieldView } from '@/components/adease';
-import {
-  deleteContent,
-  getContent,
-  getContentWithDetails,
-} from '@/server/content/actions';
+import { deleteContent, getContentWithDetails } from '@/server/content/actions';
 import { getLocation } from '@/server/locations/actions';
-import { Anchor, Fieldset, Stack, Text } from '@mantine/core';
+import {
+  Anchor,
+  Fieldset,
+  Grid,
+  Paper,
+  Stack,
+  Tabs,
+  Text,
+  Title,
+  Divider,
+  Group,
+  Box,
+  TabsList,
+  TabsTab,
+  TabsPanel,
+  GridCol,
+} from '@mantine/core';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ContentDetailsHeader } from '../components/ContentDetailsHeader';
@@ -42,39 +54,86 @@ export default async function ContentDetailsPage({ params }: Props) {
           await deleteContent(id);
         }}
       />
-      <DetailsViewBody>
-        <Stack gap='lg'>
-          <ContentDisplay content={content} />
-          <ContentID contentId={content.id} />
-          <FieldView label='Location'>
-            {location ? (
-              <Anchor
-                component={Link}
-                href={`/dashboard/locations/${location.id}`}
-              >
-                {location.name}
-              </Anchor>
-            ) : (
-              '-'
-            )}
-          </FieldView>
-          <FieldView label='Contributor'>
-            <Anchor
-              component={Link}
-              href={`/dashboard/users/${content.userId}`}
-            >
-              {content.user.name}
-            </Anchor>
-          </FieldView>
-
-          <Fieldset legend='Description'>
-            <Text size='sm'>{content.description || '-'}</Text>
-          </Fieldset>
-
-          <ContentTags tags={content.tags} />
-          <ContentLabels labels={content.labels} />
-          <ContentAuditLog contentId={content.id} />
-        </Stack>
+      <DetailsViewBody p={'xs'}>
+        <Tabs defaultValue='overview' keepMounted={false} variant='outline'>
+          <TabsList>
+            <TabsTab value='overview'>Overview</TabsTab>
+            <TabsTab value='metadata'>Metadata</TabsTab>
+            <TabsTab value='audit'>Audit Log</TabsTab>
+          </TabsList>
+          <TabsPanel value='overview' pt='md'>
+            <Stack gap='md'>
+              <ContentDisplay content={content} />
+              <Paper withBorder p='md'>
+                <Stack gap='sm'>
+                  <Group justify='space-between'>
+                    <Title order={5}>Basic Info</Title>
+                    <ContentID contentId={content.id} />
+                  </Group>
+                  <FieldView label='Contributor'>
+                    <Anchor
+                      component={Link}
+                      href={`/dashboard/users/${content.userId}`}
+                    >
+                      {content.user.name}
+                    </Anchor>
+                  </FieldView>
+                  <FieldView label='Location'>
+                    {location ? (
+                      <Anchor
+                        component={Link}
+                        href={`/dashboard/locations/${location.id}`}
+                      >
+                        {location.name}
+                      </Anchor>
+                    ) : (
+                      '-'
+                    )}
+                  </FieldView>
+                </Stack>
+              </Paper>
+              <Paper withBorder p='md'>
+                <Stack gap='sm'>
+                  <Title order={5}>Description</Title>
+                  <Text size='sm'>{content.description || '-'}</Text>
+                </Stack>
+              </Paper>
+            </Stack>
+          </TabsPanel>
+          <TabsPanel value='metadata' pt='md'>
+            <Stack gap='md'>
+              <Paper withBorder p='md'>
+                <Stack gap='sm'>
+                  <Title order={5}>Classification</Title>
+                  <ContentTags tags={content.tags} />
+                  <Divider />
+                  <ContentLabels labels={content.labels} />
+                </Stack>
+              </Paper>
+              <Paper withBorder p='md'>
+                <Stack gap='sm'>
+                  <Title order={5}>Technical</Title>
+                  <FieldView label='File Name'>
+                    <Text size='sm'>{content.fileName || '-'}</Text>
+                  </FieldView>
+                  <FieldView label='File Size'>
+                    <Text size='sm'>
+                      {content.fileSize
+                        ? `${(content.fileSize / 1024 / 1024).toFixed(2)} MB`
+                        : '-'}
+                    </Text>
+                  </FieldView>
+                  <FieldView label='Type'>
+                    <Text size='sm'>{content.type}</Text>
+                  </FieldView>
+                </Stack>
+              </Paper>
+            </Stack>
+          </TabsPanel>
+          <TabsPanel value='audit' pt='md'>
+            <ContentAuditLog contentId={content.id} />
+          </TabsPanel>
+        </Tabs>
       </DetailsViewBody>
     </DetailsView>
   );
