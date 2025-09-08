@@ -18,6 +18,7 @@ import {
   TabsPanel,
   GridCol,
 } from '@mantine/core';
+import { IconEye, IconTag, IconHistory } from '@tabler/icons-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ContentDetailsHeader } from '../components/ContentDetailsHeader';
@@ -57,28 +58,23 @@ export default async function ContentDetailsPage({ params }: Props) {
       <DetailsViewBody p={'xs'}>
         <Tabs defaultValue='overview' keepMounted={false} variant='outline'>
           <TabsList>
-            <TabsTab value='overview'>Overview</TabsTab>
-            <TabsTab value='metadata'>Metadata</TabsTab>
-            <TabsTab value='audit'>Audit Log</TabsTab>
+            <TabsTab value='overview' leftSection={<IconEye size={16} />}>
+              Overview
+            </TabsTab>
+            <TabsTab value='metadata' leftSection={<IconTag size={16} />}>
+              Metadata
+            </TabsTab>
+            <TabsTab value='audit' leftSection={<IconHistory size={16} />}>
+              Audit Log
+            </TabsTab>
           </TabsList>
           <TabsPanel value='overview' pt='md'>
             <Stack gap='md'>
               <ContentDisplay content={content} />
-              <Paper withBorder p='md'>
+              <Paper p='md'>
                 <Stack gap='sm'>
-                  <Group justify='space-between'>
-                    <Title order={5}>Basic Info</Title>
-                    <ContentID contentId={content.id} />
-                  </Group>
-                  <FieldView label='Contributor'>
-                    <Anchor
-                      component={Link}
-                      href={`/dashboard/users/${content.userId}`}
-                    >
-                      {content.user.name}
-                    </Anchor>
-                  </FieldView>
-                  <FieldView label='Location'>
+                  <ContentID contentId={content.id} />
+                  <FieldView label='Location' underline={false}>
                     {location ? (
                       <Anchor
                         component={Link}
@@ -89,6 +85,14 @@ export default async function ContentDetailsPage({ params }: Props) {
                     ) : (
                       '-'
                     )}
+                  </FieldView>
+                  <FieldView label='Contributor' underline={false}>
+                    <Anchor
+                      component={Link}
+                      href={`/dashboard/users/${content.userId}`}
+                    >
+                      {content.user.name}
+                    </Anchor>
                   </FieldView>
                 </Stack>
               </Paper>

@@ -38,7 +38,7 @@ export default function ContentID({ contentId }: Props) {
           <CopyButton value={contentId} timeout={2000}>
             {({ copied, copy }) => (
               <Tooltip
-                label={copied ? 'Copied' : 'Copy'}
+                label={copied ? 'Copied' : 'Copy ID'}
                 withArrow
                 position='right'
               >
@@ -53,14 +53,16 @@ export default function ContentID({ contentId }: Props) {
             )}
           </CopyButton>
         </Group>
-        <Anchor
-          component={Link}
-          href={`/content/${contentId}`}
-          target='_blank'
-          variant='subtle'
-        >
-          <IconExternalLink size={16} />
-        </Anchor>
+        <Tooltip label='Open content page in new tab' withArrow>
+          <Anchor
+            component={Link}
+            href={`/content/${contentId}`}
+            target='_blank'
+            variant='subtle'
+          >
+            <IconExternalLink size={16} />
+          </Anchor>
+        </Tooltip>
       </Flex>
       <Divider mt='xs' />
     </Box>
