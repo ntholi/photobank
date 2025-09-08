@@ -2,11 +2,11 @@
 
 import React from 'react';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
-import { Button } from '@heroui/button';
 import { Link } from '@heroui/link';
-import { IoMdSearch, IoMdCamera } from 'react-icons/io';
+import { IoMdCamera } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import ProfileMenu from './ProfileMenu';
+import NotificationsButton from '@/app/components/NotificationsButton';
 
 export default function HomeNavbar() {
   const [active, setActive] = React.useState(0);
@@ -75,9 +75,9 @@ export default function HomeNavbar() {
 
       <NavbarContent justify='end' className='gap-6'>
         <NavbarItem>
-          <Button isIconOnly variant='light' radius='full' aria-label='Search'>
-            <IoMdSearch className='text-lg text-white' />
-          </Button>
+          <div className='[&_button]:text-white [&_button_svg]:text-white'>
+            <NotificationsButton />
+          </div>
         </NavbarItem>
         <NavbarItem>
           <ProfileMenu />

@@ -26,6 +26,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   content: many(content),
   savedContents: many(savedContent),
   contentUpdateLogs: many(contentUpdateLogs),
+  notifications: many(notifications),
 }));
 
 export const accountsRelations = relations(accounts, ({ one }) => ({

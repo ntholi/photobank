@@ -36,6 +36,71 @@ class NotificationService {
   async count() {
     return withAuth(async () => this.repository.count(), []);
   }
+
+  async getUserNotifications(
+    options: QueryOptions<typeof notifications> & {
+      status?: 'unread' | 'read' | 'archived';
+      type?: string;
+    } = {},
+  ) {
+    return withAuth(
+      async (session) => {
+        if (!session?.user?.id) {
+          throw new Error('User session required');
+        }
+        return this.repository.getUserNotifications(session.user.id, options);
+      },
+      ['all'],
+    );
+  }
+
+  async getUnreadCount() {
+    return withAuth(
+      async (session) => {
+        if (!session?.user?.id) {
+          throw new Error('User session required');
+        }
+        return this.repository.getUnreadCount(session.user.id);
+      },
+      ['all'],
+    );
+  }
+
+  async markAsRead(id: string) {
+    return withAuth(
+      async (session) => {
+        if (!session?.user?.id) {
+          throw new Error('User session required');
+        }
+        return this.repository.markAsRead(id, session.user.id);
+      },
+      ['all'],
+    );
+  }
+
+  async markAllAsRead() {
+    return withAuth(
+      async (session) => {
+        if (!session?.user?.id) {
+          throw new Error('User session required');
+        }
+        return this.repository.markAllAsRead(session.user.id);
+      },
+      ['all'],
+    );
+  }
+
+  async getRecentNotifications(limit: number = 5) {
+    return withAuth(
+      async (session) => {
+        if (!session?.user?.id) {
+          throw new Error('User session required');
+        }
+        return this.repository.getRecentNotifications(session.user.id, limit);
+      },
+      ['all'],
+    );
+  }
 }
 
 export const notificationsService = serviceWrapper(

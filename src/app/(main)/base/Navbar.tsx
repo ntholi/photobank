@@ -5,8 +5,9 @@ import { Link } from '@heroui/link';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
 import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
-import { IoMdCamera, IoMdSearch } from 'react-icons/io';
+import { IoMdCamera } from 'react-icons/io';
 import ProfileMenu from './ProfileMenu';
+import NotificationsButton from '@/app/components/NotificationsButton';
 
 const menus = [
   { name: 'Home', href: '/' },
@@ -58,9 +59,7 @@ export default function NavbarComponent() {
 
       <NavbarContent justify='end' className='gap-6'>
         <NavbarItem>
-          <Button isIconOnly variant='light' radius='full' aria-label='Search'>
-            <IoMdSearch className='text-foreground text-lg' />
-          </Button>
+          <NotificationsButton />
         </NavbarItem>
         <NavbarItem>
           <ProfileMenu />
