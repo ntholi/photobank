@@ -50,6 +50,7 @@ export default async function ContentDetailsPage({ params }: Props) {
         title={'Content'}
         status={content.status}
         queryKey={['content']}
+        editRoles={['admin', 'moderator']}
         handleDelete={async () => {
           'use server';
           await deleteContent(id);
