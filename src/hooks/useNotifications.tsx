@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import {
   getUserNotifications,
   getUnreadNotificationsCount,
@@ -30,25 +31,34 @@ export function useNotifications(
     type?: string;
   } = {},
 ) {
+  const { data: session } = useSession();
+
   return useQuery({
     queryKey: notificationKeys.list(JSON.stringify({ page, size, ...options })),
     queryFn: () => getUserNotifications(page, size, options),
+    enabled: !!session?.user,
   });
 }
 
 export function useUnreadNotificationsCount() {
+  const { data: session } = useSession();
+
   return useQuery({
     queryKey: notificationKeys.unreadCount(),
     queryFn: getUnreadNotificationsCount,
     refetchInterval: 30000, // Refetch every 30 seconds
+    enabled: !!session?.user,
   });
 }
 
 export function useRecentNotifications(limit: number = 5) {
+  const { data: session } = useSession();
+
   return useQuery({
     queryKey: notificationKeys.recent(),
     queryFn: () => getRecentNotifications(limit),
     refetchInterval: 30000,
+    enabled: !!session?.user,
   });
 }
 
