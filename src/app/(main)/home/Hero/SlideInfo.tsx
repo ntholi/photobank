@@ -60,7 +60,7 @@ export default function SlideInfo({ data }: Props) {
       <motion.div layout className='mt-5 flex items-center gap-3'>
         <Button
           as={Link}
-          href={`/content/${data.id}`}
+          href={`/content/${data.contentId}`}
           variant='ghost'
           radius='full'
           className='border-1 text-white hover:text-black'
