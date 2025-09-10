@@ -52,7 +52,10 @@ export default function HomeNavbar() {
       position='static'
     >
       <NavbarBrand className='gap-2 font-medium tracking-[4px]'>
-        <Link href='/' className='flex items-center gap-2 text-white'>
+        <Link
+          href='/'
+          className='flex items-center gap-2 text-white drop-shadow-lg'
+        >
           <IoMdCamera className='text-2xl' />
           <span className='text-sm md:text-base'>LEHAKOE</span>
         </Link>
@@ -63,8 +66,10 @@ export default function HomeNavbar() {
           <NavbarItem key={menu}>
             <Link
               className={`${
-                active === index ? 'text-primary' : 'text-white/80'
-              } h-auto min-w-fit cursor-pointer px-0 text-xs font-medium tracking-wide uppercase`}
+                active === index
+                  ? 'text-primary drop-shadow-lg'
+                  : 'text-white/90 drop-shadow-lg'
+              } h-auto min-w-fit cursor-pointer px-0 text-xs font-medium tracking-wide uppercase hover:text-white`}
               onClick={() => handleMenuClick(index, menu)}
             >
               {menu}
@@ -75,12 +80,14 @@ export default function HomeNavbar() {
 
       <NavbarContent justify='end' className='gap-6'>
         <NavbarItem>
-          <div className='[&_button]:text-white [&_button_svg]:text-white'>
+          <div className='[&_button]:text-white [&_button]:drop-shadow-lg [&_button_svg]:text-white'>
             <NotificationsButton />
           </div>
         </NavbarItem>
         <NavbarItem>
-          <ProfileMenu />
+          <div className='[&>*]:drop-shadow-lg'>
+            <ProfileMenu />
+          </div>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

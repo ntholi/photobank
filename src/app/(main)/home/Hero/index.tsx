@@ -1,15 +1,14 @@
 'use client';
 
-import { getAllHomeContentWithDetails } from '@/server/home-contet/actions';
-import React from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@heroui/button';
 import { IconChevronDown } from '@tabler/icons-react';
-import BackgroundImage from './BackgroundImage';
-import Slides from './Slides';
-import SlideInfo from './SlideInfo';
-import Controls from './Controls';
+import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
 import HomeNavbar from '../../base/HomeNavbar';
+import BackgroundImage from './BackgroundImage';
+import Controls from './Controls';
+import SlideInfo from './SlideInfo';
+import Slides from './Slides';
 
 type HomeContentData = {
   id: string;
@@ -161,6 +160,10 @@ export default function Hero({ content }: Props) {
           currentSlideData={currentSlideData}
         />
       </AnimatePresence>
+
+      {/* Gradient overlay for text visibility */}
+      <div className='absolute inset-0 z-15 bg-gradient-to-r from-black/50 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/60 md:via-black/30 md:to-transparent' />
+
       <div className='absolute z-20 h-full w-full'>
         <HomeNavbar />
 
