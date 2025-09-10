@@ -22,11 +22,17 @@ class NotificationService {
   }
 
   async create(data: Notification) {
-    return withAuth(async () => this.repository.create(data), []);
+    return withAuth(
+      async () => this.repository.create(data),
+      ['moderator', 'admin'],
+    );
   }
 
   async update(id: string, data: Partial<Notification>) {
-    return withAuth(async () => this.repository.update(id, data), []);
+    return withAuth(
+      async () => this.repository.update(id, data),
+      ['moderator', 'admin'],
+    );
   }
 
   async delete(id: string) {

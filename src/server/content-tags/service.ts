@@ -211,7 +211,7 @@ class ContentTagService {
 
         return result;
       },
-      ['contributor'],
+      ['contributor', 'moderator', 'admin'],
     );
   }
 }
