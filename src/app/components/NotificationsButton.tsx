@@ -48,7 +48,7 @@ export default function NotificationsButton() {
     }
 
     if (notification.type === 'content_updated' && notification.payload) {
-      const contentId = (notification.payload as any).contentId;
+      const contentId = notification.payload.contentId;
       if (contentId) {
         router.push(`/content/${contentId}`);
         return;

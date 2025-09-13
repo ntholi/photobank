@@ -43,7 +43,7 @@ export default function HomeNavbar() {
 
   return (
     <Navbar
-      className='absolute z-30 border-none bg-gradient-to-t from-transparent via-black/15 to-transparent py-8'
+      className='absolute z-30 border-none bg-gradient-to-t from-transparent via-black/10 to-transparent py-8'
       classNames={{
         base: 'px-5 md:px-10',
         wrapper: 'max-w-full',
