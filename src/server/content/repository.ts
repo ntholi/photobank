@@ -7,9 +7,12 @@ import {
   desc,
   eq,
   getTableColumns,
+  ilike,
   inArray,
+  isNotNull,
   like,
   ne,
+  or,
   sql,
 } from 'drizzle-orm';
 import { QueryOptions } from '../base/BaseRepository';
@@ -127,9 +130,18 @@ export default class ContentRepository extends BaseRepository<
       conditions.push(eq(content.locationId, locationId));
     }
 
+    conditions.push(eq(content.status, 'published'));
+
     if (search) {
-      conditions.push(like(content.fileName, `%${search}%`));
-      conditions.push(like(content.description, `%${search}%`));
+      conditions.push(
+        or(
+          ilike(content.fileName, `%${search}%`),
+          and(
+            isNotNull(content.description),
+            ilike(content.description, `%${search}%`),
+          ),
+        ),
+      );
     }
 
     const baseSelect = {
