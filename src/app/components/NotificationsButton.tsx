@@ -114,33 +114,7 @@ export default function NotificationsButton() {
             heading: 'flex justify-between items-center px-3 py-2',
           }}
         >
-          <DropdownItem
-            key='header'
-            className='cursor-default hover:bg-transparent'
-            textValue='Notifications header'
-          >
-            <div className='flex w-full items-center justify-between'>
-              <span className='text-foreground font-semibold'>
-                Notifications
-              </span>
-              {unreadCount > 0 && (
-                <Button
-                  size='sm'
-                  variant='ghost'
-                  color='primary'
-                  onPress={handleMarkAllAsRead}
-                  isLoading={markAllAsReadMutation.isPending}
-                  startContent={
-                    !markAllAsReadMutation.isPending && (
-                      <IoMdCheckmarkCircle className='text-sm' />
-                    )
-                  }
-                >
-                  Mark all read
-                </Button>
-              )}
-            </div>
-          </DropdownItem>
+          {null}
         </DropdownSection>
 
         <DropdownSection className='p-0'>
