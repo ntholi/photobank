@@ -1,4 +1,5 @@
 import { Button } from '@heroui/button';
+import { Spinner } from '@heroui/spinner';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import AnimatedText from './AnimatedText';
@@ -35,7 +36,7 @@ export default function SlideInfo({ data }: Props) {
       <>
         <motion.span layout className='mb-2 h-1 w-5 rounded-full bg-white' />
         <div className='flex flex-col'>
-          <p className='spacing overflow-hidden text-[#D5D5D6]'>Loading...</p>
+          <Spinner size='lg' color='current' />
         </div>
       </>
     );
