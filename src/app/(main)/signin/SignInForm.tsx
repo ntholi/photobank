@@ -13,7 +13,7 @@ export default function SignInForm() {
     try {
       setIsLoading(true);
       setError(null);
-      await signIn('google', { redirect: true, callbackUrl: '/profile' });
+      await signIn('google');
     } catch (err) {
       setError('Failed to sign in. Please try again.');
       console.error('Sign in error:', err);
